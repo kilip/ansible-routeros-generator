@@ -1,0 +1,39 @@
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
+from ..base import ResourceBase
+
+class {{ resource.className }}Resource(ResourceBase):
+    resource_name = "{{ resource.resource_name }}"
+    command_root = "{{ resource.command_root }}"
+    related_resources = []
+    gather_network_resources = ["{{ resource.name }}"]
+    config_type = "plural"
+    argument_spec = {
+        "running_config": {"type": "str"},
+        "state": {
+            "choices": ["{{ resource.states|join('","')|raw }}"],
+            "default": "merged",
+            "type": "str"
+        },
+        "config": {
+            "elements": "dict",
+            "type": "list",
+            "options": {
+{% for key,option in resource.options  %}
+                "{{ key }}": {
+{% if option.options is defined %}
+                    "options": {{ option.options|json_encode|raw }},
+{% endif %}{% if option.type is defined %}
+                    "type": "{{ option.type }}",
+{% endif %}{% if option.choices is defined %}
+                    "choices": {{ option.choices|json_encode|raw }},
+{% endif %}{% if option.default is defined and option.default != '""' %}
+                    "default": {% if option.type == "bool" %}{{ option.default }}{% else %}"{{ option.default }}"{% endif %},
+{% endif %}
+                },
+{% endfor %}
+            },
+        },
+    }

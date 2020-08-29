@@ -1,0 +1,28 @@
+system_script:
+  url: https://wiki.mikrotik.com/wiki/Manual:Scripting
+  html_id: Script_repository
+
+system_ntp_client:
+  url: https://wiki.mikrotik.com/wiki/Manual:System/Time#SNTP_client
+  html_id: SNTP_client
+  type: singular
+  options:
+    enabled:
+      type: bool
+      default: "False"
+      description: enable SNTP client for time sychronisation
+    primary_ntp:
+      type: str
+      default: "0.0.0.0"
+      description: IP address of NTP server that has to be used for time synchronisation. If both values are non-zero, then SNTP client will alternate between the two server addresses, switching to the other when request to the current server times out or when the "KoD" packet is received, indicating that server is not willing to respond to requests from this client.
+    secondary_ntp:
+      type: str
+      default: "0.0.0.0"
+      description: Secondary NTP
+    server_dns_names:
+      type: str
+      description: |
+        - Comma separated list values.
+        - To set NTP server using its domain name. Domain name will be resolved each time NTP request is sent. Router has to have /ip dns configured.
+
+    

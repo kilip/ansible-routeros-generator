@@ -1,0 +1,91 @@
+capsman_manager:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: CAPsMAN_Global_Configuration
+  type: singular
+
+capsman_aaa:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: CAPsMAN_AAA_Configuration
+
+capsman_provisioning:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: Radio_Provisioning
+  options:
+    ip_address_ranges:
+      type: list
+      options:
+        type: str
+
+capsman_configuration:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: Master_Configuration_Profiles
+  ignores:
+    - security.disable_pmkid
+    - security.eap_radius_accounting
+    - security.authentication_types
+    - datapath.bridge
+    - datapath.interface_list
+    - datapath.mtu
+    - datapath.l2mtu
+    - datapath.openflow_switch
+    - channel.width
+  options:
+    channel:
+      type: str
+    datapath:
+      type: str
+    frame_lifetime:
+      type: str
+    disconnect_timeout:
+      type: int
+    distance:
+      type: str
+    hw_retries:
+      type: str
+    hw_protection_mode:
+      type: str
+      choices:
+        - cts-to-self
+        - none
+        - rts-cts
+    rates:
+      type: str
+    mode:
+      type: "str"
+      default: "ap"
+    tx_chains:
+      type: int
+      choices: [0,1,2,3]
+      default: 0
+    rx_chains:
+      type: int
+      choices: [0,1,2,3]
+      default: 0
+
+
+capsman_channel:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: Channel_Groups
+  command_root: /caps-man channel
+  ignores:
+    - width
+  options:
+    save_selected:
+      type: bool
+      default: "True"
+    control_channel_width:
+      type: str
+      choices:
+        - 5mhz
+        - 10mhz
+        - 20mhz
+        - 40mhz-turbo
+
+capsman_datapath:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: Datapath_Configuration
+
+capsman_access_list:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: Access_List
+  description: Access list on CAPsMAN is an ordered list of rules that is used to allow/deny clients to connect to any CAP under CAPsMAN control. When client attempts to connect to a CAP that is controlled by CAPsMAN, CAP forwards that request to CAPsMAN. As a part of registration process, CAPsMAN consults access list to determine if client should be allowed to connect. The default behaviour of the access list is to allow connection.

@@ -1,0 +1,99 @@
+wireless_cap:
+  url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+  html_id: CAP_Configuration
+  options:
+    static_virtual:
+      type: bool
+      default: "False"
+    bridge:
+      type: str
+    caps_man_certificate_common_names:
+      type: str
+    caps_man_names:
+      type: str
+    discovery_interfaces:
+      type: str
+    caps_man_addresses:
+      type: list
+      options:
+        type: str
+    interfaces:
+      type: list
+      options:
+        type: str
+
+wireless:
+  url: "https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless"
+  html_id: General_interface_properties
+  options:
+    country:
+      type: str
+    ampdu_priorities:
+      type: int
+      choices: [0,1,2,3,4,5,6,7]
+      default: 0
+    rx_chains:
+      type: int
+      choices: [0,1,2,3]
+      default: 0
+    tx_chains:
+      type: int
+      choices: [0,1,2,3]
+      default: 0
+    tx_power_mode:
+      type: str
+      choices: [default,card-rates,all-rates-fixed,manual-table]
+      default: default
+    update_stats_interval:
+      type: str
+    wds_cost_range:
+      type: str
+      default: 50-150
+
+wireless_access_list:
+  url: "https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#Access_List"
+  html_id: Access_List
+  options:
+    signal_range:
+      type: "str"
+    interface:
+      type: "str"
+
+wireless_connect_list:
+  url: "https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#Connect_List"
+  html_id: Connect_List
+  options:
+    signal_range:
+      type: "str"
+    interface:
+      type: "str"
+    security_profile:
+      type: "str"
+
+wireless_manual_tx_power_table:
+  url: "https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless"
+  html_id: Manual_TX_Power_Table
+  options:
+    manual_tx_powers:
+      type: str
+
+wireless_nstreme_dual:
+  url: "https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless"
+  html_id: Nstreme_Dual
+  ignores:
+    - rates_a/g
+  options:
+    ht_rates:
+      type: str
+    rates_ag:
+      type: str
+    rates_b:
+      type: str
+    rx_channel_width:
+      type: str
+    tx_channel_width:
+      type: str
+
+wireless_security_profiles:
+  url: "https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless"
+  html_id: Security_Profiles
