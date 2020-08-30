@@ -1,0 +1,34 @@
+group:
+  validated: true
+  generate_test: true
+  delete_related: "False"
+  package: user
+  command_root: /user group
+  options:
+    policy:
+      elements: str
+      type: list
+      negation_symbol: "!"
+
+  documentation:
+    short_description: Router User Group Management
+    description: The router user groups provide a convenient way to assign different permissions and access rights to different user classes.
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Router_AAA
+    tableIndex: 0
+
+user:
+  validated: true
+  delete_related: "False"
+  generate_test: false
+  package: user
+  command_root: /user
+  options:
+    address:
+      type: str
+  documentation:
+    short_description: Router User Group Management
+    description: Router user database stores the information such as username, password, allowed access addresses and group about router management personnel.
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Router_AAA
+    tableIndex: 1

@@ -1,0 +1,8 @@
+address:
+  validated: true
+  package: ip
+  command_root: /ip address
+  resource_keys: ["address"]
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/Address
+    tableIndex: 0

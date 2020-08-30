@@ -1,0 +1,37 @@
+firewall_filter:
+  package: firewall
+  validated: true
+  generate_test: false
+  command_root: /ip firewall filter
+  states: ["overridden"]
+  default_state: null
+  resource_keys: []
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/Firewall/Filter
+    tableIndex: 0
+  options:
+    time:
+      options:
+        type: str
+      type: "list"
+    out_interface:
+      type: "str"
+    per_connection_classifier:
+      type: "str"
+    ip_sec_policy:
+      type: "str"
+    action:
+      choices:
+        - accept
+        - add-dst-to-address-list
+        - add-src-to-address-list
+        - drop
+        - fasttrack-connection
+        - jump
+        - log
+        - passthrough
+        - reject
+        - return
+        - tarpit
+      type: str
+      default: accept

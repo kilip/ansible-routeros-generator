@@ -1,0 +1,7 @@
+route:
+  validated: true
+  package: ip
+  command_root: /ip route
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/Route
+    tableIndex: 4

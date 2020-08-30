@@ -6,34 +6,25 @@ from ..base import ResourceBase
 
 
 class {{ resource.className }}Resource(ResourceBase):
+    """
+    Class {{ resource.className }} contains definition for `{{ resource.command_root }}`
+    """
     resource_name = "{{ resource.resource_name }}"
     command_root = "{{ resource.command_root }}"
-    related_resources = []
     gather_network_resources = ["{{ resource.resource_name }}"]
+    resource_keys = {{ resource.resource_keys|json_encode|raw }}
     config_type = "singular"
     argument_spec = {
         "running_config": {"type": "str"},
         "state": {
-            "choices": ["present", "absent"],
+            "choices": ["present", "reset"],
             "default": "present",
             "type": "str"
         },
         "config": {
             "type": "dict",
             "options": {
-{% for key,option in resource.options  %}
-                "{{ key }}": {
-{% if option.options is defined %}
-                    "options": {{ option.options|json_encode|raw }},
-{% endif %}{% if option.type is defined %}
-                    "type": "{{ option.type }}",
-{% endif %}{% if option.choices is defined %}
-                    "choices": {{ option.choices|json_encode|raw }},
-{% endif %}{% if option.default is defined %}
-                    "default": {% if option.type == "bool" %}{{ option.default }}{% else %}"{{ option.default }}"{% endif %},
-{% endif %}
-                },
-{% endfor %}
+{% include "options.py.twig" %}
             },
         },
     }

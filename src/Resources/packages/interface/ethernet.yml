@@ -1,0 +1,12 @@
+ethernet:
+  validated: true
+  package: interface
+  command_root: /interface ethernet
+  states: ["merged"]
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/Ethernet
+    tableIndex: 0
+  options:
+    advertise:
+      type: list
+      elements: str

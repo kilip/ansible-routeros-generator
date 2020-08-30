@@ -21,59 +21,46 @@ class Resource
     const OPT_BYTES="bytes";
     const OPT_BITS="bits";
 
-    public $url;
-    public $html_id;
+    public $validated = false;
+    public $generate_test = false;
+    public $generator = [];
     public $name;
     public $command_root;
-    public $properties = [];
     public $description;
     public $options = [];
     public $ignores = [];
+    public $documentation = [];
     public $className = "";
     public $states = ["merged","replaced","deleted","overridden"];
-    public $relativePath = "";
-    public $importPath = "";
+    public $default_state = "merged";
+    public $import_path = "";
+    public $fileName = "";
     public $type = "plural";
+    public $package = "";
+
+    public $key_prefixes = [];
 
     public $resource_name;
     public $module_name;
+    public $resource_keys = ["name"];
+
     public function configure()
     {
-        $this->parseProperties();
         $inflector = InflectorFactory::create()->build();
         $this->className = $inflector->classify($this->name);
-        
-        if(false !== strpos($this->name, "_")){
-            $exp = explode("_", $this->name);
-            $package = $exp[0];
-            unset($exp[0]);
-            $x = implode("_", $exp);
-            $this->importPath = $package.".".$x;
-        }else{
-            $this->importPath = $this->name.".".$this->name;
-        }
 
         // configure resource name
         $this->resource_name = $this->name;
 
         $name = "ros_".$this->name;
-        $name = strtr($name,[
-            "ip_" => "",
-            "system_" => "",
-        ]);
         $this->module_name = $name;
-        /*
-        $pluralFilters = ["list", "wireless", "address", "table"];
-        if($this->type == "plural"){
-            $exp  = explode("_",$this->name);
-            $last = &$exp[count($exp)-1];
-            if(!in_array($last, $pluralFilters)){
-                $last = $inflector->pluralize($last);
-                $this->resource_name = implode("_", $exp);
-                echo $this->resource_name."\n";
-            }
+
+        $fileName = $this->name;
+        if(false !== strpos($fileName,"_")){
+            $fileName = str_replace($this->package."_", "", $fileName);
         }
-        */
+        $this->fileName = $fileName;
+        $this->import_path = $this->package.'.'.$fileName;
     }
 
     public function render(Twig $twig, $targetDir)

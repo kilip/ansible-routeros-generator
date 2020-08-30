@@ -1,0 +1,28 @@
+firewall_raw:
+  package: firewall
+  validated: true
+  generate_test: false
+  command_root: /ip firewall raw
+  states: ["overridden"]
+  default_state: null
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/Firewall/Raw
+    tableIndex: 0
+  options:
+    action:
+      choices:
+        - accept
+        - add-dst-to-address-list
+        - add-src-to-address-list
+        - drop
+        - jump
+        - log
+        - no-track
+        - passthrough
+        - return
+      type: str
+      default: accept
+    out_interface:
+      type: "str"
+    per_connection_classifier:
+      type: "str"

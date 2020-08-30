@@ -1,0 +1,7 @@
+capsman_channels:
+  package: capsman
+  command_root: /caps-man channels
+  validated: true
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+    tableIndex: 5

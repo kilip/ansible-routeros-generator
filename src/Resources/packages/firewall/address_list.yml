@@ -1,0 +1,12 @@
+firewall_address_list:
+  package: firewall
+  validated: true
+  generate_test: false
+  command_root: /ip firewall address-list
+  resource_keys: [list, address]
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/Firewall/Address_list
+    tableIndex: 0
+  options:
+    address:
+      type: str

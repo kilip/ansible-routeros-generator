@@ -1,0 +1,34 @@
+dhcp_server:
+  validated: true
+  package: ip
+  command_root: /ip dhcp-server
+  documentation:
+    short_description: Interface Configuration
+    description: Configuration for I(/interface)
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/DHCP_Server
+    tableIndex: 0
+  options:
+    comment:
+      type: str
+    address_pool:
+      type: str
+      ignore: true
+    bootp_lease_time:
+      type: str
+      ignore: true
+    delay_threshold:
+      type: str
+      ignore: true
+    dhcp_option_set:
+      type: str
+      ignore: true
+    parent_queue:
+      type: str
+      ignore: true
+    insert_queue_before:
+      type: str
+      ignore: true
+    client_mac_limit:
+      type: str
+      ignore: true

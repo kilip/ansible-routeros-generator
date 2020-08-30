@@ -1,0 +1,15 @@
+pppoe_client:
+  validated: true
+  package: interface
+  command_root: /interface pppoe-client
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/PPPoE
+    tableIndex: 1
+  options:
+    allow:
+      type: list
+      elements: str
+    mrru:
+      type: str
+      ignore: true
+      default: "disabled"

@@ -4,7 +4,10 @@
 namespace App\Command;
 
 
+use App\Compiler;
 use App\RouterOS\Resource;
+use App\Configurator;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,53 +32,62 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
 
     private $useDebug = false;
 
-    public function __construct($name = null)
+    private $logger;
+
+    public function __construct(LoggerInterface $logger, $name = null)
     {
         parent::__construct($name);
         $this->addOption('use-debug', null, InputOption::VALUE_NONE);
+        $this->logger = $logger;
     }
 
     public function setContainer(ContainerInterface $container = null)
     {
         $this->cacheDir = $container->getParameter('kernel.cache_dir');
         $this->twig = $container->get("twig");
+
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
+     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $resources = $this->getResources();
-        $target = "/home/toni/project/ansible/ansible_collections/kilip/routeros/plugins";
-        //$target = realpath(__DIR__.'/../../var/generated');
+        $resources = $this->getResources($output);
+        $target = realpath(__DIR__.'/../../var/generated');
+        if(!$this->useDebug){
+            $target = "/home/toni/project/ansible/ansible_collections/kilip/routeros";
+        }
         
         foreach($resources as $resource){
-            $this->generateResources($resource, $output);
-            $resource->configure();
-            $resource->render($this->twig, $target);
+            $output->writeln("<info>Configuring </info> <comment>{$resource->name}</comment>");
+            $parser = new Configurator(
+                $resource,
+                $this->cacheDir,
+                $this->logger
+            );
+            $parser->configure();
         }
-        $this->renderSubset($this->twig, $resources, $target);
-        return Command::SUCCESS;
-    }
+        //$this->renderSubset($this->twig, $resources, $target);
 
-    private function renderSubset(Twig $twig, $resources, $targetDir)
-    {
-        $target = $targetDir."/module_utils/resources";
-        if(!is_dir($target)){
-            mkdir($target, 0777, true);
-        }
-        $target = $target."/subset.py";
-        $output = $twig->render("subset.py.twig",[
-            "resources" => $resources
-        ]);
-        file_put_contents($target, $output, LOCK_EX);
+        $compiler = new Compiler($resources, $this->logger, $this->twig, $target);
+        $compiler->compile();
+        return Command::SUCCESS;
     }
 
     /**
      * @return Resource[]
      */
-    private function getResources()
+    private function getResources(OutputInterface $output)
     {
         $resources = [];
-        $dir = __DIR__.'/../Resources/resources';
+        $dir = __DIR__.'/../Resources/packages';
         if($this->useDebug){
             $dir = __DIR__.'/../Resources/debug';
         }
@@ -84,6 +96,7 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
         ;
         /* @var SplFileInfo $file */
         foreach($finder->files() as $file){
+            $output->writeln("Parsing yaml: {$file->getRealPath()}");
             $data = Yaml::parseFile($file->getRealPath());
             foreach($data as $name => $config){
                 $resource = new Resource();
@@ -93,14 +106,6 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
                 foreach($config as $key=>$value){
                     $resource->$key = $value;
                 }
-                /*
-                $resource->url = $config["url"];
-                $resource->html_id = $config["html_id"];
-                $resource->description = isset($config["description"]) ? $config["description"]:null;
-                $resource->options = isset($config["options"]) ? $config["options"]:array();
-                $resource->ignores = isset($config["ignores"]) ? $config["ignores"]:array();
-                $resource->command_root = isset($config["command_root"]) ? $config["command_root"]:null;
-                */
                 $resources[$name] = $resource;
             }
         }

@@ -1,8 +1,0 @@
-vlan:
-  url: https://wiki.mikrotik.com/wiki/Manual:Interface/VLAN
-  html_id: Q-in-Q
-  package: interface
-  description: |
-    Virtual Local Area Network (VLAN) is a Layer 2 method that allows multiple Virtual LANs
-    on a single physical interface (ethernet, wireless, etc.),
-    giving the ability to segregate LANs efficiently.

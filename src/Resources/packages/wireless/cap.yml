@@ -1,0 +1,28 @@
+wireless_cap:
+  package: wireless
+  command_root: /interface wireless cap
+  validated: true
+  type: singular
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+    tableIndex: 0
+  options:
+    interfaces:
+      type: list
+      elements: "str"
+    discovery_interfaces:
+      type: list
+      elements: "str"
+    caps_man_addressess:
+      type: list
+      elements: "str"
+    caps_man_names:
+      type: list
+      elements: "str"
+    caps_man_certificate_common_names:
+      type: list
+      elements: "str"
+    static_virtual:
+      type: str
+      choices: ["yes", 'no']
+      default: "no"

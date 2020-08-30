@@ -1,0 +1,9 @@
+static_dns:
+  validated: true
+  package: ip
+  command_root: /ip dns static
+  documentation:
+    short_documentation: DNS Cache Configuration
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/DNS
+    tableIndex: 4

@@ -10,68 +10,11 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-module: {{ resource.module_name }}
-short_description: Configuration for RouterOS I({{ resource.command_root }})
-{% if resource.description is not null %}
-description: |
-{{ resource.description | html_to_markdown }}
-{% endif %}
-
-version_added: 1.0.0
-author: Anthonius Munthi (@kilip)
-options:
-  config:
-    description: A dictionary of {{ resource.module_name }} options
-    {% if resource.type == "plural" %}
-    type: list
-    elements: dict
-    {% else %}
-    type: dict
-    {% endif %}
-
-    suboptions:
-
-    {% for key, option in resource.options %}
-
-      {{ key }}:
-      {% if option.type is defined %}
-        type: {{ option.type }}
-      {% endif %}{% if option.default is defined %}
-        default: {{ option.default }}
-      {% endif %}{% if option.choices is defined %}
-        choices:
-        {% for choice in option.choices %}
-          - {{ choice }}
-        {% endfor %}
-      {% endif %}{% if option.description is defined %}
-        description: |
-          {{ option.description|html_to_markdown }}
-      {% endif %}
-
-{% endfor %}
-{% if resource.type == "plural" %}
-  state:
-    default: merged
-    choices:
-    - merged
-    - replaced
-    - overridden
-    - deleted
-    description:
-      - The state I(merged) will add resource if not exists, or update the existing resource
-      - The state I(replaced) will replace existing resource with the new configuration
-      - The state I(overridden) will remove any existing resource then add resource with the new one.
-      - The state I(deleted) will remove resource from the configuration
-{% else %}
-    default: present
-    choices:
-    - present
-    - absent
-{% endif %}
+{{ documentation|raw }}
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ..module_utils.resources.{{ resource.importPath }} import {{ resource.className }}Resource
+from ..module_utils.resources.{{ resource.import_path }} import {{ resource.className }}Resource
 {% if resource.type == "singular" %}
 from ..module_utils.config.config import Config
 {% else %}

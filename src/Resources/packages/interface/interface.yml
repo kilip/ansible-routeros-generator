@@ -1,0 +1,28 @@
+interface:
+  validated: true
+  package: interface
+  command_root: /interface
+  states: ["merged"]
+  options:
+    comment:
+      type: str
+  documentation:
+    short_description: Interface Configuration
+    description: Configuration for I(/interface)
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface
+    tableIndex: 1
+
+vlan:
+  validated: true
+  package: interface
+  command_root: /interface vlan
+  resource_keys: ["interface", "name"]
+  generate_test: false
+  documentation:
+    short_description: VLAN Interface Configuration
+    description: |
+      Virtual Local Area Network (VLAN) is a Layer 2 method that allows multiple Virtual LANs on a single physical interface (ethernet, wireless, etc.), giving the ability to segregate LANs efficiently.
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/VLAN
+    tableIndex: 0

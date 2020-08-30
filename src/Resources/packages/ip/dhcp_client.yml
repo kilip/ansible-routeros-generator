@@ -1,0 +1,7 @@
+dhcp_client:
+  validated: true
+  package: ip
+  command_root: /ip dhcp-client
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:IP/DHCP_Client
+    tableIndex: 1

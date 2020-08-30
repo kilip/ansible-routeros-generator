@@ -9,31 +9,25 @@ class {{ resource.className }}Resource(ResourceBase):
     command_root = "{{ resource.command_root }}"
     related_resources = []
     gather_network_resources = ["{{ resource.name }}"]
+    resource_keys = {{ resource.resource_keys|json_encode|raw }}
     config_type = "plural"
+{% if resource.key_prefixes|length > 0 %}
+    key_prefixes = {{ resource.key_prefixes|json_encode|raw }}
+{% endif %}
     argument_spec = {
         "running_config": {"type": "str"},
         "state": {
             "choices": ["{{ resource.states|join('","')|raw }}"],
-            "default": "merged",
+{% if resource.default_state is defined  and resource.default_state != ""%}
+            "default": "{{ resource.default_state }}",
+{% endif %}
             "type": "str"
         },
         "config": {
             "elements": "dict",
             "type": "list",
             "options": {
-{% for key,option in resource.options  %}
-                "{{ key }}": {
-{% if option.options is defined %}
-                    "options": {{ option.options|json_encode|raw }},
-{% endif %}{% if option.type is defined %}
-                    "type": "{{ option.type }}",
-{% endif %}{% if option.choices is defined %}
-                    "choices": {{ option.choices|json_encode|raw }},
-{% endif %}{% if option.default is defined and option.default != '""' %}
-                    "default": {% if option.type == "bool" %}{{ option.default }}{% else %}"{{ option.default }}"{% endif %},
-{% endif %}
-                },
-{% endfor %}
+{% include "options.py.twig" %}
             },
         },
     }
