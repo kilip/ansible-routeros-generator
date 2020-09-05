@@ -5,11 +5,12 @@ namespace App;
 
 
 use App\RouterOS\Resource;
+use Doctrine\Inflector\InflectorFactory;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Yaml\Yaml;
 use League\HTMLToMarkdown\HtmlConverter;
 
 /**
@@ -21,7 +22,6 @@ class Configurator
     private $tableIndex;
     private $resource;
     private $cacheDir;
-    private $ignores;
 
     private $typos = [
         "estabilished" => "established",
@@ -31,13 +31,15 @@ class Configurator
      */
     private $logger;
 
+    private $ignores = [];
+
     public function __construct(
         Resource $resource,
         $cacheDir,
         LoggerInterface $logger
     )
     {
-        foreach($resource->generator as $method => $value){
+        foreach($resource->getGenerator() as $method => $value){
             $this->$method = $value;
         }
         $this->resource = $resource;
@@ -63,14 +65,53 @@ class Configurator
             ->filter("table")
             ->each(\Closure::fromCallable([$this, "parseTable"]));
 
-        if(!isset($resource->options["comment"])){
-            $resource->options['comment'] = [
-                'type' => 'str'
-            ];
+        if(
+            !$resource->hasOption("comment")
+            && $resource->getType() !== "setting"
+        ){
+            $resource->getOption("comment")
+                ->setType("str")
+                ->setDescription("Give notes for this resource");
         }
-        $resource->configure();
 
+        $inflector = InflectorFactory::create()->build();
+
+
+        if(is_null($resource->getClassName())){
+            $class = $inflector->classify($resource->getName())."Resource";
+            $resource->setClassName($class);
+        }
+
+        $resource->setModuleName("ros_".$resource->getName());
+        $resource->setModuleNamespace("kilip.routeros");
+
+        // configure required option
+        $module = $resource->getModule();
+        if(isset($module['keys'])){
+            $keys = $module['keys'];
+            foreach($keys as $key){
+                $resource->getOption($key)->setRequired('True');
+            }
+        }
+
+        $this->dump();
         return $configured;
+    }
+
+    public function dump()
+    {
+        $resource = $this->resource;
+        $yaml = Yaml::dump(
+            $resource->toArray(),
+            6,
+            4,
+            Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
+        );
+        $target = __DIR__."/../var/resources/{$resource->getPackage()}/{$resource->getName()}.yml";
+        if(!is_dir($dir=dirname($target))){
+            mkdir($dir, 0775, true);
+        }
+        file_put_contents($target, $yaml, LOCK_EX);
     }
 
     public function parseTable(Crawler $crawler, $index)
@@ -94,193 +135,42 @@ class Configurator
     {
         if($index == 0) return;
 
-        $filters = ["numbers", "time"];
         $params = [];
         $resource = $this->resource;
+        $logger = $this->logger;
 
         $crawler->filter("td")->each(function($crawler, $index) use(&$params){
             $converter = new HtmlConverter([
                 "strip_tags" => true,
+                "use_autolinks" => false,
             ]);
-            $converted = $converter->convert($crawler->html());
-            $params[$index] = strtr($converted,[
-                "**" => "",
-                "*" => ""
-            ]);
-        });
 
-        if(!isset($params[0])){
-           return;
-        }
+            $html = $crawler->html();
+            /*$html = preg_replace(
+                "#(.{1,80})( +|$\n?)|(.{1,80})#im",
+                "\\1\\2\n\\3",
+                $html
+            );*/
+            $converted = $converter->convert($html);
+            $params[$index] = $converted;
+        });
 
         if(false !== strpos($params[0],"read-only")){
             return;
         }
 
-        // set defaults
-        $property = strtolower($params[0]);
-        $name = $this->parseName($property);
-        $options = isset($resource->options[$name]) ? $resource->options[$name]:[];
-        $type = isset($options['type']) ? $options['type']:null;
-        $ignore = isset($options["ignore"]) ? $options["ignore"]:false;
+        $name = $this->parseName($params[0]);
 
-        // generate property config values
-        $pattern = "#\((.+)[\)|+]#im";
-        preg_match($pattern, $property, $matches);
-        if(!isset($matches[1])){
-            throw new \Exception($crawler->html());
+        if(in_array($name, $this->ignores)){
+            return;
         }
 
-        $propConfig = $matches[1];
-        $default = $this->parseDefault($propConfig);
-        $choices = $this->parseChoices($propConfig);
-
-        if(!is_null($default) && is_null($type)){
-            if(is_string($default) && strlen($default) > 0 ){
-                $type = "str";
-            }
-        }
-        
-        if(is_array($choices) && is_null($type)){
-            if(is_string($choices[0])){
-                $type = "str";
-            }
-        }
-
-        if(isset($this->resource->options[$name]["type"])){
-            $type = $this->resource->options[$name]["type"];
-        }
-
-        if(is_null($type)){
-            try{
-                $type = $this->parseType($propConfig);
-            }catch(\Exception $e){
-                throw $e;
-            }
-            
-        }
-        
-        if(in_array($name, $filters)) return;
-        
-        $description = $this->parseDescription($params[1], $type);
-        $required = in_array($name, $resource->resource_keys);
-
-        if($type && !$ignore){
-            $options['type'] = $type;
-        }
-        if($default && !$required && $type != "list" && !$ignore){
-            $options['default'] = $default;
-        }
-        if($choices && !$ignore){
-            $negation = isset($options['negation_symbol']) ? $options['negation_symbol']:false;
-            if($negation){
-                foreach($choices as $choice){
-                    $choices[] = $negation.$choice;
-                }
-            }
-
-            if($type == 'list' && !is_null($default)){
-                if(!in_array($default, $choices) && false === strpos($default, ",")){
-                    $choices[] = $default;
-                }
-                if(false !== strpos($default, ',')){
-                    $default = explode(",", $default);
-                }else{
-                    $default = [$default];
-                }
-                $options['default'] = $default;
-            }
-
-            $options['choices'] = $choices;
-            if(!isset($options["default"])){
-                $options["default"] = "None";
-            }
-        }
-
-        if($required){
-            $options["required"] = "True";
-        }
-
-        $options["description"] = "\n$description";
-        $resource->options[$name] = $options;
-        $resource->documentation["options"]["config"]["suboptions"][$name] = $options;
-
-        $logger = $this->logger;
-        $logger->info("configured options {0} {1}", [$resource->name, $options]);
-    }
-
-    private function parseDescription($description)
-    {
-        $description = strtr($description,[
-            "`Read more >>`" => "Read more"
-        ]);
-        // strip links
-        //$pattern = "#\[([^\]]+)\]\(([^\|^\s)]+)([^\)]+)\)#im";
-        $pattern = "#\[([^\]]+)\]\(([^\|^\s)]+)(\s+\".+\")\)#im";
-        $description = preg_replace($pattern,"L(\\1,\\2)", $description);
-        $pattern = "#\[([^\]]+)\]\(([^\|^\s)]+)\)#im";
-        $description = preg_replace($pattern,"L(\\1,\\2)", $description);
-
-        // strip code value
-        $pattern = "#\`([^\`]+)\`#im";
-        $description = preg_replace($pattern, "C(\\1)", $description);
-
-        return $description;
-    }
-
-    private function parseChoices($config)
-    {
-        if(false === strpos($config, "|")){
-            return false;
-        }
-
-        $filters = [
-            'ip/mask | ipv6 prefix',
-            'ip/netmask | ip range',
-            'integer[/time],integer,dst-address | dst-port | src-address[/time]',
-            'dns name | ip address/netmask | ip-ip',
-        ];
-
-        $exp = explode(";", $config);
-        $choices = $exp[0];
-        $choices = str_replace("\\","",$choices);
-        $choices = strtr($choices,[
-            "\\/" => "/",
-            "\\" => "",
-            "unreachabl" => "unreachable"
-        ]);
-        if(in_array(strtolower($choices), $filters)){
-            return false;
-        }
-        if(false !== strpos($choices, "[", 0)){
-            preg_match("#\[(.*)\]#im", $choices, $matches);
-            if(isset($matches[1])){
-                return $matches[1];
-            }
-        }
-
-        $choices = preg_replace("#(\:.*|\S+\,)#","", $choices);
-        $choices = strtr($choices, $this->typos);
-
-        preg_match_all("#([^\||^\s]+)#im", $choices, $matches);
-        if(isset($matches[1])){
-            return $matches[1];
-        }
-
-        return false;
-    }
-
-    private function parseName($property)
-    {
-        preg_match("#(\S+)#", $property, $matches);
-        if($matches[1]){
-            $name = trim($matches[1]);
-            $name = str_replace("/","", $name);
-            $name = str_replace("-", "_", $name);
-            $name = str_replace(".", "_", $name);
-            return $name;
-        }
-        throw \Exception("can not find name in {$property}.");
+        $option = $resource->getOption($name);
+        $option->setRosKey($name);
+        $option
+            ->fromText($params[0])
+            ->setDescription($params[1])
+        ;
     }
 
     /**
@@ -311,64 +201,14 @@ class Configurator
         return file_get_contents($cache);
     }
 
-    private function parseDefault($config)
+    private function parseName($text)
     {
-        $filters = ["none"];
-        $config = str_replace("\_","_", $config);
-        preg_match("#default: (\S+)$#im", $config, $matches);
+        preg_match("#\*\*(\S+)\*\*#im", $text, $matches);
         if(isset($matches[1])){
-            $default = $matches[1];
-            $default = strtr($default, [
-                '"' => "",
-            ]);
-            if(!in_array($default, $filters)){
-                return $default;
-            }
+            return trim($matches[1]);
         }
-        return null;
     }
 
-    private function parseType($config)
-    {
-        $knownTypes = [
-            "num" => "int",
-            "bool" => "bool",
-            "string" => "str",
-            "mac address" => "str",
-            "time" => "str",
-            "integer" => "int",
-            "text" => "str",
-            "mac" => "str",
-            "list of rates" => "str",
-            "name" => "str",
-            "yes" => "str",
-            "valuestohash" => "str",
-            "ip" => "str",
-            "list" => "str",
-            "script" => "str",
-            "byte" => "bytes",
-            "default" => "str",
-            "start" => "str",
-            "10mhz" => "str",
-            "bridge" => 'str',
-        ];
 
-        preg_match("#^(".implode("|", array_keys($knownTypes)).")#im", $config, $matches);
-        if(isset($matches[1])){
-            $match = $matches[1];
-            return $knownTypes[$match];
-        }
 
-        $capsman = [
-            "list; default:",
-            "; default:",
-            "; default: ap",
-            "; default: yes",
-        ];
-        if(in_array(trim($config), $capsman)){
-            return "str";
-        }
-
-        throw new \Exception("unknown type in {$config}");
-    }
 }

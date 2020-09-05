@@ -1,103 +1,14 @@
 wireless:
   package: wireless
-  command_root: /interface wireless
+  command: /interface wireless
+  validated: false
   generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
     tableIndex: 0
   options:
     update_stats_interval:
       type: str
     wps_mode:
       type: str
-
-wireless_access_list:
-  package: wireless
-  command_root:  /interface wireless access-list
-  documentation:
-    short_description: Wireless Access List Configuration
-    description: |
-      Access list is used by access point to restrict allowed connections from other devices, and to control connection parameters.
-      Operation:
-        - Access list rules are checked sequentially.
-        - Disabled rules are always ignored.
-        - Only the first matching rule is applied.
-        - If there are no matching rules for the remote connection, then the default values from the wireless interface configuration are used.
-        - If remote device is matched by rule that has authentication=no value, the connection from that remote device is rejected.
-  generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
-    tableIndex: 1
-
-wireless_connect_list:
-  package: wireless
-  command_root:  /interface wireless connect-list
-  documentation:
-    short_description: Wireless Connect List Configuration
-    description: |
-      - connect-list is used to assign priority and security settings to connections with remote access points, and to restrict allowed connections. connect-list is an ordered list of rules. Each rule in connect-list is attached to specific wireless interface, specified in the interface property of that rule (this is unlike access-list, where rules can apply to all interfaces). Rule can match MAC address of remote access point, it's signal strength and many other parameters.
-      Operation:
-      - connect-list rules are always checked sequentially, starting from the first.
-      - disabled rules are always ignored.
-      - Only the first matching rule is applied.
-      - If SSID or exact wireless protocol is provided in the wireless interface configuration Connect List SSIDs or wireless protocols not covered by wireless interface configuration are ignored.
-      - If connect-list does not have any rule that matches remote access point, then the default values from the wireless interface configuration are used.
-      - If access point is matched by rule that has connect=no value, connection with this access point will not be attempted.
-      - If access point is matched by rule that has connect=yes value, connection with this access point will be attempted.
-        - In station mode, if several remote access points are matched by connect list rules with connect=yes value, connection will be attempted with access point that is matched by rule higher in the connect-list.
-        - If no remote access points are matched by connect-list rules with connect=yes value, then value of default-authentication interface property determines whether station will attempt to connect to any access point. If default-authentication=yes, station will choose access point with best signal and compatible security.
-      - In access point mode, connect-list is checked before establishing WDS link with remote device. If access point is not matched by any rule in the connect list, then the value of default-authentication determines whether WDS link will be established.
-
-  generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
-    tableIndex: 4
-
-wireless_power_table:
-  package: wireless
-  command_root:  /interface wireless manual-tx-power-table
-  documentation:
-    short_description: Manual TX Power Table Configuration
-    description:
-  generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
-    tableIndex: 6
-  options:
-    manual_tx_powers:
+    disconnect_timeout:
       type: str
-
-wireless_nstreme:
-  package: wireless
-  command_root:  /interface wireless nstreme
-  documentation:
-    short_description: Wireless nstreme config
-    description: switch a wireless card to the nstreme mode. In this case the card will work only with nstreme clients.
-  generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
-    tableIndex: 7
-
-wireless_nstreme_dual:
-  package: wireless
-  command_root:  /interface wireless nstreme-dual
-  documentation:
-    short_description: Wireless nstreme-dual config
-    description: |
-      Two radios in nstreme-dual-slave mode can be grouped together to make nstreme2 Point-to-Point connection. To put wireless interfaces into a nstreme2 group, you should set their mode to nstreme-dual-slave. Many parameters from /interface wireless menu are ignored, using the nstreme2, except:
-        - frequency-mode
-        - country
-        - antenna-gain
-        - tx-power
-        - tx-power-mode
-        - antenna-mode
-  generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
-    tableIndex: 8
-
-wireless_security_profiles:
-  package: wireless
-  command_root:  /interface wireless security-profiles
-  documentation:
-    short_description: Wireless Security Propfiles Settings
-    description: Security profiles are configured under the C(/interface wireless security-profiles) path in the console, or in the "Security Profiles" tab of the "Wireless" window in the WinBox. Security profiles are referenced by the Wireless interface security-profile property and security-profile property of Connect Lists.
-    options:
-      suboptions: {}
-  generator:
-    url: https://help.mikrotik.com/docs/display/ROS/Wireless+Local+Area+Networking
-    tableIndex: [10,11,12,13]

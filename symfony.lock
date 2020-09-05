@@ -2,6 +2,9 @@
     "doctrine/inflector": {
         "version": "2.0.3"
     },
+    "erusev/parsedown": {
+        "version": "1.7.4"
+    },
     "league/html-to-markdown": {
         "version": "4.10.0"
     },

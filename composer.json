@@ -7,6 +7,7 @@
         "ext-dom": "*",
         "ext-iconv": "*",
         "doctrine/inflector": "^2.0",
+        "erusev/parsedown": "^1.7",
         "league/html-to-markdown": "^4.10",
         "symfony/console": "5.1.*",
         "symfony/css-selector": "5.1.*",

@@ -1,0 +1,59 @@
+{% set module_complete_name=resource.moduleNamespace ~ "." ~ resource.moduleName%}
+{% set docs = resource.documentations %}
+DOCUMENTATION="""
+module: {{ resource.moduleName }}
+author: Anthonius Munthi (@kilip)
+short_description: {{ docs.short_description }}
+description:
+{% for description in docs.descriptions %}
+- {{ description }}
+{% endfor %}
+version_added: {{ resource.versionAdded }}
+options:
+  state:
+    type: str
+    choices: {{ resource.module.states|json_encode|raw }}
+    description: Set module state
+    default: {{ resource.module.default_state }}
+  config:
+    description: A dictionary of `{{ resource.command }}` parameters
+    type: {{ resource.type == "config" ? "list":"dict" }}
+{% if resource.type == "config" %}
+    elements: dict
+{% endif %}
+    suboptions:
+{% include "module/parameters.yaml.twig" %}
+"""
+
+EXAMPLES="""
+{% for example in resource.examples %}
+# ----
+# {{ example.title }}
+# ----
+# before:
+{{ example.pre|yaml_comment|raw }}
+- name: {{ example.name }}
+  kilip.routeros.{{  module_name }}:
+{{ example.argument_spec|format_yaml|raw }}
+# after:
+{{ example.post|yaml_comment|raw }}
+{% endfor %}
+"""
+
+RETURN="""
+before:
+  description: The configuration as structured data prior to module invocation.
+  returned: always
+  type: list
+  sample: The configuration returned will always be in the same format of the parameters above.
+after:
+  description: The configuration as structured data after module completion.
+  returned: when changed
+  type: list
+  sample: The configuration returned will always be in the same format of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device
+  returned: always
+  type: list
+  sample: ['/interface bridge add name=sample']
+"""

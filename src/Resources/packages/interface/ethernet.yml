@@ -1,7 +1,7 @@
 ethernet:
-  validated: true
+  validated: false
   package: interface
-  command_root: /interface ethernet
+  command: /interface ethernet
   states: ["merged"]
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:Interface/Ethernet

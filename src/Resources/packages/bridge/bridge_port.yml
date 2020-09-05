@@ -1,0 +1,137 @@
+bridge_port:
+  versionAdded: 1.0.0
+  validated: true
+  package: bridge
+  command: /interface bridge port
+  documentations:
+    short_description: Bridge Port Module
+    descriptions:
+      - This module manages RouterOS sub menu `/interface bridge port`
+  module:
+    keys: ["bridge", "interface"]
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge
+    tableIndex: 2
+  options:
+    disabled:
+      type: str
+      choices: ["yes", "no"]
+      default: "no"
+      description: Set bridge port disability
+  tests:
+    fixtures:
+      interface_bridge_port_export: |
+        # sep/04/2020 10:10:14 by RouterOS 6.47.2
+        # software id = 
+        #
+        #
+        #
+        /interface bridge port
+        add bridge=br-wan interface=ether1
+        add bridge=br-trunk interface=ether2 disabled=yes
+    facts:
+      asserts:
+        - self.assertEqual(result[0]["bridge"], "br-wan")
+        - self.assertEqual(result[0]["interface"], "ether1")
+        - self.assertEqual(result[1]["bridge"], "br-trunk")
+        - self.assertEqual(result[1]["disabled"], "yes")
+        - self.assertEqual(result[1]["interface"], "ether2")
+  examples:
+    # merged
+    - name: Merge configuration with device configuration
+      title: Merged Configuration
+      argument_spec:
+        config:
+          - bridge: br-wan
+            interface: ether1
+            comment: "new comment"
+          - bridge: br-trunk
+            interface: ether2
+            comment: "new comment"
+        state: merged
+      commands:
+        - /interface bridge port set [ find bridge=br-wan and interface=ether1 ] comment="new comment"
+        - /interface bridge port set [ find bridge=br-trunk and interface=ether2 ] comment="new comment" disabled=no
+      pre: |
+        [admin@MikroTik] > /interface bridge port export
+        /interface bridge port
+        add bridge=br-wan interface=ether1
+        add bridge=br-trunk interface=ether2 disabled=yes
+      post: |
+        [admin@MikroTik] > /interface bridge port export
+        /interface bridge port
+        add bridge=br-wan interface=ether1 comment="new comment"
+        add bridge=br-trunk interface=ether2 comment="new comment"
+
+
+    # replaced
+    - name: Replace device configuration
+      title: Using replaced state
+      argument_spec:
+        config:
+          - bridge: br-wan
+            interface: ether1
+            comment: "new comment"
+          - bridge: br-trunk
+            interface: ether2
+            comment: "new comment"
+        state: replaced
+      commands:
+        - /interface bridge port set [ find bridge=br-wan and interface=ether1 ] comment="new comment"
+        - /interface bridge port set [ find bridge=br-trunk and interface=ether2 ] disabled=no
+        - /interface bridge port set [ find bridge=br-trunk and interface=ether2 ] comment="new comment"
+      pre: |
+        [admin@MikroTik] > /interface bridge port export
+        /interface bridge port
+        add bridge=br-wan interface=ether1
+        add bridge=br-trunk interface=ether2 disabled=yes
+      post: |
+        [admin@MikroTik] > /interface bridge port export
+        /interfce bridge port
+        add bridge=br-wan interface=ether1 comment="new comment"
+        add bridge=br-trunk interface=ether2 comment="new comment"
+
+    # overridden
+    - name: Override device configuration
+      title: Using overridden state
+      argument_spec:
+        config:
+          - bridge: br-new
+            interface: ether2
+            comment: new comment
+        state: overridden
+      commands:
+        - /interface bridge port remove [ find bridge=br-wan and interface=ether1 ]
+        - /interface bridge port remove [ find bridge=br-trunk and interface=ether2 ]
+        - /interface bridge port add bridge=br-new interface=ether2 comment="new comment"
+        - /system script run ansible-remove-invalid
+      pre: |
+        [admin@MikroTik] > /interface bridge port export
+        /interface bridge port
+        add bridge=br-wan interface=ether1
+        add bridge=br-trunk interface=ether2 disabled=yes
+      post: |
+        [admin@MikroTik] > /interface bridge port export
+        /interfce bridge port
+        add bridge=br-new interface=ether2 comment="new comment"
+
+    # deleted
+    - name: Delete bridge port
+      title: Using deleted state
+      argument_spec:
+        config:
+          - bridge: br-trunk
+            interface: ether2
+        state: deleted
+      commands:
+        - /interface bridge port remove [ find bridge=br-trunk and interface=ether2 ]
+        - /system script run ansible-remove-invalid
+      pre: |
+        [admin@MikroTik] > /interface bridge port export
+        /interface bridge port
+        add bridge=br-wan interface=ether1
+        add bridge=br-trunk interface=ether2 disabled=yes
+      post: |
+        [admin@MikroTik] > /interface bridge port export
+        /interfce bridge port
+        add bridge=br-wan interface=ether1

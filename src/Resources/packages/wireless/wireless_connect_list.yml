@@ -1,0 +1,10 @@
+wireless_connect_list:
+  validated: false
+  package: wireless
+  command:  /interface wireless connect-list
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
+    tableIndex: 7
+  options:
+    signal_range:
+      type: str

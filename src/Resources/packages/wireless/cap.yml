@@ -1,12 +1,14 @@
 wireless_cap:
   package: wireless
-  command_root: /interface wireless cap
-  validated: true
-  type: singular
+  command: /interface wireless cap
+  validated: false
+  type: config
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
     tableIndex: 0
   options:
+    bridge:
+      type: str
     interfaces:
       type: list
       elements: "str"

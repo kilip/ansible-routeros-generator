@@ -1,0 +1,12 @@
+wireless_nstreme_dual:
+  validated: false
+  package: wireless
+  command:  /interface wireless nstreme-dual
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
+    tableIndex: 12
+  options:
+    tx_channel_width:
+      type: str
+    rx_channel_width:
+      type: str

@@ -3,6 +3,7 @@ capsman_configuration:
   command_root: /caps-man configuration
   validated: true
   generate_test: true
+  support_reset_value: true
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
     tableIndex: 4

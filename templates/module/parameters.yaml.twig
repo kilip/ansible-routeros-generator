@@ -1,0 +1,21 @@
+{% for option in resource.options %}
+        {{ option.name }}:
+          type: {{ option.type }}
+{% if option.choices is not empty %}
+          choices:
+{% for choice in option.choices %}
+            - '{{ choice }}'
+{% endfor %}
+{% endif %}
+{% if option.required is not null %}
+          required: True
+{% endif %}
+{% if option.default is not null and option.required is null  %}
+          default: {% if option.type == "str" %}"{{ option.default }}"{% else %}{{ option.default }}{% endif %}
+{% endif %}
+
+{% if option.description is not null  %}
+          description: |
+            {{ option.description|doc|raw }}
+{% endif %}
+{% endfor %}

@@ -1,0 +1,10 @@
+wireless_access_list:
+  validated: false
+  package: wireless
+  command:  /interface wireless access-list
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
+    tableIndex: 4
+  options:
+    signal_range:
+      type: str

@@ -5,6 +5,7 @@ namespace App;
 
 
 use App\RouterOS\Resource;
+use App\Twig\DocExtension;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Dumper\YamlDumper;
@@ -33,7 +34,12 @@ class Compiler
      */
     private $twig;
 
-    public function __construct($resources, LoggerInterface $logger, Twig $twig, $targetDir)
+    public function __construct(
+        $resources,
+        LoggerInterface $logger,
+        Twig $twig,
+        $targetDir
+    )
     {
         $this->resources = $resources;
         $this->targetDir = $targetDir;
@@ -45,29 +51,82 @@ class Compiler
     {
         $resources = $this->resources;
         $logger = $this->logger;
-        foreach($resources as $resource){
-            $logger->notice("compiling {0}", [$resource->name]);
+        foreach ($resources as $resource) {
+            $logger->notice("compiling {0}", [$resource->getName()]);
 
-            if(!$resource->validated) continue;
+            if (!$resource->isValidated()) continue;
             $this->renderResource($resource);
             $this->renderModule($resource);
-            $this->renderTest($resource);
+            $this->renderFactTests($resource);
+            $this->renderModuleTests($resource);
+            $this->renderModuleDoc($resource);
         }
 
         $this->renderSubset();
-        $this->runTox();
+    }
+
+    private function renderModuleTests(Resource $resource)
+    {
+        $examples = $resource->getExamples();
+        $tests = $resource->getTests();
+        $target = "{$this->targetDir}/tests/unit/modules/fixtures/modules/{$resource->getModuleName()}.yml";
+
+        $config = [];
+        $config['module'] = $resource->getModuleName();
+        $config['fixtures'] = $tests['fixtures'];
+        $moduleTests = [];
+
+        if(empty($examples)){
+            return;
+        }
+        foreach($examples as $example){
+            $test = [];
+
+            $moduleTests[] = [
+                "commands" => $example["commands"],
+                "argument_spec" => $example["argument_spec"]
+            ];
+        }
+        
+        $config["tests"] = $moduleTests;
+        $yaml = Yaml::dump(
+            $config,
+            6,
+            2,
+            Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
+        );
+        file_put_contents($target, $yaml, LOCK_EX);
+    }
+
+    private function renderFactTests(Resource $resource)
+    {
+        $tests = $resource->getTests();
+        if(!isset($tests["facts"])){
+            return;
+        }
+
+        $test = $tests["facts"];
+        $target = "{$this->targetDir}/tests/unit/modules/fixtures/facts/{$resource->getName()}.yml";
+        $test["resource"] = $resource->getName();
+        $test["fixtures"] = $tests["fixtures"];
+        $yaml = Yaml::dump(
+            $test,
+            4,
+            2,
+            Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
+        );
+
+        file_put_contents($target, $yaml, LOCK_EX);
     }
 
     private function renderResource(Resource $resource)
     {
-        $name = $resource->name;
-        $fileName = $resource->fileName;
-        $package = $resource->package;
+        $name = $resource->getName();
+        $package = $resource->getPackage();
         $logger = $this->logger;
         $target = $this->targetDir;
-        $suffix = "resources/{$package}/{$fileName}.py";
+        $suffix = "resources/{$package}/{$name}.py";
         $target = "{$target}/plugins/module_utils/{$suffix}";
-        $template = $resource->type.".py.twig";
         $twig = $this->twig;
 
         if(!is_dir($dir = dirname($target))){
@@ -78,9 +137,10 @@ class Compiler
             touch($initPyFile, 0775);
         }
 
+        $template = "resource/".$resource->getType().".py.twig";
         $resourceTemplate = "{$name}.py.twig";
-        if(is_file(__DIR__.'/../templates/'.$resourceTemplate)){
-            $template = $resourceTemplate;
+        if(is_file(__DIR__.'/../templates/resource/'.$resourceTemplate)){
+            $template = "resource/".$resourceTemplate;
         }
 
         $output = $twig->render(
@@ -98,17 +158,16 @@ class Compiler
 
     private function renderModule(Resource $resource)
     {
-        $module_name = $resource->module_name;
+        $module_name = $resource->getName();
         $twig = $this->twig;
-        $template = "module.py.twig";
-        $target = $this->targetDir."/plugins/modules/{$module_name}.py";
-        $documentation = $this->getDocumentation($resource);
+        $template = "module/module.py.twig";
+        $target = $this->targetDir."/plugins/modules/{$resource->getModuleName()}.py";
         $logger = $this->logger;
         
         if(!is_dir($dir = dirname($target))){
             mkdir($dir, 0777, true);    
         }
-        if(!is_file($initPy=$dir."/__init__py")){
+        if(!is_file($initPy=$dir."/__init__.py")){
             touch($initPy);
         }
 
@@ -116,122 +175,30 @@ class Compiler
             $template,
             [
                 "resource" => $resource,
-                "documentation" => $documentation
+                "module_name" => $resource->getModuleName(),
             ]
         );
+
+        // remove trailing whitespaces
+        $output = preg_replace("#[ \t]+$#im","", $output);
 
         file_put_contents($target, $output, LOCK_EX);
         $logger->alert("Compiled {0} to {1}", [$module_name, $target]);
     }
 
-    private function getDocumentation(Resource $resource)
+    private function renderModuleDoc(Resource $resource)
     {
-        $documentation = $resource->documentation;
-        $command = $resource->command_root;
-        $module = $resource->module_name;
-
-        $documentation["module"] = $resource->module_name;
-        $documentation["version_added"] = "1.0.0";
-        $documentation["author"] = "Anthonius Munthi (@kilip)";
-        $documentation["options"]["config"]["description"] = "A dictionary for L({$resource->module_name})";
-
-        if($resource->type == "plural"){
-            $documentation["options"]["config"]["type"] = "list";
-            $documentation["options"]["config"]["elements"] = "dict";
-            $documentation["options"]["state"] = [
-                "choices" => ["merged", "replaced","overridden","deleted"],
-                "default" => "merged",
-                "description" => [
-                    "I(merged) M({$module}) will update existing C({$command}) configuration, or create new C({$command}) when resource not found",
-                    "I(replaced) M({$module}) will restore existing C({$command}) configuration to it's default value, then update existing resource with the new configuration. If the resource C({$command}) not found, M({$module}) will create resource in C({$command})",
-                    "I(overridden) M({$module}) will remove any resource in C({$command}) first, and then create new C({$command}) resources.",
-                    "I(deleted) M({module}) when found module will delete C({$command})",
-                ]
-            ];
-        }else{
-            $documentation["config"]["type"] = "list";
-            $documentation["state"] = [
-                "choices" => ["present", "reset"],
-                "default" => "present",
-                "description" => [
-                    "I(present) will update C({$command}) config with passed argument_spec values.",
-                    "I(reset) will restore C({$command}) to it's default values",
-                ]
-            ];
-        }
-
-        uksort($documentation["options"]["config"], function($key1, $key2){
-            $order = ["suboptions", "elements", "type", "description"];
-            return ((array_search($key1, $order) < array_search($key2, $order)) ? 1 : -1);
-        });
-
-        uksort($documentation["options"],function($key1, $key2){
-            $order = ["config","state"];
-            return ((array_search($key1, $order) < array_search($key2, $order)) ? 1 : -1);
-        });
-
-        uksort($documentation, function($key1, $key2){
-            $order = ["options", "author", "version_added","description","short_description","module"];
-            return ((array_search($key1, $order) < array_search($key2, $order)) ? 1 : -1);
-        });
-
-        $yaml = Yaml::dump(
-            $documentation,
-            6,
-            4,
-            Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK
-        );
-        $yaml = strtr($yaml,[
-            "'" => "",
-            "\\" => "",
-        ]);
-        $yaml = preg_replace("#^(?:[\t ]*(?:\r?\n|\r))+#im","", $yaml);
-        $yaml = preg_replace("#[ \t]+(\r?$)#im","", $yaml);
-        return $yaml;
-    }
-
-    private function renderTest(Resource $resource)
-    {
-        if(!$resource->generate_test) return;
-        $module_name = $resource->module_name;
-        $target = $this->targetDir."/tests/unit/modules/test_{$module_name}.py";
-        $template = "module_test.py.twig";
+        $target = $this->targetDir."/docs/kilip.routeros.{$resource->getModuleName()}_module.rst";
         $twig = $this->twig;
+        $template = "docs/module.rst.twig";
 
-        if(is_file($target)){
-            return;
-        }
-        
-        $output = $twig->render(
-            $template,
-            ["resource" => $resource]
-        );
+        $output = $twig->render($template,[
+            'resource' => $resource,
+            'module_name' => $resource->getModuleName(),
+            "docs" => $resource->getDocumentations(),
+        ]);
+
         file_put_contents($target, $output, LOCK_EX);
-    }
-
-    private function runTox()
-    {
-        $commands = [
-            "/home/toni/.pyvenv/ansible-dev/bin/tox"
-        ];
-        $this->logger->notice("running tox",[$commands]);
-
-        $process = new Process($commands,$this->targetDir);
-        $process->run(function($type, $buffer){
-            echo 'OUT >> '.$buffer;
-        });
-
-        $commands = [
-            '/home/toni/.pyvenv/ansible-dev/bin/ansible-test',
-            'units',
-            '--python',
-            '3.8'
-        ];
-
-        $process = new Process($commands,$this->targetDir);
-        $process->run(function($type, $buffer){
-            echo $buffer;
-        });
     }
 
     private function renderSubset()
@@ -246,4 +213,5 @@ class Compiler
         file_put_contents($target, $output, LOCK_EX);
         $logger->notice("Compiled subset to {0}",[$target]);
     }
+
 }

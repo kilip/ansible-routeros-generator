@@ -8,224 +8,412 @@ use Doctrine\Inflector\InflectorFactory;
 
 class Resource
 {
-    const OPT_STR="str";
-    const OPT_LIST="list";
-    const OPT_DICT="dict";
-    const OPT_BOOL="bool";
-    const OPT_INT="int";
-    const OPT_FLOAT="float";
-    const OPT_PATH="path";
-    const OPT_RAW="raw";
-    const OPT_JSON_ARG="jsonarg";
-    const OPT_JSON="json";
-    const OPT_BYTES="bytes";
-    const OPT_BITS="bits";
+    /**
+     * @var string
+     */
+    private $versionAdded;
 
-    public $validated = false;
-    public $generate_test = false;
-    public $generator = [];
-    public $name;
-    public $command_root;
-    public $description;
-    public $options = [];
-    public $ignores = [];
-    public $documentation = [];
-    public $className = "";
-    public $states = ["merged","replaced","deleted","overridden"];
-    public $default_state = "merged";
-    public $import_path = "";
-    public $fileName = "";
-    public $type = "plural";
-    public $package = "";
+    /**
+     * @var string
+     */
+    private $name;
 
-    public $key_prefixes = [];
+    /**
+     * @var string
+     */
+    private $package;
 
-    public $resource_name;
-    public $module_name;
-    public $resource_keys = ["name"];
+    /**
+     * @var string
+     */
+    private $type = "config";
 
-    public function configure()
+    /**
+     * @var bool
+     */
+    private $validated = false;
+
+    /**
+     * @var string
+     */
+    private $command = "";
+
+    /**
+     * @var Option[]
+     */
+    private $options = [];
+
+    /**
+     * @var array
+     */
+    private $generator = [];
+
+    private $module = [
+        "keys" => ["name"],
+        "supports" => [],
+        "states" => ["merged", "replaced", "overridden", "deleted"],
+        "default_state" => "merged",
+    ];
+
+    /**
+     * @var null|string
+     */
+    private $moduleName;
+
+    /**
+     * @var null|string
+     */
+    private $moduleNamespace;
+
+    private $examples = [];
+
+    /**
+     * @var null|string
+     */
+    private $className;
+
+    /**
+     * @var array
+     */
+    private $documentations = [
+        "author" => "Anthonius Munthi (@kilip)",
+        "version_added" => "1.0.0",
+    ];
+
+    /**
+     * @var array
+     */
+    private $tests = [];
+    
+    /**
+     * @param string $name
+     * @return Option
+     */
+    public function getOption($name)
     {
-        $inflector = InflectorFactory::create()->build();
-        $this->className = $inflector->classify($this->name);
-
-        // configure resource name
-        $this->resource_name = $this->name;
-
-        $name = "ros_".$this->name;
-        $this->module_name = $name;
-
-        $fileName = $this->name;
-        if(false !== strpos($fileName,"_")){
-            $fileName = str_replace($this->package."_", "", $fileName);
-        }
-        $this->fileName = $fileName;
-        $this->import_path = $this->package.'.'.$fileName;
-    }
-
-    public function render(Twig $twig, $targetDir)
-    {
-        $this->renderResource($twig, $targetDir);
-        $this->renderModule($twig, $targetDir);
-    }
-
-    private function renderResource(Twig $twig, $targetDir)
-    {
-        $exp = explode("_", $this->name);
-        $dir = array_shift($exp);
-        $file = isset($exp[0]) ? implode("_", $exp):$dir;
-        $target = $targetDir."/module_utils/resources/{$dir}";
-        if(!is_dir($target)){
-            mkdir($target,0777,true);
-        }
-        if(!is_file($initPY = $target."/__init__.py")){
-            touch($initPY);
-        }
-        $target = $target."/{$file}.py";
-
-        $output = $twig->render($this->type.".py.twig",[
-            "resource" => $this,
+        $translated = strtr($name, [
+            "-" => "_",
+            "/" => "",
         ]);
-        file_put_contents($target,$output, LOCK_EX);
-    }
 
-    private function renderModule(Twig $twig, $targetDir)
-    {
-        $file = $targetDir."/modules/".$this->module_name.".py";
-        if(!is_dir($dir = dirname($file))){
-            mkdir($dir, 0777, true);
+        if(!$this->hasOption($translated)){
+            $option = new Option();
+            $option->setName($translated);
+            $option->setRosKey($name);
+            $this->options[$translated] = $option;
+            ksort($this->options);
         }
-        $output = $twig->render("module.py.twig",[
-            "resource" => $this,
-        ]);
-        file_put_contents($file, $output, LOCK_EX);
+        return $this->options[$translated];
     }
 
-    private function parseProperties()
+    public function setOptions(array $options)
     {
-        $options = $this->options;
-        
-        foreach($this->properties as $property){
-            if(!isset($property['property'])) continue;
-            $prop = $property['property'];
-
-            preg_match("/(\S+)/", $prop, $matches);
-            $name = $matches[0];
-            $name = str_replace("-","_", $name);
-            
-            if(in_array($name, $this->ignores)){
-                continue;
-            }
-            if(!isset($options[$name])){
-                $options[$name] = [];
-            }
-
-            if(!isset($options[$name]["type"])){
-                preg_match("/\((.*)\)/im", $prop, $matches);
-                if(false !== strpos($matches[1],"read-only")){
-                    continue;
-                }
-                if(strpos($matches[1],"|") !== false){
-                    $ret = $this->parseChoices($matches[1]);
-                    $pyType = $ret[0];
-                    $options[$name]["type"] = $pyType;
-                    if($pyType!== self::OPT_BOOL){
-                        $options[$name]["choices"] = $ret[1];
-                    }
-                }else{
-                    $options[$name]["type"] = $this->parseType($name, $matches);
-                }
-            }
-
-            $default = $this->parseDefault($matches[1]);
-            if(
-                !is_null($default)
-                && (!isset($options[$name]["default"]) || is_null($options[$name]["default"]))
-            ){
-                $options[$name]["default"] = $default;
-            }
-
-            $options[$name]['description'] = $property["description"];
-            if(!isset($options[$name]["type"])){
-                throw new \Exception("Unknown type for ".$name);
+        foreach($options as $name => $config){
+            $option = $this->getOption($name);
+            foreach($config as $key => $value){
+                $setter = 'set'.$key;
+                call_user_func([$option,$setter], $value);
             }
         }
-        $this->options = $options;
-        //print_r($options);
     }
 
-    private function parseType($name, $matches)
+    public function toArray()
     {
-        $type = $matches[1];
-        $type = strtolower($type);
-        $known_types = [
-            "string" => self::OPT_STR,
-            "integer" => self::OPT_INT,
-            "ip address" => self::OPT_STR,
-            "ip\/netmask" => self::OPT_STR,
-            "ip\/netmaks" => self::OPT_STR,
-            "name" => self::OPT_STR,
-            "mac address" => self::OPT_STR,
-            "time" => self::OPT_STR,
-            "text" => self::OPT_STR,
-            "mac" => self::OPT_STR,
-            "ip" => self::OPT_STR,
-            "script" => self::OPT_STR,
+        $options = [];
+
+        foreach($this->options as $option){
+            $options[$option->getName()] = $option->toArray();
+        }
+
+        ksort($options);
+        return [
+            "name" => $this->name,
+            "package" => $this->package,
+            "type" => $this->type,
+            "validated" => $this->validated,
+            "command" => $this->command,
+            "module" => $this->module,
+            "examples" => $this->examples,
+            "options" => $options,
         ];
-        $pyType = null;
-        $pattern = "^(".implode("|",array_keys($known_types)).")";
-        preg_match("#{$pattern}#im", $type, $finds);
-        if($finds){
-            $match = $finds[0];
-            $match = str_replace("/","\/", $match);
-            $pyType = $known_types[$match];
-        }
-
-        if(is_null($pyType)){
-            echo "{$this->name} {$this->command_root} {$name} = {$matches[1]}\n";
-        }
-        return $pyType;
     }
 
-    private function parseChoices($type)
+    /**
+     * @return bool
+     */
+    public function isValidated(): bool
     {
-
-        $exp = explode(";", $type);
-        $choices = preg_replace("#(\s+)#","", $exp[0]);
-        if(false !== strpos($choices, "yes|no")){
-            $pyType = "bool";
-        }else{
-            $pyType = "str";
-        }
-        $choices = explode("|", $choices);
-        foreach($choices as $choice){
-            if(false !== strpos($choice,',')){
-                return [$pyType,[]];
-            }
-            if(false !== strpos($choice,"/")){
-                return [$pyType,[]];
-            }
-        }
-        
-        return [$pyType,$choices];
+        return $this->validated;
     }
 
-    private function parseDefault($match)
+    /**
+     * @return array
+     */
+    public function getDocumentations(): array
     {
-        $exp = explode(";", $match);
-        if(!isset($exp[1])){
-            return null;
+        return $this->documentations;
+    }
+
+    /**
+     * @param array $documentations
+     * @return static
+     */
+    public function setDocumentations(array $documentations)
+    {
+        $this->documentations = array_merge($documentations, $this->documentations);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVersionAdded():string
+    {
+        return $this->versionAdded;
+    }
+
+    /**
+     * @param mixed $versionAdded
+     * @return static
+     */
+    public function setVersionAdded($versionAdded)
+    {
+        $this->versionAdded = $versionAdded;
+        return $this;
+    }
+
+
+    public function setExamples(array $examples)
+    {
+        $this->examples = $examples;
+    }
+
+    public function getExamples()
+    {
+        return $this->examples;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGenerator(): array
+    {
+        return $this->generator;
+    }
+
+    /**
+     * @param array $generator
+     * @return static
+     */
+    public function setGenerator(array $generator)
+    {
+        $this->generator = $generator;
+        return $this;
+    }
+
+    /**
+     * @param bool $validated
+     * @return static
+     */
+    public function setValidated(bool $validated)
+    {
+        $this->validated = $validated;
+        return $this;
+    }
+
+    public function hasOption($name)
+    {
+        return isset($this->options[$name]);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getModuleName(): ?string
+    {
+        return $this->moduleName;
+    }
+
+    /**
+     * @param string $moduleName
+     * @return static
+     */
+    public function setModuleName(string $moduleName)
+    {
+        $this->moduleName = $moduleName;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getTests(): array
+    {
+        return $this->tests;
+    }
+
+    /**
+     * @param array $tests
+     * @return static
+     */
+    public function setTests(array $tests)
+    {
+        $this->tests = array_merge($this->tests, $tests);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassName(): ?string
+    {
+        return $this->className;
+    }
+
+    /**
+     * @param string $className
+     * @return static
+     */
+    public function setClassName(string $className)
+    {
+        $this->className = $className;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getModule(): array
+    {
+        return $this->module;
+    }
+
+    /**
+     * @param array $module
+     * @return static
+     */
+    public function setModule(array $module)
+    {
+        $this->module = array_merge($this->module, $module);
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getModuleNamespace(): ?string
+    {
+        return $this->moduleNamespace;
+    }
+
+    /**
+     * @param string|null $moduleNamespace
+     * @return static
+     */
+    public function setModuleNamespace(string $moduleNamespace)
+    {
+        $this->moduleNamespace = $moduleNamespace;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getStates(): array
+    {
+        return $this->states;
+    }
+
+    /**
+     * @param array $states
+     * @return static
+     */
+    public function setStates(array $states)
+    {
+        $this->states = $states;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     * @return static
+     */
+    public function setName(string $name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPackage(): ?string
+    {
+        return $this->package;
+    }
+
+    /**
+     * @param string $package
+     * @return static
+     */
+    public function setPackage(string $package)
+    {
+        $this->package = $package;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     * @return static
+     */
+    public function setType(string $type)
+    {
+        $this->type = $type;
+        if($type == "setting"){
+            $this->module['keys'] = [];
         }
-        $content = trim(strtolower($exp[1]));
-        preg_match("#^default\:\s+(\S+)#im", $content, $matches);
-        if($matches){
-            $default = $matches[1];
-            if(false !== strpos($default, '"')) return null;
-            if($default == "yes" || $default == "no"){
-                return $matches == "yes" ? "True":"False";
-            }
-            return $default;
-        }
-        return null;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCommand(): ?string
+    {
+        return $this->command;
+    }
+
+    /**
+     * @param string $command
+     * @return static
+     */
+    public function setCommand(string $command)
+    {
+        $this->command = $command;
+        return $this;
+    }
+
+    /**
+     * @return Option[]
+     */
+    public function getOptions(): array
+    {
+        return $this->options;
     }
 }

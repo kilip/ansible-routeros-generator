@@ -4,15 +4,15 @@ __metaclass__ = type
 
 {% for resource in resources %}
 {% if resource.validated %}
-from .{{ resource.import_path }} import {{ resource.className }}Resource
+from .{{ resource.package }}.{{ resource.name }} import {{ resource.className }}
 {% endif %}
 {% endfor %}
 
 
 RESOURCE_SUBSETS = dict(
 {% for resource in resources %}
-    {% if resource.validated %}
-    {{ resource.name }}={{ resource.className }}Resource,
-    {% endif %}
+{% if resource.validated %}
+    {{ resource.name }}={{ resource.className }},
+{% endif %}
 {% endfor %}
 )

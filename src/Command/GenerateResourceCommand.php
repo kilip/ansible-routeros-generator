@@ -24,20 +24,22 @@ use Twig\Environment as Twig;
 
 class GenerateResourceCommand extends Command implements ContainerAwareInterface
 {
-    protected static $defaultName = "app:generate-resource";
+    protected static $defaultName = "app:generate";
 
     private $cacheDir;
 
     private $twig;
 
-    private $useDebug = false;
+    private $debugMode = false;
 
     private $logger;
+
+    private $targetDir;
 
     public function __construct(LoggerInterface $logger, $name = null)
     {
         parent::__construct($name);
-        $this->addOption('use-debug', null, InputOption::VALUE_NONE);
+        $this->addOption('debug-mode', null, InputOption::VALUE_NONE);
         $this->logger = $logger;
     }
 
@@ -45,7 +47,7 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
     {
         $this->cacheDir = $container->getParameter('kernel.cache_dir');
         $this->twig = $container->get("twig");
-
+        $this->targetDir = $container->getParameter("target_dir");
     }
 
     /**
@@ -59,14 +61,17 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->debugMode = $input->getOption("debug-mode");
+
         $resources = $this->getResources($output);
+
         $target = realpath(__DIR__.'/../../var/generated');
-        if(!$this->useDebug){
-            $target = "/home/toni/project/ansible/ansible_collections/kilip/routeros";
+        if(!$this->debugMode){
+            $target = $this->targetDir;
         }
         
         foreach($resources as $resource){
-            $output->writeln("<info>Configuring </info> <comment>{$resource->name}</comment>");
+            $output->writeln("<info>Configuring </info> <comment>{$resource->getName()}</comment>");
             $parser = new Configurator(
                 $resource,
                 $this->cacheDir,
@@ -88,7 +93,7 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
     {
         $resources = [];
         $dir = __DIR__.'/../Resources/packages';
-        if($this->useDebug){
+        if($this->debugMode){
             $dir = __DIR__.'/../Resources/debug';
         }
         $finder = Finder::create()
@@ -100,11 +105,10 @@ class GenerateResourceCommand extends Command implements ContainerAwareInterface
             $data = Yaml::parseFile($file->getRealPath());
             foreach($data as $name => $config){
                 $resource = new Resource();
-                $resource->name = $name;
-                $resource->relativePath = $file->getFilenameWithoutExtension();
-
+                $resource->setName($name);
                 foreach($config as $key=>$value){
-                    $resource->$key = $value;
+                    $method = 'set'.$key;
+                    call_user_func([$resource, $method], $value);
                 }
                 $resources[$name] = $resource;
             }
