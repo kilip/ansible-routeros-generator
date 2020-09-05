@@ -54,6 +54,11 @@ class Option
     private $required;
 
     /**
+     * @var bool
+     */
+    private $choicesIgnored = false;
+
+    /**
      * @var string
      */
     private $ros_key;
@@ -256,6 +261,10 @@ class Option
 
     private function parseChoices($text)
     {
+        if($this->isChoicesIgnored()){
+            return $this;
+        }
+
         $choices = [];
         $ignores = [
             "name of the country",
@@ -391,8 +400,30 @@ class Option
             }
         }
 
+        $filters = ["empty"];
+        if(in_array($default, $filters)){
+            return;
+        }
         if(!is_null($default)){
             $this->setDefault($default);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isChoicesIgnored(): bool
+    {
+        return $this->choicesIgnored;
+    }
+
+    /**
+     * @param bool $choicesIgnored
+     * @return static
+     */
+    public function setChoicesIgnored(bool $choicesIgnored)
+    {
+        $this->choicesIgnored = $choicesIgnored;
+        return $this;
     }
 }

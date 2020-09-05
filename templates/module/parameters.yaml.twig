@@ -1,6 +1,9 @@
 {% for option in resource.options %}
         {{ option.name }}:
           type: {{ option.type }}
+{% if option.elements is not empty %}
+          elements: "{{ option.elements }}"
+{% endif %}
 {% if option.choices is not empty %}
           choices:
 {% for choice in option.choices %}
