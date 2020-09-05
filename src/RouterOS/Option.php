@@ -175,19 +175,22 @@ class Option
     }
 
     /**
-     * @return string
+     * @return mixed
      */
-    public function getDefault(): ?string
+    public function getDefault()
     {
         return $this->default;
     }
 
     /**
-     * @param string $default
+     * @param mixed $default
      * @return static
      */
-    public function setDefault(string $default)
+    public function setDefault($default)
     {
+        if(is_string($default) && $default == ""){
+            $default = null;
+        }
         $this->default = $default;
         return $this;
     }
@@ -389,7 +392,7 @@ class Option
         }
 
         if(!is_null($default)){
-            $this->default = $default;
+            $this->setDefault($default);
         }
     }
 }
