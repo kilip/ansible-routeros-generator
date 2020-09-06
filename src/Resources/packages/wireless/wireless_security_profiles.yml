@@ -1,11 +1,45 @@
 wireless_security_profiles:
-  validated: false
+  versionAdded: 1.0.0
+  validated: true
   package: wireless
   command:  /interface wireless security-profiles
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
     tableIndex: [14,15,16,17]
+  documentations:
+    short_description: Wireless Security Profiles Module
+    descriptions:
+      - This module manages the Wireless Security Profiles of Mikrotik RouterOS network devices.
   options:
     authentication_types:
       type: list
       elements: str
+  tests:
+    fixtures:
+      interface_wireless_security-profiles_export: |
+        /interface wireless security-profiles
+        add name=test supplicant-identity=MikroTik
+    facts:
+      asserts:
+        - self.assertEqual(result[0]["name"], "test")
+        - self.assertEqual(result[0]["supplicant_identity"], "MikroTik")
+
+  examples:
+    - title: Using merged state
+      name: Merge with device configuration
+      argument_spec:
+        config:
+          - name: test
+            supplicant_identity: test
+          - name: new
+            supplicant_identity: new
+      commands:
+        - /interface wireless security-profiles set [ find name=test ] supplicant-identity=test
+        - /interface wireless security-profiles add name=new supplicant-identity=new
+      post: |
+        /interface wireless security-profiles
+        add name=test supplicant-identity=test
+        add name=foo supplicant-identity=foo
+
+
+      

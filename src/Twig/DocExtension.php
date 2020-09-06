@@ -4,19 +4,71 @@
 namespace App\Twig;
 
 
+use App\RouterOS\Resource;
+use Twig\Environment as TwigEnvironment;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Symfony\Component\Yaml\Yaml;
 
 class DocExtension extends AbstractExtension
 {
+
+    /**
+     * @var TwigEnvironment
+     */
+    private $environment;
+
+    public function __construct(TwigEnvironment $environment)
+    {
+
+        $this->environment = $environment;
+    }
+
     public function getFilters()
     {
         return [
+            new TwigFilter("rst_subtitle", [$this, "formatSubTitle"]),
+            new TwigFilter("rst_title", [$this, "formatTitle"]),
             new TwigFilter("doc", [$this, 'formatDoc']),
             new TwigFilter("format_yaml", [$this, "formatYaml"]),
             new TwigFilter("yaml_comment", [$this, "formatYamlComment"]),
+            new TwigFilter("console", [$this, "formatConsole"]),
         ];
+    }
+
+    public function formatConsole($text, Resource $resource, int $spacing=0, $comment=false)
+    {
+        return $resource->formatConsoleOutput($text, $spacing, $comment);
+    }
+
+    public function formatTitle($text)
+    {
+        $length = strlen($text);
+        $mark = str_repeat("=", $length);
+        $output = <<<EOC
+
+{$mark}
+{$text}
+{$mark}
+
+EOC;
+        return $output;
+
+    }
+
+    public function formatSubTitle($text)
+    {
+        $length = strlen($text);
+        $mark = str_repeat("-", $length);
+        $output = <<<EOC
+
+{$mark}
+{$text}
+{$mark}
+
+EOC;
+        return $output;
+
     }
 
     public function formatDoc($text)
@@ -50,8 +102,6 @@ class DocExtension extends AbstractExtension
         ]);
         return $contents;
     }
-
-
 
     public function formatYaml(array $config)
     {
@@ -93,7 +143,6 @@ class DocExtension extends AbstractExtension
         return implode("\n",$contents);
     }
 
-
     private function wrapDoc($text)
     {
         $prefix = "            ";
@@ -129,4 +178,5 @@ class DocExtension extends AbstractExtension
         $text = preg_replace($pattern, "C(\\1)", $text);
         return $text;
     }
+
 }

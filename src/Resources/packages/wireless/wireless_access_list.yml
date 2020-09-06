@@ -29,11 +29,8 @@ wireless_access_list:
   tests:
     fixtures:
       interface_wireless_access-list_export: |
-        #
-        #
-        #
         /interface wireless access-list
-        add comment=existing action accept signal-range=-79..120
+        add comment=existing signal-range=-79..120
     facts:
       asserts:
         - self.assertEqual(result[0]["signal_range"], "-79..120")
@@ -51,9 +48,6 @@ wireless_access_list:
       commands:
         - /interface wireless access-list set [ find comment=existing ] signal-range=-80..120
         - /interface wireless access-list add comment=new signal-range=-50..120 interface=wlan1
-      pre: |
-        /interface wireless access-list
-        add comment=existing action accept signal-range=-79..120
       post: |
         /interface wireless access-list
         add comment=existing action=accept signal-range=-80..120

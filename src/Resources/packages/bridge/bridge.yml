@@ -20,11 +20,6 @@ bridge:
   tests:
     fixtures:
       interface_bridge_export: |
-        # sep/04/2020 10:10:14 by RouterOS 6.47.2
-        # software id = 
-        #
-        #
-        #
         /interface bridge
         add comment="trunk bridge" name=br-trunk arp=reply-only
         add comment="wan bridge" name=br-wan arp=reply-only
@@ -49,13 +44,7 @@ bridge:
       commands:
         - /interface bridge set [ find name=br-wan ] comment="updated comment" arp=enabled
         - /interface bridge set [ find name=br-trunk ] comment="updated comment" vlan-filtering=yes arp=enabled
-      pre: |
-        [admin@MikroTik] > /interface bridge export
-        /interface bridge
-        add comment="trunk bridge" name=br-trunk arp=reply-only
-        add comment="wan bridge" name=br-wan arp=reply-only
       post: |
-        [admin@MikroTik] > /interface bridge export
         /interface bridge
         add comment="trunk bridge" name=br-trunk vlan-filtering=yes arp=enabled
         add comment="wan bridge" name=br-wan arp=enabled
@@ -75,13 +64,7 @@ bridge:
         - /interface bridge set [ find name=br-wan ] comment="replaced comment"
         - /interface bridge set [ find name=br-trunk ] arp=enabled
         - /interface bridge set [ find name=br-trunk ] comment="replaced comment"
-      pre: |
-        [admin@MikroTik] > /interface bridge export
-        /interface bridge
-        add comment="trunk bridge" name=br-trunk arp=reply-only
-        add comment="wan bridge" name=br-wan arp=reply-only
       post: |
-        [admin@MikroTik] > /interface bridge export
         /interface bridge
         add comment="replaced comment" name=br-trunk arp=enabled
         add comment="replaced comment" name=br-wan arp=enabled
@@ -99,14 +82,8 @@ bridge:
         - /interface bridge remove [ find name=br-wan ]
         - /interface bridge add name=br-new comment="new bridge"
         - /system script run ansible-remove-invalid
-      pre: |
-        [admin@MikroTik] > /interface bridge export
-        /interface bridge
-        add comment="trunk bridge" name=br-trunk
-        add comment="wan bridge" name=br-wan
       post: |
-        All existing bridge will be removed and replaced with the new configuration.
-        [admin@MikroTik] > /interface bridge export
+        # All existing bridge will be removed and replaced with the new configuration.
         /interface bridge
         add comment="new bridge" name=br-new
 
@@ -123,14 +100,6 @@ bridge:
         - /interface bridge remove [ find name=br-wan ]
         - /system script run ansible-remove-invalid
 
-      pre: |
-        [admin@MikroTik] > /interface bridge export
-        # sep/04/2020 04:56:00 by RouterOS 6.47.2
-        # software id =
-        /interface bridge
-        add comment="trunk bridge" name=br-trunk
-        add comment="wan bridge" name=br-wan
       post: |
-        All existing bridge will be removed and replaced with the new configuration.
-        [admin@MikroTik] > /interface bridge export
+        # All existing bridge will be removed and replaced with the new configuration.
         # empty bridge config

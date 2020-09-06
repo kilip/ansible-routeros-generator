@@ -10,18 +10,17 @@ RouterOS Submenu: **{{ resource.command }}**
 
 .. contents::
    :local:
-   :depth: 1
+   :depth: 2
 
 
-Synopsis
---------
+{{ "Synopsis"|rst_title }}
+
 {% for description in docs.descriptions %}
 -  {{ description }}
 {% endfor %}
 
 
-Parameters
-----------
+{{ "Parameters"|rst_title }}
 
 state
   | **choices**: {{ resource.module.states|join(", ") }}
@@ -41,35 +40,26 @@ config
 
 
 
-Examples
---------
+{{ "Examples"|rst_title }}
+
 {% for example in resource.examples %}
 
-{{ example.title }}
-  | **Before State**
+{{ example.title|rst_subtitle }}
 
-  ```ssh
-{{ example.pre|raw }}
-  ```
+**Before State**
+{{ example.pre|console(resource, 2)|example_ssh|raw }}
 
-  | **Configuration**
 
-  ```yaml
-- name: {{ example.name }}
-  kilip.routeros.{{  module_name }}:
-{{ example.argument_spec|format_yaml|raw }}
-  ```
+**Configuration**
 
-  | **Executed Command**
-  ```ssh
-  {% for command in example.commands %}
-{{ command|raw }}
-  {% endfor %}
+{{ example.argument_spec|format_yaml|raw|example_yaml(module_name, example)|raw }}
 
-  ```
+**Executed Command**
 
-  | **After State**
-  ```ssh
-{{ example.post|raw }}
-  ```
+{{ example.commands|example_ssh(2)|raw }}
+
+**After State**
+
+{{ example.post|console(resource, 2)|example_ssh|raw }}
+
 {% endfor %}

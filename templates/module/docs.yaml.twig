@@ -31,12 +31,15 @@ EXAMPLES="""
 # {{ example.title }}
 # ----
 # before:
-{{ example.pre|yaml_comment|raw }}
+{{ example.pre|console(resource, 0, true)|raw }}
+#
+# configuration:
 - name: {{ example.name }}
   kilip.routeros.{{  module_name }}:
 {{ example.argument_spec|format_yaml|raw }}
+#
 # after:
-{{ example.post|yaml_comment|raw }}
+{{ example.post|console(resource, 0, true)|raw }}
 {% endfor %}
 """
 

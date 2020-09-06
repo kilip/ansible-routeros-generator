@@ -23,11 +23,6 @@ ethernet:
   tests:
     fixtures:
       interface_ethernet_export: |
-        # sep/05/2020 13:10:43 by RouterOS 6.47.2
-        # software id =
-        #
-        #
-        #
         /interface ethernet
         set [ find default-name=ether1 ] comment="ether1 comment"
     facts:
@@ -48,11 +43,6 @@ ethernet:
         state: merged
       commands:
         - /interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"
-      pre: |
-        [admin@MikroTik] > /interface ethernet export
-        /interface ethernet
-        set [ find default-name=ether1 ] comment="ether1 comment"
       post: |
-        [admin@MikroTik] > /interface ethernet export
         /interface ethernet
         set [ find default-name=ether1 ] comment="updated comment"

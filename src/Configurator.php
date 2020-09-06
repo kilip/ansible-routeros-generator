@@ -26,6 +26,7 @@ class Configurator
     private $typos = [
         "estabilished" => "established",
     ];
+
     /**
      * @var LoggerInterface
      */
@@ -93,6 +94,8 @@ class Configurator
                 $resource->getOption($key)->setRequired('True');
             }
         }
+
+        $this->configureTests();
 
         $this->dump();
         return $configured;
@@ -209,6 +212,26 @@ class Configurator
         }
     }
 
+    private function configureTests()
+    {
+        $resource = $this->resource;
+        $tests = $resource->getTests();
+        $examples = $resource->getExamples();
+        $fixtureKey = strtr($resource->getExportCommand(),[
+            " " => "_",
+            "/" => "",
+        ]);
+        $fixtures = isset($tests["fixtures"]) ? $tests["fixtures"]:[];
+        $fixtures = isset($fixtures[$fixtureKey]) ? $fixtures[$fixtureKey]:"";
+
+        foreach($resource->getExamples() as $index => $config){
+            if(!isset($config["pre"])){
+                $examples[$index]['pre'] = $fixtures;
+            }
+        }
+
+        $resource->setExamples($examples);
+    }
 
 
 }

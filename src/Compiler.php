@@ -87,7 +87,15 @@ class Compiler
                 "argument_spec" => $example["argument_spec"]
             ];
         }
-        
+
+        $prefix = <<<EOC
+# sep/06/2020 03:08:16 by RouterOS 6.47.2
+# software id =
+EOC;
+        foreach($config['fixtures'] as $key => $value){
+            $config['fixtures'][$key] = $prefix."\n".$value;
+        }
+
         $config["tests"] = $moduleTests;
         $yaml = Yaml::dump(
             $config,
@@ -109,6 +117,15 @@ class Compiler
         $target = "{$this->targetDir}/tests/unit/modules/fixtures/facts/{$resource->getName()}.yml";
         $test["resource"] = $resource->getName();
         $test["fixtures"] = $tests["fixtures"];
+
+        $prefix = <<<EOC
+# sep/06/2020 03:08:16 by RouterOS 6.47.2
+# software id =
+EOC;
+
+        foreach($test["fixtures"] as $key=>$value){
+            $test["fixtures"][$key] = $prefix."\n".$value;
+        }
         $yaml = Yaml::dump(
             $test,
             4,

@@ -84,7 +84,60 @@ class Resource
      * @var array
      */
     private $tests = [];
-    
+
+    public function getRouterOSResultHeader(int $spacing=0, bool $comment=false)
+    {
+        $prefix = $comment ? "# ":"";
+        $space = str_repeat("  ", $spacing);
+        $console = $this->getExportConsole($spacing);
+        return <<<EOC
+{$prefix}{$console}
+{$space}# sep/06/2020 03:08:16 by RouterOS 6.47.2
+{$space}# software id =
+EOC;
+    }
+
+    public function getExportCommand()
+    {
+        $command = $this->getCommand()." export";
+        $supports = isset($this->module['supports']) ? $this->module['supports']:[];
+
+        if(in_array('facts_verbose_mode', $supports)){
+            $command .= " verbose";
+        }
+        return $command;
+    }
+
+    public function getExportConsole(int $spacing=0)
+    {
+        $command = "[admin@MikroTik] > ".$this->getExportCommand();
+        return str_repeat("  ", $spacing).$command;
+    }
+
+    public function formatConsoleOutput($text, int $spacing=0, $comment = false)
+    {
+        $contents = [];
+        $prefix = "";
+
+        if($comment){
+            $prefix = "# ";
+        }
+        foreach(explode("\n", $text) as $line){
+            if(empty($line)){
+                continue;
+            }
+            $contents[] = $prefix.str_repeat("  ", $spacing).$line;
+        }
+        $contents = implode("\n", $contents);
+        $header = $this->getRouterOSResultHeader($spacing, $comment);
+        $output = <<<EOC
+{$header}
+{$contents}
+EOC;
+
+        return $output;
+    }
+
     /**
      * @param string $name
      * @return Option

@@ -1,10 +1,47 @@
 wireless_connect_list:
-  validated: false
+  versionAdded: 1.0.0
+  validated: true
   package: wireless
   command:  /interface wireless connect-list
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
     tableIndex: 7
+    ignores: [ "3gpp" ]
+  documentations:
+    short_description: Wireless Connect List Module
+    descriptions:
+      - This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.
+  module:
+    keys: ["comment"]
   options:
+    ssid:
+      defaultIgnored: true
+    interface:
+      required: "True"
     signal_range:
       type: str
+      default: -120..120
+  tests:
+    fixtures:
+      interface_wireless_connect-list_export: |
+        /interface wireless connect-list
+        add comment=existing interfce=wlan1 signal-range=-79..120
+    facts:
+      asserts:
+        - self.assertEqual(result[0]["comment"], "existing")
+        - self.assertEqual(result[0]["signal_range"], "-79..120")
+  examples:
+    - title: Using merged state
+      name: Merge device configuration
+      argument_spec:
+        config:
+          - comment: existing
+            interface: wlan1
+            signal_range: -50..120
+            wireless_protocol: 802.11
+        state: merged
+      commands:
+        - /interface wireless connect-list set [ find comment=existing ] interface=wlan1 signal-range=-50..120 wireless-protocol=802.11
+      post: |
+        /interface wireless connect-list
+        add comment=existing interfce=wlan1 signal-range=-50..120

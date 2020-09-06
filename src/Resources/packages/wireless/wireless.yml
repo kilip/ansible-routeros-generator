@@ -50,8 +50,6 @@ wireless:
   tests:
     fixtures:
       interface_wireless_export: |
-        # sep/04/2020 07:20:39 by RouterOS 6.47.2
-        # software id =
         /interface wireless
         set [ find default-name=wlan1 ] comment="wlan1 comment" security-profile=to-olympus
     facts:
@@ -78,9 +76,6 @@ wireless:
         state: merged
       commands:
         - /interface wireless set [ find name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2 security-profile=default
-      pre: |
-        /interface wireless
-        set [ find default-name=wlan1 ] comment=wlan1
       post: |
         /interface wireless
         set [ find default-name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2
@@ -97,9 +92,6 @@ wireless:
       commands:
         - /interface wireless set [ find name=wlan1 ] security-profile=default
         - /interface wireless set [ find name=wlan1 ] comment="new olympus" ssid=Olympus security-profile=new-olympus
-      pre: |
-        /interface wireless
-        set [ find default-name=wlan1 ] comment="wlan1 comment" security-profile=to-olympus
       post: |
         /interface wireless
         set [ find default-name=wlan1 ] comment="new olympus" ssid=Olympus security-profile=new-olympus

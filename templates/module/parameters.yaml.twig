@@ -3,21 +3,19 @@
           type: {{ option.type }}
 {% if option.elements is not empty %}
           elements: "{{ option.elements }}"
-{% endif %}
-{% if option.choices is not empty %}
+{% endif %}{% if option.choices is not empty %}
           choices:
 {% for choice in option.choices %}
             - '{{ choice }}'
 {% endfor %}
-{% endif %}
-{% if option.required is not null %}
+{% endif %}{% if option.required is not null %}
           required: True
 {% endif %}
 {% if option.default is not null and option.required is null  %}
           default: {% if option.default is iterable %}{{ option.default|json_encode|raw }}{% elseif option.type == "str" %}"{{ option.default }}"{% else %}{{ option.default }}{% endif %}
 {% endif %}
-
 {% if option.description is not null  %}
+
           description: |
             {{ option.description|doc|raw }}
 {% endif %}

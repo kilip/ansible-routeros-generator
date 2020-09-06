@@ -20,11 +20,6 @@ vlan:
   tests:
     fixtures:
       interface_vlan_export: |
-        # sep/05/2020 07:24:11 by RouterOS 6.47.2
-        # software id = 
-        #
-        #
-        #
         /interface vlan
         add interface=br-trunk name=vlan-100 vlan-id=100 arp=reply-only
     facts:
@@ -50,12 +45,7 @@ vlan:
       commands:
         - /interface vlan set [ find name=vlan-100 ] comment="new comment" arp=enabled
         - /interface vlan add name=vlan-200 interface=br-trunk vlan-id=200 comment="new comment"
-      pre: |
-        [admin@MikroTik] > /interface vlan export
-        /interface vlan
-        add interface=br-trunk name=vlan-100 vlan-id=100 arp=reply-only
       post: |
-        [admin@MikroTik] > /interface vlan export
         /interface vlan
         add interface=br-trunk name=vlan-100 vlan-id=100 comment="new comment"
         add interface=br-trunk name=vlan-200 vlan-id=200 comment="new comment"
@@ -73,12 +63,7 @@ vlan:
       commands:
         - /interface vlan set [ find name=vlan-100 ] arp=enabled
         - /interface vlan set [ find name=vlan-100 ] interface=br-trunk vlan-id=100 comment="new comment"
-      pre: |
-        [admin@MikroTik] > /interface vlan export
-        /interface vlan
-        add interface=br-trunk name=vlan-100 vlan-id=100 arp=reply-only
       post: |
-        [admin@MikroTik] > /interface vlan export
         /interface vlan
         add interface=br-trunk name=vlan-100 vlan-id=100 comment="new comment"
         add interface=br-trunk name=vlan-200 vlan-id=200 comment="new comment"
@@ -97,12 +82,7 @@ vlan:
         - /interface vlan remove [ find name=vlan-100 ]
         - /interface vlan add name=vlan-new interface=br-trunk vlan-id=100 comment="new comment"
         - /system script run ansible-remove-invalid
-      pre: |
-        [admin@MikroTik] > /interface vlan export
-        /interface vlan
-        add interface=br-trunk name=vlan-100 vlan-id=100 arp=reply-only
       post: |
-        [admin@MikroTik] > /interface vlan export
         /interface vlan
         add name=vlan-new interface=br-trunk vlan-id=100 comment="new comment"
 
@@ -118,9 +98,5 @@ vlan:
       commands:
         - /interface vlan remove [ find name=vlan-100 ]
         - /system script run ansible-remove-invalid
-      pre: |
-        [admin@MikroTik] > /interface vlan export
-        /interface vlan
-        add interface=br-trunk name=vlan-100 vlan-id=100 arp=reply-only
       post: |
-        [admin@MikroTik] > /interface vlan export
+        # empty interface

@@ -21,11 +21,6 @@ bridge_port:
   tests:
     fixtures:
       interface_bridge_port_export: |
-        # sep/04/2020 10:10:14 by RouterOS 6.47.2
-        # software id = 
-        #
-        #
-        #
         /interface bridge port
         add bridge=br-wan interface=ether1
         add bridge=br-trunk interface=ether2 disabled=yes
@@ -52,13 +47,7 @@ bridge_port:
       commands:
         - /interface bridge port set [ find bridge=br-wan and interface=ether1 ] comment="new comment"
         - /interface bridge port set [ find bridge=br-trunk and interface=ether2 ] comment="new comment" disabled=no
-      pre: |
-        [admin@MikroTik] > /interface bridge port export
-        /interface bridge port
-        add bridge=br-wan interface=ether1
-        add bridge=br-trunk interface=ether2 disabled=yes
       post: |
-        [admin@MikroTik] > /interface bridge port export
         /interface bridge port
         add bridge=br-wan interface=ether1 comment="new comment"
         add bridge=br-trunk interface=ether2 comment="new comment"
@@ -80,13 +69,7 @@ bridge_port:
         - /interface bridge port set [ find bridge=br-wan and interface=ether1 ] comment="new comment"
         - /interface bridge port set [ find bridge=br-trunk and interface=ether2 ] disabled=no
         - /interface bridge port set [ find bridge=br-trunk and interface=ether2 ] comment="new comment"
-      pre: |
-        [admin@MikroTik] > /interface bridge port export
-        /interface bridge port
-        add bridge=br-wan interface=ether1
-        add bridge=br-trunk interface=ether2 disabled=yes
       post: |
-        [admin@MikroTik] > /interface bridge port export
         /interfce bridge port
         add bridge=br-wan interface=ether1 comment="new comment"
         add bridge=br-trunk interface=ether2 comment="new comment"
@@ -105,13 +88,7 @@ bridge_port:
         - /interface bridge port remove [ find bridge=br-trunk and interface=ether2 ]
         - /interface bridge port add bridge=br-new interface=ether2 comment="new comment"
         - /system script run ansible-remove-invalid
-      pre: |
-        [admin@MikroTik] > /interface bridge port export
-        /interface bridge port
-        add bridge=br-wan interface=ether1
-        add bridge=br-trunk interface=ether2 disabled=yes
       post: |
-        [admin@MikroTik] > /interface bridge port export
         /interfce bridge port
         add bridge=br-new interface=ether2 comment="new comment"
 
@@ -126,12 +103,6 @@ bridge_port:
       commands:
         - /interface bridge port remove [ find bridge=br-trunk and interface=ether2 ]
         - /system script run ansible-remove-invalid
-      pre: |
-        [admin@MikroTik] > /interface bridge port export
-        /interface bridge port
-        add bridge=br-wan interface=ether1
-        add bridge=br-trunk interface=ether2 disabled=yes
       post: |
-        [admin@MikroTik] > /interface bridge port export
         /interfce bridge port
         add bridge=br-wan interface=ether1

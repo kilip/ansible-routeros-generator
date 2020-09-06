@@ -42,11 +42,6 @@ wireless_cap:
   tests:
     fixtures:
       interface_wireless_cap_export_verbose: |
-        # sep/05/2020 13:37:38 by RouterOS 6.47.2
-        # software id =
-        #
-        #
-        #
         /interface wireless cap
         set bridge=none caps-man-addresses="" caps-man-certificate-common-names="" caps-man-names="" \
             certificate=none discovery-interfaces="" \
@@ -68,9 +63,6 @@ wireless_cap:
         state: present
       commands:
         - /interface wireless cap set interfaces=wlan1,wlan2
-      pre: |
-        /interface wireless cap
-        set interface=wlan1,wlan2
       post: |
         /interface wireless cap
         set interface=wlan-new
