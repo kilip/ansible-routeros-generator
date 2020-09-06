@@ -14,7 +14,7 @@
           required: True
 {% endif %}
 {% if option.default is not null and option.required is null  %}
-          default: {% if option.type == "str" %}"{{ option.default }}"{% else %}{{ option.default }}{% endif %}
+          default: {% if option.default is iterable %}{{ option.default|json_encode|raw }}{% elseif option.type == "str" %}"{{ option.default }}"{% else %}{{ option.default }}{% endif %}
 {% endif %}
 
 {% if option.description is not null  %}

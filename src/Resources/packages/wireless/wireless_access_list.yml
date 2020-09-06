@@ -1,10 +1,60 @@
 wireless_access_list:
-  validated: false
+  versionAdded: 1.0.0
+  validated: true
   package: wireless
   command:  /interface wireless access-list
+  module:
+    keys: [ comment ]
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
     tableIndex: 4
+  documentations:
+    short_description: Wireless Access List Module
+    descriptions:
+      - This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.
   options:
     signal_range:
       type: str
+      default: -120..120
+    management_protection_key:
+      defaultIgnored: true
+    private_key:
+      defaultIgnored: true
+    private_pre_shared_key:
+      defaultIgnored: true
+    time:
+      type: str
+      choicesIgnored: true
+      
+  tests:
+    fixtures:
+      interface_wireless_access-list_export: |
+        #
+        #
+        #
+        /interface wireless access-list
+        add comment=existing action accept signal-range=-79..120
+    facts:
+      asserts:
+        - self.assertEqual(result[0]["signal_range"], "-79..120")
+  examples:
+    - title: Using merge state
+      name: Merge with device configuration
+      argument_spec:
+        config:
+          - comment: existing
+            signal_range: -80..120
+          - comment: new
+            signal_range: -50..120
+            interface: wlan1
+        state: merged
+      commands:
+        - /interface wireless access-list set [ find comment=existing ] signal-range=-80..120
+        - /interface wireless access-list add comment=new signal-range=-50..120 interface=wlan1
+      pre: |
+        /interface wireless access-list
+        add comment=existing action accept signal-range=-79..120
+      post: |
+        /interface wireless access-list
+        add comment=existing action=accept signal-range=-80..120
+        add comment=new action=accept signal-range=-50..120

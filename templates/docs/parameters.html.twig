@@ -29,7 +29,7 @@
           {% endif %}
         </td>
         <td>
-          {{ option.description|markdown_to_html|raw }}
+          {{ option.description is not null ? option.description|markdown_to_html|raw }}
         </td>
       </tr>
       {% endfor %}

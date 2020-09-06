@@ -59,6 +59,11 @@ class Option
     private $choicesIgnored = false;
 
     /**
+     * @var bool
+     */
+    private $defaultIgnored = false;
+
+    /**
      * @var string
      */
     private $ros_key;
@@ -214,6 +219,9 @@ class Option
      */
     public function setDescription(string $description)
     {
+        // normalize smart quotes
+        $description = preg_replace("#[\"“‘”]#im", "'", $description);
+
         $description = strtr($description,[
             "(/wiki/" => "(https://wiki.mikrotik.com/wiki/"
         ]);
@@ -375,6 +383,7 @@ class Option
 
     private function parseDefault($text)
     {
+        if($this->defaultIgnored) return $this;
         $type = $this->type;
         $default = null;
         $choices = $this->choices;
@@ -386,6 +395,10 @@ class Option
         if(0!==preg_match("#\s+default\:\s+?(.+)\)#im", $text, $matches)){
             $default = $matches[1];
         }
+
+        $default = strtr($default, [
+            "\\" => "",
+        ]);
 
         if(!is_null($default)){
             if($type == self::OPT_INT){
@@ -404,6 +417,17 @@ class Option
         if(in_array($default, $filters)){
             return;
         }
+
+        if(is_string($default)){
+            $default = strtr($default, [
+                "regulatory_domain" => "regulatory-domain",
+            ]);
+        }
+
+        if(!empty($choices) && !is_array($default) && !in_array($default, $choices)){
+            return;
+        }
+
         if(!is_null($default)){
             $this->setDefault($default);
         }
@@ -424,6 +448,24 @@ class Option
     public function setChoicesIgnored(bool $choicesIgnored)
     {
         $this->choicesIgnored = $choicesIgnored;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDefaultIgnored(): bool
+    {
+        return $this->defaultIgnored;
+    }
+
+    /**
+     * @param bool $defaultIgnored
+     * @return static
+     */
+    public function setDefaultIgnored(bool $defaultIgnored)
+    {
+        $this->defaultIgnored = $defaultIgnored;
         return $this;
     }
 }

@@ -43,6 +43,11 @@ class DocExtension extends AbstractExtension
         // fix link
         $contents = preg_replace("#(L\(\s+)(.*)#im", "L(\\2", $contents);
         $contents = preg_replace("#L\((.+)(\s+)(.+)\)#im", "L(\\1 \\3)", $contents);
+    
+        // remove \_ to _
+        $contents = strtr($contents, [
+            "\\" => "",
+        ]);
         return $contents;
     }
 

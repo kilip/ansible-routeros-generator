@@ -1,10 +1,18 @@
 wireless:
+  versionAdded: 1.0.0
   package: wireless
   command: /interface wireless
-  validated: false
+  validated: true
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
     tableIndex: 0
+  module:
+    states: [ "merged", "replaced" ]
+    default_state: "merged"
+  documentations:
+    short_description: Wireless Resource Module
+    descriptions:
+      - This module manages the Wireless configuration of Mikrotik RouterOS network devices.
   options:
     update_stats_interval:
       type: str
@@ -12,3 +20,86 @@ wireless:
       type: str
     disconnect_timeout:
       type: str
+    ssid:
+      defaultIgnored: true
+    radio_name:
+      defaultIgnored: true
+    ampdu_priorities:
+      type: list
+      elements: int
+      choices: [0, 1, 2, 3, 4, 5, 6, 7]
+      default: [0]
+      defaultIgnored: true
+    rx_chains:
+      type: list
+      elements: int
+      choices: [0, 1, 2, 3]
+      default: [0]
+      defaultIgnored: true
+    tx_chains:
+      type: list
+      elements: int
+      choices: [0, 1, 2, 3]
+      default: [0]
+      defaultIgnored: true
+    scan_list:
+      type: list
+      elements: str
+      default: [default]
+      defaultIgnored: true
+  tests:
+    fixtures:
+      interface_wireless_export: |
+        # sep/04/2020 07:20:39 by RouterOS 6.47.2
+        # software id =
+        /interface wireless
+        set [ find default-name=wlan1 ] comment="wlan1 comment" security-profile=to-olympus
+    facts:
+      asserts:
+        - self.assertEqual(result[0]["name"], "wlan1")
+        - self.assertEqual(result[0]["comment"], "wlan1 comment")
+
+  examples:
+    # merged
+    - title: Using merged state
+      name: Merge device configuration
+      argument_spec:
+        config:
+          - name: wlan1
+            comment: "updated comment"
+            ampdu_priorities:
+              - 0
+              - 1
+              - 2
+            # @TODO: add a way to handle key with a/g
+            #supported_rates_ag:
+            #  - 6Mbps
+            #  - 24Mbps
+        state: merged
+      commands:
+        - /interface wireless set [ find name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2 security-profile=default
+      pre: |
+        /interface wireless
+        set [ find default-name=wlan1 ] comment=wlan1
+      post: |
+        /interface wireless
+        set [ find default-name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2
+    
+    - title: Using replaced state
+      name: Replace device wireless configuration
+      argument_spec:
+        config:
+          - name: wlan1
+            comment: new olympus
+            ssid: Olympus
+            security_profile: new-olympus
+        state: replaced
+      commands:
+        - /interface wireless set [ find name=wlan1 ] security-profile=default
+        - /interface wireless set [ find name=wlan1 ] comment="new olympus" ssid=Olympus security-profile=new-olympus
+      pre: |
+        /interface wireless
+        set [ find default-name=wlan1 ] comment="wlan1 comment" security-profile=to-olympus
+      post: |
+        /interface wireless
+        set [ find default-name=wlan1 ] comment="new olympus" ssid=Olympus security-profile=new-olympus
