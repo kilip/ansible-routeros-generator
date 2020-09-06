@@ -1,0 +1,62 @@
+capsman_aaa:
+  versionAdded: 1.0.0
+  validated: true
+  package: capsman
+  command: /caps-man aaa
+  type: setting
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+    tableIndex: 2
+  documentations:
+    short_description: CAPsMan AAA Configuration Module
+    descriptions:
+      - This modules manages CAPsMan AAA configuration on Mikrotik RouterOS network devices
+  module:
+    states: ["present", "reset"]
+    default_state: "present"
+    supports:
+      - facts_verbose_mode
+  options:
+    interim_update:
+      type: str
+      choicesIgnored: true
+    mac_caching:
+      type: str
+      choicesIgnored: true
+  tests:
+    fixtures:
+      caps-man_aaa_export_verbose: |
+        /caps-man aaa
+        set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username
+    facts:
+      asserts:
+        - self.assertEqual(result["called_format"], "mac:ssid")
+        - self.assertEqual(result["interim_update"], "disabled")
+        - self.assertEqual(result["mac_caching"], "disabled")
+
+  examples:
+    - title: Using present state
+      name: Change configuration
+      argument_spec:
+        config:
+          called_format: mac
+          interim_update: 10s
+          mac_caching: 10m
+          mac_format: XX-XX-XX-XX-XX-XX
+          mac_mode: as-username-and-password
+        state: present
+      commands:
+        - /caps-man aaa set called-format=mac interim-update=10s mac-caching=10m mac-format=XX-XX-XX-XX-XX-XX mac-mode=as-username-and-password
+      post: |
+        /caps-man aaa
+        set called-format=mac interim-update=10s mac-caching=10m mac-format=XX-XX-XX-XX-XX-XX mac-mode=as-username-and-password
+
+    - title: Using reset state
+      name: Reset to default value
+      argument_spec:
+        state: reset
+      commands:
+        - /caps-man aaa set mac-format=XX:XX:XX:XX:XX:XX
+      post: |
+        /caps-man aaa
+        set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX:XX:XX:XX:XX:XX mac-mode=as-username

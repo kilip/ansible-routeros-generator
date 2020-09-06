@@ -6,7 +6,6 @@ wireless_connect_list:
   generator:
     url: https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless
     tableIndex: 7
-    ignores: [ "3gpp" ]
   documentations:
     short_description: Wireless Connect List Module
     descriptions:

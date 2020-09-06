@@ -95,6 +95,7 @@ class Configurator
             }
         }
 
+        $this->configureCustomProps();
         $this->configureTests();
 
         $this->dump();
@@ -174,6 +175,23 @@ class Configurator
             ->fromText($params[0])
             ->setDescription($params[1])
         ;
+    }
+
+    private function configureCustomProps()
+    {
+        $resource = $this->resource;
+
+        $customProps = [];
+        foreach($resource->getOptions() as $key => $option)
+        {
+            $rosKey = $option->getRosKey();
+            $test = str_replace("_", "-", $key);
+            if($rosKey != $test){
+                $customProps[$key]['ros_key'] = $rosKey;
+            }
+        }
+
+        $resource->setCustomProps($customProps);
     }
 
     /**

@@ -69,16 +69,15 @@ wireless:
               - 0
               - 1
               - 2
-            # @TODO: add a way to handle key with a/g
-            #supported_rates_ag:
-            #  - 6Mbps
-            #  - 24Mbps
+            supported_rates_ag:
+              - 6Mbps
+              - 24Mbps
         state: merged
       commands:
-        - /interface wireless set [ find name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2 security-profile=default
+        - /interface wireless set [ find name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2 supported-rates-a/g=6Mbps,24Mbps security-profile=default
       post: |
         /interface wireless
-        set [ find default-name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2
+        set [ find default-name=wlan1 ] comment="updated comment" ampdu-priorities=0,1,2 supported-rates-a/g=6Mbps,24Mbps security-profile=default
     
     - title: Using replaced state
       name: Replace device wireless configuration

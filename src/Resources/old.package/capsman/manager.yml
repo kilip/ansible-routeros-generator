@@ -1,8 +1,0 @@
-capsman_manager:
-  package: capsman
-  command_root: /caps-man manager
-  validated: true
-  type: singular
-  generator:
-    url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
-    tableIndex: 1

@@ -13,13 +13,12 @@
 
         configs = []
         for conf in sp:
-            config = parse_config(spec, conf, self.facts_argument_spec, self.prefixes)
+            config = self.parse_config(spec, conf, self.facts_argument_spec)
             config["type"] = intype
             if config:
                 configs.append(config)
         return configs
 {% endblock %}
 {% block custom_import %}
-from ...utils import parse_config
 import re
 {% endblock %}

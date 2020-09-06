@@ -1,7 +1,0 @@
-capsman_provisioning:
-  package: capsman
-  command_root: /caps-man provisioning
-  validated: true
-  generator:
-    url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
-    tableIndex: 3

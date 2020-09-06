@@ -1,0 +1,48 @@
+capsman_channel:
+  versionAdded: 1.0.0
+  validated: true
+  package: capsman
+  command: /caps-man channel
+  generator:
+    url: https://wiki.mikrotik.com/wiki/Manual:CAPsMAN
+    tableIndex: 5
+  documentations:
+    short_description: CAPsMan Channels Configuration Module
+    descriptions:
+      - This modules manages CAPsMan Channels configuration on Mikrotik RouterOS network devices
+  options:
+    width:
+      type: str
+    save_selected:
+      type: str
+      choices:
+        - yes
+        - no
+  tests:
+    fixtures:
+      caps-man_channel_export: |
+        /caps-man channel
+        add name=test
+    facts:
+      asserts:
+        - self.assertEqual(result[0]["name"], "test")
+        - self.assertEqual(result[0]["save_selected"], "yes")
+
+  examples:
+    - title: Using merged
+      name: Merge with device configuration
+      argument_spec:
+        config:
+          - name: test
+            save_selected: no
+          - name: new
+            extension_channel: Ce
+        state: merged
+      commands:
+        - /caps-man channel set [ find name=test ] save-selected=no
+        - /caps-man channel add name=new extension-channel=Ce
+      post:
+        /caps-man channel
+        add name=test save-selected=no
+        add name=new extension-channel=Ce
+

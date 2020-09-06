@@ -85,6 +85,8 @@ class Resource
      */
     private $tests = [];
 
+    private $customProps = [];
+
     public function getRouterOSResultHeader(int $spacing=0, bool $comment=false)
     {
         $prefix = $comment ? "# ":"";
@@ -144,10 +146,12 @@ EOC;
      */
     public function getOption($name)
     {
+        $name = preg_replace("#(\.|\-)#im","_", $name);
+        $name = preg_replace("#(\/)#im", "", $name);
         $translated = strtr($name, [
-            "-" => "_",
-            "/" => "",
+            "3gpp" => "three_gpp",
         ]);
+
 
         if(!$this->hasOption($translated)){
             $option = new Option();
@@ -215,6 +219,17 @@ EOC;
     {
         $this->documentations = array_merge($documentations, $this->documentations);
         return $this;
+    }
+
+    public function setCustomProps(array $props)
+    {
+        $this->customProps = $props;
+        return $this;
+    }
+
+    public function getCustomProps()
+    {
+        return $this->customProps;
     }
 
     /**

@@ -28,11 +28,11 @@ class {{ resource.className }}(ResourceBase):
     command = "{{ resource.command }}"
     gather_network_resources = ["{{ resource.name }}"]
     keys = {{ resource.module.keys|json_encode|raw }}
-    type = "{{ resource.type }}"
-{% if resource.module.supports is not empty %}
+    config_type = "{{ resource.type }}"
+{% if resource.customProps is not empty %}
+    custom_props = {{ resource.customProps|json_encode|raw }}
+{% endif %}{% if resource.module.supports is not empty %}
     supports = {{ resource.module.supports|json_encode|raw }}
-{% endif %}{% if resource.module.prefixes is defined %}
-    prefixes = {{ resource.key_prefixes|json_encode|raw }}
 {% endif %}
     argument_spec = {
         "state": {
