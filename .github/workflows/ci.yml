@@ -141,7 +141,6 @@ jobs:
     strategy:
       matrix:
         php:
-          - '7.1'
           - '7.2'
           - '7.3'
           - '7.4'
@@ -206,6 +205,7 @@ jobs:
       - name: Run PHPUnit tests
         run: |
           mkdir -p build/logs/phpunit
+          composer prepare-test
           if [ "$COVERAGE" = '1' ]; then
             vendor/bin/simple-phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
           else
