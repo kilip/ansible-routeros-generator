@@ -207,9 +207,9 @@ jobs:
           mkdir -p build/logs/phpunit
           composer prepare-test
           if [ "$COVERAGE" = '1' ]; then
-            vendor/bin/simple-phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
+            bin/phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
           else
-            vendor/bin/simple-phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
+            bin/phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
           fi
       - name: Upload test artifacts
         if: always()
