@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+env:
+  COMPOSER_ALLOW_SUPERUSER: '1' # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
+  COMPOSER_INSTALLER_COMMIT: fb22b78362d31c0d2bf516d1f8cdfd2745caa431
+  COVERAGE: '0'
+  EXT_PCOV_VERSION: '1.0.6'
+
+jobs:
+  phpstan:
+    name: PHPStan (${{ matrix.php }})
+    runs-on: ubuntu-latest
+    container:
+      image: php:${{ matrix.php }}-alpine
+      options: >-
+        --tmpfs /tmp:exec
+        --tmpfs /var/tmp:exec
+    strategy:
+      matrix:
+        php:
+          - '7.4'
+      fail-fast: false
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Install system packages
+        run: |
+          apk add \
+            unzip \
+      - name: Disable PHP memory limit
+        run: echo 'memory_limit=-1' >> /usr/local/etc/php/php.ini
+      - name: Install Composer
+        run: wget -qO - https://raw.githubusercontent.com/composer/getcomposer.org/$COMPOSER_INSTALLER_COMMIT/web/installer | php -- --install-dir=/usr/local/bin --filename=composer --quiet
+      - name: Cache Composer packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.composer/cache
+          key: composer-php${{ matrix.php }}-${{ github.sha }}
+          restore-keys: |
+            composer-php${{ matrix.php }}-
+            composer-
+        continue-on-error: true
+      - name: Install Symfony Flex
+        run: |
+          composer global require --prefer-dist --no-progress --no-suggest --ansi \
+            symfony/flex
+      - name: Update project dependencies
+        run: |
+          mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
+          ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
+          composer update --no-progress --no-suggest --ansi
+      - name: Install PHPUnit
+        env:
+          SYMFONY_PHPUNIT_VERSION: '9.2'
+        run: vendor/bin/simple-phpunit --version
+      - name: Clear test app cache
+        run: |
+          mkdir -p /tmp/kilip/ansible-routeros-generator/var
+          ln -s /tmp/kilip/ansible-routeros-generator/var tests/Fixtures/app/var
+          tests/Fixtures/app/console cache:clear --ansi
+      - name: Cache PHPStan results
+        uses: actions/cache@v2
+        with:
+          path: /tmp/phpstan
+          key: phpstan-php${{ matrix.php }}-${{ github.sha }}
+          restore-keys: |
+            phpstan-php${{ matrix.php }}-
+            phpstan-
+        continue-on-error: true
+      - name: Run PHPStan analysis
+        run: vendor/bin/phpstan analyse --no-progress --no-interaction --ansi
