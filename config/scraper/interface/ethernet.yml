@@ -11,7 +11,7 @@ properties:
     choices:
       - 'yes'
       - 'no'
-    defaultValue: 'no'
     description: 'Set interface disability.'
+    defaultValue: 'no'
   advertise:
     type: list

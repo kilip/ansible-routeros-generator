@@ -65,7 +65,7 @@ class Property
      *
      * @var array
      */
-    private $defaultValue = [];
+    private $defaultValue;
 
     /**
      * @ORM\Column(type="array", nullable=true)

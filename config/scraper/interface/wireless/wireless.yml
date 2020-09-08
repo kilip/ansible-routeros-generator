@@ -29,10 +29,10 @@ properties:
       - 5
       - 6
       - 7
-    defaultValue:
-      - 0
     options:
       - ignore-default
+    defaultValue:
+      - 0
   rx_chains:
     type: list
     choices:
@@ -40,10 +40,10 @@ properties:
       - 1
       - 2
       - 3
-    defaultValue:
-      - 0
     options:
       - ignore-default
+    defaultValue:
+      - 0
   tx_chains:
     type: list
     choices:
@@ -51,13 +51,13 @@ properties:
       - 1
       - 2
       - 3
+    options:
+      - ignore-default
     defaultValue:
       - 0
-    options:
-      - ignore-default
   scan_list:
     type: list
-    defaultValue:
-      - default
     options:
       - ignore-default
+    defaultValue:
+      - default

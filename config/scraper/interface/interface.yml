@@ -12,8 +12,8 @@ properties:
     choices:
       - 'yes'
       - 'no'
-    defaultValue: 'no'
     description: 'Set interface disability.'
+    defaultValue: 'no'
   mtu:
     type: str
   l2mtu:

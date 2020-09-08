@@ -11,5 +11,5 @@ properties:
     choices:
       - 'yes'
       - 'no'
-    defaultValue: 'no'
     description: 'Set bridge port disability'
+    defaultValue: 'no'

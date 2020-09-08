@@ -15,13 +15,13 @@ properties:
     description: 'Short description of the datapath'
   arp:
     type: str
-    defaultValue: enabled
     choices:
       - disabled
       - enabled
       - proxy-arp
       - reply-only
     description: "Address Resolution Protocol setting\n- `disabled` - the interface will not use ARP\n- `enabled` - the interface will use ARP\n- `proxy-arp` - the interface will use the ARP proxy feature\n- `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the L(IP/ARP,https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. Therefore for communications to be successful, a valid static entry must already exist.\n"
+    defaultValue: enabled
   bridge:
     type: str
     description: "Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.\n"
@@ -33,11 +33,11 @@ properties:
     description: "bridge horizon to use when adding as bridge port\n"
   client_to_client_forwarding:
     type: str
-    defaultValue: 'no'
     choices:
       - 'yes'
       - 'no'
     description: "controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN\n"
+    defaultValue: 'no'
   interface_list:
     type: list
     description: 'interface list for this datapath'
@@ -46,11 +46,11 @@ properties:
     description: 'set Layer2 MTU size'
   local_forwarding:
     type: str
-    defaultValue: 'no'
     choices:
       - 'yes'
       - 'no'
     description: "Controls forwarding mode. If disabled, all L2 and L3 data will be forwarded to CAPsMAN, and further forwarding decisions will be made only then.\nNote, if disabled, make sure that each CAP interface MAC Address that participates in the same broadcast domain is unique (including local MACs, like Bridge-MAC).\n"
+    defaultValue: 'no'
   mtu:
     type: str
     description: 'set MTU size'

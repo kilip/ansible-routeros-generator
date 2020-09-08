@@ -13,12 +13,9 @@
         "doctrine/doctrine-migrations-bundle": "^3.0",
         "doctrine/orm": "^2.7",
         "erusev/parsedown": "^1.7",
-        "friendsofphp/php-cs-fixer": "^2.16",
         "league/html-to-markdown": "^4.10",
         "nelmio/cors-bundle": "^2.1",
         "phpdocumentor/reflection-docblock": "^5.2",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.42",
         "symfony/asset": "5.1.*",
         "symfony/cache": "5.1.*",
         "symfony/console": "5.1.*",
@@ -43,6 +40,10 @@
         "twig/twig": "^2.12|^3.0"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^6.3",
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.12.42",
         "symfony/phpunit-bridge": "^5.1"
     },
     "config": {
@@ -82,10 +83,22 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "meta": "./bin/console routeros:meta --ansi",
+        "scrap": "./bin/console routeros:scrap --ansi",
         "phpstan": "./vendor/bin/phpstan analyse --ansi",
         "phpcs": "./vendor/bin/php-cs-fixer fix --ansi",
         "phpunit": "./bin/phpunit --colors=always",
+        "prepare-test": [
+            "./bin/console doctrine:database:create --ansi --env=test",
+            "./bin/console doctrine:schema:update --force --env=test"
+        ],
+        "test": [
+            "@prepare-test",
+            "@phpunit"
+        ],
+        "coverage": [
+            "@prepare-test",
+            "@phpunit --coverage-text --coverage-clover=var/log/clover.xml"
+        ],
         "verify": [
             "@phpunit",
             "@phpcs --dry-run --diff",

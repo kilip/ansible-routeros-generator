@@ -1,2 +1,2 @@
 routeros:
-  scraper_config_dir: "%kernel.project_dir%/scraper/routeros"
+  scraper_config_dir: "%kernel.project_dir%/config/scraper"

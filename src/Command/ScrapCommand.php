@@ -77,7 +77,8 @@ class ScrapCommand extends Command
 
         $scraper->start();
         $this->progressBar->finish();
-
+        $output->writeln("");
+        $output->writeln("Finished");
         return Command::SUCCESS;
     }
 
