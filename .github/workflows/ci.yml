@@ -197,7 +197,7 @@ jobs:
           ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
       - name: Install PHPUnit
-        run: vendor/bin/simple-phpunit --version
+        run: bin/phpunit --version
 
       - name: Enable code coverage
         if: matrix.coverage
