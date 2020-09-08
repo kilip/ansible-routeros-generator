@@ -1,7 +1,5 @@
 name: interface
 package: interface
-debug: true
-validated: true
 command: /interface
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:Interface'
