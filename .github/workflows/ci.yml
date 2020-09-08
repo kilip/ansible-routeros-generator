@@ -196,9 +196,6 @@ jobs:
           mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
           ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
-      - name: Install PHPUnit
-        run: bin/phpunit --version
-
       - name: Enable code coverage
         if: matrix.coverage
         run: echo '::set-env name=COVERAGE::1'
@@ -207,9 +204,9 @@ jobs:
           mkdir -p build/logs/phpunit
           composer prepare-test
           if [ "$COVERAGE" = '1' ]; then
-            bin/phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
+            ./vendor/bin/phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
           else
-            bin/phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
+            ./vendor/bin/phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
           fi
       - name: Upload test artifacts
         if: always()

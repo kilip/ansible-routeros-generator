@@ -44,7 +44,7 @@ class SubMenuManagerTest extends TestCase
      */
     private $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->om = $this->createMock(EntityManagerInterface::class);
         $this->repository = $this->createMock(ObjectRepository::class);

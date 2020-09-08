@@ -25,7 +25,7 @@ class SubMenuManagerFunctionalTest extends KernelTestCase
      */
     private $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $kernel = self::bootKernel();
         $this->em = $kernel->getContainer()

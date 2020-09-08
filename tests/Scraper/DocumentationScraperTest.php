@@ -54,7 +54,7 @@ class DocumentationScraperTest extends TestCase
      */
     private $manager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $contents = file_get_contents(__DIR__.'/../Fixtures/page/interface.html');
 
