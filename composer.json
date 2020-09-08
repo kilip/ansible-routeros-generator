@@ -104,6 +104,9 @@
             "@phpunit",
             "@phpcs --dry-run --diff",
             "@phpstan"
+        ],
+        "commit": [
+            "git commit -am  $1"
         ]
     },
     "conflict": {
