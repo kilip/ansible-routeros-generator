@@ -14,11 +14,13 @@ declare(strict_types=1);
 
 namespace RouterOS\Provider\Ansible;
 
+use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class ModuleConfiguration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
+        return new TreeBuilder('ansible');
     }
 }

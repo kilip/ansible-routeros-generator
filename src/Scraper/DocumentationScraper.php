@@ -102,12 +102,6 @@ class DocumentationScraper
     /**
      * @param array $config
      * @param mixed $name
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     private function scrapSubMenu($name, array $config)
     {
@@ -148,17 +142,11 @@ class DocumentationScraper
     }
 
     /**
-     * @param $url
-     *
-     * @throws \Psr\Cache\InvalidArgumentException
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     * @param string $url
      *
      * @return string
      */
-    private function getPageContents($url): string
+    private function getPageContents(string $url): string
     {
         $cache = $this->cache;
         $id = md5($url);

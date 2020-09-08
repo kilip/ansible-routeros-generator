@@ -128,7 +128,7 @@ class SubMenu
     /**
      * @param mixed $name
      *
-     * @return true If object has option
+     * @return bool true If object has option
      */
     public function hasOption($name)
     {
@@ -136,11 +136,11 @@ class SubMenu
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return Property
      */
-    public function getProperty($name)
+    public function getProperty(string $name)
     {
         if (null === $this->properties) {
             $this->properties = new ArrayCollection();
@@ -235,46 +235,6 @@ class SubMenu
     public function setCommand(string $command)
     {
         $this->command = $command;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDebug(): bool
-    {
-        return $this->debug;
-    }
-
-    /**
-     * @param bool $debug
-     *
-     * @return static
-     */
-    public function setDebug(bool $debug)
-    {
-        $this->debug = $debug;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isValidated(): bool
-    {
-        return $this->validated;
-    }
-
-    /**
-     * @param bool $validated
-     *
-     * @return static
-     */
-    public function setValidated(bool $validated)
-    {
-        $this->validated = $validated;
 
         return $this;
     }
