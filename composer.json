@@ -105,8 +105,9 @@
             "@phpcs --dry-run --diff",
             "@phpstan"
         ],
-        "commit": [
-            "git commit -am  $1"
+        "push": [
+            "@verify",
+            "git push origin master"
         ]
     },
     "conflict": {

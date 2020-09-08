@@ -2,7 +2,9 @@ name: CI
 
 on:
   push:
+    branches: [master]
   pull_request:
+    branches: [master]
 
 env:
   COMPOSER_ALLOW_SUPERUSER: '1' # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
