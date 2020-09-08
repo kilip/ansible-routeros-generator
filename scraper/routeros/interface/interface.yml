@@ -1,0 +1,20 @@
+name: interface
+package: interface
+debug: true
+validated: true
+command: /interface
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface'
+  table_index: 1
+properties:
+  disabled:
+    type: str
+    choices:
+      - 'yes'
+      - 'no'
+    defaultValue: 'no'
+    description: 'Set interface disability.'
+  mtu:
+    type: str
+  l2mtu:
+    type: str

@@ -1,0 +1,34 @@
+name: wireless_connect_list
+package: interface.wireless
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_wireless_connect_list
+short_description: 'Wireless Connect List Module'
+description:
+  - 'This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.'
+keys:
+  - comment
+fixtures:
+  - action: add
+    values:
+      comment: existing
+      interfce: wlan1
+      signal_range: '-79..120'
+examples:
+  merged:
+    title: 'Using merged state'
+    name: 'Merge device configuration'
+    argument_spec:
+      config:
+        - comment: existing
+          interface: wlan1
+          signal_range: '-50..120'
+          wireless_protocol: 802.11
+      state: merged
+    verify:
+      - action: set
+        values:
+          comment: existing
+          interface: wlan1
+          signal_range: '-50..120'
+          wireless_protocol: '802.11'

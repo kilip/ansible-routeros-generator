@@ -1,0 +1,56 @@
+name: wireless
+package: interface.wireless
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_wireless
+short_description: 'Wireless Resource Module'
+description:
+  - 'This module manages the Wireless configuration of Mikrotik RouterOS network devices.'
+states:
+  - merged
+  - replaced
+default_state: merged
+keys:
+  - name
+fixtures:
+  - action: set
+    values:
+      default_name: wlan1
+      comment: 'wlan1 comment'
+      security_profile: to-olympus
+examples:
+  merged:
+    title: 'Using merged state'
+    name: 'Merge device configuration'
+    argument_spec:
+      config:
+        - name: wlan1
+          comment: 'updated comment'
+          ampdu_priorities: [0, 1, 2]
+          supported_rates_ag: [6Mbps, 24Mbps]
+      state: merged
+    verify:
+      - action: set
+        values:
+          name: wlan1
+          ampdu_priorities: '0,1,2'
+          comment: 'updated comment'
+          security_profile: default
+          supported_rates_a_g: '6Mbps,24Mbps'
+  replaced:
+    title: 'Using replaced state'
+    name: 'Replace device wireless configuration'
+    argument_spec:
+      config:
+        - name: wlan1
+          comment: 'new olympus'
+          ssid: Olympus
+          security_profile: new-olympus
+      state: replaced
+    verify:
+      - action: set
+        values:
+          name: wlan1
+          comment: 'new olympus'
+          security_profile: new-olympus
+          ssid: Olympus

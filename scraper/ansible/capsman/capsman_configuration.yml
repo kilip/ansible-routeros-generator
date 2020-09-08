@@ -1,0 +1,38 @@
+name: capsman_configuration
+package: capsman
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_capsman_configuration
+short_description: 'CAPsMan Configuration Module'
+description:
+  - 'This modules manages CAPsMan Configuration on Mikrotik RouterOS network devices'
+supports:
+  - reset_value
+keys:
+  - name
+fixtures:
+  - action: add
+    values:
+      name: test
+examples:
+  merged:
+    title: 'Using merged'
+    name: 'Merge configuration with devie configuration'
+    argument_spec:
+      state: merged
+      config:
+        - name: test
+          datapath_bridge: br-trunk
+          rx_chains: [0, 1, 2]
+        - name: new
+          datapath_bridge: br-trunk
+    verify:
+      - action: set
+        values:
+          name: test
+          datapath_bridge: br-trunk
+          rx_chains: '0,1,2'
+      - action: add
+        values:
+          datapath_bridge: br-trunk
+          name: new

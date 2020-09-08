@@ -1,0 +1,110 @@
+name: bridge_port
+package: interface.bridge
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_bridge_port
+short_description: 'Bridge Port Module'
+description:
+  - 'This module manages RouterOS sub menu `/interface bridge port`'
+keys:
+  - bridge
+  - interface
+fixtures:
+  - action: add
+    values:
+      bridge: br-wan
+      interface: ether1
+  - action: add
+    values:
+      bridge: br-trunk
+      interface: ether2
+      disabled: 'yes'
+examples:
+  merged:
+    name: 'Merge configuration with device configuration'
+    title: 'Merged Configuration'
+    argument_spec:
+      config:
+        - bridge: br-wan
+          interface: ether1
+          comment: 'new comment'
+        - bridge: br-trunk
+          interface: ether2
+          comment: 'new comment'
+      state: merged
+    verify:
+      - action: set
+        values:
+          bridge: br-wan
+          interface: ether1
+          comment: 'new comment'
+      - action: set
+        values:
+          bridge: br-trunk
+          interface: ether2
+          comment: 'new comment'
+          disabled: 'no'
+  replaced:
+    name: 'Replace device configuration'
+    title: 'Using replaced state'
+    argument_spec:
+      config:
+        - bridge: br-wan
+          interface: ether1
+          comment: 'new comment'
+        - bridge: br-trunk
+          interface: ether2
+          comment: 'new comment'
+      state: replaced
+    verify:
+      - action: set
+        values:
+          bridge: br-wan
+          interface: ether1
+          comment: 'new comment'
+      - action: set
+        values:
+          bridge: br-trunk
+          interface: ether2
+          comment: 'new comment'
+          disabled: 'no'
+  overridden:
+    name: 'Override device configuration'
+    title: 'Using overridden state'
+    argument_spec:
+      config:
+        - bridge: br-new
+          interface: ether2
+          comment: 'new comment'
+      state: overridden
+    verify:
+      - action: remove
+        values:
+          bridge: br-wan
+          interface: ether1
+      - action: remove
+        values:
+          bridge: br-trunk
+          interface: ether2
+      - action: add
+        values:
+          bridge: br-new
+          comment: 'new comment'
+          interface: ether2
+      - action: script
+        script: '/system script run ansible-remove-invalid'
+  deleted:
+    name: 'Delete bridge port'
+    title: 'Using deleted state'
+    argument_spec:
+      config:
+        - bridge: br-trunk
+          interface: ether2
+      state: deleted
+    verify:
+      - action: remove
+        values:
+          bridge: br-trunk
+          interface: ether2
+      - action: script
+        script: '/system script run ansible-remove-invalid'

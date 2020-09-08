@@ -1,7 +1,0 @@
-dhcp_network:
-  validated: true
-  package: ip
-  command_root: /ip dhcp-server network
-  generator:
-    url: https://wiki.mikrotik.com/wiki/Manual:IP/DHCP_Server
-    tableIndex: 3

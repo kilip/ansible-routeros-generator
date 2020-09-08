@@ -1,0 +1,31 @@
+name: ethernet
+package: interface
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_ethernet
+short_description: 'Ethernet Resource Module'
+description:
+  - 'This module manages the ethernet configuration of Mikrotik RouterOS network devices.'
+keys:
+  - name
+fixtures:
+  - action: set
+    values:
+      default_name: ether1
+      comment: 'ether1 comment'
+examples:
+  merged:
+    name: 'Merge configuration with device configuration'
+    title: 'Using merged state'
+    argument_spec:
+      config:
+        - name: ether1
+          advertise: [10M-full, 100M-full, 1000M-full]
+          comment: 'updated comment'
+      state: merged
+    verify:
+      - action: set
+        values:
+          name: ether1
+          advertise: '10M-full,100M-full,1000M-full'
+          comment: 'updated comment'

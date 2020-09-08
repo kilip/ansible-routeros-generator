@@ -1,8 +1,22 @@
 <?php
 
-namespace App;
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
 
+declare(strict_types=1);
+
+namespace RouterOS;
+
+use RouterOS\DependencyInjection\RouterosExtension;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
@@ -10,6 +24,15 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
+
+    protected function build(ContainerBuilder $container)
+    {
+        //$container->registerExtension("foo");
+        $extension = new RouterosExtension();
+        $alias = $extension->getAlias();
+        $container->registerExtension($extension);
+        $container->loadFromExtension($extension->getAlias());
+    }
 
     protected function configureContainer(ContainerConfigurator $container): void
     {

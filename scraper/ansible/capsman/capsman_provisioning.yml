@@ -1,0 +1,53 @@
+name: capsman_provisioning
+package: capsman
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_capsman_provisioning
+short_description: 'CAPsMan Provisioning Module'
+description:
+  - 'This modules manages CAPsMan Provisioning on Mikrotik RouterOS network devices'
+keys:
+  - comment
+fixtures:
+  - action: add
+    values:
+      comment: test
+examples:
+  merged:
+    title: 'Using merged state'
+    name: 'Merge with device configuration'
+    argument_spec:
+      state: merged
+      config:
+        - comment: test
+          action: create-disabled
+        - comment: 'Olympus Wireless Network'
+          identity_regexp: olympus- master_configuration: olympus-network
+          name_format: identity
+          slave_configurations: [troy-network, gaia-network]
+          action: create-enabled
+    verify:
+      - action: set
+        values:
+          comment: test
+          action: create-disabled
+      - action: add
+        values:
+          action: create-enabled
+          comment: 'Olympus Wireless Network'
+          identity_regexp: olympus- master_configuration: olympus-network
+          name_format: identity
+          slave_configurations: 'troy-network,gaia-network'
+  deleted:
+    title: 'Using deleted state'
+    name: 'Delete provisioning config'
+    argument_spec:
+      state: deleted
+      config:
+        - comment: test
+    verify:
+      - action: remove
+        values:
+          comment: test
+      - action: script
+        script: '/system script run ansible-remove-invalid'

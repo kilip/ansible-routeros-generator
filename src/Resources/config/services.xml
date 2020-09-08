@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="routeros.scraper.page_cache_namespace">routeros</parameter>
+        <parameter key="routeros.scraper.page_cache_lifetime">604800</parameter>
+        <parameter key="routeros.scraper.cache_dir">%kernel.project_dir%/var/static-wiki</parameter>
+        <parameter key="routeros.model.max_results">1000</parameter>
+        <parameter key="routeros.scraper.config_dir"/>
+    </parameters>
+    <services>
+        <service id="routeros.model.submenu_manager" class="RouterOS\Model\SubMenuManager">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+            <argument>%routeros.model.max_results%</argument>
+        </service>
+
+        <service id="routeros.scraper.page_cache" class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
+            <argument>%routeros.scraper.page_cache_namespace%</argument>
+            <argument>%routeros.scraper.page_cache_lifetime%</argument>
+            <argument>%routeros.scraper.cache_dir%</argument>
+        </service>
+
+        <service id="routeros.scraper.configuration" class="RouterOS\Scraper\Configuration"/>
+        <service id="RouterOS\Scraper\Configuration" alias="routeros.scraper.configuration"/>
+
+        <service id="routeros.scraper.documentation" class="RouterOS\Scraper\DocumentationScraper">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.scraper.page_cache"/>
+            <argument type="service" id="routeros.scraper.configuration"/>
+            <argument type="service" id="routeros.model.submenu_manager"/>
+            <argument>%routeros.scraper.config_dir%</argument>
+        </service>
+
+        <!--
+        <service id="routeros.listener.process" class="RouterOS\Listener\ProcessEventListener">
+            <argument type="service" id="logger"/>
+            <argument type="service" id="console"/>
+            <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
+            <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
+        </service>
+        -->
+
+        <service id="routeros.command.scrap" class="RouterOS\Command\ScrapCommand">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="logger"/>
+            <argument type="service" id="routeros.scraper.documentation"/>
+            <tag name="console.command"/>
+
+            <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
+            <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
+        </service>
+        <service id="RouterOS\Command\ScrapCommand" alias="routeros.command.scrap"/>
+    </services>
+</container>

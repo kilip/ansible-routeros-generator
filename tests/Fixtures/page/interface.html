@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<title>Manual:Interface - MikroTik Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"Manual","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":100,"wgPageName":"Manual:Interface","wgTitle":"Interface","wgCurRevisionId":26135,"wgRevisionId":26135,"wgArticleId":4070,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Manual","Routerboard","Hardware"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Manual:Interface","wgRelevantArticleId":4070,"wgRequestId":"8ef44a4748a67de124c08c48","wgIsProbablyEditable":false,"wgRestrictionEdit":["sysop"],"wgRestrictionMove":["sysop"]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.options@0j3lz3q",function($,jQuery,require,module){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens@0b5cs7y",function ( $, jQuery, require, module ) {
+mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});/*@nomin*/;
+
+});mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.29.2"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="/opensearch_desc.php" title="MikroTik Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://wiki.mikrotik.com/api.php?action=rsd"/>
+<link rel="alternate" type="application/atom+xml" title="MikroTik Wiki Atom feed" href="/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-100 ns-subject page-Manual_Interface rootpage-Manual_Interface skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+
+						<div class="mw-indicators mw-body-content">
+</div>
+			<h1 id="firstHeading" class="firstHeading" lang="en">Manual:Interface</h1>
+									<div id="bodyContent" class="mw-body-content">
+									<div id="siteSub">From MikroTik Wiki</div>
+								<div id="contentSub"></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div id="shbox" style="float:right; border:1px solid #c1c1c1; padding: 10px; width:100px;">
+<div class="floatright"><a href="/wiki/File:Version.png" class="image"><img alt="Version.png" src="/images/c/c4/Version.png" width="32" height="32" /></a></div>
+<p><small><b>Applies to RouterOS:</b> <strong>v3, v4 +</strong></small>
+</p>
+</div>
+<div class="manual">
+<div id="toc" class="toc"><div id="toctitle" class="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Sub_Categories"><span class="tocnumber">1</span> <span class="toctext">Sub Categories</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Summary"><span class="tocnumber">2</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Properties"><span class="tocnumber">3</span> <span class="toctext">Properties</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Read-only_properties"><span class="tocnumber">3.1</span> <span class="toctext">Read-only properties</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-5"><a href="#Traffic_monitor"><span class="tocnumber">4</span> <span class="toctext">Traffic monitor</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Stats"><span class="tocnumber">5</span> <span class="toctext">Stats</span></a></li>
+</ul>
+</div>
+
+<h2><span class="mw-headline" id="Sub_Categories">Sub Categories</span></h2>
+<table width="100%" id="shtable" style="width:100%; min-height:36px;" cellpadding="5px">
+<tr>
+<td width="33%" valign="top" style="border-bottom: 1px solid #ccc;">
+<p><b>List of reference sub-pages</b>
+</p>
+</td>
+<td width="33%" valign="top" style="border-bottom: 1px solid #ccc;">
+<p><b>Case studies</b>
+</p>
+</td>
+<td width="33%" valign="top" style="border-bottom: 1px solid #ccc;">
+<p><b>List of examples</b>
+</p>
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+<div class="subpagelist">
+<ul><li><a class="mw-selflink selflink">Interface</a>
+<ul><li> <a href="/wiki/Manual:Interface/Bonding" title="Manual:Interface/Bonding">Bonding</a></li>
+<li> <a href="/wiki/Manual:Interface/Bridge" title="Manual:Interface/Bridge">Bridge</a></li>
+<li> <a href="/wiki/Manual:Interface/Dot1x" title="Manual:Interface/Dot1x">Dot1x</a></li>
+<li> <a href="/wiki/Manual:Interface/EoIP" title="Manual:Interface/EoIP">EoIP</a></li>
+<li> <a href="/wiki/Manual:Interface/Ethernet" title="Manual:Interface/Ethernet">Ethernet</a></li>
+<li> <a href="/wiki/Manual:Interface/Gre" title="Manual:Interface/Gre">Gre</a></li>
+<li> <a href="/wiki/Manual:Interface/Gre6" title="Manual:Interface/Gre6">Gre6</a></li>
+<li> <a href="/wiki/Manual:Interface/HWMPplus" title="Manual:Interface/HWMPplus">HWMPplus</a></li>
+<li> <a href="/wiki/Manual:Interface/IPIP" title="Manual:Interface/IPIP">IPIP</a></li>
+<li> <a href="/wiki/Manual:Interface/L2TP" title="Manual:Interface/L2TP">L2TP</a></li>
+<li> <a href="/wiki/Manual:Interface/LTE" title="Manual:Interface/LTE">LTE</a></li>
+<li> <a href="/wiki/Manual:Interface/List" title="Manual:Interface/List">List</a></li>
+<li> <a href="/wiki/Manual:Interface/Lora" title="Manual:Interface/Lora">Lora</a></li>
+<li> <a href="/wiki/Manual:Interface/OVPN" title="Manual:Interface/OVPN">OVPN</a></li>
+<li> <a href="/wiki/Manual:Interface/PPP" title="Manual:Interface/PPP">PPP</a></li>
+<li> <a href="/wiki/Manual:Interface/PPPoE" title="Manual:Interface/PPPoE">PPPoE</a></li>
+<li> <a href="/wiki/Manual:Interface/PPTP" title="Manual:Interface/PPTP">PPTP</a></li>
+<li> <a href="/wiki/Manual:Interface/PWR_Line" title="Manual:Interface/PWR Line">PWR Line</a></li>
+<li> <a href="/wiki/Manual:Interface/SSTP" title="Manual:Interface/SSTP">SSTP</a></li>
+<li> <a href="/wiki/Manual:Interface/Traffic_Engineering" title="Manual:Interface/Traffic Engineering">Traffic Engineering</a></li>
+<li> <a href="/wiki/Manual:Interface/VLAN" title="Manual:Interface/VLAN">VLAN</a></li>
+<li> <a href="/wiki/Manual:Interface/VPLS" title="Manual:Interface/VPLS">VPLS</a></li>
+<li> <a href="/wiki/Manual:Interface/VRRP" title="Manual:Interface/VRRP">VRRP</a></li>
+<li> <a href="/wiki/Manual:Interface/Virtual-ethernet" title="Manual:Interface/Virtual-ethernet">Virtual-ethernet</a></li>
+<li> <a href="/wiki/Manual:Interface/W60G" title="Manual:Interface/W60G">W60G</a>
+<ul><li> <a href="/wiki/Manual:Interface/W60G/GUIexample" title="Manual:Interface/W60G/GUIexample">GUIexample</a></li></ul></li>
+<li> <a href="/wiki/Manual:Interface/Wireless" title="Manual:Interface/Wireless">Wireless</a></div></li></ul></li></ul>
+</td><td width="33%" valign="top" style="border-left: 1px dashed #ccc;border-right: 1px dashed #ccc;">
+<ul>
+<li><a href="/wiki/Manual:Fast_Path" title="Manual:Fast Path">Fast Path</a></li> 
+<li><a href="/wiki/Manual:PoE-Out" title="Manual:PoE-Out">PoE-Out</a></li> 
+<li><a href="/wiki/Manual:BCP_bridging_(PPP_tunnel_bridging)" title="Manual:BCP bridging (PPP tunnel bridging)">BCP bridging (PPP tunnel bridging)</a></li> 
+<li><a href="/wiki/Manual:MLPPP_over_single_and_multiple_links" title="Manual:MLPPP over single and multiple links">MLPPP over single and multiple links</a></li> 
+<li><a href="/wiki/Manual:Maximum_Transmission_Unit_on_RouterBoards" title="Manual:Maximum Transmission Unit on RouterBoards">Maximum Transmission Unit on RouterBoards</a></li></ul>
+</td><td width="33%" valign="top">
+<ul>
+<li><a href="/wiki/Manual:Bonding_Examples" title="Manual:Bonding Examples">Bonding Examples</a></li> 
+<li><a href="/wiki/Manual:VRRP-examples" title="Manual:VRRP-examples">VRRP-examples</a></li> 
+<li><a href="/wiki/Manual:Making_a_simple_wireless_AP" title="Manual:Making a simple wireless AP">Making a simple wireless AP</a></li></ul>
+</td>
+</tr>
+</table>
+<h2><span class="mw-headline" id="Summary">Summary</span></h2>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface</code></p>
+<p>MikroTik RouterOS supports a variety of Network Interface Cards as well as virtual interfaces (e.g. Bonding, Bridge, VLAN etc.). Each of them have their own sub-menu, but common properties of all interfaces can be configured and read in the general interface menu.
+</p>
+<h2><span class="mw-headline" id="Properties">Properties</span></h2>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>l2mtu</b></var> (<em>integer</em>; Default: )</td>
+    <td>Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. <a href="/wiki/Maximum_Transmission_Unit_on_RouterBoards" class="mw-redirect" title="Maximum Transmission Unit on RouterBoards"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>mtu</b></var> (<em>integer</em>; Default: )</td>
+    <td>Layer3 Maximum transmission unit</td>
+</tr>
+
+<tr>
+    <td><var><b>name</b></var> (<em>string</em>; Default: )</td>
+    <td>Name of an interface</td>
+</tr>
+</table>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Read-only_properties">Read-only properties</span></h3>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>bindstr</b></var> (<em></em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>bindstr2</b></var> (<em></em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>caps</b></var> (<em></em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>default-name</b></var> (<em></em>)</td>
+    <td></td>
+</tr>
+
+
+<tr>
+    <td><var><b>dynamic</b></var> (<em>yes|no</em>)</td>
+    <td>Whether interface is dynamically created</td>
+</tr>
+
+<tr>
+    <td><var><b>default-name</b></var> (<em></em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>fast-path</b></var> (<em>yes | no</em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>flags</b></var> (<em></em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>id</b></var> (<em>integer</em>)</td>
+    <td>interface id</td>
+</tr>
+
+<tr>
+    <td><var><b>ifindex</b></var> (<em>integer</em>)</td>
+    <td>interface index</td>
+</tr>
+
+<tr>
+    <td><var><b>ifname</b></var> (<em>string</em>)</td>
+    <td>interface name in Linux kernel</td>
+</tr>
+
+<tr>
+    <td><var><b>mac-address</b></var> (<em>MAC</em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>max-l2mtu</b></var> (<em>integer</em>)</td>
+    <td>Max supported L2MTU</td>
+</tr>
+
+<tr>
+    <td><var><b>running</b></var> (<em>yes|no</em>)</td>
+    <td>Whether interface is running. Note that some interfaces may not have a 'running check' and they will always be reported as "running" (e.g. <a href="/wiki/EoIP" class="mw-redirect" title="EoIP">EoIP</a>)</td>
+</tr>
+
+<tr>
+    <td><var><b>rx-byte</b></var> (<em>integer</em>)</td>
+    <td>Number of received bytes. <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>rx-drop</b></var> (<em>integer</em>)</td>
+    <td>Number of received packets being dropped <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>rx-errors</b></var> (<em>integer</em>)</td>
+    <td>Packets received with some kind of an error. <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>rx-packet</b></var> (<em>integer</em>)</td>
+    <td>Number of packets received. <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>slave</b></var> (<em>yes|no</em>)</td>
+    <td>Whether interface is configured as a slave of another interface (for example <a href="/wiki/Bonding" class="mw-redirect" title="Bonding">Bonding</a>)</td>
+</tr>
+
+<tr>
+    <td><var><b>status</b></var> (<em>string</em>)</td>
+    <td></td>
+</tr>
+
+<tr>
+    <td><var><b>tx-byte</b></var> (<em>integer</em>)</td>
+    <td>Number of transmitted bytes. <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>tx-drop</b></var> (<em>integer</em>)</td>
+    <td>Number of transmitted packets being dropped <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>tx-errors</b></var> (<em>integer</em>)</td>
+    <td>Packets transmitted with some kind of an error. <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+
+<tr>
+    <td><var><b>tx-packet</b></var> (<em>integer</em>)</td>
+    <td>Number of transmitted packets. <a href="#Stats"> Read more&gt;&gt; </a></td>
+</tr>
+</table>
+<h2><span class="mw-headline" id="Traffic_monitor">Traffic monitor</span></h2>
+<p><br />
+The traffic passing through any interface can be monitored using following command: <br />
+<code>/interface monitor-traffic [id | name]</code>
+</p><p>For example monitor ether2 and aggregate traffic. <code>Aggregate</code> is used to monitor total ammount of traffic handled by the router:
+</p>
+<pre>
+[maris@maris_main] &gt; /interface monitor-traffic ether2,aggregate 
+    rx-packets-per-second: 9        14
+      rx-drops-per-second: 0        0
+     rx-errors-per-second: 0        0
+       rx-bits-per-second: 6.6kbps  10.2kbps
+    tx-packets-per-second: 9        12
+      tx-drops-per-second: 0        0
+     tx-errors-per-second: 0        0
+       tx-bits-per-second: 13.6kbps 15.8kbps
+</pre>
+<h2><span class="mw-headline" id="Stats">Stats</span></h2>
+<p>RouterOS v3.22 introduces a new command:
+</p>
+<pre>
+ /interface print stats
+</pre>
+<p>This command prints total <a href="#Read-only_properties"> packets, bytes, drops and errors</a>.
+</p><p>All interfaces that support this feature will be displayed. Some interfaces are not supporting Error and Drop counters at the moment (RB4XX except RB450G ether 2-5), these devices will not display these counters.
+</p><p><br />
+<a href="#Traffic_monitor"> Traffic monitor</a> now also displays errors per second, in addition to the usual stats: 
+</p>
+<pre>
+ /interface monitor-traffic
+</pre>
+<p><code>/interface ethernet print stats</code> will display all kinds of other statistics if the interface is supporting them (currently only RB450G ether2-ether5 and also RB750 ether2-ether5). 
+</p>
+</div>
+<p><br />
+<b>[</b> <a href="#content">Top</a> | <a href="/wiki/Manual:TOC" title="Manual:TOC">Back to Content</a> <b>]</b>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20200906211209
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.049 seconds
+Real time usage: 0.071 seconds
+Preprocessor visited node count: 508/1000000
+Preprocessor generated node count: 1771/1000000
+Post‐expand include size: 4589/2097152 bytes
+Template argument size: 1683/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   47.267      1 -total
+ 42.45%   20.067      1 Template:Ycgu-cooltable-3
+ 12.45%    5.883     23 Template:Mr-arg-ro-table
+  6.93%    3.276      2 Template:Mr-arg-table
+  6.74%    3.187      1 Template:Mr-arg-table-end
+  6.40%    3.026      2 Template:Mr-arg-table-h
+  6.08%    2.872      1 Template:Cont
+  6.04%    2.853      1 Template:Versions
+  5.93%    2.804      1 Template:Mr-arg-ro-table-end
+-->
+
+<!-- Saved in parser cache with key wiki_mikrotik_com:pcache:idhash:4070-0!*!0!!en!5!* and timestamp 20200906211209 and revision id 26135
+ -->
+</div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://wiki.mikrotik.com/index.php?title=Manual:Interface&amp;oldid=26135">https://wiki.mikrotik.com/index.php?title=Manual:Interface&amp;oldid=26135</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="/wiki/Category:Manual" title="Category:Manual">Manual</a></li><li><a href="/wiki/Category:Routerboard" title="Category:Routerboard">Routerboard</a></li><li><a href="/wiki/Category:Hardware" title="Category:Hardware">Hardware</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="/index.php?title=Special:UserLogin&amp;returnto=Manual%3AInterface" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+															<li  id="ca-nstab-manual" class="selected"><span><a href="/wiki/Manual:Interface" >Manual</a></span></li>
+															<li  id="ca-talk" class="new"><span><a href="/index.php?title=Manual_talk:Interface&amp;action=edit&amp;redlink=1"  title="Discussion about the content page [t]" accesskey="t" rel="discussion">Discussion</a></span></li>
+													</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label">
+							<span>Variants</span><a href="#"></a>
+						</h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+															<li id="ca-view" class="selected"><span><a href="/wiki/Manual:Interface" >Read</a></span></li>
+															<li id="ca-viewsource"><span><a href="/index.php?title=Manual:Interface&amp;action=edit"  title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li>
+															<li id="ca-history" class="collapsible"><span><a href="/index.php?title=Manual:Interface&amp;action=history"  title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+													</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<h3 id="p-cactions-label"><span>More</span><a href="#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+
+						<form action="/index.php" id="searchform">
+							<div id="simpleSearch">
+							<input type="search" name="search" placeholder="Search MikroTik Wiki" title="Search MikroTik Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="/wiki/Main_Page"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id='p-navigation' aria-labelledby='p-navigation-label'>
+			<h3 id='p-navigation-label'>Navigation</h3>
+
+			<div class="body">
+									<ul>
+						<li id="n-mainpage"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-recentchanges"><a href="/wiki/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>					</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-tb' aria-labelledby='p-tb-label'>
+			<h3 id='p-tb-label'>Tools</h3>
+
+			<div class="body">
+									<ul>
+						<li id="t-whatlinkshere"><a href="/wiki/Special:WhatLinksHere/Manual:Interface" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="/wiki/Special:RecentChangesLinked/Manual:Interface" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="/index.php?title=Manual:Interface&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="/index.php?title=Manual:Interface&amp;oldid=26135" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/index.php?title=Manual:Interface&amp;action=info" title="More information about this page">Page information</a></li>					</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last edited on 3 March 2014, at 18:02.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="/wiki/MikroTik_Wiki:Privacy_policy" title="MikroTik Wiki:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="/wiki/MikroTik_Wiki:About" title="MikroTik Wiki:About">About MikroTik Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="/wiki/MikroTik_Wiki:General_disclaimer" title="MikroTik Wiki:General disclaimer">Disclaimers</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+											<li id="footer-poweredbyico">
+							<a href="//www.mediawiki.org/"><img src="/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>						</li>
+									</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.049","walltime":"0.071","ppvisitednodes":{"value":508,"limit":1000000},"ppgeneratednodes":{"value":1771,"limit":1000000},"postexpandincludesize":{"value":4589,"limit":2097152},"templateargumentsize":{"value":1683,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"timingprofile":["100.00%   47.267      1 -total"," 42.45%   20.067      1 Template:Ycgu-cooltable-3"," 12.45%    5.883     23 Template:Mr-arg-ro-table","  6.93%    3.276      2 Template:Mr-arg-table","  6.74%    3.187      1 Template:Mr-arg-table-end","  6.40%    3.026      2 Template:Mr-arg-table-h","  6.08%    2.872      1 Template:Cont","  6.04%    2.853      1 Template:Versions","  5.93%    2.804      1 Template:Mr-arg-ro-table-end"]},"cachereport":{"timestamp":"20200906211209","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":127});});</script>
+	</body>
+</html>
