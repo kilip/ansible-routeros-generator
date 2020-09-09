@@ -83,7 +83,7 @@ class DocumentationScraper
         $pages = $config['pages'];
 
         $event = new ProcessEvent('Start Scraping Web Pages', [], \count($pages));
-        $dispatcher->dispatch($event, ProcessEvent::EVENT_LOG);
+        $dispatcher->dispatch($event, ProcessEvent::EVENT_START);
         $i = 1;
         foreach ($pages as $name => $page) {
             $event
@@ -94,6 +94,7 @@ class DocumentationScraper
             $this->scrapSubMenu($name, $page);
             ++$i;
         }
+        $dispatcher->dispatch($event, ProcessEvent::EVENT_END);
     }
 
     /**

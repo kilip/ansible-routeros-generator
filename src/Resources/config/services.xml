@@ -31,10 +31,15 @@
             <argument>%kernel.debug%</argument>
         </service>
 
+        <service id="routeros.event.console_process_subscriber" class="RouterOS\Generator\Listener\ConsoleProcessEventSubscriber" public="true">
+            <argument type="service" id="logger"/>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
         <service id="routeros.scraper.configuration" class="RouterOS\Generator\Scraper\Configuration"/>
         <service id="RouterOS\Generator\Scraper\Configuration" alias="routeros.scraper.configuration"/>
 
-        <service id="routeros.scraper.documentation" class="RouterOS\Generator\Scraper\DocumentationScraper">
+        <service id="routeros.scraper.documentation" class="RouterOS\Generator\Scraper\DocumentationScraper" public="true">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.cache_manager"/>
             <argument type="service" id="routeros.scraper.configuration"/>
@@ -47,10 +52,8 @@
             <argument type="service" id="logger"/>
             <argument type="service" id="routeros.scraper.documentation"/>
             <tag name="console.command"/>
-
-            <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
-            <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
         </service>
-        <service id="RouterOS\Generator\Command\ScrapCommand" alias="routeros.command.scrap"/>
+
+
     </services>
 </container>

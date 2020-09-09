@@ -18,7 +18,9 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ProcessEvent extends Event
 {
+    public const EVENT_START = 'routeros.process.start';
     public const EVENT_LOOP = 'routeros.process.loop';
+    public const EVENT_END = 'routeros.process.end';
     public const EVENT_LOG = 'routeros.process.log';
 
     /**

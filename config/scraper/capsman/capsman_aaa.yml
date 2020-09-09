@@ -1,6 +1,6 @@
 name: capsman_aaa
 package: capsman
-validated: true
+
 command: '/caps-man aaa'
 type: setting
 generator:

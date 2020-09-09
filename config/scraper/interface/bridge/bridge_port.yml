@@ -1,6 +1,6 @@
 name: bridge_port
 package: interface.bridge
-validated: true
+
 command: '/interface bridge port'
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge'

@@ -17,6 +17,7 @@ namespace Tests\RouterOS\Generator\Scraper;
 use PHPUnit\Framework\MockObject\MockObject;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\SubMenuManagerInterface;
+use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Model\SubMenu;
 use RouterOS\Generator\Scraper\Configuration;
 use RouterOS\Generator\Scraper\DocumentationScraper;
@@ -91,9 +92,35 @@ class DocumentationScraperTest extends KernelTestCase
             ->method('update')
             ->with($subMenu);
 
+        $this->configureEventAssertions();
+
         $scraper->start();
 
         $this->assertTrue($subMenu->hasProperty('disabled'));
         $this->assertTrue($subMenu->hasProperty('comment'));
+    }
+
+    private function configureEventAssertions()
+    {
+        $dispatcher = $this->dispatcher;
+
+        $dispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ProcessEvent::class),
+                ProcessEvent::EVENT_START
+            );
+        $dispatcher->expects($this->at(1))
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ProcessEvent::class),
+                ProcessEvent::EVENT_LOOP
+            );
+        $dispatcher->expects($this->at(2))
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ProcessEvent::class),
+                ProcessEvent::EVENT_END
+            );
     }
 }

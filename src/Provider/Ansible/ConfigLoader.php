@@ -67,8 +67,10 @@ class ConfigLoader
     {
         $dispatcher = $this->dispatcher;
         $modules = $this->getModules();
-
         $count = \count($modules);
+        $event = new ProcessEvent("Start Reindexing Modules", [], $count);
+
+        $dispatcher->dispatch($event, ProcessEvent::EVENT_START);
         foreach ($modules as $name => $config) {
             $event = new ProcessEvent(
                 'Processing {0}',
@@ -79,6 +81,7 @@ class ConfigLoader
 
             $this->process($name, $config);
         }
+        $dispatcher->dispatch($event, ProcessEvent::EVENT_END);
     }
 
     private function getModules()

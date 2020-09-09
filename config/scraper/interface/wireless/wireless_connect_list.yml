@@ -1,6 +1,6 @@
 name: wireless_connect_list
 package: interface.wireless
-validated: true
+
 command: '/interface wireless connect-list'
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'

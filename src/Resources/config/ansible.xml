@@ -9,8 +9,32 @@
         <parameter key="ansible.config.default_author">%env(AUTHOR)%</parameter>
     </parameters>
     <services>
+
+        <service id="ansible.module_manager" class="RouterOS\Generator\Provider\Ansible\Model\ModuleManager">
+            <argument type="service" id="doctrine.orm.default_entity_manager"/>
+        </service>
+        <service alias="ansible.module_manager" id="RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface"/>
+
+        <service id="ansible.module_configuration" class="RouterOS\Generator\Provider\Ansible\ModuleConfiguration"/>
+
+
+        <service id="ansible.config_loader" class="RouterOS\Generator\Provider\Ansible\ConfigLoader">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.cache_manager"/>
+            <argument type="service" id="ansible.module_manager"/>
+            <argument type="service" id="routeros.model.submenu_manager"/>
+            <argument type="service" id="ansible.module_configuration"/>
+            <argument>%ansible.config.modules_dir%</argument>
+        </service>
+
         <service id="ansible.command.create_modules" class="RouterOS\Generator\Provider\Ansible\Command\CreateModulesCommand">
             <tag name="console.command" />
+        </service>
+
+        <service id="ansible.command.reindex_modules" class="RouterOS\Generator\Provider\Ansible\Command\ReindexModuleCommand">
+            <argument type="service" id="ansible.config_loader"/>
+            <argument type="service" id="routeros.event.console_process_subscriber"/>
+            <tag name="console.command"/>
         </service>
     </services>
 </container>

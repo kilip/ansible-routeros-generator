@@ -1,6 +1,6 @@
 name: vlan
 package: interface
-validated: true
+
 command: '/interface vlan'
 properties:
   vlan_id:

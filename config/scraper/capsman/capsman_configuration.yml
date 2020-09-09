@@ -1,6 +1,6 @@
 name: capsman_configuration
 package: capsman
-validated: true
+
 command: '/caps-man configuration'
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'

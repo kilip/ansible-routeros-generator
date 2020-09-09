@@ -1,6 +1,6 @@
 name: ethernet
 package: interface
-validated: true
+
 command: '/interface ethernet'
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Ethernet'

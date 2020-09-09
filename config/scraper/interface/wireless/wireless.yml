@@ -1,7 +1,7 @@
 name: wireless
 package: interface.wireless
 command: '/interface wireless'
-validated: true
+
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'
   table_index: 0

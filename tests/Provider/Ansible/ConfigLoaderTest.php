@@ -85,7 +85,6 @@ class ConfigLoaderTest extends TestCase
 
     public function testRefresh()
     {
-        $dispatcher = $this->dispatcher;
         $configuration = $this->configuration;
         $cache = $this->cache;
         $loader = $this->loader;
@@ -105,13 +104,7 @@ class ConfigLoaderTest extends TestCase
             )
             ->willReturn($config);
 
-        $dispatcher->expects($this->once())
-            ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_LOOP
-            );
-
+        $this->configureEventAssert();
         $moduleManager
             ->expects($this->once())
             ->method('findOrCreate')
@@ -146,5 +139,30 @@ class ConfigLoaderTest extends TestCase
                 'interface' => $config,
             ],
         ];
+    }
+
+    private function configureEventAssert()
+    {
+        $dispatcher = $this->dispatcher;
+
+        $dispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ProcessEvent::class),
+                ProcessEvent::EVENT_START
+            );
+        $dispatcher->expects($this->at(1))
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ProcessEvent::class),
+                ProcessEvent::EVENT_LOOP
+            );
+        $dispatcher->expects($this->at(2))
+            ->method('dispatch')
+            ->with(
+                $this->isInstanceOf(ProcessEvent::class),
+                ProcessEvent::EVENT_END
+            );
+
     }
 }

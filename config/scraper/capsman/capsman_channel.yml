@@ -1,6 +1,6 @@
 name: capsman_channel
 package: capsman
-validated: true
+
 command: '/caps-man channel'
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'

@@ -1,6 +1,6 @@
 name: wireless_security_profiles
 package: interface.wireless
-validated: true
+
 command: '/interface wireless security-profiles'
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'

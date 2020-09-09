@@ -1,7 +1,7 @@
 name: wireless_cap
 package: interface.wireless
 command: '/interface wireless cap'
-validated: true
+
 type: setting
 generator:
   url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'

@@ -28,10 +28,17 @@ class RouterosExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('services.xml');
+        $loader->load("ansible.xml");
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('routeros.scraper.config_dir', $config['scraper_config_dir']);
         $container->setParameter('routeros.scraper.page_cache_lifetime', 604800);
+
+        $ansible = $config['ansible'];
+        $container->setParameter(
+            'ansible.config.modules_dir',
+            $ansible['modules_config_dir']
+        );
     }
 }
