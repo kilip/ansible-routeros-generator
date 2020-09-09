@@ -71,7 +71,7 @@
         "scrap": "./bin/console routeros:scrap --ansi",
         "phpstan": "./vendor/bin/phpstan analyse --ansi",
         "phpcs": "./vendor/bin/php-cs-fixer fix --ansi",
-        "phpunit": "bin/phpunit --colors=always",
+        "phpunit": "phpunit --colors=always",
         "prepare-test": [
             "./bin/console doctrine:database:create --ansi --env=test",
             "./bin/console doctrine:schema:update --force --env=test"

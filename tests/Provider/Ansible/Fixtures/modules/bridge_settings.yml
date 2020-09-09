@@ -1,0 +1,54 @@
+name: bridge_settings
+package: interface.bridge
+version_added: 1.0.0
+type: setting
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_bridge_settings
+short_description: 'Bridge Setting Module'
+description:
+  - 'This modules manages configuration in submenu `/interface bridge settings`.'
+supports:
+  - facts_verbose_mode
+states:
+  - present
+  - reset
+default_state: present
+keys:
+  - name
+fixtures:
+  - action: set
+    values:
+      allow_fast_path: 'no'
+      use_ip_firewall: 'yes'
+      use_ip_firewall_for_pppoe: 'yes'
+      use_ip_firewall_for_vlan: 'yes'
+examples:
+  present:
+    name: 'Configure Bridge Settings'
+    title: 'Change Bridge Setting Configuration'
+    argument_spec:
+      config:
+        allow_fast_path: 'yes'
+        use_ip_firewall: 'no'
+        use_ip_firewall_for_pppoe: 'no'
+        use_ip_firewall_for_vlan: 'no'
+      state: present
+    verify:
+      - action: set
+        values:
+          allow_fast_path: 'yes'
+          use_ip_firewall_for_pppoe: 'no'
+          use_ip_firewall_for_vlan: 'no'
+          use_ip_firewall: 'no'
+  reset:
+    name: 'Configure Bridge Settings'
+    title: 'Change Bridge Setting Configuration'
+    argument_spec:
+      state: reset
+    verify:
+      - action: set
+        values:
+          allow_fast_path: 'yes'
+          use_ip_firewall_for_pppoe: 'no'
+          use_ip_firewall_for_vlan: 'no'
+          use_ip_firewall: 'no'

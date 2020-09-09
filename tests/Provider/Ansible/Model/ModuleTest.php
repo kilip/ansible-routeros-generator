@@ -16,6 +16,7 @@ namespace Tests\RouterOS\Generator\Provider\Ansible\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
 use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Provider\Ansible\Model\Module;
 use RouterOS\Generator\Provider\Ansible\Model\ModuleManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -69,7 +70,7 @@ class ModuleTest extends KernelTestCase
         return [
             ['name', 'test'],
             ['subMenu', new SubMenu()],
-            ['configFile', 'some_file'],
+            ['configFile', __FILE__],
             ['config', ['some' => 'config']],
         ];
     }
@@ -78,8 +79,17 @@ class ModuleTest extends KernelTestCase
     {
         $manager = $this->manager;
         $model = $manager->findOrCreate('foo');
+        $model->setConfigFile(__DIR__.'/../Fixtures/modules/interface.yml');
         $manager->update($model);
 
         $this->assertNotNull($model->getId());
+    }
+
+    public function testThrowOnInvalidConfigPath()
+    {
+        $model = new Module();
+
+        $this->expectException(\InvalidArgumentException::class);
+        $model->setConfigFile('foo');
     }
 }

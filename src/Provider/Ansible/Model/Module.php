@@ -49,6 +49,8 @@ class Module
     private $subMenu;
 
     /**
+     * @ORM\Column(type="string")
+     *
      * @var string
      */
     private $configFile;
@@ -118,6 +120,10 @@ class Module
      */
     public function setConfigFile(string $configFile)
     {
+        if (!file_exists($configFile)) {
+            throw new \InvalidArgumentException("Config file {$this->name} not exists: {$configFile}");
+        }
+        $configFile = realpath($configFile);
         $this->configFile = $configFile;
 
         return $this;

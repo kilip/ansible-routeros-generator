@@ -45,7 +45,8 @@ class ModuleConfigurationTest extends KernelTestCase
         $config = $loader->processYamlConfig(
             $configuration,
             'ansible.modules',
-            __DIR__.'/Fixtures/modules'
+            __DIR__.'/Fixtures/modules',
+            true
         );
 
         $processed = $processor->processConfiguration($configuration, ['modules' => $config]);

@@ -38,6 +38,7 @@ class ModuleConfiguration implements ConfigurationInterface
                             ->scalarNode('module_name')->isRequired()->end()
                             ->scalarNode('short_description')->isRequired()->end()
                             ->scalarNode('type')->defaultValue('config')->end()
+                            ->scalarNode('config_file')->end()
                             ->arrayNode('description')
                                 ->isRequired()
                                 ->scalarPrototype()->end()

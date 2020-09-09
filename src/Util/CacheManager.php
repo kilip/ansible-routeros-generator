@@ -69,7 +69,8 @@ class CacheManager implements CacheManagerInterface
     public function processYamlConfig(
         ConfigurationInterface $configuration,
         $rootName,
-        string $path
+        string $path,
+        bool $addFilePath = false
     ): array {
         $finder = Finder::create()
             ->in($path);
@@ -79,6 +80,9 @@ class CacheManager implements CacheManagerInterface
 
         foreach ($finder->files() as $file) {
             $data = $this->parseYaml($file->getRealPath());
+            if ($addFilePath) {
+                $data['config_file'] = $file->getRealPath();
+            }
             $configs[$exp[0]][$exp[1]][] = $data;
         }
 
