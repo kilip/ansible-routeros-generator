@@ -1,5 +1,17 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
+
 namespace Tests\RouterOS\Generator\Provider\Ansible\Generator;
 
 use PHPUnit\Framework\MockObject\MockObject;
@@ -13,7 +25,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ModuleGeneratorTest extends TestCase
 {
-
     /**
      * @var MockObject|ModuleManagerInterface
      */
@@ -34,7 +45,7 @@ class ModuleGeneratorTest extends TestCase
      */
     private $dispatcher;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->moduleManager = $this->createMock(ModuleManagerInterface::class);
@@ -44,7 +55,7 @@ class ModuleGeneratorTest extends TestCase
             $this->dispatcher,
             $this->moduleManager,
             $this->templateCompiler,
-            __DIR__."/../Fixtures/compiled"
+            __DIR__.'/../Fixtures/compiled'
         );
     }
 
@@ -56,21 +67,21 @@ class ModuleGeneratorTest extends TestCase
         $this->configureMock();
 
         $compiler->expects($this->once())
-            ->method("compile")
+            ->method('compile')
             ->with(
-                "@ansible/module/custom.py.twig",
+                '@ansible/module/custom.py.twig',
                 __DIR__.'/../Fixtures/compiled/module_name.py',
-                $this->callback(function($v){
-                    if(!isset($v['module'])){
+                $this->callback(function ($v) {
+                    if (!isset($v['module'])) {
                         return false;
                     }
-                    if(!isset($v['config'])){
+                    if (!isset($v['config'])) {
                         return false;
                     }
+
                     return true;
                 })
-            )
-        ;
+            );
         $generator->createModule('bridge');
     }
 
@@ -86,12 +97,12 @@ class ModuleGeneratorTest extends TestCase
             ->method('getModuleList')
             ->willReturn([
                 [
-                    "name" => "bridge",
-                ]
+                    'name' => 'bridge',
+                ],
             ]);
 
         $dispatcher->expects($this->once())
-            ->method("dispatch")
+            ->method('dispatch')
             ->with(
                 $this->isInstanceOf(ProcessEvent::class),
                 ProcessEvent::EVENT_LOOP
@@ -113,7 +124,7 @@ class ModuleGeneratorTest extends TestCase
 
         $moduleManager->expects($this->once())
             ->method('findByName')
-            ->with("bridge")
+            ->with('bridge')
             ->willReturn($bridge);
     }
 }

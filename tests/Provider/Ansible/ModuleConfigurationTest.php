@@ -33,7 +33,7 @@ class ModuleConfigurationTest extends TestCase
             __DIR__.'/Fixtures/config'
         );
 
-        $processed = $processor->processConfiguration($configuration, ["modules" => $config]);
+        $processed = $processor->processConfiguration($configuration, ['modules' => $config]);
 
         $modules = $processed['modules'];
         $this->assertArrayHasKey('bridge', $modules);

@@ -1,31 +1,42 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Model;
 
-
-use RouterOS\Generator\Model\SubMenu;
 use Doctrine\ORM\Mapping as ORM;
+use RouterOS\Generator\Model\SubMenu;
 
 /**
- * Class Module
+ * Class Module.
  *
- * @ORM\Entity()
- * @ORM\Table(name="ansible.module")
- * @package RouterOS\Generator\Provider\Ansible\Model
+ * @ORM\Entity
+ * @ORM\Table(name="ansible_module")
  */
 class Module
 {
     /**
-     * @ORM\Id()
+     * @ORM\Id
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="UUID")
+     *
      * @var string
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", unique=true)
+     *
      * @var string
      */
     private $name;
@@ -62,11 +73,13 @@ class Module
 
     /**
      * @param string $name
+     *
      * @return static
      */
     public function setName(string $name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -80,11 +93,13 @@ class Module
 
     /**
      * @param SubMenu $subMenu
+     *
      * @return static
      */
     public function setSubMenu(SubMenu $subMenu)
     {
         $this->subMenu = $subMenu;
+
         return $this;
     }
 
@@ -98,11 +113,13 @@ class Module
 
     /**
      * @param string $configFile
+     *
      * @return static
      */
     public function setConfigFile(string $configFile)
     {
         $this->configFile = $configFile;
+
         return $this;
     }
 
@@ -116,11 +133,13 @@ class Module
 
     /**
      * @param array $config
+     *
      * @return static
      */
     public function setConfig(array $config)
     {
         $this->config = $config;
+
         return $this;
     }
 }

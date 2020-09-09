@@ -47,7 +47,7 @@ class SubMenuManager implements SubMenuManagerInterface
     {
         $object = $this->findByName($name);
 
-        if (null === $object) {
+        if (!\is_object($object)) {
             $object = $this->create();
             $object->setName($name);
         }
@@ -59,7 +59,6 @@ class SubMenuManager implements SubMenuManagerInterface
     {
         return $this->getRepository()->findOneBy(['name' => $name]);
     }
-
 
     public function update(SubMenu $object, bool $andFlush = true): void
     {

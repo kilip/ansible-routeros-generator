@@ -1,5 +1,17 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
+
 namespace Tests\RouterOS\Generator\Provider\Ansible\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -28,7 +40,7 @@ class ModuleManagerTest extends TestCase
      */
     private $repository;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->em = $this->createMock(EntityManagerInterface::class);
         $this->repository = $this->createMock(ObjectRepository::class);
@@ -37,8 +49,7 @@ class ModuleManagerTest extends TestCase
             ->expects($this->any())
             ->method('getRepository')
             ->with(Module::class)
-            ->willReturn($this->repository)
-        ;
+            ->willReturn($this->repository);
 
         $this->manager = new ModuleManager(
             $this->em
@@ -87,8 +98,7 @@ class ModuleManagerTest extends TestCase
         $repository->expects($this->once())
             ->method('findOneBy')
             ->with(['name' => 'test'])
-            ->willReturn(null)
-        ;
+            ->willReturn(null);
 
         $object = $manager->findOrCreate('test');
         $this->assertEquals('test', $object->getName());
@@ -109,6 +119,5 @@ class ModuleManagerTest extends TestCase
             ->method('flush');
 
         $manager->update($module);
-
     }
 }

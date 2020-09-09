@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace RouterOS\Generator;
 
 use RouterOS\Generator\DependencyInjection\RouterosExtension;
-use RouterOS\Generator\Provider\Ansible\AnsibleProvider;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

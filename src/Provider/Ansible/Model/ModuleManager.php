@@ -1,8 +1,18 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Model;
-
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
@@ -23,8 +33,7 @@ class ModuleManager implements ModuleManagerInterface
     public function __construct(
         EntityManagerInterface $em,
         $maxResults = 1000
-    )
-    {
+    ) {
         $this->em = $em;
         $this->maxResults = $maxResults;
     }
@@ -34,19 +43,17 @@ class ModuleManager implements ModuleManagerInterface
         return new Module();
     }
 
-
     public function findOrCreate(string $name): Module
     {
         $object = $this->findByName($name);
 
-        if(is_null($object)){
+        if (!\is_object($object)) {
             $object = $this->create();
             $object->setName($name);
         }
 
         return $object;
     }
-
 
     public function findByName(string $name)
     {
@@ -63,10 +70,10 @@ class ModuleManager implements ModuleManagerInterface
 
         $builder
             ->select('a.id, a.name')
-            ->from(Module::class, 'a')
-        ;
+            ->from(Module::class, 'a');
 
         $builder->setMaxResults($maxResults);
+
         return $builder->getQuery()->getArrayResult();
     }
 
@@ -81,9 +88,8 @@ class ModuleManager implements ModuleManagerInterface
 
         $em->persist($module);
 
-        if($andFlush){
+        if ($andFlush) {
             $em->flush();
         }
     }
-
 }

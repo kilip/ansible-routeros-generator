@@ -16,7 +16,6 @@ namespace RouterOS\Generator\Contracts;
 
 use Doctrine\Persistence\ObjectRepository;
 use RouterOS\Generator\Model\SubMenu;
-use RouterOS\Generator\Provider\Ansible\Model\Module;
 
 interface SubMenuManagerInterface
 {
@@ -27,19 +26,21 @@ interface SubMenuManagerInterface
 
     /**
      * @param string $name
-     * @return object|SubMenu
+     *
+     * @return object|SubMenu|null
      */
     public function findByName(string $name);
 
     /**
      * @param string $name
+     *
      * @return object|SubMenu
      */
     public function findOrCreate(string $name);
 
     /**
      * @param SubMenu $object
-     * @param bool $andFlush
+     * @param bool    $andFlush
      */
     public function update(SubMenu $object, bool $andFlush = true): void;
 

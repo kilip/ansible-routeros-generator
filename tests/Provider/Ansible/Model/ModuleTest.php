@@ -1,17 +1,26 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
+
 namespace Tests\RouterOS\Generator\Provider\Ansible\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
 use RouterOS\Generator\Model\SubMenu;
 use RouterOS\Generator\Provider\Ansible\Model\ModuleManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use RouterOS\Generator\Provider\Ansible\Model\Module;
 
 /**
- * Class ModuleTest
- *
- * @package Tests\RouterOS\Generator\Provider\Ansible\Model
+ * Class ModuleTest.
  */
 class ModuleTest extends KernelTestCase
 {
@@ -25,7 +34,7 @@ class ModuleTest extends KernelTestCase
      */
     private $manager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $kernel = self::bootKernel();
         $container = $kernel->getContainer();
@@ -37,7 +46,7 @@ class ModuleTest extends KernelTestCase
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      * @dataProvider getMutabilityData
      */
     public function testMutability($name, $value)
@@ -48,12 +57,11 @@ class ModuleTest extends KernelTestCase
         $setter = "set{$name}";
         $getter = "get{$name}";
 
-
         // setter test
-        $this->assertSame($model, call_user_func([$model, $setter], $value));
+        $this->assertSame($model, \call_user_func([$model, $setter], $value));
 
         // getter test
-        $this->assertSame($value, call_user_func([$model, $getter]));
+        $this->assertSame($value, \call_user_func([$model, $getter]));
     }
 
     public function getMutabilityData()
@@ -61,19 +69,15 @@ class ModuleTest extends KernelTestCase
         return [
             ['name', 'test'],
             ['subMenu', new SubMenu()],
-            ['configFile', "some_file"],
+            ['configFile', 'some_file'],
             ['config', ['some' => 'config']],
         ];
     }
 
-
     public function testCreateUpdate()
     {
         $manager = $this->manager;
-
-        $model = new Module();
-        $model->setName('foo');
-
+        $model = $manager->findOrCreate('foo');
         $manager->update($model);
 
         $this->assertNotNull($model->getId());
