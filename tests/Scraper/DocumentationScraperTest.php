@@ -20,11 +20,9 @@ use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 use RouterOS\Generator\Model\SubMenu;
 use RouterOS\Generator\Scraper\Configuration;
 use RouterOS\Generator\Scraper\DocumentationScraper;
-use RouterOS\Generator\Util\Cache;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Yaml\Yaml;
-use Tests\RouterOS\Generator\UseContainerTrait;
 
 class DocumentationScraperTest extends KernelTestCase
 {
@@ -74,15 +72,15 @@ class DocumentationScraperTest extends KernelTestCase
         $config = Yaml::parseFile(__DIR__.'/../Fixtures/scraper/routeros/interface.yml');
         $config = [
             'pages' => [
-                $config['name'] => $config
-            ]
+                $config['name'] => $config,
+            ],
         ];
         $cache->expects($this->once())
             ->method('processYamlConfig')
             ->willReturn($config);
         $cache->expects($this->once())
-            ->method("getHtmlPage")
-            ->with("https://wiki.mikrotik.com/wiki/Manual:Interface")
+            ->method('getHtmlPage')
+            ->with('https://wiki.mikrotik.com/wiki/Manual:Interface')
             ->willReturn($contents);
 
         $manager->expects($this->once())

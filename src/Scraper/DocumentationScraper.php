@@ -20,8 +20,6 @@ use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Model\Property;
 use RouterOS\Generator\Model\SubMenu;
-use RouterOS\Generator\Util\YamlConfigLoader;
-use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -33,7 +31,7 @@ class DocumentationScraper
     private $dispatcher;
 
     /**
-     * @var CacheAdapter
+     * @var CacheInterface
      */
     private $cache;
 

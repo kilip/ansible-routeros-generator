@@ -1,8 +1,18 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator;
-
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -21,10 +31,11 @@ trait UseContainerTrait
      */
     protected function getKernel()
     {
-        if(is_null(static::$kernel)){
+        if (null === static::$kernel) {
             self::$kernel = self::createKernel();
             self::$kernel->boot();
         }
+
         return static::$kernel;
     }
 }
