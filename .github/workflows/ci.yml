@@ -114,8 +114,8 @@ jobs:
             symfony/flex
       - name: Update project dependencies
         run: |
-          mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
-          ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
+          mkdir -p /tmp/kilip/routeros-generator/vendor
+          ln -s /tmp/kilip/routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
       - name: Install PHPUnit
         env:
@@ -196,8 +196,8 @@ jobs:
             symfony/flex
       - name: Update project dependencies
         run: |
-          mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
-          ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
+          mkdir -p /tmp/kilip/routeros-generator/vendor
+          ln -s /tmp/kilip/routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
           composer require --dev phpunit/phpunit
       - name: Enable code coverage
