@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Scraper;
 
 use Doctrine\Inflector\InflectorFactory;
+use RouterOS\Generator\Contracts\CacheInterface;
 use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Model\Property;
@@ -23,8 +24,6 @@ use RouterOS\Generator\Util\YamlConfigLoader;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Component\HttpFoundation\Request;
 
 class DocumentationScraper
 {
@@ -57,23 +56,23 @@ class DocumentationScraper
      * DocumentationScraper constructor.
      *
      * @param EventDispatcherInterface $dispatcher
-     * @param CacheAdapter             $cache
+     * @param CacheInterface           $cache
      * @param ConfigurationInterface   $configuration
      * @param SubMenuManagerInterface  $manager
      * @param string                   $configDir
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        CacheAdapter $cache,
+        CacheInterface $cache,
         ConfigurationInterface $configuration,
         SubMenuManagerInterface $manager,
         string $configDir
     ) {
         $this->dispatcher = $dispatcher;
-        $this->cache = $cache;
         $this->configuration = $configuration;
         $this->manager = $manager;
         $this->configDir = $configDir;
+        $this->cache = $cache;
     }
 
     public function start()
@@ -81,8 +80,8 @@ class DocumentationScraper
         $configuration = $this->configuration;
         $configDir = $this->configDir;
         $dispatcher = $this->dispatcher;
-        $loader = new YamlConfigLoader();
-        $config = $loader->process($configuration, 'routeros.pages', $configDir);
+        $cache = $this->cache;
+        $config = $cache->processYamlConfig($configuration, 'routeros.pages', $configDir);
         $pages = $config['pages'];
 
         $event = new ProcessEvent('Start Scraping Web Pages', [], \count($pages));
@@ -108,6 +107,7 @@ class DocumentationScraper
         $manager = $this->manager;
         $subMenu = $manager->findOrCreate($name);
         $inflector = InflectorFactory::create()->build();
+        $cache = $this->cache;
         $url = $config['generator']['url'];
 
         // preparing sub menu
@@ -129,7 +129,7 @@ class DocumentationScraper
 
         $tableParser = TableParser::fromSubMenu($subMenu);
         $propertyParser = new PropertyParser();
-        $page = $this->getPageContents($url);
+        $page = $cache->getHtmlPage($url);
         $rows = $tableParser->parse($page);
 
         foreach ($rows as $columns) {
@@ -139,32 +139,6 @@ class DocumentationScraper
         $this->setDefaultProperty($subMenu);
 
         $manager->update($subMenu);
-    }
-
-    /**
-     * @param string $url
-     *
-     * @return string
-     */
-    private function getPageContents(string $url): string
-    {
-        $cache = $this->cache;
-        $id = md5($url);
-        $page = $cache->getItem($id);
-
-        if (!$page->isHit()) {
-            $dispatcher = $this->dispatcher;
-            $event = new ProcessEvent('Loading html page from : {0}', [$url]);
-            $dispatcher->dispatch($event, ProcessEvent::EVENT_LOG);
-
-            $client = HttpClient::create();
-            $r = $client->request(Request::METHOD_GET, $url);
-            $content = $r->getContent();
-            $page->set($content);
-            $cache->save($page);
-        }
-
-        return $page->get();
     }
 
     private function setDefaultProperty(SubMenu $subMenu)

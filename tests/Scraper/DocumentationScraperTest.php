@@ -15,34 +15,28 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Scraper;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Contracts\CacheInterface;
 use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 use RouterOS\Generator\Model\SubMenu;
 use RouterOS\Generator\Scraper\Configuration;
 use RouterOS\Generator\Scraper\DocumentationScraper;
-use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
-use Symfony\Component\Console\Output\OutputInterface;
+use RouterOS\Generator\Util\Cache;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Contracts\Cache\ItemInterface as CacheItem;
+use Symfony\Component\Yaml\Yaml;
+use Tests\RouterOS\Generator\UseContainerTrait;
 
-class DocumentationScraperTest extends TestCase
+class DocumentationScraperTest extends KernelTestCase
 {
-    private $output;
-
     /**
      * @var MockObject|EventDispatcherInterface
      */
     private $dispatcher;
 
     /**
-     * @var MockObject|CacheAdapter
+     * @var MockObject|CacheInterface
      */
     private $cache;
-
-    /**
-     * @var MockObject|CacheItem
-     */
-    private $cacheItem;
 
     /**
      * @var DocumentationScraper
@@ -56,28 +50,9 @@ class DocumentationScraperTest extends TestCase
 
     protected function setUp(): void
     {
-        $contents = file_get_contents(__DIR__.'/../Fixtures/page/interface.html');
-
-        $this->output = $this->createMock(OutputInterface::class);
-        $this->cache = $this->createMock(CacheAdapter::class);
-        $this->cacheItem = $this->createMock(CacheItem::class);
+        $this->cache = $this->createMock(CacheInterface::class);
         $this->manager = $this->createMock(SubMenuManagerInterface::class);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
-
-        $this->cache
-            ->expects($this->any())
-            ->method('getItem')
-            ->willReturn($this->cacheItem);
-
-        $this->cacheItem
-            ->expects($this->any())
-            ->method('isHit')
-            ->willReturn(true);
-
-        $this->cacheItem
-            ->expects($this->any())
-            ->method('get')
-            ->willReturn($contents);
 
         $this->scraper = new DocumentationScraper(
             $this->dispatcher,
@@ -93,6 +68,22 @@ class DocumentationScraperTest extends TestCase
         $scraper = $this->scraper;
         $manager = $this->manager;
         $subMenu = new SubMenu();
+        $cache = $this->cache;
+        $contents = file_get_contents(__DIR__.'/../Fixtures/page/interface.html');
+
+        $config = Yaml::parseFile(__DIR__.'/../Fixtures/scraper/routeros/interface.yml');
+        $config = [
+            'pages' => [
+                $config['name'] => $config
+            ]
+        ];
+        $cache->expects($this->once())
+            ->method('processYamlConfig')
+            ->willReturn($config);
+        $cache->expects($this->once())
+            ->method("getHtmlPage")
+            ->with("https://wiki.mikrotik.com/wiki/Manual:Interface")
+            ->willReturn($contents);
 
         $manager->expects($this->once())
             ->method('findOrCreate')
@@ -102,7 +93,7 @@ class DocumentationScraperTest extends TestCase
             ->method('update')
             ->with($subMenu);
 
-        $scraper->start($this->output);
+        $scraper->start();
 
         $this->assertTrue($subMenu->hasProperty('disabled'));
         $this->assertTrue($subMenu->hasProperty('comment'));

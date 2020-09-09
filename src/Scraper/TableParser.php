@@ -38,9 +38,6 @@ class TableParser
     {
         $this->url = $config['url'];
         $index = $config['table_index'];
-        if (!\is_array($index)) {
-            $index = [$index];
-        }
         $this->tableIndex = $index;
     }
 

@@ -23,6 +23,14 @@
             <argument>%routeros.scraper.cache_dir%</argument>
         </service>
 
+        <service id="routeros.cache" class="RouterOS\Generator\Util\Cache" public="true">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.scraper.page_cache"/>
+            <argument type="service" id="http_client"/>
+            <argument>%routeros.scraper.cache_dir%</argument>
+            <argument>%kernel.debug%</argument>
+        </service>
+
         <service id="routeros.scraper.configuration" class="RouterOS\Generator\Scraper\Configuration"/>
         <service id="RouterOS\Generator\Scraper\Configuration" alias="routeros.scraper.configuration"/>
 
