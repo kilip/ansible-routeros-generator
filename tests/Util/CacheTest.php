@@ -17,7 +17,7 @@ namespace Tests\RouterOS\Generator\Util;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RouterOS\Generator\Scraper\Configuration;
-use RouterOS\Generator\Util\Cache;
+use RouterOS\Generator\Util\CacheManager;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -30,7 +30,7 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 class CacheTest extends TestCase
 {
     /**
-     * @var Cache
+     * @var CacheManager
      */
     private $cache;
 
@@ -67,7 +67,7 @@ class CacheTest extends TestCase
         $this->cacheItem = $this->createMock(ItemInterface::class);
 
         $this->cacheDir = __DIR__.'/../Fixtures/cache';
-        $this->cache = new Cache(
+        $this->cache = new CacheManager(
             $this->dispatcher,
             $this->adapter,
             $this->httpClient,
@@ -81,7 +81,8 @@ class CacheTest extends TestCase
         $cache = $this->cache;
         $file = __DIR__.'/../Fixtures/scraper/routeros/interface.yml';
         $result = $cache->parseYaml($file);
-        $this->assertInternalType('array', $result);
+        $this->assertArrayHasKey('name', $result);
+        $this->assertEquals('interface', $result['name']);
     }
 
     public function testProcessYamlConfig()

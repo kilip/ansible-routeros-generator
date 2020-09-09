@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Scraper;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use RouterOS\Generator\Contracts\CacheInterface;
+use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 use RouterOS\Generator\Model\SubMenu;
 use RouterOS\Generator\Scraper\Configuration;
@@ -32,7 +32,7 @@ class DocumentationScraperTest extends KernelTestCase
     private $dispatcher;
 
     /**
-     * @var MockObject|CacheInterface
+     * @var MockObject|CacheManagerInterface
      */
     private $cache;
 
@@ -48,7 +48,7 @@ class DocumentationScraperTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->cache = $this->createMock(CacheInterface::class);
+        $this->cache = $this->createMock(CacheManagerInterface::class);
         $this->manager = $this->createMock(SubMenuManagerInterface::class);
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
 

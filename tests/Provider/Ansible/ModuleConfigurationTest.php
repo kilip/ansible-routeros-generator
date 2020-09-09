@@ -14,16 +14,19 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Provider\Ansible;
 
-use PHPUnit\Framework\TestCase;
 use RouterOS\Generator\Provider\Ansible\ModuleConfiguration;
-use RouterOS\Generator\Util\Cache;
+use RouterOS\Generator\Util\CacheManager;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Tests\RouterOS\Generator\UseContainerTrait;
 
-class ModuleConfigurationTest extends TestCase
+class ModuleConfigurationTest extends KernelTestCase
 {
+    use UseContainerTrait;
+
     public function testProcessConfiguration()
     {
         $dispatcher = $this->createMock(EventDispatcherInterface::class);
@@ -32,7 +35,7 @@ class ModuleConfigurationTest extends TestCase
 
         $configuration = new ModuleConfiguration();
         $processor = new Processor();
-        $loader = new Cache(
+        $loader = new CacheManager(
             $dispatcher,
             $adapter,
             $httpClient,
@@ -42,7 +45,7 @@ class ModuleConfigurationTest extends TestCase
         $config = $loader->processYamlConfig(
             $configuration,
             'ansible.modules',
-            __DIR__.'/Fixtures/config'
+            __DIR__.'/Fixtures/modules'
         );
 
         $processed = $processor->processConfiguration($configuration, ['modules' => $config]);

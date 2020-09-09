@@ -1,2 +1,5 @@
 routeros:
   scraper_config_dir: "%kernel.project_dir%/tests/Fixtures/scraper/routeros"
+
+  ansible:
+    modules_config_dir: "%kernel.project_dir%/tests/Provider/Ansible/Fixtures/modules"

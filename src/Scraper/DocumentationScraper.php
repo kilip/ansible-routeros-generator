@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Scraper;
 
 use Doctrine\Inflector\InflectorFactory;
-use RouterOS\Generator\Contracts\CacheInterface;
+use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Model\Property;
@@ -31,7 +31,7 @@ class DocumentationScraper
     private $dispatcher;
 
     /**
-     * @var CacheInterface
+     * @var CacheManagerInterface
      */
     private $cache;
 
@@ -54,14 +54,14 @@ class DocumentationScraper
      * DocumentationScraper constructor.
      *
      * @param EventDispatcherInterface $dispatcher
-     * @param CacheInterface           $cache
+     * @param CacheManagerInterface    $cache
      * @param ConfigurationInterface   $configuration
      * @param SubMenuManagerInterface  $manager
      * @param string                   $configDir
      */
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        CacheInterface $cache,
+        CacheManagerInterface $cache,
         ConfigurationInterface $configuration,
         SubMenuManagerInterface $manager,
         string $configDir

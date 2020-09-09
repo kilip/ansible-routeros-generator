@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Util;
 
-use RouterOS\Generator\Contracts\CacheInterface;
+use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Event\ProcessEvent;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Config\ConfigCache;
@@ -27,7 +27,7 @@ use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class Cache implements CacheInterface
+class CacheManager implements CacheManagerInterface
 {
     /**
      * @var string

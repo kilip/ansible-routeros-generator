@@ -1,2 +1,5 @@
 routeros:
   scraper_config_dir: "%kernel.project_dir%/config/scraper"
+
+  ansible:
+    modules_config_dir: "%kernel.project_dir%/provider/ansible/modules"

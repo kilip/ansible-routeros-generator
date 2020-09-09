@@ -23,7 +23,7 @@
             <argument>%routeros.scraper.cache_dir%</argument>
         </service>
 
-        <service id="routeros.cache" class="RouterOS\Generator\Util\Cache" public="true">
+        <service id="routeros.cache_manager" class="RouterOS\Generator\Util\CacheManager" public="true">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.scraper.page_cache"/>
             <argument type="service" id="http_client"/>
@@ -36,7 +36,7 @@
 
         <service id="routeros.scraper.documentation" class="RouterOS\Generator\Scraper\DocumentationScraper">
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="routeros.scraper.page_cache"/>
+            <argument type="service" id="routeros.cache_manager"/>
             <argument type="service" id="routeros.scraper.configuration"/>
             <argument type="service" id="routeros.model.submenu_manager"/>
             <argument>%routeros.scraper.config_dir%</argument>

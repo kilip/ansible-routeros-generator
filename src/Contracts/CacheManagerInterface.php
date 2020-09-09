@@ -16,7 +16,7 @@ namespace RouterOS\Generator\Contracts;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
-interface CacheInterface
+interface CacheManagerInterface
 {
     /**
      * @param ConfigurationInterface $configuration

@@ -35,6 +35,15 @@ class Configuration implements ConfigurationInterface
     private function configureGeneralConfig(NodeBuilder $root)
     {
         $root
-            ->scalarNode('scraper_config_dir')->end();
+            ->scalarNode('scraper_config_dir')->end()
+            ->arrayNode('ansible')
+                ->isRequired()
+                ->children()
+                    ->scalarNode('modules_config_dir')
+                        ->isRequired()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
     }
 }

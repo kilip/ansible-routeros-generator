@@ -19,6 +19,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Provider\Ansible\Model\Module;
 use RouterOS\Generator\Provider\Ansible\Model\ModuleManager;
 use Tests\RouterOS\Generator\Model\QueryMock;
@@ -40,9 +41,15 @@ class ModuleManagerTest extends TestCase
      */
     private $repository;
 
+    /**
+     * @var MockObject|CacheManagerInterface
+     */
+    private $cache;
+
     protected function setUp(): void
     {
         $this->em = $this->createMock(EntityManagerInterface::class);
+        $this->cache = $this->createMock(CacheManagerInterface::class);
         $this->repository = $this->createMock(ObjectRepository::class);
 
         $this->em

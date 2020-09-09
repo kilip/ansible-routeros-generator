@@ -32,7 +32,7 @@ class ModuleManager implements ModuleManagerInterface
 
     public function __construct(
         EntityManagerInterface $em,
-        $maxResults = 1000
+        int $maxResults = 1000
     ) {
         $this->em = $em;
         $this->maxResults = $maxResults;
