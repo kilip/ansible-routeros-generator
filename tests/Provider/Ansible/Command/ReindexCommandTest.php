@@ -39,7 +39,6 @@ class ReindexCommandTest extends KernelTestCase
         $output = $tester->getDisplay();
 
         $this->assertRegExp('#Start Reindexing Modules#', $output);
-        $this->assertRegExp('#Processing bridge_settings#', $output);
         $this->assertRegExp('#3/3#', $output);
     }
 
