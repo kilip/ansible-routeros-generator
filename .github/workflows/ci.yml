@@ -74,6 +74,7 @@ jobs:
           mkdir -p /var/cache/php-cs-fixer
           php-cs-fixer fix --dry-run --diff --cache-file=/var/cache/php-cs-fixer/.php_cs.cache --ansi
 
+
   phpstan:
     name: PHPStan (${{ matrix.php }})
     runs-on: ubuntu-latest
@@ -198,6 +199,7 @@ jobs:
           mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
           ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
+          composer require --dev phpunit/phpunit
       - name: Enable code coverage
         if: matrix.coverage
         run: echo '::set-env name=COVERAGE::1'

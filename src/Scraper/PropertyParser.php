@@ -12,11 +12,11 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Scraper;
+namespace RouterOS\Generator\Scraper;
 
-use RouterOS\Model\Property;
-use RouterOS\Model\SubMenu;
-use RouterOS\Util\Text;
+use RouterOS\Generator\Model\Property;
+use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Util\Text;
 
 class PropertyParser
 {

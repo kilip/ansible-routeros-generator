@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Scraper;
+namespace RouterOS\Generator\Scraper;
 
 use League\HTMLToMarkdown\HtmlConverter;
-use RouterOS\Model\SubMenu;
+use RouterOS\Generator\Model\SubMenu;
 use Symfony\Component\DomCrawler\Crawler;
 
 class TableParser

@@ -3,7 +3,7 @@ parameters:
 	paths:
 		- src
 	excludes_analyse:
-	    - src/Resources
+		- src/Resources
 	inferPrivatePropertyTypeFromConstructor: true
 	earlyTerminatingMethodCalls:
 		PHPUnit\Framework\Constraint\Constraint:

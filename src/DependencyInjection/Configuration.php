@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\DependencyInjection;
+namespace RouterOS\Generator\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

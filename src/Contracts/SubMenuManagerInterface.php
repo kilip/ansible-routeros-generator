@@ -12,19 +12,36 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Contracts;
+namespace RouterOS\Generator\Contracts;
 
 use Doctrine\Persistence\ObjectRepository;
-use RouterOS\Model\SubMenu;
+use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Provider\Ansible\Model\Module;
 
 interface SubMenuManagerInterface
 {
     /**
      * @return SubMenu
      */
-    public function findOrCreate(string $name): SubMenu;
+    public function create(): SubMenu;
 
-    public function update(SubMenu $object);
+    /**
+     * @param string $name
+     * @return object|SubMenu
+     */
+    public function findByName(string $name);
+
+    /**
+     * @param string $name
+     * @return object|SubMenu
+     */
+    public function findOrCreate(string $name);
+
+    /**
+     * @param SubMenu $object
+     * @param bool $andFlush
+     */
+    public function update(SubMenu $object, bool $andFlush = true): void;
 
     /**
      * @return ObjectRepository

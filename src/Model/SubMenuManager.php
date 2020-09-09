@@ -12,11 +12,11 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Model;
+namespace RouterOS\Generator\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
-use RouterOS\Contracts\SubMenuManagerInterface;
+use RouterOS\Generator\Contracts\SubMenuManagerInterface;
 
 class SubMenuManager implements SubMenuManagerInterface
 {
@@ -38,22 +38,30 @@ class SubMenuManager implements SubMenuManagerInterface
         $this->maxResults = $maxResults;
     }
 
-    public function findOrCreate(string $name): SubMenu
+    public function create(): SubMenu
     {
-        $repository = $this->getRepository();
-        $object = $repository->findOneBy(['name' => $name]);
+        return new SubMenu();
+    }
+
+    public function findOrCreate(string $name)
+    {
+        $object = $this->findByName($name);
 
         if (null === $object) {
-            $object = new SubMenu();
-
+            $object = $this->create();
             $object->setName($name);
-            $this->update($object);
         }
 
         return $object;
     }
 
-    public function update(SubMenu $object, $andFlush = true)
+    public function findByName(string $name)
+    {
+        return $this->getRepository()->findOneBy(['name' => $name]);
+    }
+
+
+    public function update(SubMenu $object, bool $andFlush = true): void
     {
         $om = $this->manager;
 

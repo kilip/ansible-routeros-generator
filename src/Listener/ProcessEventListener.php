@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Listener;
+namespace RouterOS\Generator\Listener;
 
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Helper\ProgressBar;

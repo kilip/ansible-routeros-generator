@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Event;
+namespace RouterOS\Generator\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 

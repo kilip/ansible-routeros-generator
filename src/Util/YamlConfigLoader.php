@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Util;
+namespace RouterOS\Generator\Util;
 
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;

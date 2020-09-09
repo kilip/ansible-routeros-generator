@@ -12,7 +12,7 @@
         <parameter key="routeros.scraper.config_dir"/>
     </parameters>
     <services>
-        <service id="routeros.model.submenu_manager" class="RouterOS\Model\SubMenuManager">
+        <service id="routeros.model.submenu_manager" class="RouterOS\Generator\Model\SubMenuManager">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument>%routeros.model.max_results%</argument>
         </service>
@@ -23,10 +23,10 @@
             <argument>%routeros.scraper.cache_dir%</argument>
         </service>
 
-        <service id="routeros.scraper.configuration" class="RouterOS\Scraper\Configuration"/>
-        <service id="RouterOS\Scraper\Configuration" alias="routeros.scraper.configuration"/>
+        <service id="routeros.scraper.configuration" class="RouterOS\Generator\Scraper\Configuration"/>
+        <service id="RouterOS\Generator\Scraper\Configuration" alias="routeros.scraper.configuration"/>
 
-        <service id="routeros.scraper.documentation" class="RouterOS\Scraper\DocumentationScraper">
+        <service id="routeros.scraper.documentation" class="RouterOS\Generator\Scraper\DocumentationScraper">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.scraper.page_cache"/>
             <argument type="service" id="routeros.scraper.configuration"/>
@@ -34,16 +34,7 @@
             <argument>%routeros.scraper.config_dir%</argument>
         </service>
 
-        <!--
-        <service id="routeros.listener.process" class="RouterOS\Listener\ProcessEventListener">
-            <argument type="service" id="logger"/>
-            <argument type="service" id="console"/>
-            <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
-            <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
-        </service>
-        -->
-
-        <service id="routeros.command.scrap" class="RouterOS\Command\ScrapCommand">
+        <service id="routeros.command.scrap" class="RouterOS\Generator\Command\ScrapCommand">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="logger"/>
             <argument type="service" id="routeros.scraper.documentation"/>
@@ -52,6 +43,6 @@
             <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
             <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
         </service>
-        <service id="RouterOS\Command\ScrapCommand" alias="routeros.command.scrap"/>
+        <service id="RouterOS\Generator\Command\ScrapCommand" alias="routeros.command.scrap"/>
     </services>
 </container>

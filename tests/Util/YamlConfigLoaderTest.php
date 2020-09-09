@@ -12,11 +12,11 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Tests\Util;
+namespace Tests\RouterOS\Generator\Util;
 
 use PHPUnit\Framework\TestCase;
-use RouterOS\Scraper\Configuration;
-use RouterOS\Util\YamlConfigLoader;
+use RouterOS\Generator\Scraper\Configuration;
+use RouterOS\Generator\Util\YamlConfigLoader;
 
 class YamlConfigLoaderTest extends TestCase
 {

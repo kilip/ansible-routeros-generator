@@ -12,10 +12,10 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Tests\Functional\Model;
+namespace Tests\RouterOS\Generator\Functional\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
-use RouterOS\Model\SubMenuManager;
+use RouterOS\Generator\Model\SubMenuManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class SubMenuManagerFunctionalTest extends KernelTestCase
@@ -24,6 +24,11 @@ class SubMenuManagerFunctionalTest extends KernelTestCase
      * @var EntityManagerInterface
      */
     private $em;
+
+    /**
+     * @var SubMenuManager
+     */
+    private $manager;
 
     protected function setUp(): void
     {
@@ -37,8 +42,6 @@ class SubMenuManagerFunctionalTest extends KernelTestCase
     public function testGetSubMenuList()
     {
         $manager = $this->manager;
-
-        $subMenu = $manager->findOrCreate('foo');
         $data = $manager->getSubMenuList();
         $this->assertIsArray($data);
     }

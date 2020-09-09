@@ -12,11 +12,11 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Command;
+namespace RouterOS\Generator\Command;
 
 use Psr\Log\LoggerInterface;
-use RouterOS\Event\ProcessEvent;
-use RouterOS\Scraper\DocumentationScraper;
+use RouterOS\Generator\Event\ProcessEvent;
+use RouterOS\Generator\Scraper\DocumentationScraper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;

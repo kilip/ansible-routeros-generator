@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Scraper;
+namespace RouterOS\Generator\Scraper;
 
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;

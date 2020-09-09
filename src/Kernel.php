@@ -12,9 +12,10 @@
 
 declare(strict_types=1);
 
-namespace RouterOS;
+namespace RouterOS\Generator;
 
-use RouterOS\DependencyInjection\RouterosExtension;
+use RouterOS\Generator\DependencyInjection\RouterosExtension;
+use RouterOS\Generator\Provider\Ansible\AnsibleProvider;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -29,7 +30,6 @@ class Kernel extends BaseKernel
     {
         //$container->registerExtension("foo");
         $extension = new RouterosExtension();
-        $alias = $extension->getAlias();
         $container->registerExtension($extension);
         $container->loadFromExtension($extension->getAlias());
     }

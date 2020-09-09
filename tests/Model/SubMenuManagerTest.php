@@ -12,20 +12,15 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Tests\Model;
+namespace Tests\RouterOS\Generator\Model;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ObjectRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use RouterOS\Model\SubMenu;
-use RouterOS\Model\SubMenuManager;
-
-interface QueryMock
-{
-    public function getArrayResult();
-}
+use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Model\SubMenuManager;
 
 class SubMenuManagerTest extends TestCase
 {
@@ -59,7 +54,6 @@ class SubMenuManagerTest extends TestCase
 
     public function testFindOrCreate()
     {
-        $om = $this->om;
         $repository = $this->repository;
         $manager = $this->manager;
 
@@ -67,12 +61,6 @@ class SubMenuManagerTest extends TestCase
             ->method('findOneBy')
             ->with(['name' => 'test'])
             ->willReturn(null);
-
-        $om->expects($this->once())
-            ->method('persist')
-            ->with($this->isInstanceOf(SubMenu::class));
-        $om->expects($this->once())
-            ->method('flush');
 
         $manager->findOrCreate('test');
     }

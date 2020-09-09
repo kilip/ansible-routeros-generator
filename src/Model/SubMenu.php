@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Model;
+namespace RouterOS\Generator\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -61,7 +61,7 @@ class SubMenu
 
     /**
      * @ORM\OneToMany(
-     *     targetEntity="RouterOS\Model\Property",
+     *     targetEntity="Property",
      *     mappedBy="subMenu",
      *     cascade={"persist", "remove"}
      * )

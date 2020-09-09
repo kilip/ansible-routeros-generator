@@ -12,14 +12,14 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Scraper;
+namespace RouterOS\Generator\Scraper;
 
 use Doctrine\Inflector\InflectorFactory;
-use RouterOS\Contracts\SubMenuManagerInterface;
-use RouterOS\Event\ProcessEvent;
-use RouterOS\Model\Property;
-use RouterOS\Model\SubMenu;
-use RouterOS\Util\YamlConfigLoader;
+use RouterOS\Generator\Contracts\SubMenuManagerInterface;
+use RouterOS\Generator\Event\ProcessEvent;
+use RouterOS\Generator\Model\Property;
+use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Util\YamlConfigLoader;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

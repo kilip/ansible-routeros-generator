@@ -12,14 +12,14 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Tests\Scraper;
+namespace Tests\RouterOS\Generator\Scraper;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use RouterOS\Contracts\SubMenuManagerInterface;
-use RouterOS\Model\SubMenu;
-use RouterOS\Scraper\Configuration;
-use RouterOS\Scraper\DocumentationScraper;
+use RouterOS\Generator\Contracts\SubMenuManagerInterface;
+use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Scraper\Configuration;
+use RouterOS\Generator\Scraper\DocumentationScraper;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

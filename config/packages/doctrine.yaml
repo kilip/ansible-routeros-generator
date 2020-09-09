@@ -18,5 +18,11 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 dir: '%kernel.project_dir%/src/Model'
-                prefix: 'RouterOS\Model'
+                prefix: 'RouterOS\Generator\Model'
+                alias: RouterOS
+            Ansible:
+                is_bundle: false
+                type: annotation
+                dir: '%kernel.project_dir%/src/Provider/Ansible/Model'
+                prefix: 'RouterOS\Generator\Provider\Ansible\Model'
                 alias: RouterOS

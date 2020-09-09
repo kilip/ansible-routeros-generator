@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Util;
+namespace RouterOS\Generator\Util;
 
 class CommandUtil
 {

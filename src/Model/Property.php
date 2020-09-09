@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Model;
+namespace RouterOS\Generator\Model;
 
 use Doctrine\ORM\Mapping as ORM;
 
@@ -104,7 +104,7 @@ class Property
 
     /**
      * @ORM\ManyToOne(
-     *     targetEntity="RouterOS\Model\SubMenu",
+     *     targetEntity="SubMenu",
      *     inversedBy="properties",
      *     cascade={"persist", "remove"}
      * )
