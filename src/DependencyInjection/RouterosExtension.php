@@ -28,7 +28,7 @@ class RouterosExtension extends Extension
             new FileLocator(__DIR__.'/../Resources/config')
         );
         $loader->load('services.xml');
-        $loader->load("ansible.xml");
+        $loader->load('ansible.xml');
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 

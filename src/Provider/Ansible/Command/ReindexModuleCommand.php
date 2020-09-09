@@ -1,8 +1,18 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Command;
-
 
 use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
 use RouterOS\Generator\Provider\Ansible\ConfigLoader;
@@ -25,8 +35,7 @@ class ReindexModuleCommand extends Command
     public function __construct(
         ConfigLoader $configLoader,
         ConsoleProcessEventSubscriber $consoleProcessSubscriber
-    )
-    {
+    ) {
         parent::__construct(static::$defaultName);
         $this->configLoader = $configLoader;
         $this->consoleProcessSubscriber = $consoleProcessSubscriber;

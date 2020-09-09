@@ -40,8 +40,7 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
 
     public function __construct(
         LoggerInterface $logger
-    )
-    {
+    ) {
         $this->logger = $logger;
     }
 
@@ -75,7 +74,7 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
 
     public function onStartProcessEvent(ProcessEvent $event)
     {
-        if(!is_null($this->progressBar)){
+        if (null !== $this->progressBar) {
             $this->showMessage($event);
             $this->progressBar->start();
             $this->setMaxSteps($event);
@@ -84,7 +83,7 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
 
     public function onLoopEvent(ProcessEvent $event)
     {
-        if(!is_null($this->progressBar)) {
+        if (null !== $this->progressBar) {
             $progressBar = $this->progressBar;
             $this->showMessage($event);
             $progressBar->advance();
@@ -93,7 +92,7 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
 
     public function onEndProcessEvent()
     {
-        if(!is_null($this->progressBar)){
+        if (null !== $this->progressBar) {
             $this->progressBar->finish();
         }
     }

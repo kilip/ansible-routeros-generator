@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Command;
 
 use Psr\Log\LoggerInterface;
-use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Scraper\DocumentationScraper;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;

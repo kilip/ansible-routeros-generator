@@ -1,26 +1,37 @@
 <?php
 
+/*
+ * This file is part of the RouterOS project.
+ *
+ * (c) Anthonius Munthi <https://itstoni.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ */
+
+declare(strict_types=1);
+
 namespace Tests\RouterOS\Generator\Provider\Ansible\Command;
 
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Console\Tester\TesterTrait;
 use Tests\RouterOS\Generator\UseContainerTrait;
 
 class ReindexCommandTest extends KernelTestCase
 {
-    use UseContainerTrait, TesterTrait;
+    use UseContainerTrait;
+    use TesterTrait;
 
     public function testExecute()
     {
         $kernel = $this->getKernel();
         $application = new Application($kernel);
 
-        $command = $application->find("ansible:reindex-module");
+        $command = $application->find('ansible:reindex-module');
         $tester = new CommandTester($command);
-
 
         $this->prepare();
         $tester->execute([]);

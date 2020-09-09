@@ -163,6 +163,5 @@ class ConfigLoaderTest extends TestCase
                 $this->isInstanceOf(ProcessEvent::class),
                 ProcessEvent::EVENT_END
             );
-
     }
 }
