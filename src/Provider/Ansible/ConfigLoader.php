@@ -109,8 +109,11 @@ class ConfigLoader
         $module = $moduleManager->findOrCreate($name);
         $subMenu = $subMenuManager->findByName($name);
 
+        $config['module_name'] = 'ros_'.$name;
         $module->setSubMenu($subMenu);
+        $module->setConfig($config);
         $module->setConfigFile($configFile);
+
         $moduleManager->update($module);
     }
 }

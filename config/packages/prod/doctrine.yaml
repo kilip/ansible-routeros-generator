@@ -1,4 +1,6 @@
 doctrine:
+    dbal:
+        url: 'sqlite:///%kernel.project_dir%/var/routeros.db'
     orm:
         auto_generate_proxy_classes: false
         metadata_cache_driver:

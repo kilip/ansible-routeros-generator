@@ -1,5 +1,11 @@
+twig:
+  paths:
+      "%kernel.project_dir%/provider/ansible/templates": "ansible"
+
 routeros:
   scraper_config_dir: "%kernel.project_dir%/config/scraper"
-
+  cache_dir: "%kernel.cache_dir%/routeros"
   ansible:
+    module_name_prefix: "kilip.routeros"
     modules_config_dir: "%kernel.project_dir%/provider/ansible/modules"
+    target_dir: "%kernel.project_dir%/var/ansible"

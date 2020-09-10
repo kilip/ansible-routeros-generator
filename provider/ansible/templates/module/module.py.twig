@@ -1,0 +1,20 @@
+#!/usr/bin/python
+{% include "@ansible/header.txt.twig" %}
+
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
+"""
+The module file for {{ config.module_name|full_module_name }}
+"""
+
+DOCUMENTATION = """
+{{ documentation|routeros_yaml_dump|raw }}
+"""
+
+EXAMPLES = """
+"""
+
+RETURNS = """
+"""

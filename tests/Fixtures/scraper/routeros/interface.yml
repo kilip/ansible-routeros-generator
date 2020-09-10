@@ -6,6 +6,6 @@ generator:
   table_index: [1]
 properties:
   mtu:
-    type: str
+    type: string
   l2mtu:
-    type: str
+    type: string

@@ -7,7 +7,7 @@ generator:
   table_index: 0
 properties:
   disabled:
-    type: str
+    type: string
     choices:
       - 'yes'
       - 'no'

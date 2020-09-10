@@ -7,11 +7,14 @@
     <parameters>
         <parameter key="routeros.scraper.page_cache_namespace">routeros</parameter>
         <parameter key="routeros.scraper.page_cache_lifetime">604800</parameter>
-        <parameter key="routeros.scraper.cache_dir">%kernel.project_dir%/var/static-wiki</parameter>
+        <parameter key="routeros.cache_dir"/>
         <parameter key="routeros.model.max_results">1000</parameter>
         <parameter key="routeros.scraper.config_dir"/>
+        <parameter key="routeros.scraper.cache_dir">%routeros.cache_dir%/static-wiki</parameter>
+        <parameter key="routeros.twig.contexts" type="collection"/>
     </parameters>
     <services>
+
         <service id="routeros.model.submenu_manager" class="RouterOS\Generator\Model\SubMenuManager">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
             <argument>%routeros.model.max_results%</argument>
@@ -27,7 +30,7 @@
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.scraper.page_cache"/>
             <argument type="service" id="http_client"/>
-            <argument>%routeros.scraper.cache_dir%</argument>
+            <argument>%routeros.cache_dir%</argument>
             <argument>%kernel.debug%</argument>
         </service>
 
@@ -36,6 +39,9 @@
             <tag name="kernel.event_subscriber"/>
         </service>
 
+        <service id="routeros.template_compiler" class="RouterOS\Generator\Util\TemplateCompiler">
+            <argument type="service" id="twig"/>
+        </service>
         <service id="routeros.scraper.configuration" class="RouterOS\Generator\Scraper\Configuration"/>
         <service id="RouterOS\Generator\Scraper\Configuration" alias="routeros.scraper.configuration"/>
 
@@ -54,6 +60,9 @@
             <tag name="console.command"/>
         </service>
 
+        <service id="routeros.twig.extension" class="RouterOS\Generator\Twig\RouterosExtension">
+            <tag name="twig.extension"/>
+        </service>
 
     </services>
 </container>

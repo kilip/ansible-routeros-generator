@@ -36,13 +36,13 @@ class Configuration implements ConfigurationInterface
     {
         $root
             ->scalarNode('scraper_config_dir')->end()
+            ->scalarNode('cache_dir')->end()
             ->arrayNode('ansible')
                 ->isRequired()
                 ->children()
-                    ->scalarNode('modules_config_dir')
-                        ->isRequired()
-                        ->end()
-                    ->end()
+                    ->scalarNode('modules_config_dir')->isRequired()->end()
+                    ->scalarNode('target_dir')->isRequired()->end()
+                    ->scalarNode('module_name_prefix')->isRequired()->end()
                 ->end()
             ->end();
     }

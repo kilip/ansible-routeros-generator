@@ -18,7 +18,10 @@ class Text
 {
     public static function fixYamlDump($dump)
     {
-        return preg_replace("#-(\s+)#", '- ', $dump);
+        $dump = preg_replace("#-(\s+)#", '- ', $dump);
+
+        // strip empty values
+        return preg_replace("#(.*[\{|\[]\s+?[\}|\]]\n)#", '', $dump);
     }
 
     public static function normalizeName($name)

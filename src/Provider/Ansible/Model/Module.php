@@ -56,6 +56,8 @@ class Module
     private $configFile;
 
     /**
+     * @ORM\Column(type="array")
+     *
      * @var array
      */
     private $config = [];
@@ -86,9 +88,9 @@ class Module
     }
 
     /**
-     * @return SubMenu
+     * @return null|SubMenu
      */
-    public function getSubMenu(): SubMenu
+    public function getSubMenu(): ?SubMenu
     {
         return $this->subMenu;
     }
@@ -147,5 +149,13 @@ class Module
         $this->config = $config;
 
         return $this;
+    }
+
+    /**
+     * @return Documentation
+     */
+    public function getDocumentation(): Documentation
+    {
+        return new Documentation($this);
     }
 }

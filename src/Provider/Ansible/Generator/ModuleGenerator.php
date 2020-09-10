@@ -84,6 +84,7 @@ class ModuleGenerator
             [
                 'module' => $module,
                 'config' => $config,
+                'documentation' => (array) $module->getDocumentation(),
             ]
         );
     }

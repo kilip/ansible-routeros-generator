@@ -5,11 +5,12 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="ansible.config.modules_dir"/>
-        <parameter key="ansible.config.default_author">%env(AUTHOR)%</parameter>
+        <parameter key="ansible.modules_config_dir"/>
+        <parameter key="ansible.default_author">%env(AUTHOR)%</parameter>
+        <parameter key="ansible.templates_dir"/>
+        <parameter key="ansible.target_dir"/>
     </parameters>
     <services>
-
         <service id="ansible.module_manager" class="RouterOS\Generator\Provider\Ansible\Model\ModuleManager">
             <argument type="service" id="doctrine.orm.default_entity_manager"/>
         </service>
@@ -17,14 +18,28 @@
 
         <service id="ansible.module_configuration" class="RouterOS\Generator\Provider\Ansible\ModuleConfiguration"/>
 
+        <service
+                id="ansible.generator.module"
+                class="RouterOS\Generator\Provider\Ansible\Generator\ModuleGenerator"
+                public="true"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="ansible.module_manager"/>
+            <argument type="service" id="routeros.template_compiler"/>
+            <argument>%ansible.target_dir%</argument>
+        </service>
 
-        <service id="ansible.config_loader" class="RouterOS\Generator\Provider\Ansible\ConfigLoader">
+        <service
+                id="ansible.config_loader"
+                class="RouterOS\Generator\Provider\Ansible\ConfigLoader"
+                public="true"
+        >
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.cache_manager"/>
             <argument type="service" id="ansible.module_manager"/>
             <argument type="service" id="routeros.model.submenu_manager"/>
             <argument type="service" id="ansible.module_configuration"/>
-            <argument>%ansible.config.modules_dir%</argument>
+            <argument>%ansible.modules_config_dir%</argument>
         </service>
 
         <service id="ansible.command.create_modules" class="RouterOS\Generator\Provider\Ansible\Command\CreateModulesCommand">
@@ -35,6 +50,11 @@
             <argument type="service" id="ansible.config_loader"/>
             <argument type="service" id="routeros.event.console_process_subscriber"/>
             <tag name="console.command"/>
+        </service>
+
+        <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">
+            <argument>%ansible.module_name_prefix%</argument>
+            <tag name="twig.extension"/>
         </service>
     </services>
 </container>

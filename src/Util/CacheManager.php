@@ -72,23 +72,39 @@ class CacheManager implements CacheManagerInterface
         string $path,
         bool $addFilePath = false
     ): array {
-        $finder = Finder::create()
-            ->in($path);
-
-        $configs = [];
+        $cacheDir = $this->cacheDir;
         $exp = explode('.', $rootName);
+        $id = md5("{$rootName}-{$path}");
+        $cachePath = "{$cacheDir}/processed-yml/{$id}.php";
+        $cache = new ConfigCache($cachePath, $this->debug);
 
-        foreach ($finder->files() as $file) {
-            $data = $this->parseYaml($file->getRealPath());
-            if ($addFilePath) {
-                $data['config_file'] = $file->getRealPath();
+        if (!$cache->isFresh()) {
+            $configs = [];
+            $resources = [];
+            $finder = Finder::create()->in($path);
+            foreach ($finder->files() as $file) {
+                $data = $this->parseYaml($file->getRealPath());
+                if ($addFilePath) {
+                    $data['config_file'] = $file->getRealPath();
+                }
+                $configs[$exp[0]][$exp[1]][] = $data;
+                $resources[] = new FileResource($file->getRealPath());
             }
-            $configs[$exp[0]][$exp[1]][] = $data;
+            $r = new \ReflectionClass(\get_class($configuration));
+            $resources[] = new FileResource($r->getFileName());
+
+            $processor = new Processor();
+            $processed = $processor->processConfiguration($configuration, $configs);
+
+            $contents = "<?php\n".
+                'return '.var_export($processed, true)
+                .";\n";
+            $cache->write($contents, $resources);
         }
 
-        $processor = new Processor();
+        $data = require $cachePath;
 
-        return $processor->processConfiguration($configuration, $configs);
+        return $data;
     }
 
     public function parseYaml(string $file): array
@@ -96,7 +112,7 @@ class CacheManager implements CacheManagerInterface
         $cacheDir = $this->cacheDir;
         $debug = $this->debug;
         $id = md5($file);
-        $cachePath = "{$cacheDir}/{$id}.php";
+        $cachePath = "{$cacheDir}/yml/{$id}.php";
 
         $cache = new ConfigCache($cachePath, $debug);
         if (!$cache->isFresh()) {

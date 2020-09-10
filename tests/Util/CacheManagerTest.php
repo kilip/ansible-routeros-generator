@@ -27,7 +27,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-class CacheTest extends TestCase
+class CacheManagerTest extends TestCase
 {
     /**
      * @var CacheManager
@@ -90,6 +90,7 @@ class CacheTest extends TestCase
         $cache = $this->cache;
         $path = __DIR__.'/../Fixtures/scraper/routeros';
         $configuration = new Configuration();
+        $this->configureAdapter();
 
         $result = $cache->processYamlConfig(
             $configuration,

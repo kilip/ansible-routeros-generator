@@ -3,3 +3,4 @@ routeros:
 
   ansible:
     modules_config_dir: "%kernel.project_dir%/tests/Provider/Ansible/Fixtures/modules"
+    target_dir: "%kernel.cache_dir%/routeros/compiled-templates/ansible"
