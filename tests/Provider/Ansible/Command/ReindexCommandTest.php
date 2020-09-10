@@ -14,24 +14,18 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Provider\Ansible\Command;
 
-use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Console\Tester\CommandTester;
-use Symfony\Component\Console\Tester\TesterTrait;
-use Tests\RouterOS\Generator\UseContainerTrait;
+use Tests\RouterOS\Generator\Concerns\InteractsWithCommand;
+use Tests\RouterOS\Generator\Concerns\InteractsWithConsoleOutput;
 
 class ReindexCommandTest extends KernelTestCase
 {
-    use UseContainerTrait;
-    use TesterTrait;
+    use InteractsWithCommand;
+    use InteractsWithConsoleOutput;
 
     public function testExecute()
     {
-        $kernel = $this->getKernel();
-        $application = new Application($kernel);
-
-        $command = $application->find('ansible:reindex-module');
-        $tester = new CommandTester($command);
+        $tester = $this->getCommandTester('ansible:reindex-module');
 
         $this->prepare();
         $tester->execute([]);

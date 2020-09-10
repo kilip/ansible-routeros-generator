@@ -97,7 +97,7 @@ class CacheTest extends TestCase
             $path
         );
 
-        $this->assertIsArray($result);
+        $this->assertNotEmpty($result);
     }
 
     public function testGetHtmlPage()

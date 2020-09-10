@@ -12,11 +12,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\RouterOS\Generator;
+namespace Tests\RouterOS\Generator\Concerns;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-trait UseContainerTrait
+trait InteractsWithContainer
 {
     /**
      * @return ContainerInterface

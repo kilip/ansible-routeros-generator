@@ -43,6 +43,6 @@ class SubMenuManagerFunctionalTest extends KernelTestCase
     {
         $manager = $this->manager;
         $data = $manager->getSubMenuList();
-        $this->assertIsArray($data);
+        $this->assertNotEmpty($data);
     }
 }

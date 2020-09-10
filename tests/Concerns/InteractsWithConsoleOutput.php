@@ -12,14 +12,11 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Generator\Contracts;
+namespace Tests\RouterOS\Generator\Concerns;
 
-interface TemplateCompilerInterface
+use Symfony\Component\Console\Tester\TesterTrait;
+
+trait InteractsWithConsoleOutput
 {
-    /**
-     * @param string $template
-     * @param string $target
-     * @param array  $context
-     */
-    public function compile(string $template, string $target, array $context): void;
+    use TesterTrait;
 }

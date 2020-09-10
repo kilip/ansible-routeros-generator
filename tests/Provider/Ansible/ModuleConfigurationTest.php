@@ -21,11 +21,11 @@ use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Tests\RouterOS\Generator\UseContainerTrait;
+use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class ModuleConfigurationTest extends KernelTestCase
 {
-    use UseContainerTrait;
+    use InteractsWithContainer;
 
     public function testProcessConfiguration()
     {
