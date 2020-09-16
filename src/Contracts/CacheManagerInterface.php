@@ -19,6 +19,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 interface CacheManagerInterface
 {
     /**
+     * @return object
+     */
+    public function getYamlObject(string $className, string $file): object;
+
+    /**
      * @param ConfigurationInterface $configuration
      * @param string                 $rootName
      * @param string                 $path

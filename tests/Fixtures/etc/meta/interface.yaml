@@ -1,0 +1,11 @@
+name: interface
+package: interface
+command: /interface
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface'
+  table_index: [1]
+properties_override:
+  mtu:
+    type: string
+  l2mtu:
+    type: string

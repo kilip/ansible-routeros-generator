@@ -1,0 +1,143 @@
+name: wireless_access_list
+package: interface.wireless
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_wireless_access_list
+export_command: '/interface wireless access-list export'
+resource_class_name: WirelessAccessListResource
+documentation:
+  module: ros_wireless_access_list
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Wireless Access List Module'
+  description:
+    - 'This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        ap_tx_limit:
+          type: int
+          default: 0
+        authentication:
+          type: bool
+          default: 'True'
+        client_tx_limit:
+          type: int
+          default: 0
+        comment:
+          type: str
+          required: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        forwarding:
+          type: bool
+          default: 'True'
+        interface:
+          type: str
+          default: any
+        mac_address:
+          type: str
+          default: '00:00:00:00:00:00'
+        management_protection_key:
+          type: str
+        private_algo:
+          type: str
+          choices: [104bit-wep, 40bit-wep, aes-ccm, none, tkip]
+        private_key:
+          type: str
+        private_pre_shared_key:
+          type: str
+        signal_range:
+          type: str
+          default: '-120..120'
+        time:
+          type: str
+examples:
+  - title: 'Using merge state'
+    name: 'Merge with device configuration'
+    argument_spec:
+      config:
+        - comment: existing
+          signal_range: '-80..120'
+        - comment: new
+          signal_range: '-50..120'
+          interface: wlan1
+      state: merged
+    before: |
+      /interface wireless access-list
+      add comment=existing signal-range=-79..120
+    after: |
+      /interface wireless access-list
+      add comment=existing signal-range=-80..120
+      add comment=new interface=wlan1 signal-range=-50..120
+    commands:
+      - '/interface wireless access-list set [ find comment=existing ] signal-range=-80..120'
+      - '/interface wireless access-list add comment=new interface=wlan1 signal-range=-50..120'
+resource:
+  name: wireless_access_list
+  package: interface.wireless
+  command: '/interface wireless access-list'
+  config_type: config
+  keys:
+    - comment
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        ap_tx_limit:
+          type: int
+          default: 0
+        authentication:
+          type: bool
+          default: 'True'
+        client_tx_limit:
+          type: int
+          default: 0
+        comment:
+          type: str
+          required: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        forwarding:
+          type: bool
+          default: 'True'
+        interface:
+          type: str
+          default: any
+        mac_address:
+          type: str
+          default: '00:00:00:00:00:00'
+        management_protection_key:
+          type: str
+        private_algo:
+          type: str
+          choices: [104bit-wep, 40bit-wep, aes-ccm, none, tkip]
+        private_key:
+          type: str
+        private_pre_shared_key:
+          type: str
+        signal_range:
+          type: str
+          default: '-120..120'
+        time:
+          type: str

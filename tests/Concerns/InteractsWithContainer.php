@@ -19,6 +19,15 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 trait InteractsWithContainer
 {
     /**
+     * @param string $name
+     * @return mixed
+     */
+    protected function getParameter(string $name)
+    {
+        return $this->getContainer()->getParameter($name);
+    }
+
+    /**
      * @return ContainerInterface
      */
     protected function getContainer()

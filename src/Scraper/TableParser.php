@@ -15,48 +15,44 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Scraper;
 
 use League\HTMLToMarkdown\HtmlConverter;
-use RouterOS\Generator\Model\SubMenu;
+use RouterOS\Generator\Contracts\CacheManagerInterface;
+use RouterOS\Generator\Structure\Meta;
 use Symfony\Component\DomCrawler\Crawler;
 
 class TableParser
 {
     /**
-     * @var string
-     */
-    private $url;
-
-    /**
      * @var array
      */
-    private $tableIndex;
+    private $currentTableIndex;
 
     private $rows = [];
 
-    private $page;
+    /**
+     * @var CacheManagerInterface
+     */
+    private $cacheManager;
 
-    public function __construct(array $config)
-    {
-        $this->url = $config['url'];
-        $index = $config['table_index'];
-        $this->tableIndex = $index;
+    public function __construct(
+        CacheManagerInterface $cacheManager
+    ) {
+        $this->cacheManager = $cacheManager;
     }
 
     /**
-     * @param SubMenu $resource
+     * @param Meta $meta
      *
-     * @return TableParser
+     * @return array Lists of table rows
      */
-    public static function fromSubMenu(SubMenu $resource)
+    public function parse(Meta $meta): array
     {
-        $config = $resource->getGenerator();
+        $cacheManager = $this->cacheManager;
+        $config = $meta->getGenerator();
+        $url = $config['url'];
+        $this->currentTableIndex = $config['table_index'];
+        $this->rows = [];
 
-        return new self($config);
-    }
-
-    public function parse($page)
-    {
-        $url = $this->url;
-
+        $page = $cacheManager->getHtmlPage($url);
         $crawler = new Crawler($page, $url);
         $crawler
             ->filter('table')
@@ -68,7 +64,7 @@ class TableParser
     public function parseTable(Crawler $crawler, $index)
     {
         if (
-            !\in_array($index, $this->tableIndex, true)
+            !\in_array($index, $this->currentTableIndex, true)
         ) {
             return;
         }
@@ -88,8 +84,9 @@ class TableParser
 
         $crawler->filter('td')->each(function ($crawler, $index) use (&$columns) {
             $html = $crawler->html();
-            $converter = new HtmlConverter();
+            $converter = new HtmlConverter(['use_autolinks' => false]);
             $markdown = $converter->convert($html);
+            $markdown = str_replace('/wiki/', 'https://wiki.mikrotik.com/wiki/', $markdown);
             $columns[$index] = $markdown;
         });
 

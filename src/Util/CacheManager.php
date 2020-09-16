@@ -51,12 +51,17 @@ class CacheManager implements CacheManagerInterface
      * @var EventDispatcherInterface
      */
     private $dispatcher;
+    /**
+     * @var string
+     */
+    private $kernelProjectDir;
 
     public function __construct(
         EventDispatcherInterface $dispatcher,
         CacheAdapter $adapter,
         HttpClientInterface $httpClient,
-        $cacheDir,
+        string $cacheDir,
+        string $kernelProjectDir,
         $debug = false
     ) {
         $this->cacheDir = $cacheDir;
@@ -64,6 +69,33 @@ class CacheManager implements CacheManagerInterface
         $this->adapter = $adapter;
         $this->httpClient = $httpClient;
         $this->dispatcher = $dispatcher;
+        $this->kernelProjectDir = $kernelProjectDir;
+    }
+
+    public function getYamlObject(string $className, string $file): object
+    {
+        $cacheDir = $this->cacheDir;
+        $debug = $this->debug;
+        $id = md5($file);
+        $cachePath = "{$cacheDir}/yaml-objects/{$id}.dat";
+        $cache = new ConfigCache($cachePath, $debug);
+
+        if (!$cache->isFresh()) {
+            $config = Yaml::parseFile($file);
+            $ob = new $className();
+
+            //@TODO: throws when object doesn't have toArray() method
+            $ob->fromArray($config);
+
+            $resources = [new FileResource($file)];
+            $contents = serialize([$ob]);
+            $cache->write($contents, $resources);
+        }
+
+        $data = file_get_contents($cachePath);
+        $data = unserialize($data);
+
+        return $data[0];
     }
 
     public function processYamlConfig(
@@ -73,10 +105,11 @@ class CacheManager implements CacheManagerInterface
         bool $addFilePath = false
     ): array {
         $cacheDir = $this->cacheDir;
-        $exp = explode('.', $rootName);
         $id = md5("{$rootName}-{$path}");
         $cachePath = "{$cacheDir}/processed-yml/{$id}.php";
         $cache = new ConfigCache($cachePath, $this->debug);
+        $buildTree = $configuration->getConfigTreeBuilder()->buildTree();
+        $root = $buildTree->getName();
 
         if (!$cache->isFresh()) {
             $configs = [];
@@ -87,7 +120,8 @@ class CacheManager implements CacheManagerInterface
                 if ($addFilePath) {
                     $data['config_file'] = $file->getRealPath();
                 }
-                $configs[$exp[0]][$exp[1]][] = $data;
+                //$configs[$exp[0]][$exp[1]][] = $data;
+                $configs[$root][$rootName][] = $data;
                 $resources[] = new FileResource($file->getRealPath());
             }
             $r = new \ReflectionClass(\get_class($configuration));
@@ -97,7 +131,7 @@ class CacheManager implements CacheManagerInterface
             $processed = $processor->processConfiguration($configuration, $configs);
 
             $contents = "<?php\n".
-                'return '.var_export($processed, true)
+                'return '.var_export($processed[$rootName], true)
                 .";\n";
             $cache->write($contents, $resources);
         }
@@ -109,6 +143,12 @@ class CacheManager implements CacheManagerInterface
 
     public function parseYaml(string $file): array
     {
+        $kernelProjectDir = $this->kernelProjectDir;
+
+        if (file_exists($test = $kernelProjectDir.'/'.$file)) {
+            $file = $test;
+        }
+
         $cacheDir = $this->cacheDir;
         $debug = $this->debug;
         $id = md5($file);

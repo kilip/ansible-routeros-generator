@@ -20,6 +20,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 trait InteractsWithCommand
 {
     use InteractsWithContainer;
+    use InteractsWithConsoleOutput;
 
     /**
      * @param string $command

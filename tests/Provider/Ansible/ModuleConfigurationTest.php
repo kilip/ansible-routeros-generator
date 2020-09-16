@@ -18,7 +18,6 @@ use RouterOS\Generator\Provider\Ansible\ModuleConfiguration;
 use RouterOS\Generator\Util\CacheManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
@@ -34,24 +33,20 @@ class ModuleConfigurationTest extends KernelTestCase
         $httpClient = $this->createMock(HttpClientInterface::class);
 
         $configuration = new ModuleConfiguration();
-        $processor = new Processor();
         $loader = new CacheManager(
             $dispatcher,
             $adapter,
             $httpClient,
-            __DIR__.'/Fixtures/compiled'
+            $this->getParameter('routeros.cache_dir'),
+            $this->getParameter('kernel.project_dir')
         );
 
-        $config = $loader->processYamlConfig(
+        $modules = $loader->processYamlConfig(
             $configuration,
-            'ansible.modules',
-            __DIR__.'/Fixtures/modules',
-            true
+            'modules',
+            __DIR__.'/../../Fixtures/etc/ansible/modules'
         );
 
-        $processed = $processor->processConfiguration($configuration, ['modules' => $config]);
-
-        $modules = $processed['modules'];
         $this->assertArrayHasKey('bridge', $modules);
         $this->assertArrayHasKey('bridge_settings', $modules);
     }

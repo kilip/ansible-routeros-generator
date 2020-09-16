@@ -1,0 +1,193 @@
+name: ethernet
+package: interface
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_ethernet
+export_command: '/interface ethernet export'
+resource_class_name: EthernetResource
+documentation:
+  module: ros_ethernet
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Ethernet Resource Module'
+  description:
+    - 'This module manages the ethernet configuration of Mikrotik RouterOS network devices.'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        advertise:
+          type: list
+          choices: [10000M-full, 1000M-full, 1000M-half, 100M-full, 100M-half, 10M-full, 10M-half, 2500M-full, 5000M-full]
+        arp:
+          type: str
+          choices: [disabled, enabled, local-proxy-arp, proxy-arp, reply-only]
+          default: enabled
+        auto_negotiation:
+          type: bool
+          default: 'True'
+        bandwidth:
+          type: int
+          default: 0
+        cable_setting:
+          type: str
+          choices: [default, short, standard]
+          default: default
+        combo_mode:
+          type: str
+          choices: [auto, copper, sfp]
+          default: auto
+        comment:
+          type: str
+        disable_running_check:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        full_duplex:
+          type: bool
+          default: 'True'
+        l2mtu:
+          type: int
+        mac_address:
+          type: str
+        master_port:
+          type: str
+        mdix_enable:
+          type: bool
+          default: 'True'
+        mtu:
+          type: int
+          default: 1500
+        name:
+          type: str
+          required: 'True'
+        poe_out:
+          type: str
+          choices: [auto-on, forced-on, 'off']
+          default: 'off'
+        poe_priority:
+          type: int
+        rx_flow_control:
+          type: str
+          choices: [auto, 'off', 'on']
+          default: 'off'
+        speed:
+          type: str
+          choices: [100Mbps, 10Gbps, 10Mbps, 1Gbps]
+        tx_flow_control:
+          type: str
+          choices: [auto, 'off', 'on']
+          default: 'off'
+examples:
+  - title: 'Using merged state'
+    name: 'Merge configuration with device configuration'
+    argument_spec:
+      config:
+        - name: ether1
+          advertise: '10M-full,100M-full,1000M-full'
+          comment: 'updated comment'
+      state: merged
+    before: |
+      /interface ethernet
+      set comment="ether1 comment" default-name=ether1
+    after: |
+      /interface ethernet
+      add advertise=10M-full,100M-full,1000M-full comment="updated comment" name=ether1
+    commands:
+      - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"'
+resource:
+  name: ethernet
+  package: interface
+  command: '/interface ethernet'
+  config_type: config
+  keys:
+    - name
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        advertise:
+          type: list
+          choices: [10000M-full, 1000M-full, 1000M-half, 100M-full, 100M-half, 10M-full, 10M-half, 2500M-full, 5000M-full]
+        arp:
+          type: str
+          choices: [disabled, enabled, local-proxy-arp, proxy-arp, reply-only]
+          default: enabled
+        auto_negotiation:
+          type: bool
+          default: 'True'
+        bandwidth:
+          type: int
+          default: 0
+        cable_setting:
+          type: str
+          choices: [default, short, standard]
+          default: default
+        combo_mode:
+          type: str
+          choices: [auto, copper, sfp]
+          default: auto
+        comment:
+          type: str
+        disable_running_check:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        full_duplex:
+          type: bool
+          default: 'True'
+        l2mtu:
+          type: int
+        mac_address:
+          type: str
+        master_port:
+          type: str
+        mdix_enable:
+          type: bool
+          default: 'True'
+        mtu:
+          type: int
+          default: 1500
+        name:
+          type: str
+          required: 'True'
+        poe_out:
+          type: str
+          choices: [auto-on, forced-on, 'off']
+          default: 'off'
+        poe_priority:
+          type: int
+        rx_flow_control:
+          type: str
+          choices: [auto, 'off', 'on']
+          default: 'off'
+        speed:
+          type: str
+          choices: [100Mbps, 10Gbps, 10Mbps, 1Gbps]
+        tx_flow_control:
+          type: str
+          choices: [auto, 'off', 'on']
+          default: 'off'
+        default_name:
+          type: str

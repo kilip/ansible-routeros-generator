@@ -1,0 +1,36 @@
+name: capsman_datapath
+package: capsman
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_capsman_datapath
+short_description: 'CAPsMan DataPath Configuration Module'
+description:
+  - 'This modules manages CAPsMan DataPath Configuration on Mikrotik RouterOS network devices'
+fixtures:
+  - action: add
+    values:
+      name: test
+examples:
+  merged:
+    title: 'Using Merged'
+    name: 'Merge with device configuration'
+    argument_spec:
+      state: merged
+      config:
+        - name: test
+          bridge: br-trunk
+          arp: reply-only
+        - name: new
+          bridge: br-trunk
+          arp: reply-only
+    verify:
+      - action: set
+        values:
+          name: test
+          arp: reply-only
+          bridge: br-trunk
+      - action: add
+        values:
+          arp: reply-only
+          bridge: br-trunk
+          name: new

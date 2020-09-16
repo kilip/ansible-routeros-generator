@@ -1,0 +1,14 @@
+name: vlan
+package: interface
+command: '/interface vlan'
+keys:
+  - name
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/VLAN'
+  table_index:
+    - 0
+properties_override:
+  vlan_id:
+    required: true
+  interface:
+    required: true

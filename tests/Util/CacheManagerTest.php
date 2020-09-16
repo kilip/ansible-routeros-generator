@@ -15,9 +15,10 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Util;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use RouterOS\Generator\Scraper\Configuration;
+use RouterOS\Generator\Structure\Meta;
+use RouterOS\Generator\Structure\MetaConfiguration;
 use RouterOS\Generator\Util\CacheManager;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\AdapterInterface as CacheAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -26,9 +27,12 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
-class CacheManagerTest extends TestCase
+class CacheManagerTest extends KernelTestCase
 {
+    use InteractsWithContainer;
+
     /**
      * @var CacheManager
      */
@@ -59,6 +63,8 @@ class CacheManagerTest extends TestCase
      */
     private $dispatcher;
 
+    private $projectDir;
+
     protected function setUp(): void
     {
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
@@ -66,12 +72,14 @@ class CacheManagerTest extends TestCase
         $this->adapter = $this->createMock(CacheAdapter::class);
         $this->cacheItem = $this->createMock(ItemInterface::class);
 
-        $this->cacheDir = __DIR__.'/../Fixtures/cache';
+        $this->cacheDir = $this->getContainer()->getParameter('routeros.cache_dir');
+        $this->projectDir = $this->getContainer()->getParameter('kernel.project_dir');
         $this->cache = new CacheManager(
             $this->dispatcher,
             $this->adapter,
             $this->httpClient,
-            $this->cacheDir
+            $this->cacheDir,
+            $this->projectDir
         );
         $this->clearCache();
     }
@@ -79,7 +87,7 @@ class CacheManagerTest extends TestCase
     public function testParseYaml()
     {
         $cache = $this->cache;
-        $file = __DIR__.'/../Fixtures/scraper/routeros/interface.yml';
+        $file = __DIR__.'/../Fixtures/etc/meta/interface.yaml';
         $result = $cache->parseYaml($file);
         $this->assertArrayHasKey('name', $result);
         $this->assertEquals('interface', $result['name']);
@@ -88,13 +96,13 @@ class CacheManagerTest extends TestCase
     public function testProcessYamlConfig()
     {
         $cache = $this->cache;
-        $path = __DIR__.'/../Fixtures/scraper/routeros';
-        $configuration = new Configuration();
+        $path = __DIR__.'/../Fixtures/etc/meta';
+        $configuration = new MetaConfiguration();
         $this->configureAdapter();
 
         $result = $cache->processYamlConfig(
             $configuration,
-            'routeros.pages',
+            'metas',
             $path
         );
 
@@ -131,11 +139,35 @@ class CacheManagerTest extends TestCase
         $this->assertSame($contents, $cache->getHtmlPage('some-url'));
     }
 
+    public function testGetYamlObject()
+    {
+        $file = __DIR__.'/../Fixtures/etc/meta/interface.yaml';
+        $cache = $this->cache;
+        $meta = new Meta();
+        $meta->setName('test');
+        $object = $cache->getYamlObject(Meta::class, $file);
+
+        $this->assertEquals('interface', $object->getName());
+        $this->assertEquals('interface', $object->getPackage());
+    }
+
+    public function testMockHttpClient()
+    {
+        $container = $this->getContainer();
+        $cacheManager = $container->get('routeros.util.cache_manager');
+
+        $result = $cacheManager->getHtmlPage('https://wiki.mikrotik.com/wiki/Manual:Interface');
+        $expected = file_get_contents(__DIR__.'/../Fixtures/pages/interface.html');
+
+        $this->assertSame($expected, $result);
+    }
+
     private function clearCache()
     {
         $finder = Finder::create()
             ->in($this->cacheDir)
             ->name('*.php')
+            ->name('*.dat')
             ->name('*.meta');
         $fs = new Filesystem();
 

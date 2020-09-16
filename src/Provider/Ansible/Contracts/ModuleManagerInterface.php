@@ -14,39 +14,17 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Contracts;
 
-use RouterOS\Generator\Provider\Ansible\Model\Module;
-
 interface ModuleManagerInterface
 {
     /**
-     * @return Module
-     */
-    public function create(): Module;
-
-    /**
      * @param string $name
      *
-     * @return Module
+     * @return array
      */
-    public function findOrCreate(string $name): Module;
-
-    /**
-     * @param string $name
-     *
-     * @return Module|null
-     */
-    public function findByName(string $name);
+    public function getConfig($name): array;
 
     /**
      * @return array
      */
-    public function getModuleList(): array;
-
-    /**
-     * Update module.
-     *
-     * @param Module $module
-     * @param bool   $andFlush
-     */
-    public function update(Module $module, $andFlush = true): void;
+    public function getList(): array;
 }

@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html class="client-nojs" lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8"/>
+<title>Manual:Interface/Bridge - MikroTik Wiki</title>
+<script>document.documentElement.className = document.documentElement.className.replace( /(^|\s)client-nojs(\s|$)/, "$1client-js$2" );</script>
+<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgCanonicalNamespace":"Manual","wgCanonicalSpecialPageName":false,"wgNamespaceNumber":100,"wgPageName":"Manual:Interface/Bridge","wgTitle":"Interface/Bridge","wgCurRevisionId":34205,"wgRevisionId":34205,"wgArticleId":4292,"wgIsArticle":true,"wgIsRedirect":false,"wgAction":"view","wgUserName":null,"wgUserGroups":["*"],"wgCategories":["Manual","Interface","Bridging and switching"],"wgBreakFrames":false,"wgPageContentLanguage":"en","wgPageContentModel":"wikitext","wgSeparatorTransformTable":["",""],"wgDigitTransformTable":["",""],"wgDefaultDateFormat":"dmy","wgMonthNames":["","January","February","March","April","May","June","July","August","September","October","November","December"],"wgMonthNamesShort":["","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"wgRelevantPageName":"Manual:Interface/Bridge","wgRelevantArticleId":4292,"wgRequestId":"17e8c683ea75e6465a2e4083","wgIsProbablyEditable":false,"wgRestrictionEdit":["sysop"],"wgRestrictionMove":["sysop"]});mw.loader.state({"site.styles":"ready","noscript":"ready","user.styles":"ready","user":"ready","user.options":"loading","user.tokens":"loading","mediawiki.legacy.shared":"ready","mediawiki.legacy.commonPrint":"ready","mediawiki.sectionAnchor":"ready","mediawiki.skinning.interface":"ready","skins.vector.styles":"ready"});mw.loader.implement("user.options@0j3lz3q",function($,jQuery,require,module){mw.user.options.set({"variant":"en"});});mw.loader.implement("user.tokens@0b5cs7y",function ( $, jQuery, require, module ) {
+mw.user.tokens.set({"editToken":"+\\","patrolToken":"+\\","watchToken":"+\\","csrfToken":"+\\"});/*@nomin*/;
+
+});mw.loader.load(["mediawiki.toc","mediawiki.action.view.postEdit","site","mediawiki.page.startup","mediawiki.user","mediawiki.hidpi","mediawiki.page.ready","jquery.tablesorter","mediawiki.searchSuggest","skins.vector.js"]);});</script>
+<link rel="stylesheet" href="/load.php?debug=false&amp;lang=en&amp;modules=mediawiki.legacy.commonPrint%2Cshared%7Cmediawiki.sectionAnchor%7Cmediawiki.skinning.interface%7Cskins.vector.styles&amp;only=styles&amp;skin=vector"/>
+<script async="" src="/load.php?debug=false&amp;lang=en&amp;modules=startup&amp;only=scripts&amp;skin=vector"></script>
+<meta name="ResourceLoaderDynamicStyles" content=""/>
+<link rel="stylesheet" href="/load.php?debug=false&amp;lang=en&amp;modules=site.styles&amp;only=styles&amp;skin=vector"/>
+<meta name="generator" content="MediaWiki 1.29.2"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+<link rel="search" type="application/opensearchdescription+xml" href="/opensearch_desc.php" title="MikroTik Wiki (en)"/>
+<link rel="EditURI" type="application/rsd+xml" href="https://wiki.mikrotik.com/api.php?action=rsd"/>
+<link rel="alternate" type="application/atom+xml" title="MikroTik Wiki Atom feed" href="/index.php?title=Special:RecentChanges&amp;feed=atom"/>
+</head>
+<body class="mediawiki ltr sitedir-ltr mw-hide-empty-elt ns-100 ns-subject page-Manual_Interface_Bridge rootpage-Manual_Interface skin-vector action-view">		<div id="mw-page-base" class="noprint"></div>
+		<div id="mw-head-base" class="noprint"></div>
+		<div id="content" class="mw-body" role="main">
+			<a id="top"></a>
+
+						<div class="mw-indicators mw-body-content">
+</div>
+			<h1 id="firstHeading" class="firstHeading" lang="en">Manual:Interface/Bridge</h1>
+									<div id="bodyContent" class="mw-body-content">
+									<div id="siteSub">From MikroTik Wiki</div>
+								<div id="contentSub"><span class="subpages">&lt; <a href="/wiki/Manual:Interface" title="Manual:Interface">Manual:Interface</a></span></div>
+												<div id="jump-to-nav" class="mw-jump">
+					Jump to:					<a href="#mw-head">navigation</a>, 					<a href="#p-search">search</a>
+				</div>
+				<div id="mw-content-text" lang="en" dir="ltr" class="mw-content-ltr"><div id="shbox" style="float:right; border:1px solid #c1c1c1; padding: 10px; width:100px;">
+<div class="floatright"><a href="/wiki/File:Version.png" class="image"><img alt="Version.png" src="/images/c/c4/Version.png" width="32" height="32" /></a></div>
+<p><small><b>Applies to RouterOS:</b> <strong> v3, v4+</strong></small>
+</p>
+</div>
+<div id="toc" class="toc"><div id="toctitle" class="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Summary"><span class="tocnumber">1</span> <span class="toctext">Summary</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Bridge_Interface_Setup"><span class="tocnumber">2</span> <span class="toctext">Bridge Interface Setup</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Properties"><span class="tocnumber">2.1</span> <span class="toctext">Properties</span></a></li>
+<li class="toclevel-2 tocsection-3"><a href="#Example"><span class="tocnumber">2.2</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-4"><a href="#Spanning_Tree_Protocol"><span class="tocnumber">3</span> <span class="toctext">Spanning Tree Protocol</span></a>
+<ul>
+<li class="toclevel-2 tocsection-5"><a href="#Per_port_STP"><span class="tocnumber">3.1</span> <span class="toctext">Per port STP</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-6"><a href="#Bridge_Settings"><span class="tocnumber">4</span> <span class="toctext">Bridge Settings</span></a></li>
+<li class="toclevel-1 tocsection-7"><a href="#Port_Settings"><span class="tocnumber">5</span> <span class="toctext">Port Settings</span></a>
+<ul>
+<li class="toclevel-2 tocsection-8"><a href="#Example_2"><span class="tocnumber">5.1</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-9"><a href="#Interface_lists"><span class="tocnumber">6</span> <span class="toctext">Interface lists</span></a></li>
+<li class="toclevel-1 tocsection-10"><a href="#Hosts_Table"><span class="tocnumber">7</span> <span class="toctext">Hosts Table</span></a>
+<ul>
+<li class="toclevel-2 tocsection-11"><a href="#Monitoring"><span class="tocnumber">7.1</span> <span class="toctext">Monitoring</span></a></li>
+<li class="toclevel-2 tocsection-12"><a href="#Static_entries"><span class="tocnumber">7.2</span> <span class="toctext">Static entries</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-13"><a href="#Bridge_Monitoring"><span class="tocnumber">8</span> <span class="toctext">Bridge Monitoring</span></a>
+<ul>
+<li class="toclevel-2"><a href="#Example_3"><span class="tocnumber">8.1</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-14"><a href="#Bridge_Port_Monitoring"><span class="tocnumber">9</span> <span class="toctext">Bridge Port Monitoring</span></a>
+<ul>
+<li class="toclevel-2 tocsection-15"><a href="#Example_4"><span class="tocnumber">9.1</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-16"><a href="#Bridge_Hardware_Offloading"><span class="tocnumber">10</span> <span class="toctext">Bridge Hardware Offloading</span></a>
+<ul>
+<li class="toclevel-2 tocsection-17"><a href="#Example_5"><span class="tocnumber">10.1</span> <span class="toctext">Example</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-18"><a href="#Bridge_VLAN_Filtering"><span class="tocnumber">11</span> <span class="toctext">Bridge VLAN Filtering</span></a>
+<ul>
+<li class="toclevel-2 tocsection-19"><a href="#VLAN_Example_.231_.28Trunk_and_Access_Ports.29"><span class="tocnumber">11.1</span> <span class="toctext">VLAN Example #1 (Trunk and Access Ports)</span></a></li>
+<li class="toclevel-2 tocsection-20"><a href="#VLAN_Example_.232_.28Trunk_and_Hybrid_Ports.29"><span class="tocnumber">11.2</span> <span class="toctext">VLAN Example #2 (Trunk and Hybrid Ports)</span></a></li>
+<li class="toclevel-2 tocsection-21"><a href="#VLAN_Example_.233_.28InterVLAN_Routing_by_Bridge.29"><span class="tocnumber">11.3</span> <span class="toctext">VLAN Example #3 (InterVLAN Routing by Bridge)</span></a></li>
+<li class="toclevel-2 tocsection-22"><a href="#Management_access_configuration"><span class="tocnumber">11.4</span> <span class="toctext">Management access configuration</span></a></li>
+<li class="toclevel-2 tocsection-23"><a href="#VLAN_Tunneling_.28Q-in-Q.29"><span class="tocnumber">11.5</span> <span class="toctext">VLAN Tunneling (Q-in-Q)</span></a>
+<ul>
+<li class="toclevel-3 tocsection-24"><a href="#Tag_stacking"><span class="tocnumber">11.5.1</span> <span class="toctext">Tag stacking</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-25"><a href="#Fast_Forward"><span class="tocnumber">12</span> <span class="toctext">Fast Forward</span></a></li>
+<li class="toclevel-1 tocsection-26"><a href="#IGMP_Snooping"><span class="tocnumber">13</span> <span class="toctext">IGMP Snooping</span></a></li>
+<li class="toclevel-1 tocsection-27"><a href="#DHCP_Snooping_and_DHCP_Option_82"><span class="tocnumber">14</span> <span class="toctext">DHCP Snooping and DHCP Option 82</span></a></li>
+<li class="toclevel-1 tocsection-28"><a href="#Bridge_Firewall"><span class="tocnumber">15</span> <span class="toctext">Bridge Firewall</span></a>
+<ul>
+<li class="toclevel-2 tocsection-29"><a href="#Properties_2"><span class="tocnumber">15.1</span> <span class="toctext">Properties</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Notes"><span class="tocnumber">15.1.1</span> <span class="toctext">Notes</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-30"><a href="#Bridge_Packet_Filter"><span class="tocnumber">15.2</span> <span class="toctext">Bridge Packet Filter</span></a>
+<ul>
+<li class="toclevel-3"><a href="#Properties_3"><span class="tocnumber">15.2.1</span> <span class="toctext">Properties</span></a></li>
+</ul>
+</li>
+<li class="toclevel-2 tocsection-31"><a href="#Bridge_NAT"><span class="tocnumber">15.3</span> <span class="toctext">Bridge NAT</span></a>
+<ul>
+<li class="toclevel-3 tocsection-32"><a href="#Properties_4"><span class="tocnumber">15.3.1</span> <span class="toctext">Properties</span></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-33"><a href="#See_also"><span class="tocnumber">16</span> <span class="toctext">See also</span></a></li>
+</ul>
+</div>
+
+<h1><span class="mw-headline" id="Summary">Summary</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge</code>
+<br />
+<b>Standards:</b> <code><a rel="nofollow" class="external text" href="https://en.wikipedia.org/wiki/IEEE_802.1D">IEEE 802.1D</a> , <a rel="nofollow" class="external text" href="https://en.wikipedia.org/wiki/IEEE_802.1Q">IEEE 802.1Q</a></code>
+</p>
+<p><br />
+</p>
+<p>
+Ethernet-like networks (Ethernet, Ethernet over IP, IEEE 802.11 in ap-bridge or bridge mode, WDS, VLAN) can be connected together using MAC bridges. The bridge feature allows the interconnection of hosts connected to separate LANs (using EoIP, geographically distributed networks can be bridged as well if any kind of IP network interconnection exists between them) as if they were attached to a single LAN. As bridges are transparent, they do not appear in traceroute list, and no utility can make a distinction between a host working in one LAN and a host working in another LAN if these LANs are bridged (depending on the way the LANs are interconnected, latency and data rate between hosts may vary).
+</p>
+<p>
+Network loops may emerge (intentionally or not) in complex topologies. Without any special treatment, loops would prevent network from functioning normally, as they would lead to avalanche-like packet multiplication. Each bridge runs an algorithm which calculates how the loop can be prevented. STP and RSTP allows bridges to communicate with each other, so they can negotiate a loop free topology. All other alternative connections that would otherwise form loops, are put to standby, so that should the main connection fail, another connection could take its place. This algorithm exchanges configuration messages (BPDU - Bridge Protocol Data Unit) periodically, so that all bridges are updated with the newest information about changes in network topology. (R)STP selects a root bridge which is responsible for network reconfiguration, such as blocking and opening ports on other bridges. The root bridge is the bridge with the lowest bridge ID.
+</p>
+<h1><span class="mw-headline" id="Bridge_Interface_Setup">Bridge Interface Setup</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge</code></p>
+<p><br />
+</p>
+<p>To combine a number of networks into one bridge, a bridge interface should be created (later, all the desired interfaces should be set up as its ports). One MAC address from slave (secondary) ports will be assigned to the bridge interface, the MAC address will be chosen automatically, depending on "port-number", and it can change after a reboot. To avoid unwanted MAC address changes, it is recommended to disable "auto-mac", and to manually specify MAC by using "admin-mac".</p>
+<h3><span class="mw-headline" id="Properties">Properties</span></h3>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>add-dhcp-option82</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Whether to add DHCP Option-82 information (Agent Remote ID and Agent Circuit ID) to DHCP packets. Can be used together with Option-82 capable DHCP server to assign IP addresses and implement policies. This property only has effect when <var>dhcp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>admin-mac</b></var> (<em>MAC address</em>; Default: <b>none</b>)</td>
+    <td>Static MAC address of the bridge. This property only has effect when <var>auto-mac</var> is set to <code>no</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>ageing-time</b></var> (<em>time</em>; Default: <b>00:05:00</b>)</td>
+    <td>How long a host's information will be kept in the bridge database.</td>
+</tr>
+
+<tr>
+    <td><var><b>arp</b></var> (<em>disabled | enabled | proxy-arp | reply-only</em>; Default: <b>enabled</b>)</td>
+    <td>Address Resolution Protocol setting
+<ul><li> <code>disabled</code> - the interface will not use ARP</li>
+<li> <code>enabled</code> - the interface will use ARP</li>
+<li> <code>proxy-arp</code> - the interface will use the ARP proxy feature</li>
+<li> <code>reply-only</code> - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the <a href="/wiki/Manual:IP/ARP" title="Manual:IP/ARP"> IP/ARP</a> table. No dynamic entries will be automatically stored in the <a href="/wiki/Manual:IP/ARP" title="Manual:IP/ARP"> IP/ARP</a> table. Therefore for communications to be successful, a valid static entry must already exist.</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>arp-timeout</b></var> (<em>auto | integer</em>; Default: <b>auto</b>)</td>
+    <td>ARP timeout is time how long ARP record is kept in ARP table after no packets are received from IP. Value <code>auto</code> equals to the value of <var>arp-timeout</var> in <a href="/wiki/Manual:IP/Settings" title="Manual:IP/Settings"> IP/Settings</a>, default is 30s.</td>
+</tr>
+
+<tr>
+    <td><var><b>auto-mac</b></var> (<em>yes | no</em>; Default: <b>yes</b>)</td>
+    <td>Automatically select one MAC address of bridge ports as a bridge MAC address, bridge MAC will be chosen from the first added bridge port. After a device reboot, the bridge MAC can change depending on the port-number.</td>
+</tr>
+
+<tr>
+    <td><var><b>comment</b></var> (<em>string</em>; Default: )</td>
+    <td>Short description of the interface.</td>
+</tr>
+
+<tr>
+    <td><var><b>dhcp-snooping</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables or disables DHCP Snooping on the bridge.</td>
+</tr>
+
+<tr>
+    <td><var><b>disabled</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Changes whether the bridge is disabled.</td>
+</tr>
+
+<tr>
+    <td><var><b>ether-type</b></var> (<em>0x9100 | 0x8100 | 0x88a8</em>; Default: <b>0x8100</b>)</td>
+    <td>Changes the EtherType, which will be used to determine if a packet has a VLAN tag. Packets that have a matching EtherType are considered as tagged packets. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>fast-forward</b></var> (<em>yes | no</em>; Default: <b>yes</b>)</td>
+    <td>Special and faster case of <a href="/wiki/Manual:Fast_Path" title="Manual:Fast Path"> FastPath</a> which works only on bridges with 2 interfaces (enabled by default only for new bridges). More details can be found in the <a href="/wiki/Manual:Interface/Bridge#Fast_Forward" title="Manual:Interface/Bridge"> Fast Forward</a> section.</td>
+</tr>
+
+<tr>
+    <td><var><b>forward-delay</b></var> (<em>time</em>; Default: <b>00:00:15</b>)</td>
+    <td>Time which is spent during the initialization phase of the bridge interface (i.e., after router startup or enabling the interface) in listening/learning state before the bridge will start functioning normally.</td>
+</tr>
+
+<tr>
+    <td><var><b>frame-types</b></var> (<em>admit-all | admit-only-untagged-and-priority-tagged | admit-only-vlan-tagged</em>; Default: <b>admit-all</b>)</td>
+    <td>Specifies allowed frame types on a bridge port. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>igmp-snooping</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables multicast group and port learning to prevent multicast traffic from flooding all interfaces in a bridge.</td>
+</tr>
+
+<tr>
+    <td><var><b>igmp-version</b></var> (<em>2 | 3</em>; Default: <b>2</b>)</td>
+    <td>Selects the IGMP version in which IGMP general membership queries will be generated. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>ingress-filtering</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables or disables VLAN ingress filtering, which checks if the ingress port is a member of the received VLAN ID in the bridge VLAN table. By default, VLANs that don't exist in the bridge VLAN table are dropped before they are sent out (egress), but this property allows you to drop the packets when they are received (ingress). Should be used with <var>frame-types</var> to specify if the ingress traffic should be tagged or untagged. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>l2mtu</b></var> (<em>read-only</em>; Default: )</td>
+    <td>L2MTU indicates the maximum size of the frame without MAC header that can be sent by this interface. The L2MTU value will be automatically set by the bridge and it will use the lowest L2MTU value of any associated bridge port. This value cannot be manually changed.</td>
+</tr>
+
+<tr>
+    <td><var><b>last-member-interval</b></var> (<em>time</em>; Default: <b>1s</b>)</td>
+    <td>If a port has <var>fast-leave</var> set to <code>no</code> and a bridge port receives a IGMP Leave message, then a IGMP Snooping enabled bridge will send a IGMP query to make sure that no devices has subscribed to a certain multicast stream on a bridge port. If a IGMP Snooping enabled bridge does not receive a IGMP membership report after amount of <var>last-member-interval</var>, then the bridge considers that no one has subscribed to a certain multicast stream and can stop forwarding it. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>last-member-query-count</b></var> (<em>integer: 0..4294967295</em>; Default: <b>2</b>)</td>
+    <td>How many times should <var>last-member-interval</var> pass until a IGMP Snooping bridge will stop forwarding a certain multicast stream. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>max-hops</b></var> (<em>integer: 6..40</em>; Default: <b>20</b>)</td>
+    <td>Bridge count which BPDU can pass in a MSTP enabled network in the same region before BPDU is being ignored. This property only has effect when <var>protocol-mode</var> is set to <code>mstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>max-message-age</b></var> (<em>time</em>; Default: <b>00:00:20</b>)</td>
+    <td>How long to remember Hello messages received from other STP/RSTP enabled bridges. This property only has effect when <var>protocol-mode</var> is set to <code>stp</code> or <code>rstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>membership-interval</b></var> (<em>time</em>; Default: <b>4m20s</b>)</td>
+    <td>Amount of time after an entry in the Multicast Database (MDB) is removed if a IGMP membership report is not received on a certain port. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>mld-version</b></var> (<em>1 | 2</em>; Default: <b>1</b>)</td>
+    <td>Selects the MLD version. Version 2 adds support for source-specific multicast. This property only has effect when RouterOS IPv6 package is enabled and <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>mtu</b></var> (<em>integer</em>; Default: <b>auto</b>)</td>
+    <td>Maximum transmission unit, by default, the bridge will set MTU automatically and it will use the lowest MTU value of any associated bridge port. The default bridge MTU value without any bridge ports added is 1500. The MTU value can be set manually, but it cannot exceed the bridge L2MTU or the lowest bridge port L2MTU. If a new bridge port is added with L2MTU which is smaller than the actual-mtu of the bridge (set by the <var>mtu</var> property), then manually set value will be ignored and the bridge will act as if <code>mtu=auto</code> is set.</td>
+</tr>
+
+<tr>
+    <td><var><b>multicast-querier</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Multicast querier generates IGMP general membership queries to which all IGMP capable devices respond with a IGMP membership report, usually a PIM (multicast) router generates these queries. By using this property you can make a IGMP Snooping enabled bridge to generate IGMP general membership queries. This property should be used whenever there is no PIM (multicast) router in a Layer2 network or IGMP packets must be sent through multiple IGMP Snooping enabled bridges to reach a PIM (multicast) router. Without a multicast querier in a Layer2 network the Multicast Database (MDB) is not being updated and IGMP Snooping will not function properly. Only untagged IGMP general membership queries are generated. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>. Additionally, the <var>igmp-snooping</var> should be disabled/enabled after changing <var>multicast-querier</var> property.</td>
+</tr>
+
+<tr>
+    <td><var><b>multicast-router</b></var> (<em>disabled | permanent | temporary-query</em>; Default: <b>temporary-query</b>)</td>
+    <td>Changes the state of a bridge itself if IGMP membership reports are going to be forwarded to it. This property can be used to forward IGMP membership reports to the bridge for statistics or to analyse them.
+<ul><li> <code>disabled</code> - IGMP membership reports are not forwarded to the bridge itself regardless what is connected to it.</li>
+<li> <code>permanent</code> - IGMP membership reports are forwarded through this the bridge itself regardless what is connected to it.</li>
+<li> <code>temporary-query</code> - automatically detect multicast routers and IGMP Snooping enabled bridges. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>name</b></var> (<em>text</em>; Default: <b>bridgeN</b>)</td>
+    <td>Name of the bridge interface</td>
+</tr>
+
+<tr>
+    <td><var><b>priority</b></var> (<em>integer: 0..65535 decimal format or 0x0000-0xffff hex format</em>; Default: <b>32768 / 0x8000</b>)</td>
+    <td>Bridge priority, used by STP to determine root bridge, used by MSTP to determine CIST and IST regional root bridge. This property has no effect when <var>protocol-mode</var> is set to <code>none</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>protocol-mode</b></var> (<em>none | rstp | stp | mstp</em>; Default: <b>rstp</b>)</td>
+    <td>Select Spanning tree protocol (STP) or Rapid spanning tree protocol (RSTP) to ensure a loop-free topology for any bridged LAN. RSTP provides for faster spanning tree convergence after a topology change. Select MSTP to ensure loop-free topology across multiple VLANs. Since RouterOS v6.43 it is possible to forward Reserved MAC addresses that are in <b>01:80:C2:00:00:0X</b> range, this can be done by setting the <var>protocol-mode</var> to <code>none</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>pvid</b></var> (<em>integer: 1..4094</em>; Default: <b>1</b>)</td>
+    <td>Port VLAN ID (pvid) specifies which VLAN the untagged ingress traffic is assigned to. It applies e.g. to frames sent from bridge IP and destined to a bridge port. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>querier-interval</b></var> (<em>time</em>; Default: <b>4m15s</b>)</td>
+    <td>Used to change the interval how often a bridge checks if it is the active multicast querier. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>query-interval</b></var> (<em>time</em>; Default: <b>2m5s</b>)</td>
+    <td>Used to change the interval how often IGMP general membership queries are sent out. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>query-response-interval</b></var> (<em>time</em>; Default: <b>10s</b>)</td>
+    <td>Interval in which a IGMP capable device must reply to a IGMP query with a IGMP membership report. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>region-name</b></var> (<em>text</em>; Default: )</td>
+    <td>MSTP region name. This property only has effect when <var>protocol-mode</var> is set to <code>mstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>region-revision</b></var> (<em>integer: 0..65535</em>; Default: <b>0</b>)</td>
+    <td>MSTP configuration revision number. This property only has effect when <var>protocol-mode</var> is set to <code>mstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>startup-query-count</b></var> (<em>integer: 0..4294967295</em>; Default: <b>2</b>)</td>
+    <td>Specifies how many times must <var>startup-query-interval</var> pass until the bridge starts sending out IGMP general membership queries periodically. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>startup-query-interval</b></var> (<em>time</em>; Default: <b>31s250ms</b>)</td>
+    <td>Used to change the amount of time after a bridge starts sending out IGMP general membership queries after the bridge is enabled. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>transmit-hold-count</b></var> (<em>integer: 1..10</em>; Default: <b>6</b>)</td>
+    <td>The Transmit Hold Count used by the Port Transmit state machine to limit transmission rate.</td>
+</tr>
+
+<tr>
+    <td><var><b>vlan-filtering</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Globally enables or disables VLAN functionality for bridge.</td>
+</tr>
+</table>
+<p><br />
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  Changing certain properties can cause the bridge to temporarily disable all ports. This must be taken into account whenever changing such properties on production environments since it can cause all packets to be temporarily dropped. Such properties include <var>vlan-filtering</var>, <var>protocol-mode</var>, <var>igmp-snooping</var>, <var>fast-forward</var> and others. </p></div>
+<p><br />
+</p><p><br />
+</p>
+<h2><span class="mw-headline" id="Example">Example</span></h2>
+<p>To add and enable a bridge interface that will forward all the protocols:</p>
+<pre>
+[admin@MikroTik] /interface bridge&gt; add 
+[admin@MikroTik] /interface bridge&gt; print 
+Flags: X - disabled, R - running 
+ 0  R name="bridge1" mtu=1500 l2mtu=65535 arp=enabled 
+      mac-address=00:00:00:00:00:00 protocol-mode=none priority=0x8000 
+      auto-mac=yes admin-mac=00:00:00:00:00:00 max-message-age=20s 
+      forward-delay=15s transmit-hold-count=6 ageing-time=5m 
+[admin@MikroTik] /interface bridge&gt;
+</pre>
+<h1><span class="mw-headline" id="Spanning_Tree_Protocol">Spanning Tree Protocol</span></h1>
+<p>RouterOS bridge interfaces are capable of running Spanning Tree Protocol to ensure a loop-free and redundant topology. For small networks with just 2 bridges STP does not bring much benefits, but for larger networks properly configured STP is very crucial, leaving STP related values to default may result in completely unreachable network in case of a even single bridge failure. To achieve a proper loop-free and redundant topology, it is necessary to properly set bridge priorities, port path costs and port priorities. 
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  In RouterOS it is possible to set any value for bridge priority between 0 and 65535, the IEEE 802.1W standard states that the bridge priority must be in steps of 4096. This can cause incompatibility issues between devices that does not support such values. To avoid compatibility issues, it is recommended to use only these priorities: 0, 4096, 8192, 12288, 16384, 20480, 24576, 28672, 32768, 36864, 40960, 45056, 49152, 53248, 57344, 61440 </p></div>
+<p><br />
+</p><p>STP has multiple variants, currently RouterOS supports STP, RSTP and MSTP. Depending on needs, either one of them can be used, some devices are able to run some of these protocols using hardware offloading, detailed information about which device support it can be found in the <a href="/wiki/Manual:Switch_Chip_Features#Bridge_Hardware_Offloading" title="Manual:Switch Chip Features"> Hardware Offloading </a> section. STP is considered to be outdated and slow, it has been almost entirely replaced in all network topologies by RSTP, which is backwards compatible with STP. For network topologies that depend on VLANs, it is recommended to use MSTP since it is a VLAN aware protocol and gives the ability to do load balancing per VLAN groups. There are a lot of considerations that should be made when designing a STP enabled network, more detailed case studies can be found in the <a href="/wiki/Manual:Spanning_Tree_Protocol" title="Manual:Spanning Tree Protocol"> Spanning Tree Protocol </a> section. In RouterOS the <var>protocol-mode</var> property controls the used STP variant.
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  By the IEEE 802.1ad standard the BPDUs from bridges that comply with IEEE 802.1Q are not compatible with IEEE 802.1ad bridges, this means that the same bridge VLAN protocol should be used across all bridges in a single Layer2 domain, otherwise (R/M)STP will not function properly. </p></div>
+<p><br style="clear:both" />
+</p>
+<h2><span class="mw-headline" id="Per_port_STP">Per port STP</span></h2>
+<p>There might be certain situations where you want to limit STP functionality on a single or multiple ports. Below you can find some examples for different use cases.
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  Be careful when changing the default (R/M)STP functionality, make sure you understand the working principles of STP and BPDUs. Misconfigured (R/M)STP can cause unexpected behaviour. </p></div>
+<p><br />
+</p>
+<ul><li> Don't send out BPDUs from a certain port</li></ul>
+<pre>
+/interface bridge
+add name=bridge1
+/interface bridge port
+add bridge=bridge1 interface=ether1
+add bridge=bridge1 interface=ether2
+add bridge=bridge1 interface=ether3
+/interface bridge filter
+add action=drop chain=output dst-mac-address=01:80:C2:00:00:00/FF:FF:FF:FF:FF:FF out-interface=ether1
+</pre>
+<p>In this example BPDUs will not be sent out through <b>ether1</b>. In case the bridge is the root bridge, then loop detection will not work on this port. If another bridge is connected to <b>ether1</b>, then the other bridge will not receive any BPDUs and therefore might become as a second root bridge. You might want to consider blocking received BPDUs as well.
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  You can use <a href="/wiki/Manual:Interface/List" title="Manual:Interface/List"> Interface Lists</a> to specify multiple interfaces. </p></div>
+<p><br style="clear:both" />
+</p>
+<ul><li> Dropping received BPDUs on a certain port can be done on some switch chips using ACL rules, but the Bridge Filter Input rules cannot do it if bridge has STP/RSTP/MSTP enabled because then received BPDUs have special processing in the bridge.</li></ul>
+<p>On CRS3xx:
+</p>
+<pre>
+/interface ethernet switch rule
+add dst-mac-address=01:80:C2:00:00:00/FF:FF:FF:FF:FF:FF new-dst-ports="" ports=ether1 switch=switch1
+</pre>
+<p>Or on CRS1xx/CRS2xx with <a href="/wiki/Manual:CRS1xx/2xx_series_switches#Cloud_Router_Switch_models" title="Manual:CRS1xx/2xx series switches"> Access Control List (ACL) support</a>:
+</p>
+<pre>
+/interface ethernet switch acl
+add action=drop mac-dst-address=01:80:C2:00:00:00 src-ports=ether1
+</pre>
+<p>In this example all received BPDUs on <b>ether1</b> are dropped. This will prevent other bridges on that port becoming a root bridge.
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  If you intend to drop received BPDUs on a port, then make sure to prevent BPDUs from being sent out from the interface that this port is connected to. A root bridge always sends out BPDUs and under normal conditions is waiting for a more superior BPDU (from a bridge with a lower bridge ID), but the bridge must temporarily disable the new root-port when transitioning from a root bridge to designated bridge. If you have blocked BPDUs only on one side, then a port will flap continuously. </p></div>
+<p><br />
+</p>
+<ul><li> Don't allow BPDUs on a port</li></ul>
+<pre>
+/interface bridge
+add name=bridge1
+/interface bridge port
+add bridge=bridge1 interface=ether1 bpdu-guard=yes
+add bridge=bridge1 interface=ether2
+add bridge=bridge1 interface=ether3
+</pre>
+<p>In this example if <b>ether1</b> receives a BPDU, it will block the port and will require you to manually re-enable it.
+</p>
+<h1><span class="mw-headline" id="Bridge_Settings">Bridge Settings</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge settings</code></p>
+<p><br />
+</p>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>use-ip-firewall</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Force bridged traffic to also be processed by prerouting, forward and postrouting sections of IP routing (<a href="/wiki/Manual:Packet_Flow_v6" title="Manual:Packet Flow v6"> Packet Flow</a>). This does not apply to routed traffic. This property is required in case you want to assign <a href="/wiki/Manual:Queue#Simple_Queues" title="Manual:Queue"> Simple Queues</a> or global <a href="/wiki/Manual:Queue#Queue_Tree" title="Manual:Queue"> Queue Tree</a> to traffic in a bridge. Property <var>use-ip-firewall-for-vlan</var> is required in case bridge <var>vlan-filtering</var> is used.</td>
+</tr>
+
+<tr>
+    <td><var><b>use-ip-firewall-for-pppoe</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Send bridged un-encrypted PPPoE traffic to also be processed by <a href="/wiki/Manual:IP/Firewall" title="Manual:IP/Firewall"> IP/Firewall</a>. This property only has effect when <var>use-ip-firewall</var> is set to <code>yes</code>. This property is required in case you want to assign <a href="/wiki/Manual:Queue#Simple_Queues" title="Manual:Queue"> Simple Queues</a> or global <a href="/wiki/Manual:Queue#Queue_Tree" title="Manual:Queue"> Queue Tree</a> to PPPoE traffic in a bridge.</td>
+</tr>
+
+<tr>
+    <td><var><b>use-ip-firewall-for-vlan</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Send bridged VLAN traffic to also be processed by <a href="/wiki/Manual:IP/Firewall" title="Manual:IP/Firewall"> IP/Firewall</a>. This property only has effect when <var>use-ip-firewall</var> is set to <code>yes</code>. This property is required in case you want to assign <a href="/wiki/Manual:Queue#Simple_Queues" title="Manual:Queue"> Simple Queues</a> or global <a href="/wiki/Manual:Queue#Queue_Tree" title="Manual:Queue"> Queue Tree</a> to VLAN traffic in a bridge.</td>
+</tr>
+
+<tr>
+    <td><var><b>allow-fast-path</b></var> (<em>yes | no</em>; Default: <b>yes</b>)</td>
+    <td>Whether to enable a bridge <a href="/wiki/Manual:Fast_Path" title="Manual:Fast Path"> FastPath</a> globally.</td>
+</tr>
+
+<tr>
+    <td><var><b>bridge-fast-path-active</b></var> (<em>yes | no</em>; Default: <b><i></b>)</td></i>
+    <td>Shows whether a bridge FastPath is active globally, FastPatch status per bridge interface is not displayed.</td>
+</tr>
+
+<tr>
+    <td><var><b>bridge-fast-path-packets</b></var> (<em>integer</em>; Default: <b><i></b>)</td></i>
+    <td>Shows packet count forwarded by Bridge FastPath.</td>
+</tr>
+
+<tr>
+    <td><var><b>bridge-fast-path-bytes</b></var> (<em>integer</em>; Default: <b><i></b>)</td></i>
+    <td>Shows byte count forwarded by Bridge Fast Path.</td>
+</tr>
+
+<tr>
+    <td><var><b>bridge-fast-forward-packets</b></var> (<em>integer</em>; Default: <b><i></b>)</td></i>
+    <td>Shows packet count forwarded by Bridge Fast Forward.</td>
+</tr>
+
+<tr>
+    <td><var><b>bridge-fast-forward-bytes</b></var> (<em>integer</em>; Default: <b><i></b>)</td></i>
+    <td>Shows byte count forwarded by Bridge Fast Forward.</td>
+</tr>
+</table>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  In case you want to assign <a href="/wiki/Manual:Queue#Simple_Queues" title="Manual:Queue"> Simple Queues</a> (Simple QoS) or global <a href="/wiki/Manual:Queue#Queue_Tree" title="Manual:Queue"> Queue Trees</a> to traffic that is being forwarded by a bridge, then you need to enable the <var>use-ip-firewall</var> property. Without using this property the bridge traffic will never reach the postrouting chain, <a href="/wiki/Manual:Queue#Simple_Queues" title="Manual:Queue"> Simple Queues</a> and global <a href="/wiki/Manual:Queue#Queue_Tree" title="Manual:Queue"> Queue Trees</a> are working in the postrouting chain. To assign <a href="/wiki/Manual:Queue#Simple_Queues" title="Manual:Queue"> Simple Queues</a> or global <a href="/wiki/Manual:Queue#Queue_Tree" title="Manual:Queue"> Queue Trees</a> for VLAN or PPPoE traffic in a bridge you should enable appropriate properties as well. </p></div>
+<p><br style="clear:both" />
+</p>
+<h1><span class="mw-headline" id="Port_Settings">Port Settings</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge port</code></p>
+<p><br />
+</p>
+<p>Port submenu is used to enslave interfaces in a particular bridge interface.</p>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>auto-isolate</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>When enabled, prevents a port moving from discarding into forwarding state if no BPDUs are received from the neighboring bridge. The port will change into a forwarding state only when a BPDU is received. This property only has an effect when <var>protocol-mode</var> is set to <code>rstp</code> or <code>mstp</code> and <var>edge</var> is set to <code>no</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>bpdu-guard</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables or disables BPDU Guard feature on a port. This feature puts the port in a disabled role if it receives a BPDU and requires the port to be manually disabled and enabled if a BPDU was received. Should be used to prevent a bridge from BPDU related attacks. This property has no effect when <var>protocol-mode</var> is set to <code>none</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>bridge</b></var> (<em>name</em>; Default: <b>none</b>)</td>
+    <td>The bridge interface the respective interface is grouped in.</td>
+</tr>
+
+<tr>
+    <td><var><b>broadcast-flood</b></var> (<em>yes | no</em>; Default: <b>yes</b>)</td>
+    <td>When enabled, bridge floods broadcast traffic to all bridge egress ports. When disabled, drops broadcast traffic on egress ports. Can be used to filter all broadcast traffic on an egress port. Broadcast traffic is considered as traffic that uses <b>FF:FF:FF:FF:FF:FF</b> as destination MAC address, such traffic is crucial for many protocols such as DHCP, ARP, NDP, BOOTP (Netinstall) and others. This option does not limit traffic flood to the CPU.</td>
+</tr>
+
+<tr>
+    <td><var><b>edge</b></var> (<em>auto | no | no-discover | yes | yes-discover</em>; Default: <b>auto</b>)</td>
+    <td>Set port as edge port or non-edge port, or enable edge discovery. Edge ports are connected to a LAN that has no other bridges attached. An edge port will skip the learning and the listening states in STP and will transition directly to the forwarding state, this reduces the STP initialization time. If the port is configured to discover edge port then as soon as the bridge detects a BPDU coming to an edge port, the port becomes a non-edge port. This property has no effect when <var>protocol-mode</var> is set to <code>none</code>.
+<ul><li> <code>no</code> - non-edge port, will participate in learning and listening states in STP.</li>
+<li> <code>no-discover</code> - non-edge port with enabled discovery, will participate in learning and listening states in STP, a port can become edge port if no BPDU is received.</li>
+<li> <code>yes</code> - edge port without discovery, will transit directly to forwarding state.</li>
+<li> <code>yes-discover</code> - edge port with enabled discovery, will transit directly to forwarding state.</li>
+<li> <code>auto</code> - same as <code>no-discover</code>, but will additionally detect if bridge port is a Wireless interface with disabled bridge-mode, such interface will be automatically set as an edge port without discovery.</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>external-fdb</b></var> (<em>auto | no | yes</em>; Default: <b>auto</b>)</td>
+    <td>Whether to use wireless registration table to speed up bridge host learning. If there are no Wireless interfaces in a bridge, then setting <var>external-fdb</var> to <code>yes</code> will disable MAC learning and the bridge will act as a hub (disables hardware offloading). Replaced with <var>learn</var> parameter in RouterOS v6.42</td>
+</tr>
+
+<tr>
+    <td><var><b>fast-leave</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables IGMP Fast leave feature on the port. Bridge will stop forwarding traffic to a bridge port whenever a IGMP Leave message is received for appropriate multicast stream. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>frame-types</b></var> (<em>admit-all | admit-only-untagged-and-priority-tagged | admit-only-vlan-tagged</em>; Default: <b>admit-all</b>)</td>
+    <td>Specifies allowed ingress frame types on a bridge port. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>ingress-filtering</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables or disables VLAN ingress filtering, which checks if the ingress port is a member of the received VLAN ID in the bridge VLAN table. Should be used with <var>frame-types</var> to specify if the ingress traffic should be tagged or untagged. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>learn</b></var> (<em>auto | no | yes</em>; Default: <b>auto</b>)</td>
+    <td>Changes MAC learning behaviour on a bridge port
+<ul><li> <code>yes</code> - enables MAC learning</li>
+<li> <code>no</code> - disables MAC learning</li>
+<li> <code>auto</code> - detects if bridge port is a Wireless interface and uses Wireless registration table instead of MAC learning, will use Wireless registration table if the <a href="/wiki/Manual:Interface/Wireless" title="Manual:Interface/Wireless"> Wireless interface</a> is set to one of <var>ap-bridge,bridge,wds-slave</var> mode and bridge mode for the <a href="/wiki/Manual:Interface/Wireless" title="Manual:Interface/Wireless"> Wireless interface</a> is disabled.</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>multicast-router</b></var> (<em>disabled | permanent | temporary-query</em>; Default: <b>temporary-query</b>)</td>
+    <td>Changes the state of a bridge port whether IGMP membership reports are going to be forwarded to this port. By default IGMP membership reports (most importantly IGMP Join messages) are only forwarded to ports that have a multicast router or a IGMP Snooping enabled bridge connected to. Without at least one port marked as a <code>multicast-router</code> IPTV might not work properly, it can be either detected automatically or forced manually.
+<ul><li> <code>disabled</code> - IGMP membership reports are not forwarded through this port regardless what is connected to it.</li>
+<li> <code>permanent</code> - IGMP membership reports are forwarded through this port regardless what is connected to it.</li>
+<li> <code>temporary-query</code> - automatically detect multicast routers and IGMP Snooping enabled bridges.</li></ul>
+You can improve security by forcing ports that have IPTV boxes connected to never become ports marked as <code>multicast-router</code>. This property only has effect when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>horizon</b></var> (<em>integer 0..429496729</em>; Default: <b>none</b>)</td>
+    <td>Use split horizon bridging to prevent bridging loops. Set the same value for group of ports, to prevent them from sending data to ports with the same horizon value. Split horizon is a software feature that disables hardware offloading. Read more about <a href="/wiki/MPLSVPLS#Split_horizon_bridging" class="mw-redirect" title="MPLSVPLS"> Bridge split horizon</a>.</td>
+</tr>
+
+<tr>
+    <td><var><b>internal-path-cost</b></var> (<em>integer: 0..4294967295</em>; Default: <b>10</b>)</td>
+    <td>Path cost to the interface for MSTI0 inside a region. This property only has effect when <var>protocol-mode</var> is set to <code>mstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>interface</b></var> (<em>name</em>; Default: <b>none</b>)</td>
+    <td>Name of the interface.</td>
+</tr>
+
+<tr>
+    <td><var><b>path-cost</b></var> (<em>integer: 0..4294967295</em>; Default: <b>10</b>)</td>
+    <td>Path cost to the interface, used by STP to determine the "best" path, used by MSTP to determine "best" path between regions. This property has no effect when <var>protocol-mode</var> is set to <code>none</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>point-to-point</b></var> (<em>auto | yes | no</em>; Default: <b>auto</b>)</td>
+    <td>Specifies if a bridge port is connected to a bridge using a point-to-point link for faster convergence in case of failure. By setting this property to <code>yes</code>, you are forcing the link to be a point-to-point link, which will skip the checking mechanism, which detects and waits BPDUs from other devices from this single link, by setting this property to <code>no</code>, you are expecting that a link can receive BPDUs from multiple devices. By setting the property to <code>yes</code>, you are significantly improving (R/M)STP convergence time. In general, you should only set this property to <code>no</code> if it is possible that another device can be connected between a link, this is mostly relevant to Wireless mediums and Ethernet hubs. If the Ethernet link is full-duplex, <code>auto</code> enables point-to-point functionality. And this property has no effect when <var>protocol-mode</var> is set to <code>none</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>priority</b></var> (<em>integer: 0..240</em>; Default: <b>128</b>)</td>
+    <td>The priority of the interface, used by STP to determine the root port, used by MSTP to determine root port between regions.</td>
+</tr>
+
+<tr>
+    <td><var><b>pvid</b></var> (<em>integer 1..4094</em>; Default: <b>1</b>)</td>
+    <td>Port VLAN ID (pvid) specifies which VLAN the untagged ingress traffic is assigned to. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>restricted-role</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enable the restricted role on a port, used by STP to forbid a port becoming a root port. This property only has effect when <var>protocol-mode</var> is set to <code>mstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>restricted-tcn</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Disable topology change notification (TCN) sending on a port, used by STP to forbid network topology changes to propagate. This property only has effect when <var>protocol-mode</var> is set to <code>mstp</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>tag-stacking</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Forces all packets to be treated as untagged packets. Packets on ingress port will be tagged with another VLAN tag regardless if a VLAN tag already exists, packets will be tagged with a VLAN ID that matches the <var>pvid</var> value and will use EtherType that is specified in <var>ether-type</var>. This property only has effect when <var>vlan-filtering</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>trusted</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>When enabled, it allows to forward DHCP packets towards DHCP server through this port. Mainly used to limit unauthorized servers to provide malicious information for users. This property only has effect when <var>dhcp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>unknown-multicast-flood</b></var> (<em>yes | no</em>; Default: <b>yes</b>)</td>
+    <td>When enabled, bridge floods unknown multicast traffic to all bridge egress ports. When disabled, drops unknown multicast traffic on egress ports. Multicast addresses that are in <code>/interface bridge mdb</code> are considered as learned multicasts and therefore will not be flooded to all ports. Without IGMP Snooping all multicast traffic will be dropped on egress ports. Has effect only on an egress port. This option does not limit traffic flood to the CPU. Note that local multicast addresses (224.0.0.0/24) are not flooded when <var>unknown-multicast-flood</var> is disabled, as a result some protocols that rely on local multicast addresses might not work properly, such protocols are RIPv2m OSPF, mDNS, VRRP and others. Some protocols do send a IGMP join request and therefore are compatible with IGMP Snooping, some OSPF implementations are compatible with RFC1584, RouterOS OSPF implementation is not compatible with IGMP Snooping. This property should only be used when <var>igmp-snooping</var> is set to <code>yes</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>unknown-unicast-flood</b></var> (<em>yes | no</em>; Default: <b>yes</b>)</td>
+    <td>When enabled, bridge floods unknown unicast traffic to all bridge egress ports. When disabled, drops unknown unicast traffic on egress ports. If a MAC address is not learned in <code>/interface bridge host</code>, then the traffic is considered as unknown unicast traffic and will be flooded to all ports. MAC address is learnt as soon as a packet on a bridge port is received, then the source MAC address is added to the bridge host table. Since  it is required for the bridge to receive at least one packet on the bridge port to learn the MAC address, it is recommended to use static bridge host entries to avoid packets being dropped until the MAC address has been learnt. Has effect only on an egress port. This option does not limit traffic flood to the CPU.</td>
+</tr>
+</table>
+<h2><span class="mw-headline" id="Example_2">Example</span></h2>
+<p>To group <b>ether1</b> and <b>ether2</b> in the already created <b>bridge1</b> bridge</p>
+<pre>
+[admin@MikroTik] /interface bridge port&gt; add bridge=bridge1 interface=ether1
+[admin@MikroTik] /interface bridge port&gt; add bridge=bridge1 interface=ether2
+[admin@MikroTik] /interface bridge port&gt; print 
+Flags: X - disabled, I - inactive, D - dynamic 
+ #    INTERFACE              BRIDGE              PRIORITY PATH-COST  HORIZON   
+ 0    ether1                 bridge1             0x80     10         none      
+ 1    ether2                 bridge1             0x80     10         none      
+[admin@MikroTik] /interface bridge port&gt; 
+</pre>
+<h1><span class="mw-headline" id="Interface_lists">Interface lists</span></h1>
+<p>Starting with RouterOS v6.41 it possible to add interface lists as a bridge port and sort them. Interface lists are useful for creating simpler firewall rules, you can read more about interface lists at the <a href="/wiki/Manual:Interface/List" title="Manual:Interface/List"> Interface List </a> section. Below is an example how to add interface list to a bridge:
+</p>
+<pre>
+/interface list member
+add interface=ether1 list=LAN1
+add interface=ether2 list=LAN1
+add interface=ether3 list=LAN2
+add interface=ether4 list=LAN2
+/interface bridge port
+add bridge=bridge1 interface=LAN1
+add bridge=bridge1 interface=LAN2
+</pre>
+<p>Ports from a interface list added to a bridge will show up as dynamic ports:
+</p>
+<pre>
+[admin@MikroTik] &gt; /interface bridge port print 
+Flags: X - disabled, I - inactive, D - dynamic, H - hw-offload 
+ #     INTERFACE                                      BRIDGE
+ 0     LAN1                                           bridge1
+ 1  D  ether1                                         bridge1
+ 2  D  ether2                                         bridge1
+ 3     LAN2                                           bridge1
+ 4  D  ether3                                         bridge1
+ 5  D  ether4                                         bridge1 
+</pre>
+<p>It is also possible to sort the order of lists in which they appear in the <code>/interface bridge port</code> menu. This can be done using the <code>move</code> command. Below is an example how to sort interface lists:
+</p>
+<pre>
+[admin@MikroTik] &gt; /interface bridge port move 3 0
+[admin@MikroTik] &gt; /interface bridge port print 
+Flags: X - disabled, I - inactive, D - dynamic, H - hw-offload 
+ #     INTERFACE                                      BRIDGE
+ 0     LAN2                                           bridge1
+ 1  D  ether3                                         bridge1
+ 2  D  ether4                                         bridge1
+ 3     LAN1                                           bridge1
+ 4  D  ether1                                         bridge1
+ 5  D  ether2                                         bridge1
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  The second parameter when moving interface lists is considered as "before id", the second parameter specifies before which interface list should be the selected interface list moved. When moving first interface list in place of the second interface list, then the command will have no effect since the first list will be moved before the second list, which is the current state either way.</p></div>
+<p><br style="clear:both" />
+</p>
+<h1><span class="mw-headline" id="Hosts_Table">Hosts Table</span></h1>
+<p>MAC addresses that have been learned on a bridge interface can be viewed in the <code>/interface bridge host</code> menu. Below is a table of parameters and flags that can be viewed.
+</p>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge host</code></p>
+<p><br />
+</p>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+<tr>
+    <td><var><b>age</b></var> (<em>read-only: time</em>)</td>
+    <td>The time since the last packet was received from the host. Appears only for dynamic, non-external and non-local host entries</td>
+</tr>
+<tr>
+    <td><var><b>bridge</b></var> (<em>read-only: name</em>)</td>
+    <td>The bridge the entry belongs to</td>
+</tr>
+<tr>
+    <td><var><b>disabled</b></var> (<em>read-only: flag</em>)</td>
+    <td>Whether the static host entry is disabled</td>
+</tr>
+<tr>
+    <td><var><b>dynamic</b></var> (<em>read-only: flag</em>)</td>
+    <td>Whether the host has been dynamically created</td>
+</tr>
+<tr>
+    <td><var><b>external</b></var> (<em>read-only: flag</em>)</td>
+    <td>Whether the host has been learned using an external table, for example, from a switch chip or Wireless registration table. Adding a static host entry on a hardware-offloaded bridge port will also display an active external flag</td>
+</tr>
+<tr>
+    <td><var><b>invalid</b></var> (<em>read-only: flag</em>)</td>
+    <td>Whether the host entry is invalid, can appear for statically configured hosts on already removed interface</td>
+</tr>
+<tr>
+    <td><var><b>local</b></var> (<em>read-only: flag</em>)</td>
+    <td>Whether the host entry is created from the bridge itself (that way all local interfaces are shown)</td>
+</tr>
+<tr>
+    <td><var><b>mac-address</b></var> (<em>read-only: MAC address</em>)</td>
+    <td>Host's MAC address</td>
+</tr>
+<tr>
+    <td><var><b>on-interface</b></var> (<em>read-only: name</em>)</td>
+    <td>Which of the bridged interfaces the host is connected to</td>
+</tr>
+</table>
+<h2><span class="mw-headline" id="Monitoring">Monitoring</span></h2>
+<p>To get the active hosts table:</p>
+<pre>
+[admin@MikroTik] &gt; interface bridge host print 
+Flags: X - disabled, I - invalid, D - dynamic, L - local, E - external 
+ #       MAC-ADDRESS        VID ON-INTERFACE   BRIDGE     AGE
+ 0   D E D4:CA:6D:E1:B5:7E      ether2         bridge1
+ 1   DL  E4:8D:8C:73:70:37      bridge1        bridge1
+ 2   D   D4:CA:6D:E1:B5:7F      ether3         bridge2    27s
+ 3   DL  E4:8D:8C:73:70:38      bridge2        bridge2
+</pre>
+<h2><span class="mw-headline" id="Static_entries">Static entries</span></h2>
+<p>Since RouterOS v6.42 it is possible to add a static MAC address entry into the hosts table. This can be used to forward a certain type of traffic through a specific port. Another use case for static host entries is for protecting the device resources by disabling the dynamic learning and rely only on configured static host entries. Below is a table of possible parameters that can be set when adding a static MAC address entry into the hosts table.
+</p>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge host</code></p>
+<p><br />
+</p>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>bridge</b></var> (<em>name</em>; Default: <b>none</b>)</td>
+    <td>The bridge interface to which the MAC address is going to be assigned to.</td>
+</tr>
+
+<tr>
+    <td><var><b>disabled</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Disables/enables static MAC address entry.</td>
+</tr>
+
+<tr>
+    <td><var><b>interface</b></var> (<em>name</em>; Default: <b>none</b>)</td>
+    <td>Name of the interface.</td>
+</tr>
+
+<tr>
+    <td><var><b>mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>MAC address that will be added to the hosts table statically.</td>
+</tr>
+
+<tr>
+    <td><var><b>vid</b></var> (<em>integer: 1..4094</em>; Default: )</td>
+    <td>VLAN ID for the statically added MAC address entry.</td>
+</tr>
+</table>
+<p>For example, if it was required that all traffic destined to <b>4C:5E:0C:4D:12:43</b> is forwarded only through <b>ether2</b>, then the following commands can be used:
+</p>
+<pre>
+/interface bridge host
+add bridge=bridge interface=ether2 mac-address=4C:5E:0C:4D:12:43
+</pre>
+<h1><span class="mw-headline" id="Bridge_Monitoring">Bridge Monitoring</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge monitor</code></p>
+<p><br />
+</p>
+<p>Used to monitor the current status of a bridge.</p>
+<table class="styled_table">
+<tr>
+   <th width="35%">Property</th>
+   <th>Description</th>
+</tr>
+<tr>
+    <td><var><b>current-mac-address</b></var> (<em>MAC address</em>)</td>
+    <td>Current MAC address of the bridge</td>
+</tr>
+<tr>
+    <td><var><b>designated-port-count</b></var> (<em>integer</em>)</td>
+    <td>Number of designated bridge ports</td>
+</tr>
+<tr>
+    <td><var><b>port-count</b></var> (<em>integer</em>)</td>
+    <td>Number of the bridge ports</td>
+</tr>
+<tr>
+    <td><var><b>root-bridge</b></var> (<em>yes | no</em>)</td>
+    <td>Shows whether bridge is the root bridge of the spanning tree</td>
+</tr>
+<tr>
+    <td><var><b>root-bridge-id</b></var> (<em>text</em>)</td>
+    <td>The root bridge ID, which is in form of bridge-priority.bridge-MAC-address</td>
+</tr>
+<tr>
+    <td><var><b>root-path-cost</b></var> (<em>integer</em>)</td>
+    <td>The total cost of the path to the root-bridge</td>
+</tr>
+<tr>
+    <td><var><b>root-port</b></var> (<em>name</em>)</td>
+    <td>Port to which the root bridge is connected to</td>
+</tr>
+<tr>
+    <td><var><b>state</b></var> (<em>enabled | disabled</em>)</td>
+    <td>State of the bridge</td>
+</tr>
+</table>
+<h3><span class="mw-headline" id="Example_3">Example</span></h3>
+<p>To monitor a bridge:</p>
+<pre>
+[admin@MikroTik] /interface bridge&gt; monitor bridge1 
+                  state: enabled
+    current-mac-address: 00:0C:42:52:2E:CE
+            root-bridge: yes
+         root-bridge-id: 0x8000.00:00:00:00:00:00
+         root-path-cost: 0
+              root-port: none
+             port-count: 2
+  designated-port-count: 0
+
+[admin@MikroTik] /interface bridge&gt;
+</pre>
+<h1><span class="mw-headline" id="Bridge_Port_Monitoring">Bridge Port Monitoring</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge port monitor</code></p>
+<p><br />
+</p>
+<p>Statistics of an interface that belongs to a bridge.</p>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+<tr>
+    <td><var><b>edge-port</b></var> (<em>yes | no</em>)</td>
+    <td>Whether port is an edge port or not.</td>
+</tr>
+<tr>
+    <td><var><b>edge-port-discovery</b></var> (<em>yes | no</em>)</td>
+    <td>Whether port is set to automatically detect edge ports.</td>
+</tr>
+<tr>
+    <td><var><b>external-fdb</b></var> (<em>yes | no</em>)</td>
+    <td>Whether registration table is used instead of forwarding data base.</td>
+</tr>
+<tr>
+    <td><var><b>forwarding</b></var> (<em>yes | no</em>)</td>
+    <td>Shows if the port is not blocked by (R/M)STP.</td>
+</tr>
+<tr>
+    <td><var><b>hw-offload-group</b></var> (<em>switchX</em>)</td>
+    <td>Switch chip used by the port.</td>
+</tr>
+<tr>
+    <td><var><b>learning</b></var> (<em>yes | no</em>)</td>
+    <td>Shows if the port is currently listening for BPDUs.</td>
+</tr>
+<tr>
+    <td><var><b>multicast-router</b></var> (<em>yes | no</em>)</td>
+    <td>Shows if a multicast router is detected on the port.</td>
+</tr>
+<tr>
+    <td><var><b>port-number</b></var> (<em>integer 1..4095</em>)</td>
+    <td>port-number will be assigned in the order that ports got added to the bridge, but this is only true until reboot. After reboot internal numbering will be used.</td>
+</tr>
+<tr>
+    <td><var><b>point-to-point-port</b></var> (<em>yes | no</em>)</td>
+    <td>Whether the port is connected to a bridge port using full-duplex (yes) or half-duplex (no).</td>
+</tr>
+<tr>
+    <td><var><b>role</b></var> (<em>designated | root port | alternate | backup | disabled</em>)</td>
+    <td>
+<p>(R/M)STP algorithm assigned role of the port:
+</p>
+<ul><li> <code>Disabled port</code> - not strictly part of STP, a network administrator can manually disable a port</li>
+<li> <code>Root port</code> - a forwarding port that is the best port from Nonroot-bridge to Rootbridge</li>
+<li> <code>Alternative port</code> - an alternate path to the root bridge. This path is different than using the root port</li>
+<li> <code>Designated port</code> - a forwarding port for every LAN segment</li>
+<li> <code>Backup port</code> - a backup/redundant path to a segment where another bridge port already connects.</li></ul>
+</td>
+</tr>
+<tr>
+    <td><var><b>sending-rstp</b></var> (<em>yes | no</em>)</td>
+    <td>Whether the port is sending RSTP or MSTP BPDU types. A port will transit to STP type when RSTP/MSTP enabled port receives a STP BPDU</td>
+</tr>
+<tr>
+    <td><var><b>status</b></var> (<em>in-bridge | inactive</em>)</td>
+    <td>Port status:
+<ul><li> <code>in-bridge</code> - port is enabled.</li>
+<li> <code>inactive</code> - port is disabled.</li></ul>
+</td>
+</tr>
+</table>
+<h2><span class="mw-headline" id="Example_4">Example</span></h2>
+<p>To monitor a bridge port:</p>
+<pre>
+[admin@MikroTik] &gt; /interface bridge port monitor 0     
+               status: in-bridge
+          port-number: 1
+                 role: designated-port
+            edge-port: no
+  edge-port-discovery: yes
+  point-to-point-port: no
+         external-fdb: no
+         sending-rstp: no
+             learning: yes
+           forwarding: yes
+
+[admin@MikroTik] /interface bridge port&gt;
+</pre>
+<h1><span class="mw-headline" id="Bridge_Hardware_Offloading">Bridge Hardware Offloading</span></h1>
+<p>Since RouterOS v6.41 it is possible to switch multiple ports together if a device has a built-in switch chip. While a bridge is a software feature that will consume CPU's resources, the bridge hardware offloading feature will allow you to use the built-in switch chip to forward packets, this allows you to achieve higher throughput, if configured correctly. In previous versions (prior to RouterOS v6.41) you had to use the <var>master-port</var> property to switch multiple ports together, but in RouterOS v6.41 this property is replaced with the bridge hardware offloading feature, which allows your to switch ports and use some of the bridge features, for example, <a href="/wiki/Manual:Spanning_Tree_Protocol" title="Manual:Spanning Tree Protocol"> Spanning Tree Protocol</a>. More details about the outdated <var>master-port</var> property can be found in the <a href="/wiki/Manual:Master-port" title="Manual:Master-port"> Master-port</a> page.
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  When upgrading from previous versions (before RouterOS v6.41), the old <var>master-port</var> configuration is automatically converted to the new <b>Bridge Hardware Offloading</b> configuration. When downgrading from newer versions (RouterOS v6.41 and newer) to older versions (before RouterOS v6.41) the configuration is not converted back, a bridge without hardware offloading will exist instead, in such a case you need to reconfigure your device to use the old <var>master-port</var> configuration. </p></div>
+<p><br style="clear:both" />
+</p><p>Below is a list of devices and feature that supports hardware offloading (+) or disables hardware offloading (-):
+</p>
+<table border="1" class="wikitable collapsible sortable" style="text-align: center">
+<tr>
+<td nowrap="" style="background-color: #CCC;*"> <b><u>RouterBoard/[Switch Chip] Model</u></b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Features in Switch menu</b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Bridge STP/RSTP</b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Bridge MSTP</b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Bridge IGMP Snooping</b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Bridge DHCP Snooping</b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Bridge VLAN Filtering</b>
+</td>
+<td nowrap="" style="background-color: #CCC;*"> <b>Bonding</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> CRS3xx series
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> CRS1xx/CRS2xx series
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>+ <small style="font-size:60%;">2</small></b>
+</td>
+<td>  <b>+ <small style="font-size:60%;">1</small></b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [QCA8337]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>+ <small style="font-size:60%;">2</small></b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [Atheros8327]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>+ <small style="font-size:60%;">2</small></b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [Atheros8227]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [Atheros8316]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>+ <small style="font-size:60%;">2</small></b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [Atheros7240]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [MT7621]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [RTL8367]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+<tr>
+<td style="background-color: #CCC;font-weight: bold;"> [ICPlus175D]
+</td>
+<td>  <b>+</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td>
+<td>  <b>-</b>
+</td></tr>
+</table>
+<p><b>NOTES:</b>
+</p>
+<ol><li>  Feature will not work properly in VLAN switching setups. It is possible to correctly snoop DHCP packets only for a single VLAN, but this requires that these DHCP messages get tagged with the correct VLAN tag using an ACL rule, for example, <code>/interface ethernet switch acl add dst-l3-port=67-68 ip-protocol=udp mac-protocol=ip new-customer-vid=10 src-ports=switch1-cpu</code>. DHCP Option 82 will not contain any information regarding VLAN-ID. </li>
+<li>  Feature will not work properly in VLAN switching setups.</li></ol>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  When upgrading from older versions (before RouterOS v6.41), only the <var>master-port</var> configuration is converted. For each <var>master-port</var> a bridge will be created. VLAN configuration is not converted and should not be changed, check the <a href="/wiki/Manual:Basic_VLAN_switching" title="Manual:Basic VLAN switching"> Basic VLAN switching</a> guide to be sure how VLAN switching should be configured for your device. </p></div>
+<p><br style="clear:both" />
+</p><p>Bridge Hardware Offloading should be considered as port switching, but with more possible features. By enabling hardware offloading you are allowing a built-in switch chip to processes packets using it's switching logic. The diagram below illustrates that switching occurs before any software related action:
+</p>
+<div class="center"><div class="floatnone"><a href="/wiki/File:Switch-png.png" class="image"><img alt="Switch-png.png" src="/images/a/ac/Switch-png.png" width="711" height="300" /></a></div></div>
+<p>A packet that is received by one of the ports always passes through the switch logic first. Switch logic decides to which ports the packet should be going to (most commonly this decision is made based on the destination MAC address of a packet, but there might be other criteria that might be involved based on the packet and the configuration). In most cases the packet will not be visible to RouterOS (only statistics will show that a packet has passed through), this is because the packet was already processed by the switch chip and never reached the CPU, though it is possible in certain situations to allow a packet to be processed by the CPU. To allow the CPU process a packet you need to forward the packet to the CPU and not allow the switch chip to forward the packet through a switch port directly, this is usually called passing a packet to the switch CPU port (or the bridge CPU port in bridge VLAN filtering scenario).
+</p><p>By passing a packet to the switch CPU port you are prohibiting the switch chip to forward the packet directly, this allows the CPU to process the packet and lets the CPU to forward the packet. Passing the packet to the CPU port will give you the opportunity to route packets to different networks, perform traffic control and other software related packet processing actions. To allow a packet to be processed by the CPU, you need to make certain configuration changes depending on your needs and on the device you are using (most commonly passing packets to the CPU are required for VLAN filtering setups). Check the manual page for your specific device:
+</p>
+<ul><li> <a href="/wiki/Manual:CRS1xx/2xx_series_switches_examples" title="Manual:CRS1xx/2xx series switches examples"> CRS1xx/2xx series switches</a></li>
+<li> <a href="/wiki/Manual:CRS3xx_series_switches" title="Manual:CRS3xx series switches"> CRS3xx series switches</a></li>
+<li> <a href="/wiki/Manual:Switch_Chip_Features" title="Manual:Switch Chip Features"> non-CRS series switches</a></li></ul>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  Certain bridge and Ethernet port properties are directly related to switch chip settings, changing such properties can trigger a <b>switch chip reset</b>, that will temporarily disable all Ethernet ports that are on the switch chip for the settings to have an effect, this must be taken into account whenever changing properties on production environments. Such properties are DHCP Snooping, IGMP Snooping, VLAN filtering, L2MTU, Flow Control and others (exact settings that can trigger a switch chip reset depends on the device's model). </p></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="Example_5">Example</span></h2>
+<p>Port switching with bridge configuration and enabled hardware offloading since RouterOS v6.41:
+</p>
+<pre>
+/interface bridge
+add name=bridge1
+/interface bridge port
+add bridge=bridge1 interface=ether2 hw=yes
+add bridge=bridge1 interface=ether3 hw=yes
+add bridge=bridge1 interface=ether4 hw=yes
+add bridge=bridge1 interface=ether5 hw=yes
+</pre>
+<p>Make sure that hardware offloading is enabled by checking the "H" flag:
+</p>
+<pre>
+[admin@MikroTik] &gt; interface bridge port print 
+Flags: X - disabled, I - inactive, D - dynamic, H - hw-offload 
+ #     INTERFACE              BRIDGE              HW  PVID PRIORITY  PATH-COST INTERNAL-PATH-COST    HORIZON
+ 0   H ether2                 bridge1             yes    1     0x80         10                 10       none
+ 1   H ether3                 bridge1             yes    1     0x80         10                 10       none
+ 2   H ether4                 bridge1             yes    1     0x80         10                 10       none
+ 3   H ether5                 bridge1             yes    1     0x80         10                 10       none
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Port switching in RouterOS v6.41 and newer is done using the bridge configuration. Prior to RouterOS v6.41 port switching was done using the <var>master-port</var> property, for more details check the <a href="/wiki/Manual:Master-port" title="Manual:Master-port"> Master-port</a> page. </p></div>
+<p><br style="clear:both" />
+</p>
+<h1><span class="mw-headline" id="Bridge_VLAN_Filtering">Bridge VLAN Filtering</span></h1>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Currently only CRS3xx series devices are capable of using bridge VLAN filtering and hardware offloading at the same time, other devices will not be able to use the benefits of a built-in switch chip when bridge VLAN filtering is enabled. Other devices should be configured according to the method described in the <a href="/wiki/Manual:Basic_VLAN_switching" title="Manual:Basic VLAN switching"> Basic VLAN switching</a> guide. If an improper configuration method is used, your device can cause throughput issues in your network. </p></div>
+<p><br style="clear:both" />
+</p>
+<p>Bridge VLAN Filtering since RouterOS v6.41 provides VLAN aware Layer2 forwarding and VLAN tag modifications within the bridge.
+This set of features makes bridge operation more like a traditional Ethernet switch and allows to overcome Spanning Tree compatibilty issues compared to configuration when tunnel-like VLAN interfaces are bridged.
+Bridge VLAN Filtering configuration is highly recommended to comply with STP (IEEE 802.1D), RSTP (IEEE  802.1W) standards and is mandatory to enable MSTP (IEEE 802.1s) support in RouterOS.</p>
+<p>The main VLAN setting is <code>vlan-filtering</code> which globally controls vlan-awareness and VLAN tag processing in the bridge.
+If <code>vlan-filtering=no</code>, bridge ignores VLAN tags, works in a shared-VLAN-learning (SVL) mode and cannot modify VLAN tags of packets.
+Turning on <code>vlan-filtering</code> enables all bridge VLAN related functionality and independent-VLAN-learning (IVL) mode.
+Besides joining the ports for Layer2 forwarding, bridge itself is also an interface therefore it has Port VLAN ID (pvid).</p>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge vlan</code></p>
+<p>Bridge VLAN table represents per-VLAN port mapping with an egress VLAN tag action.
+<code>tagged</code> ports send out frames with a learned VLAN ID tag.
+<code>untagged</code> ports remove VLAN tag before sending out frames if the learned VLAN ID matches the port <code>pvid</code>.
+</p>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>bridge</b></var> (<em>name</em>; Default: <b>none</b>)</td>
+    <td>The bridge interface which the respective VLAN entry is intended for.</td>
+</tr>
+
+<tr>
+    <td><var><b>disabled</b></var> (<em>yes | no</em>; Default: <b>no</b>)</td>
+    <td>Enables or disables Bridge VLAN entry.</td>
+</tr>
+
+<tr>
+    <td><var><b>tagged</b></var> (<em>interfaces</em>; Default: <b>none</b>)</td>
+    <td>Interface list with a VLAN tag adding action in egress. This setting accepts comma separated values. E.g. <code>tagged=ether1,ether2</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>untagged</b></var> (<em>interfaces</em>; Default: <b>none</b>)</td>
+    <td>Interface list with a VLAN tag removing action in egress. This setting accepts comma separated values. E.g. <code>untagged=ether3,ether4</code></td>
+</tr>
+
+<tr>
+    <td><var><b>vlan-ids</b></var> (<em>integer 1..4094</em>; Default: <b>1</b>)</td>
+    <td>The list of VLAN IDs for certain port configuration. This setting accepts VLAN ID range as well as comma separated values. E.g. <code>vlan-ids=100-115,120,122,128-130</code>.</td>
+</tr>
+</table>
+<p><br />
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  The <var>vlan-ids</var> parameter can be used to specify a set or range of VLANs, but specifying multiple VLANs in a single bridge VLAN table entry should only be used for ports that are trunk ports. In case multiple VLANs are specified for access ports, then tagged packets might get sent out as untagged packets through the wrong access port, regardless of the <var>PVID</var> value. </p></div>
+<p><br />
+</p>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge host</code></p>
+<p>Bridge Host table allows monitoring learned MAC addresses and when <code>vlan-filtering</code> is enabled shows learned VLAN ID as well.</p>
+<pre>
+[admin@MikroTik] &gt; interface bridge host print where&#160;!local
+Flags: L - local, E - external-fdb 
+  BRIDGE                          VID MAC-ADDRESS       ON-INTERFACE                   AGE                 
+  bridge1                         200 D4:CA:6D:77:2E:F0 ether3                         7s                  
+  bridge1                         200 E4:8D:8C:1B:05:F0 ether2                         2s                  
+  bridge1                         300 D4:CA:6D:74:65:9D ether4                         3s                  
+  bridge1                         300 E4:8D:8C:1B:05:F0 ether2                         2s                  
+  bridge1                         400 4C:5E:0C:4B:89:5C ether5                         0s                  
+  bridge1                         400 E4:8D:8C:1B:05:F0 ether2                         0s                  
+[admin@MikroTik] &gt; 
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Make sure you have added all needed interfaces to the bridge VLAN table when using bridge VLAN filtering. For routing functions to work properly on the same device through ports that use bridge VLAN filtering, you will need to allow access to the CPU from those ports, this can be done by adding the bridge interface itself to the VLAN table, for tagged traffic you will need to add the bridge interface as a tagged port and create a VLAN interface on the bridge interface. Examples can be found at the <a href="/wiki/Manual:Interface/Bridge#Management_port" title="Manual:Interface/Bridge"> Management port</a> section.</p></div>
+<p><br style="clear:both" />
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  When allowing access to the CPU, you are allowing access from a certain port to the actual router/switch, this is not always desirable. Make sure you implement proper firewall filter rules to secure your device when access to the CPU is allowed from a certain VLAN ID and port, use firewall filter rules to allow access to only certain services.</p></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="VLAN_Example_.231_.28Trunk_and_Access_Ports.29">VLAN Example #1 (Trunk and Access Ports)</span></h2>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Improperly configured bridge VLAN filtering can cause security issues, make sure you fully understand how <a href="/wiki/Manual:Bridge_VLAN_Table" title="Manual:Bridge VLAN Table"> Bridge VLAN table</a> works before deploying your device into production environments. </p></div>
+<p><br style="clear:both" />
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:865px;"><a href="/wiki/File:Portbased-vlan1.png" class="image"><img alt="Alt text" src="/images/c/c2/Portbased-vlan1.png" width="863" height="231" class="thumbimage" /></a>  <div class="thumbcaption">Trunk and Access Ports</div></div></div></div>
+<ul><li> Create a bridge with disabled <code>vlan-filtering</code> to avoid losing access to the device before VLANs are completely configured.</li></ul>
+<pre>
+/interface bridge
+add name=bridge1 vlan-filtering=no
+</pre>
+<ul><li> Add bridge ports and specify <code>pvid</code> for VLAN access ports to assign their untagged traffic to the intended VLAN.</li></ul>
+<pre>
+/interface bridge port
+add bridge=bridge1 interface=ether2
+add bridge=bridge1 interface=ether6 pvid=200
+add bridge=bridge1 interface=ether7 pvid=300
+add bridge=bridge1 interface=ether8 pvid=400
+</pre>
+<ul><li> Add Bridge VLAN entries and specify tagged and untagged ports in them.</li></ul>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 tagged=ether2 untagged=ether6 vlan-ids=200
+add bridge=bridge1 tagged=ether2 untagged=ether7 vlan-ids=300
+add bridge=bridge1 tagged=ether2 untagged=ether8 vlan-ids=400
+</pre>
+<ul><li> In the end, when VLAN configuration is complete, enable Bridge VLAN Filtering.</li></ul>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<h2><span class="mw-headline" id="VLAN_Example_.232_.28Trunk_and_Hybrid_Ports.29">VLAN Example #2 (Trunk and Hybrid Ports)</span></h2>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:764px;"><a href="/wiki/File:Portbased-vlan2.png" class="image"><img alt="Alt text" src="/images/f/fd/Portbased-vlan2.png" width="762" height="180" class="thumbimage" /></a>  <div class="thumbcaption">Trunk and Hybrid Ports</div></div></div></div>
+<ul><li> Create a bridge with disabled <code>vlan-filtering</code> to avoid losing access to the router before VLANs are completely configured.</li></ul>
+<pre>
+/interface bridge
+add name=bridge1 vlan-filtering=no
+</pre>
+<ul><li> Add bridge ports and specify <code>pvid</code> on hybrid VLAN ports to assign untagged traffic to the intended VLAN.</li></ul>
+<pre>
+/interface bridge port
+add bridge=bridge1 interface=ether2
+add bridge=bridge1 interface=ether6 pvid=200
+add bridge=bridge1 interface=ether7 pvid=300
+add bridge=bridge1 interface=ether8 pvid=400
+</pre>
+<ul><li> Add Bridge VLAN entries and specify tagged and untagged ports in them. In this example egress VLAN tagging is done on ether6,ether7,ether8 ports too, making them into hybrid ports.</li></ul>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 tagged=ether2,ether7,ether8 untagged=ether6 vlan-ids=200
+add bridge=bridge1 tagged=ether2,ether6,ether8 untagged=ether7 vlan-ids=300
+add bridge=bridge1 tagged=ether2,ether6,ether7 untagged=ether8 vlan-ids=400
+</pre>
+<ul><li> In the end, when VLAN configuration is complete, enable Bridge VLAN Filtering.</li></ul>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  You don't have to add access ports as untagged ports, they will be added dynamically as untagged port with the VLAN ID that is specified in <code>PVID</code>, you can specify just the trunk port as tagged port. All ports that have the same <code>PVID</code> set will be added as untagged ports in a single entry. You must take into account that the bridge itself is a port and it also has a <code>PVID</code> value, this means that the bridge port also will be added as untagged port for the ports that have the same <code>PVID</code>. You can circumvent this behaviour by either setting different <code>PVID</code> on all ports (even the trunk port and bridge itself), or to use <code>frame-type</code> set to <code>accept-only-vlan-tagged</code>. </p></div>
+<p><br />
+</p>
+<h2><span class="mw-headline" id="VLAN_Example_.233_.28InterVLAN_Routing_by_Bridge.29">VLAN Example #3 (InterVLAN Routing by Bridge)</span></h2>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:813px;"><a href="/wiki/File:Bridge-vlan-routing.png" class="image"><img alt="Alt text" src="/images/7/74/Bridge-vlan-routing.png" width="811" height="443" class="thumbimage" /></a>  <div class="thumbcaption">InterVLAN Routing by Bridge</div></div></div></div>
+<p>Create a bridge with disabled <code>vlan-filtering</code> to avoid losing access to the router before VLANs are completely configured:
+</p>
+<pre>
+/interface bridge
+add name=bridge1 vlan-filtering=no
+</pre>
+<p>Add bridge ports and specify <code>pvid</code> for VLAN access ports to assign their untagged traffic to the intended VLAN:
+</p>
+<pre>
+/interface bridge port
+add bridge=bridge1 interface=ether6 pvid=200
+add bridge=bridge1 interface=ether7 pvid=300
+add bridge=bridge1 interface=ether8 pvid=400
+</pre>
+<p>Add Bridge VLAN entries and specify tagged and untagged ports in them. In this example <b>bridge1</b> interface is the VLAN trunk that will send traffic further to do InterVLAN routing:
+</p>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 tagged=bridge1 untagged=ether6 vlan-ids=200
+add bridge=bridge1 tagged=bridge1 untagged=ether7 vlan-ids=300
+add bridge=bridge1 tagged=bridge1 untagged=ether8 vlan-ids=400
+</pre>
+<p>Configure VLAN interfaces on the <b>bridge1</b> to allow handling of tagged VLAN traffic at routing level and set IP addresses to ensure routing between VLANs as planned:
+</p>
+<pre>
+/interface vlan
+add interface=bridge1 name=VLAN200 vlan-id=200
+add interface=bridge1 name=VLAN300 vlan-id=300
+add interface=bridge1 name=VLAN400 vlan-id=400
+
+/ip address
+add address=20.0.0.1/24 interface=VLAN200
+add address=30.0.0.1/24 interface=VLAN300
+add address=40.0.0.1/24 interface=VLAN400
+</pre>
+<p>In the end, when VLAN configuration is complete, enable Bridge VLAN Filtering:
+</p>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<h2><span class="mw-headline" id="Management_access_configuration">Management access configuration</span></h2>
+<p>There are multiple ways to setup management access on a device that uses bridge VLAN filtering. Below are some of the most popular approaches to properly enable access to a router/switch. Start by creating a bridge without VLAN filtering enabled:
+</p>
+<pre>
+/interface bridge
+add name=bridge1 vlan-filtering=no
+</pre>
+<ul><li> In case VLAN filtering will not be used and access with untagged traffic is desired</li></ul>
+<p>The only requirement is to create an IP address on the bridge interface.
+</p>
+<pre>
+/ip address
+add address=192.168.99.1/24 interface=bridge1
+</pre>
+<ul><li> In case VLAN filtering is used and access from trunk and/or access ports with tagged traffic is desired</li></ul>
+<p>In this example VLAN99 will be used to access the device, a VLAN interface on the bridge must be created and an IP address must be assigned to it.
+</p>
+<pre>
+/interface vlan
+add interface=bridge1 name=MGMT vlan-id=99
+/ip address
+add address=192.168.99.1/24 interface=MGMT
+</pre>
+<p>For example, if you want to allow access to the router/switch from access ports <b>ether3</b>, <b>ether4</b> and from trunk port <b>sfp-sfpplus1</b>, then you must add this entry to the VLAN table:
+</p>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 tagged=bridge1,ether3,ether4,sfp-sfpplus1 vlan-ids=99
+</pre>
+<p>After that you can enable VLAN filtering:
+</p>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<ul><li> In case VLAN filtering is used and access from trunk and/or access ports with untagged traffic is desired</li></ul>
+<p>To allow untagged traffic to access the router/switch, start by creating an IP address on the bridge interface.
+</p>
+<pre>
+/ip address
+add address=192.168.88.1/24 interface=bridge1
+</pre>
+<p>It is required to add VLAN 1 to ports from which you want to allow the access to the router/switch, for example, to allow access from access ports <b>ether3</b>, <b>ether4</b> add this entry to the VLAN table:
+</p>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 untagged=ether3,ether4 vlan-ids=1
+</pre>
+<p>Make sure that PVID on the bridge interface matches the PVID value on these ports:
+</p>
+<pre>
+/interface bridge set bridge1 pvid=1
+/interface bridge port set ether3,ether4 pvid=1
+</pre>
+<p>After that you can enable VLAN filtering:
+</p>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  If connection to the router/switch through an IP address is not required, then steps adding this IP address can be skipped since connection to the router/switch through Layer2 protocols (e.g. MAC-telnet) will be working either way. </p></div>
+<p><br style="clear:both" />
+</p>
+<h2><span class="mw-headline" id="VLAN_Tunneling_.28Q-in-Q.29">VLAN Tunneling (Q-in-Q)</span></h2>
+<p>Since RouterOS v6.43 the RouterOS bridge is IEEE 802.1ad compliant and it is possible to filter VLAN IDs based on Service VLAN ID (0x88A8) rather than Customer VLAN ID (0x8100). The same principals can be applied as with IEEE 802.1Q VLAN filtering (the same setup examples can be used). Below is a topology for a common <b>Provider bridge</b>:
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:701px;"><a href="/wiki/File:Provider_bridge.png" class="image"><img alt="Alt text" src="/images/7/70/Provider_bridge.png" width="699" height="277" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="/wiki/File:Provider_bridge.png" class="internal" title="Enlarge"></a></div>Provider bridge topology</div></div></div></div>
+<p>In this example <b>R1</b>, <b>R2</b>, <b>R3</b> and <b>R4</b> might be sending any VLAN tagged traffic by 802.1Q (CVID), but <b>SW1</b> and <b>SW2</b> needs isolate traffic between routers in a way that <b>R1</b> is able to communicate only with <b>R3</b> and <b>R2</b> is only able to communicate with <b>R4</b>. To do so, you can tag all ingress traffic with a SVID and only allow these VLANs on certain ports. Start by enabling <code>802.1ad</code> VLAN protocol on the bridge, use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge
+add name=bridge1 vlan-filtering=no ether-type=0x88a8
+</pre>
+<p>In this setup <b>ether1</b> and <b>ether2</b> are going to be access ports (untagged), use the <code>pvid</code> parameter to tag all ingress traffic on each port, use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge port
+add interface=ether1 bridge=bridge1 pvid=200
+add interface=ether2 bridge=bridge1 pvid=300
+add interface=ether3 bridge=bridge1
+</pre>
+<p>Specify tagged and untagged ports in the bridge VLAN table, use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 tagged=ether3 untagged=ether1 vlan-ids=200
+add bridge=bridge1 tagged=ether3 untagged=ether2 vlan-ids=300
+</pre>
+<p>When bridge VLAN table is configured, you can enable bridge VLAN filtering, use these commands on <b>SW1</b> and <b>SW2</b>
+</p>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  By enabling <var>vlan-filtering</var> you will be filtering out traffic destined to the CPU, before enabling VLAN filtering you should make sure that you set up a <a href="/wiki/Manual:Interface/Bridge#Management_port" title="Manual:Interface/Bridge"> Management port</a>. The difference between using different EtherTypes is that you must use a Service VLAN interface. Service VLAN interfaces can be created as regular VLAN interface, but the <var>use-service-tag</var> parameter toggles if the interface will use Service VLAN tag. </p></div>
+<p><br />
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Currently only CRS3xx series switches are capable of hardware offloading VLAN filtering based on SVID (Service VLAN ID) tag when <var>ether-type</var> is set to 0x88a8. </p></div>
+<p><br style="clear:both" />
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  When <code>ether-type&#61;0x8100</code>, then the bridge checks the outer VLAN tag if it is using EtherType <code>0x8100</code>. If the bridge receives a packet with an outer tag that has a different EtherType, it will mark the packet as <code>untagged</code>. Since RouterOS only checks the outer tag of a packet, it is not possible to filter 802.1Q packets when 802.1ad protocol is used. </p></div>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Tag_stacking">Tag stacking</span></h3>
+<p>Since RouterOS v6.43 it is possible to forcefully add a new VLAN tag over any existing VLAN tags, this feature can be used to achieve a CVID stacking setup, where a CVID (0x8100) tag is added before an existing CVID tag. This type of setup is very similar to <a href="/wiki/Manual:Interface/Bridge#VLAN_Tunneling_.28Q-in-Q.29" title="Manual:Interface/Bridge"> Provider bridge</a> setup, to achieve the same setup but with multiple CVID tags (CVID stacking) we can use the same topology:
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:701px;"><a href="/wiki/File:Tag_stacking.png" class="image"><img alt="Alt text" src="/images/b/b5/Tag_stacking.png" width="699" height="277" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="/wiki/File:Tag_stacking.png" class="internal" title="Enlarge"></a></div>Tag stacking topology</div></div></div></div>
+<p>In this example <b>R1</b>, <b>R2</b>, <b>R3</b> and <b>R4</b> might be sending any VLAN tagged traffic, it can be 802.1ad, 802.1Q or any other type of traffic, but <b>SW1</b> and <b>SW2</b> needs isolate traffic between routers in a way that <b>R1</b> is able to communicate only with <b>R3</b> and <b>R2</b> is only able to communicate with <b>R4</b>. To do so, you can tag all ingress traffic with a new CVID tag and only allow these VLANs on certain ports. Start by selecting the proper EtherType, use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge
+add name=bridge1 vlan-filtering=no ether-type=0x8100
+</pre>
+<p>In this setup <b>ether1</b> and <b>ether2</b> will ignore any VLAN tags that are present and add a new VLAN tag, use the <code>pvid</code> parameter to tag all ingress traffic on each port and allow <code>tag-stacking</code> on these ports, use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge port
+add interface=ether1 bridge=bridge1 pvid=200 tag-stacking=yes
+add interface=ether2 bridge=bridge1 pvid=300 tag-stacking=yes
+add interface=ether3 bridge=bridge1
+</pre>
+<p>Specify tagged and untagged ports in the bridge VLAN table, you only need to specify the VLAN ID of the outer tag, use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge vlan
+add bridge=bridge1 tagged=ether3 untagged=ether1 vlan-ids=200
+add bridge=bridge1 tagged=ether3 untagged=ether2 vlan-ids=300
+</pre>
+<p>When bridge VLAN table is configured, you can enable bridge VLAN filtering, which is required in order for the <code>PVID</code> parameter have any effect, use these commands on <b>SW1</b> and <b>SW2</b>
+</p>
+<pre>
+/interface bridge set bridge1 vlan-filtering=yes
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  By enabling <var>vlan-filtering</var> you will be filtering out traffic destined to the CPU, before enabling VLAN filtering you should make sure that you set up a <a href="/wiki/Manual:Interface/Bridge#Management_port" title="Manual:Interface/Bridge"> Management port</a>. </p></div>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="Fast_Forward">Fast Forward</span></h1>
+<p>Fast Forward allows to forward packets faster under special conditions. When Fast Forward is enabled, then the bridge can process packets even faster since it can skip multiple bridge related checks, including MAC learning. Below you can find a list of conditions that <b>MUST</b> be met in order for Fast Forward to be active:
+</p>
+<ul><li> Bridge has <var>fast-forward</var> set to <code>yes</code></li>
+<li> Bridge has only 2 running ports</li>
+<li> Both bridge ports support <a href="/wiki/Manual:Fast_Path" title="Manual:Fast Path"> Fast Path</a>, Fast Path is active on ports and globally on the bridge</li>
+<li> <a href="/wiki/Manual:Switch_Chip_Features#Bridge_Hardware_Offloading" title="Manual:Switch Chip Features"> Bridge Hardware Offloading</a> is disabled</li>
+<li> <var>protocol-mode</var> is set to <code>none</code></li>
+<li> <a href="/wiki/Manual:Interface/Bridge#Bridge_VLAN_Filtering" title="Manual:Interface/Bridge"> Bridge VLAN Filtering</a> is disabled</li>
+<li> <a href="/wiki/Manual:Interface/Bridge#DHCP_Snooping_and_DHCP_Option_82" title="Manual:Interface/Bridge"> bridge DHCP snooping</a> is disabled</li>
+<li> <var>unknown-multicast-flood</var> is set to <code>yes</code></li>
+<li> <var>unknown-unicast-flood</var> is set to <code>yes</code></li>
+<li> <var>broadcast-flood</var> is set to <code>yes</code></li>
+<li> MAC address for the bridge matches with a MAC address from one of the bridge slaves</li>
+<li> <var>horizon</var> for both ports is set to <code>none</code></li></ul>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Fast Forward disables MAC learning, this is by design to achieve faster packet forwarding. MAC learning prevents traffic from flooding multiple interfaces, but MAC learning is not needed when a packet can only be sent out trough just one interface. </p></div>
+<p><br style="clear:both" />
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  Fast Forward is disabled when hardware offloading is enabled. Hardware offloading can achieve full write-speed performance when it is active since it will use the built-in switch chip (if such exists on your device), fast forward uses the CPU to forward packets. When comparing throughput results, you would get such results: Hardware offloading &gt; Fast Forward &gt; Fast Path &gt; Slow Path. </p></div>
+<p><br />
+</p><p>It is possible to check how many packets where processed by Fast Forward:
+</p>
+<pre>
+[admin@MikroTik] &gt; /interface bridge settings print 
+              use-ip-firewall: no
+     use-ip-firewall-for-vlan: no
+    use-ip-firewall-for-pppoe: no
+              allow-fast-path: yes
+      bridge-fast-path-active: yes
+     bridge-fast-path-packets: 0
+       bridge-fast-path-bytes: 0
+  bridge-fast-forward-packets: 1279812
+    bridge-fast-forward-bytes: 655263744
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  If packets are processed by Fast Path, then Fast Forward is not active. Packet count can be used as an indicator whether Fast Forward is active or not. </p></div>
+<p><br style="clear:both" />
+</p><p>Since RouterOS 6.44beta28 it is possible to monitor Fast Forward status, for example:
+</p>
+<pre>
+[admin@MikroTik] &gt; /interface bridge monitor bridge1 
+                  state: enabled
+    current-mac-address: D4:CA:6D:E1:B5:82
+            root-bridge: yes
+         root-bridge-id: 0x8000.00:00:00:00:00:00
+         root-path-cost: 0
+              root-port: none
+             port-count: 2
+  designated-port-count: 0
+           fast-forward: yes
+
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em;">
+<div class="floatleft"><a href="/wiki/File:Icon-warn.png" class="image"><img alt="Icon-warn.png" src="/images/thumb/1/1d/Icon-warn.png/56px-Icon-warn.png" width="56" height="56" srcset="/images/thumb/1/1d/Icon-warn.png/84px-Icon-warn.png 1.5x, /images/thumb/1/1d/Icon-warn.png/112px-Icon-warn.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b style="color:red;">Warning:</b>  Disabling or enabling <var>fast-forward</var> will temporarily disable all bridge ports for settings to take effect. This must be taken into account whenever changing this property on production environments since it can cause all packets to be temporarily dropped. </p></div>
+<p><br />
+</p>
+<h1><span class="mw-headline" id="IGMP_Snooping">IGMP Snooping</span></h1>
+<p>IGMP Snooping which controls multicast streams and prevents multicast flooding is implemented in RouterOS starting from version 6.41.<br />
+It's settings are placed in bridge menu and it works independently in every bridge interface.<br />
+Software driven implementation works on all devices with RouterOS but CRS1xx/2xx/3xx series switches also support IGMP Snooping with hardware offloading.</p>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge</code> <code>/interface bridge mdb</code></p>
+<ul><li> Enabling IGMP Snooping on Bridge.</li></ul>
+<pre>
+/interface bridge set bridge1 igmp-snooping=yes
+</pre>
+<ul><li> Monitoring multicast groups in the Bridge Multicast Database</li></ul>
+<pre>
+[admin@MikroTik] &gt; interface bridge mdb print 
+BRIDGE                   VID GROUP                                              PORTS           
+bridge1                  200 229.1.1.2                                          ether3          
+                                                                                ether2          
+                                                                                ether1          
+bridge1                  300 231.1.3.3                                          ether4          
+                                                                                ether3          
+                                                                                ether2          
+bridge1                  400 229.10.10.4                                        ether4          
+                                                                                ether3          
+bridge1                  500 234.5.1.5                                          ether5          
+                                                                                ether1          
+</pre>
+<ul><li> Monitoring ports that are connected to a multicast router</li></ul>
+<pre>
+[admin@MikroTik] &gt; /interface bridge port monitor [f]
+              interface: ether1          ether2
+                 status: in-bridge       in-bridge
+            port-number: 1               2
+                   role: designated-port designated-port
+              edge-port: yes             yes
+    edge-port-discovery: yes             yes
+    point-to-point-port: yes             yes
+           external-fdb: no              no
+           sending-rstp: yes             yes
+               learning: yes             yes
+             forwarding: yes             yes
+       multicast-router: yes              no
+</pre>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  IGMP membership reports are only forwarded to ports that are connected to a multicast router or to another IGMP Snooping enabled bridge. If no port is marked as a <var>multicast-router</var> then IGMP membership reports will not be forwarded to any port. </p></div>
+<p><br style="clear:both" />
+</p>
+<h1><span class="mw-headline" id="DHCP_Snooping_and_DHCP_Option_82">DHCP Snooping and DHCP Option 82</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge</code> <code>/interface bridge port</code></p>
+<p><br />
+Starting from RouterOS version 6.43, bridge supports DHCP Snooping and DHCP Option 82. The DHCP Snooping is a Layer2 security feature, that limits unauthorized DHCP servers from providing a malicious information to users. In RouterOS you can specify which bridge ports are trusted (where known DHCP server resides and DHCP messages should be forwarded) and which are untrusted (usually used for access ports, received DHCP server messages will be dropped). The DHCP Option 82 is an additional information (Agent Circuit ID and Agent Remote ID) provided by DHCP Snooping enabled devices that allows identifying the device itself and DHCP clients.
+</p>
+<div class="center"><div class="thumb tnone"><div class="thumbinner" style="width:702px;"><a href="/wiki/File:Dhcp_snooping.png" class="image"><img alt="Alt text" src="/images/6/6c/Dhcp_snooping.png" width="700" height="327" class="thumbimage" /></a>  <div class="thumbcaption"><div class="magnify"><a href="/wiki/File:Dhcp_snooping.png" class="internal" title="Enlarge"></a></div>DHCP Snooping and Option 82 setup</div></div></div></div>
+<p>In this example, SW1 and SW2 are DHCP Snooping and Option 82 enabled devices. First, we need to create a bridge, assign interfaces and mark trusted ports. Use these commands on <b>SW1</b>:
+</p>
+<pre>
+/interface bridge
+add name=bridge
+/interface bridge port
+add bridge=bridge interface=ether1
+add bridge=bridge interface=ether2 trusted=yes
+</pre>
+<p>For SW2 configuration will be similar, but we also need to mark ether1 as trusted, because this interface is going to receive DHCP messages with Option 82 already added. You need to mark all ports as trusted if they are going to receive DHCP messages with added Option 82, otherwise these messages will be dropped. Also, we add ether3 to the same bridge and leave this port untrusted, imagine there is an unauthorized (rogue) DHCP server. Use these commands on <b>SW2</b>:
+</p>
+<pre>
+/interface bridge
+add name=bridge
+/interface bridge port
+add bridge=bridge interface=ether1 trusted=yes
+add bridge=bridge interface=ether2 trusted=yes
+add bridge=bridge interface=ether3
+</pre>
+<p>Then we need to enable DHCP Snooping and Option 82. In case your DHCP server does not support DHCP Option 82 or you do not implement any Option 82 related policies, this option can be disabled. Use these commands on <b>SW1</b> and <b>SW2</b>:
+</p>
+<pre>
+/interface bridge
+set [find where name="bridge"] dhcp-snooping=yes add-dhcp-option82=yes
+</pre>
+<p>Now both devices will analyze what DHCP messages are received on bridge ports. The <b>SW1</b> is responsible for adding and removing the DHCP Option 82. The <b>SW2</b> will limit rogue DHCP server form receiving any discovery messages and drop malicious DHCP server messages from ether3.
+</p>
+<div id="shbox" style="border-width:1px; border-color:lightgrey; padding: 2px 5px 2px 10px; min-height:56px; border-style:solid; font-size: 0.9em; width=500px; display: block; margin-top:20px">
+<div class="floatleft"><a href="/wiki/File:Icon-note.png" class="image"><img alt="Icon-note.png" src="/images/thumb/e/ee/Icon-note.png/56px-Icon-note.png" width="56" height="56" srcset="/images/thumb/e/ee/Icon-note.png/84px-Icon-note.png 1.5x, /images/thumb/e/ee/Icon-note.png/112px-Icon-note.png 2x" /></a></div>
+<p style="margin-top:10px; margin-left: 56px;"><b>Note:</b>  Currently only CRS3xx devices fully support hardware DHCP Snooping and Option 82. For CRS1xx and CRS2xx series switches it is possible to use DHCP Snooping along with VLAN switching, but then you must make sure that DHCP packets are sent out with the correct VLAN tag using egress ACL rules. Other devices are capable of using DHCP Snooping and Option 82 features along with hardware offloading, but you must make sure that there is no VLAN related configuration applied on the device, otherwise DHCP Snooping and Option 82 might not work properly. See <a href="/wiki/Switch_Chip_Features#Bridge_Hardware_Offloading" class="mw-redirect" title="Switch Chip Features"> Bridge Hardware Offloading</a> section with supported features.</p></div>
+<p><br style="clear:both" />
+</p>
+<h1><span class="mw-headline" id="Bridge_Firewall">Bridge Firewall</span></h1>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge filter, /interface bridge nat</code></p>
+<p><br />
+</p>
+<p>The bridge firewall implements packet filtering and thereby provides security functions that are used to manage data flow to, from and through bridge.</p>
+<p><a href="/wiki/Packet_Flow" class="mw-redirect" title="Packet Flow"> Packet flow diagram</a> shows how packets are processed through router. It is possible to force bridge traffic to go through <code>/ip firewall filter</code> rules (see: <a href="#Bridge_Settings"> Bridge Settings</a>)</p>
+<p>
+There are two bridge firewall tables:
+
+<ul><li><b>filter</b> - bridge firewall with three predefined chains:
+<ul><li><b>input</b> - filters packets, where the destination is the bridge (including those packets that will be routed, as they are destined to the bridge MAC address anyway)</li>
+<li><b>output</b> - filters packets, which come from the bridge (including those packets that has been routed normally)</li>
+<li><b>forward</b> - filters packets, which are to be bridged (note: this chain is not applied to the packets that should be routed through the router, just to those that are traversing between the ports of the same bridge)</li></ul></li>
+<li><b>nat</b> - bridge network address translation provides ways for changing source/destination MAC addresses of the packets traversing a bridge. Has two built-in chains:
+<ul><li><b>srcnat</b> - used for "hiding" a host or a network behind a different MAC address. This chain is applied to the packets leaving the router through a bridged interface</li>
+<li><b>dstnat</b> - used for redirecting some packets to other destinations</li></ul></li></ul>
+</p>
+<p>
+You can put packet marks in bridge firewall (filter and NAT), which are the same as the packet marks in IP firewall put by <code>'/ip firewall mangle'</code>. In this way, packet marks put by bridge firewall can be used in 'IP firewall', and vice versa.
+</p>
+<p>
+General bridge firewall properties are described in this section. Some parameters that differ between nat and filter rules are described in further sections.
+</p>
+<h2><span class="mw-headline" id="Properties_2">Properties</span></h2>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>802.3-sap</b></var> (<em>integer</em>; Default: )</td>
+    <td>DSAP (Destination Service Access Point) and SSAP (Source Service Access Point) are 2 one byte fields, which identify the network protocol entities which use the link layer service. These bytes are always equal. Two hexadecimal digits may be specified here to match a SAP byte.</td>
+</tr>
+
+<tr>
+    <td><var><b>802.3-type</b></var> (<em>integer</em>; Default: )</td>
+    <td>Ethernet protocol type, placed after the IEEE 802.2 frame header. Works only if 802.3-sap is 0xAA (SNAP - Sub-Network Attachment Point header). For example, AppleTalk can be indicated by SAP code of 0xAA followed by a SNAP type code of 0x809B.</td>
+</tr>
+
+
+<tr>
+    <td><var><b>action</b></var> (<em>accept | drop | jump | log | mark-packet | passthrough | return | set-priority</em>; Default: )</td>
+    <td>Action to take if packet is matched by the rule: 
+<ul><li> <var>accept</var> - accept the packet. Packet is not passed to next firewall rule</li>
+<li> <var>drop</var> - silently drop the packet</li>
+<li> <var>jump</var> - jump to the user defined chain specified by the value of <code>jump-target</code> parameter </li>
+<li> <var>log</var> - add a message to the system log containing following data: in-interface, out-interface, src-mac, protocol, src-ip:port-&gt;dst-ip:port and length of the packet. After packet is matched it is passed to next rule in the list, similar as <code>passthrough</code></li>
+<li> <var>mark-packet</var> - place a mark specified by the new-packet-mark parameter on a packet that matches the rule</li>
+<li> <var>passthrough</var> - if packet is matched by the rule, increase counter and go to next rule (useful for statistics)</li>
+<li> <var>return</var> - passes control back to the chain from where the jump took place</li>
+<li> <var>set-priority</var> - set priority specified by the new-priority parameter on the packets sent out through a link that is capable of transporting priority (VLAN or WMM-enabled wireless interface). <a href="/wiki/WMM#How_to_set_priority" class="mw-redirect" title="WMM"> Read more&gt;</a></td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>arp-dst-address</b></var> (<em>IP address</em>; Default: )</td>
+    <td>ARP destination IP address.</td>
+</tr>
+
+<tr>
+    <td><var><b>arp-dst-mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>ARP destination MAC address</td>
+</tr>
+
+<tr>
+    <td><var><b>arp-gratuitous</b></var> (<em>yes | no</em>; Default: )</td>
+    <td>Matches ARP gratuitous packets.</td>
+</tr>
+
+<tr>
+    <td><var><b>arp-hardware-type</b></var> (<em>integer</em>; Default: <b>1</b>)</td>
+    <td>ARP hardware type. This is normally Ethernet (Type 1).</td>
+</tr>
+
+<tr>
+    <td><var><b>arp-opcode</b></var> (<em>arp-nak | drarp-error | drarp-reply | drarp-request | inarp-reply | inarp-request | reply | reply-reverse | request | request-reverse</em>; Default: )</td>
+    <td>ARP opcode (packet type)
+<ul><li> <var>arp-nak</var> - negative ARP reply (rarely used, mostly in ATM networks) </li>
+<li> <var>drarp-error</var> - Dynamic RARP error code, saying that an IP address for the given MAC address can not be allocated </li>
+<li> <var>drarp-reply</var> - Dynamic RARP reply, with a temporaty IP address assignment for a host </li>
+<li> <var>drarp-request</var> - Dynamic RARP request to assign a temporary IP address for the given MAC address </li>
+<li> <var>inarp-reply</var> - InverseARP Reply</li>
+<li> <var>inarp-request</var> - InverseARP Request</li>
+<li> <var>reply</var> - standard ARP reply with a MAC address </li>
+<li> <var>reply-reverse</var> - reverse ARP (RARP) reply with an IP address assigned </li>
+<li> <var>request</var> - standard ARP request to a known IP address to find out unknown MAC address </li>
+<li> <var>request-reverse</var> - reverse ARP (RARP) request to a known MAC address to find out unknown IP address (intended to be used by hosts to find out their own IP address, similarly to DHCP service)</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>arp-packet-type</b></var> (<em>integer 0..65535 | hex 0x0000-0xffff</em>; Default: )</td>
+    <td>ARP Packet Type.</td>
+</tr>
+
+<tr>
+    <td><var><b>arp-src-address</b></var> (<em>IP address</em>; Default: )</td>
+    <td>ARP source IP address.</td>
+</tr>
+
+<tr>
+    <td><var><b>arp-src-mac-address</b></var> (<em>MAC addres</em>; Default: )</td>
+    <td>ARP source MAC address.</td>
+</tr>
+
+<tr>
+    <td><var><b>chain</b></var> (<em>text</em>; Default: )</td>
+    <td>Bridge firewall chain, which the filter is functioning in (either a built-in one, or a user-defined one).</td>
+</tr>
+
+<tr>
+    <td><var><b>dst-address</b></var> (<em>IP address</em>; Default: )</td>
+    <td>Destination IP address (only if MAC protocol is set to IP).</td>
+</tr>
+
+<tr>
+    <td><var><b>dst-mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>Destination MAC address.</td>
+</tr>
+
+<tr>
+    <td><var><b>dst-port</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>Destination port number or range (only for TCP or UDP protocols).</td>
+</tr>
+
+<tr>
+    <td><var><b>in-bridge</b></var> (<em>name</em>; Default: )</td>
+    <td>Bridge interface through which the packet is coming in.</td>
+</tr>
+
+<tr>
+    <td><var><b>in-interface</b></var> (<em>name</em>; Default: )</td>
+    <td>Physical interface (i.e., bridge port) through which the packet is coming in.</td>
+</tr>
+
+<tr>
+    <td><var><b>in-interface-list</b></var> (<em>name</em>; Default: )</td>
+    <td>Set of interfaces defined in <a href="/wiki/Manual:Interface/List" title="Manual:Interface/List"> interface list</a>. Works the same as <code>in-interface</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>ingress-priority</b></var> (<em>integer 0..63</em>; Default: )</td>
+    <td>Matches the priority of an ingress packet. Priority may be derived from VLAN, WMM, DSCP or MPLS EXP bit. <a href="/wiki/WMM" class="mw-redirect" title="WMM"> read more&#187;</a></td>
+</tr>
+
+<tr>
+    <td><var><b>ip-protocol</b></var> (<em>dccp | ddp | egp | encap | etherip | ggp | gre | hmp | icmp | icmpv6 | idpr-cmtp | igmp | ipencap | ipip | ipsec-ah | ipsec-esp | ipv6 | ipv6-frag | ipv6-nonxt | ipv6-opts | ipv6-route | iso-tp4 | l2tp | ospf | pim | pup | rdp | rspf | rsvp | sctp | st | tcp | udp | udp-lite | vmtp | vrrp | xns-idp | xtp</em>; Default: )</td>
+    <td>IP protocol (only if MAC protocol is set to IPv4)
+<ul><li> <var>dccp</var> - Datagram Congestion Control Protocol</li>
+<li> <var>ddp</var> - Datagram Delivery Protocol</li>
+<li> <var>egp</var> - Exterior Gateway Protocol</li>
+<li> <var>encap</var> - Encapsulation Header</li>
+<li> <var>etherip</var> - Ethernet-within-IP Encapsulation</li>
+<li> <var>ggp</var> - Gateway-to-Gateway Protocol</li>
+<li> <var>gre</var> - Generic Routing Encapsulation</li>
+<li> <var>hmp</var> - Host Monitoring Protocol</li>
+<li> <var>icmp</var> - IPv4 Internet Control Message Protocol</li>
+<li> <var>icmpv6</var> - IPv6 Internet Control Message Protocol</li>
+<li> <var>idpr-cmtp</var> - Inter-Domain Policy Routing Control Message Transport Protocol </li>
+<li> <var>igmp</var> - Internet Group Management Protocol</li>
+<li> <var>ipencap</var> - IP in IP (encapsulation)</li>
+<li> <var>ipip</var> - IP-within-IP Encapsulation Protocol</li>
+<li> <var>ipsec-ah</var> - IPsec Authentication Header</li>
+<li> <var>ipsec-esp</var> - IPsec Encapsulating Security Payload</li>
+<li> <var>ipv6</var> - Internet Protocol version 6</li>
+<li> <var>ipv6-frag</var> - Fragment Header for IPv6</li>
+<li> <var>ipv6-nonxt</var> - No Next Header for IPv6</li>
+<li> <var>ipv6-opts</var> - Destination Options for IPv6</li>
+<li> <var>ipv6-route</var> - Routing Header for IPv6</li>
+<li> <var>iso-tp4</var> - ISO Transport Protocol Class 4</li>
+<li> <var>l2tp</var> - Layer Two Tunneling Protocol</li>
+<li> <var>ospf</var> - Open Shortest Path First</li>
+<li> <var>pim</var> - Protocol Independent Multicast</li>
+<li> <var>pup</var> - PARC Universal Packet</li>
+<li> <var>rdp</var> - Reliable Data Protocol</li>
+<li> <var>rspf</var> - Radio Shortest Path First</li>
+<li> <var>rsvp</var> - Reservation Protocol</li>
+<li> <var>sctp</var> - Stream Control Transmission Protocol</li>
+<li> <var>st</var> - Internet Stream Protocol</li>
+<li> <var>tcp</var> - Transmission Control Protocol</li>
+<li> <var>udp</var> - User Datagram Protocol</li>
+<li> <var>udp-lite</var> - Lightweight User Datagram Protocol</li>
+<li> <var>vmtp</var> - Versatile Message Transaction Protocol</li>
+<li> <var>vrrp</var> - Virtual Router Redundancy Protocol</li>
+<li> <var>xns-idp</var> - Xerox Network Systems Internet Datagram Protocol</li>
+<li> <var>xtp</var> - Xpress Transport Protocol</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>jump-target</b></var> (<em>name</em>; Default: )</td>
+    <td>If <code>action=jump</code> specified, then specifies the user-defined firewall chain to process the packet.</td>
+</tr>
+
+<tr>
+    <td><var><b>limit</b></var> (<em>integer/time,integer</em>; Default: )</td>
+    <td>Restricts packet match rate to a given limit.
+<ul><li> <var>count</var> - maximum average packet rate, measured in packets per second (pps), unless followed by Time option </li>
+<li> <var>time</var> - specifies the time interval over which the packet rate is measured </li>
+<li> <var>burst</var> - number of packets to match in a burst</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>log-prefix</b></var> (<em>text</em>; Default: )</td>
+    <td>Defines the prefix to be printed before the logging information.</td>
+</tr>
+
+<tr>
+    <td><var><b>mac-protocol</b></var> (<em>802.2 | arp | homeplug-av | ip | ipv6 | ipx | length | lldp | loop-protect | mpls-multicast | mpls-unicast | packing-compr | packing-simple | pppoe | pppoe-discovery | rarp | service-vlan | vlan | integer 0..65535 | hex 0x0000-0xffff</em>; Default: )</td>
+    <td>Ethernet payload type (MAC-level protocol). To match protocol type for VLAN encapsulated frames (0x8100 or 0x88a8), a <var>vlan-encap</var> property should be used.
+<ul><li> <var>802.2</var> - 802.2 Frames (0x0004)</li>
+<li> <var>arp</var> - Address Resolution Protocol (0x0806)</li>
+<li> <var>homeplug-av</var> - HomePlug AV MME (0x88E1)</li>
+<li> <var>ip</var> - Internet Protocol version 4 (0x0800)</li>
+<li> <var>ipv6</var> - Internet Protocol Version 6 (0x86DD)</li>
+<li> <var>ipx</var> - Internetwork Packet Exchange (0x8137)</li>
+<li> <var>length</var> - Packets with length field (0x0000-0x05DC)</li>
+<li> <var>lldp</var> - Link Layer Discovery Protocol (0x88CC)</li>
+<li> <var>loop-protect</var> - Loop Protect Protocol (0x9003)</li>
+<li> <var>mpls-multicast</var> - MPLS multicast (0x8848)</li>
+<li> <var>mpls-unicast</var> - MPLS unicast (0x8847)</li>
+<li> <var>packing-compr</var> - Encapsulated packets with compressed <a href="/wiki/Manual:IP/Packing" title="Manual:IP/Packing"> IP packing</a> (0x9001)</li>
+<li> <var>packing-simple</var> - Encapsulated packets with simple <a href="/wiki/Manual:IP/Packing" title="Manual:IP/Packing"> IP packing</a> (0x9000)</li>
+<li> <var>pppoe</var> - PPPoE Session Stage (0x8864)</li>
+<li> <var>pppoe-discovery</var> - PPPoE Discovery Stage (0x8863)</li>
+<li> <var>rarp</var> - Reverse Address Resolution Protocol (0x8035)</li>
+<li> <var>service-vlan</var> - Provider Bridging (IEEE 802.1ad) &amp; Shortest Path Bridging IEEE 802.1aq (0x88A8) </li>
+<li> <var>vlan</var> - VLAN-tagged frame (IEEE 802.1Q) and Shortest Path Bridging IEEE 802.1aq with NNI compatibility (0x8100)</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>out-bridge</b></var> (<em>name</em>; Default: )</td>
+    <td>Outgoing bridge interface.</td>
+</tr>
+
+<tr>
+    <td><var><b>out-interface</b></var> (<em>name</em>; Default: )</td>
+    <td>Interface that the packet is leaving the bridge through.</td>
+</tr>
+
+<tr>
+    <td><var><b>out-interface-list</b></var> (<em>name</em>; Default: )</td>
+    <td>Set of interfaces defined in <a href="/wiki/Manual:Interface/List" title="Manual:Interface/List"> interface list</a>. Works the same as <code>out-interface</code>.</td>
+</tr>
+
+<tr>
+    <td><var><b>packet-mark</b></var> (<em>name</em>; Default: )</td>
+    <td>Match packets with certain packet mark.</td>
+</tr>
+
+<tr>
+    <td><var><b>packet-type</b></var> (<em>broadcast | host | multicast | other-host</em>; Default: )</td>
+    <td>MAC frame type:
+<ul><li> <var>broadcast</var> - broadcast MAC packet </li>
+<li> <var>host</var> - packet is destined to the bridge itself </li>
+<li> <var>multicast</var> - multicast MAC packet </li>
+<li> <var>other-host</var> - packet is destined to some other unicast address, not to the bridge itself</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>src-address</b></var> (<em>IP address</em>; Default: )</td>
+    <td>Source IP address (only if MAC protocol is set to IPv4).</td>
+</tr>
+
+<tr>
+    <td><var><b>src-mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>Source MAC address.</td>
+</tr>
+
+<tr>
+    <td><var><b>src-port</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>Source port number or range (only for TCP or UDP protocols).</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-flags</b></var> (<em>topology-change | topology-change-ack</em>; Default: )</td>
+    <td>The BPDU (Bridge Protocol Data Unit) flags. Bridge exchange configuration messages named BPDU periodically for preventing loops
+<ul><li> <var>topology-change</var> - topology change flag is set when a bridge detects port state change, to force all other bridges to drop their host tables and recalculate network topology </li>
+<li> <var>topology-change-ack</var> - topology change acknowledgement flag is sent in replies to the notification packets</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>stp-forward-delay</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>Forward delay timer.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-hello-time</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>STP hello packets time.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-max-age</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>Maximal STP message age.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-msg-age</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>STP message age.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-port</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>STP port identifier.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-root-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>Root bridge MAC address.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-root-cost</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>Root bridge cost.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-root-priority</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>Root bridge priority.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-sender-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>STP message sender MAC address.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-sender-priority</b></var> (<em>integer 0..65535</em>; Default: )</td>
+    <td>STP sender priority.</td>
+</tr>
+
+<tr>
+    <td><var><b>stp-type</b></var> (<em>config | tcn</em>; Default: )</td>
+    <td>The BPDU type:
+<ul><li> <var>config</var> - configuration BPDU </li>
+<li> <var>tcn</var> - topology change notification</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>tls-host</b></var> (<em>string</em>; Default: )</td>
+    <td>Allows to match https traffic based on TLS SNI hostname. Accepts <a rel="nofollow" class="external text" href="https://en.wikipedia.org/wiki/Glob_(programming)">GLOB syntax</a> for wildcard matching. Note that matcher will not be able to match hostname if TLS handshake frame is fragmented into multiple TCP segments (packets).</td>
+</tr>
+
+<tr>
+    <td><var><b>vlan-encap</b></var> (<em>802.2 | arp | ip | ipv6 | ipx | length | mpls-multicast | mpls-unicast | pppoe | pppoe-discovery | rarp | vlan | integer 0..65535 | hex 0x0000-0xffff</em>; Default: )</td>
+    <td>Matches the MAC protocol type encapsulated in the VLAN frame.</td>
+</tr>
+
+<tr>
+    <td><var><b>vlan-id</b></var> (<em>integer 0..4095</em>; Default: )</td>
+    <td>Matches the VLAN identifier field.</td>
+</tr>
+
+<tr>
+    <td><var><b>vlan-priority</b></var> (<em>integer 0..7</em>; Default: )</td>
+    <td>Matches the VLAN priority (priority code point)</td>
+</tr>
+</table>
+<p><br />
+</p>
+<h3><span class="mw-headline" id="Notes">Notes</span></h3>
+<ul><li>STP matchers are only valid if destination MAC address is 01:80:C2:00:00:00/FF:FF:FF:FF:FF:FF (Bridge Group address), also <code>stp</code> should be enabled.</li></ul>
+<ul><li>ARP matchers are only valid if <var>mac-protocol</var> is <code>arp</code> or <code>rarp</code></li></ul>
+<ul><li>VLAN matchers are only valid for <code>0x8100</code> or <code>0x88a8</code> ethernet protocols</li></ul>
+<ul><li>IP or IPv6 related matchers are only valid if <var>mac-protocol</var> is either set to <code>ip</code> or <code>ipv6</code></li></ul>
+<ul><li>802.3 matchers are only consulted if the actual frame is compliant with IEEE 802.2 and IEEE 802.3 standards (<b>note</b>: it is not the industry-standard Ethernet frame format used in most networks worldwide!). These matchers are ignored for other packets.</li></ul>
+<h2><span class="mw-headline" id="Bridge_Packet_Filter">Bridge Packet Filter</span></h2>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge filter</code></p>
+<p><br />
+</p>
+<p>This section describes bridge packet filter specific filtering options, that are specific to <code>'/interface bridge filter'</code>.</p>
+<h3><span class="mw-headline" id="Properties_3">Properties</span></h3>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>action</b></var> (<em>accept | drop | jump | log | mark-packet | passthrough | return | set-priority</em>; Default: <b>accept</b>)</td>
+    <td>Action to take if packet is matched by the rule: 
+<ul><li> <var>accept</var> - accept the packet. No action, i.e., the packet is passed through without undertaking any action, and no more rules are processed in the relevant list/chain </li>
+<li> <var>drop</var> - silently drop the packet (without sending the ICMP reject message) </li>
+<li> <var>jump</var> - jump to the chain specified by the value of the jump-target argument </li>
+<li> <var>log</var> - add a message to the system log containing following data: in-interface, out-interface, src-mac, dst-mac, eth-proto, protocol, src-ip:port-&gt;dst-ip:port and length of the packet. After packet is matched it is passed to next rule in the list, similar as passthrough</li>
+<li> <var>mark</var> - mark the packet to use the mark later </li>
+<li> <var>passthrough</var> - ignore this rule and go on to the next one. Acts the same way as a disabled rule, except for ability to count packets </li>
+<li> <var>return</var> - return to the previous chain, from where the jump took place</li>
+<li> <var>set-priority</var> - set priority specified by the new-priority parameter on the packets sent out through a link that is capable of transporting priority (VLAN or WMM-enabled wireless interface). <a href="/wiki/WMM#How_to_set_priority" class="mw-redirect" title="WMM"> Read more&gt;</a></td></li></ul>
+</tr>
+</table>
+<h2><span class="mw-headline" id="Bridge_NAT">Bridge NAT</span></h2>
+<p id="shbox"><b>Sub-menu:</b> <code>/interface bridge nat</code></p>
+<p><br />
+</p>
+<p>This section describes bridge NAT options, that are specific to <code>'/interface bridge nat'</code>.</p>
+<h3><span class="mw-headline" id="Properties_4">Properties</span></h3>
+<table class="styled_table">
+<tr>
+   <th width="40%">Property</th>
+   <th>Description</th>
+</tr>
+
+<tr>
+    <td><var><b>action</b></var> (<em>accept | drop | jump | mark-packet | redirect | set-priority | arp-reply | dst-nat | log |  passthrough | return | src-nat</em>; Default: <b>accept</b>)</td>
+    <td>Action to take if packet is matched by the rule:
+<ul><li> <var>accept</var> - accept the packet. No action, i.e., the packet is passed through without undertaking any action, and no more rules are processed in the relevant list/chain </li>
+<li> <var>arp-reply</var> - send a reply to an ARP request (any other packets will be ignored by this rule) with the specified MAC address (only valid in dstnat chain) </li>
+<li> <var>drop</var> - silently drop the packet (without sending the ICMP reject message) </li>
+<li> <var>dst-nat</var> - change destination MAC address of a packet (only valid in dstnat chain) </li>
+<li> <var>jump</var> - jump to the chain specified by the value of the jump-target argument </li>
+<li> <var>log</var> - log the packet </li>
+<li> <var>mark</var> - mark the packet to use the mark later </li>
+<li> <var>passthrough</var> - ignore this rule and go on to the next one. Acts the same way as a disabled rule, except for ability to count packets </li>
+<li> <var>redirect</var> - redirect the packet to the bridge itself (only valid in dstnat chain) </li>
+<li> <var>return</var> - return to the previous chain, from where the jump took place</li>
+<li> <var>set-priority</var> - set priority specified by the new-priority parameter on the packets sent out through a link that is capable of transporting priority (VLAN or WMM-enabled wireless interface). <a href="/wiki/WMM#How_to_set_priority" class="mw-redirect" title="WMM"> Read more&gt;</a></li>
+<li> <var>src-nat</var> - change source MAC address of a packet (only valid in srcnat chain)</td></li></ul>
+</tr>
+
+<tr>
+    <td><var><b>to-arp-reply-mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>Source MAC address to put in Ethernet frame and ARP payload, when <code>action=arp-reply</code> is selected</td>
+</tr>
+
+<tr>
+    <td><var><b>to-dst-mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>Destination MAC address to put in Ethernet frames, when <code>action=dst-nat</code> is selected</td>
+</tr>
+
+<tr>
+    <td><var><b>to-src-mac-address</b></var> (<em>MAC address</em>; Default: )</td>
+    <td>Source MAC address to put in Ethernet frames, when <code>action=src-nat</code> is selected</td>
+</tr>
+</table>
+<h1><span class="mw-headline" id="See_also">See also</span></h1>
+<ul><li> <a href="/wiki/Manual:CRS1xx/2xx_series_switches" title="Manual:CRS1xx/2xx series switches"> CRS1xx/2xx series switches</a></li>
+<li> <a href="/wiki/Manual:CRS3xx_series_switches" title="Manual:CRS3xx series switches"> CRS3xx series switches</a></li>
+<li> <a href="/wiki/Manual:Switch_Chip_Features" title="Manual:Switch Chip Features"> Swith chip features</a></li>
+<li> <a href="/wiki/Manual:Maximum_Transmission_Unit_on_RouterBoards" title="Manual:Maximum Transmission Unit on RouterBoards"> MTU on RouterBOARD</a></li>
+<li> <a href="/wiki/Manual:Layer2_misconfiguration" title="Manual:Layer2 misconfiguration"> Layer2 misconfiguration</a></li>
+<li> <a href="/wiki/Manual:Bridge_VLAN_Table" title="Manual:Bridge VLAN Table"> Bridge VLAN Table</a></li>
+<li> <a href="/wiki/Manual:Wireless_VLAN_Trunk" title="Manual:Wireless VLAN Trunk"> Wireless VLAN Trunk</a></li>
+<li> <a href="/wiki/Manual:VLANs_on_Wireless" title="Manual:VLANs on Wireless"> VLANs on Wireless</a></li></ul>
+<p><b>[</b> <a href="#content">Top</a> | <a href="/wiki/Manual:TOC" title="Manual:TOC">Back to Content</a> <b>]</b>
+</p>
+<!-- 
+NewPP limit report
+Cached time: 20200911132817
+Cache expiry: 86400
+Dynamic content: false
+CPU time usage: 0.213 seconds
+Real time usage: 0.268 seconds
+Preprocessor visited node count: 3383/1000000
+Preprocessor generated node count: 11349/1000000
+Post‐expand include size: 71608/2097152 bytes
+Template argument size: 49797/2097152 bytes
+Highest expansion depth: 3/40
+Expensive parser function count: 0/100
+-->
+<!--
+Transclusion expansion time report (%,ms,calls,template)
+100.00%   71.997      1 -total
+ 37.74%   27.170    127 Template:Mr-arg-table
+  6.54%    4.709      8 Template:Mr-arg-table-end
+  6.04%    4.348     16 Template:Note
+  5.63%    4.051     13 Template:Warning
+  5.00%    3.603      8 Template:Mr-arg-table-h
+  4.76%    3.428      1 Template:Cont
+  4.13%    2.972      1 Template:Versions
+-->
+
+<!-- Saved in parser cache with key wiki_mikrotik_com:pcache:idhash:4292-0!*!0!!en!5!* and timestamp 20200911132816 and revision id 34205
+ -->
+</div>					<div class="printfooter">
+						Retrieved from "<a dir="ltr" href="https://wiki.mikrotik.com/index.php?title=Manual:Interface/Bridge&amp;oldid=34205">https://wiki.mikrotik.com/index.php?title=Manual:Interface/Bridge&amp;oldid=34205</a>"					</div>
+				<div id="catlinks" class="catlinks" data-mw="interface"><div id="mw-normal-catlinks" class="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Categories</a>: <ul><li><a href="/wiki/Category:Manual" title="Category:Manual">Manual</a></li><li><a href="/wiki/Category:Interface" title="Category:Interface">Interface</a></li><li><a href="/wiki/Category:Bridging_and_switching" title="Category:Bridging and switching">Bridging and switching</a></li></ul></div></div>				<div class="visualClear"></div>
+							</div>
+		</div>
+		<div id="mw-navigation">
+			<h2>Navigation menu</h2>
+
+			<div id="mw-head">
+									<div id="p-personal" role="navigation" class="" aria-labelledby="p-personal-label">
+						<h3 id="p-personal-label">Personal tools</h3>
+						<ul>
+							<li id="pt-login"><a href="/index.php?title=Special:UserLogin&amp;returnto=Manual%3AInterface%2FBridge" title="You are encouraged to log in; however, it is not mandatory [o]" accesskey="o">Log in</a></li>						</ul>
+					</div>
+									<div id="left-navigation">
+										<div id="p-namespaces" role="navigation" class="vectorTabs" aria-labelledby="p-namespaces-label">
+						<h3 id="p-namespaces-label">Namespaces</h3>
+						<ul>
+															<li  id="ca-nstab-manual" class="selected"><span><a href="/wiki/Manual:Interface/Bridge" >Manual</a></span></li>
+															<li  id="ca-talk" class="new"><span><a href="/index.php?title=Manual_talk:Interface/Bridge&amp;action=edit&amp;redlink=1"  title="Discussion about the content page [t]" accesskey="t" rel="discussion">Discussion</a></span></li>
+													</ul>
+					</div>
+										<div id="p-variants" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-variants-label">
+												<h3 id="p-variants-label">
+							<span>Variants</span><a href="#"></a>
+						</h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+									</div>
+				<div id="right-navigation">
+										<div id="p-views" role="navigation" class="vectorTabs" aria-labelledby="p-views-label">
+						<h3 id="p-views-label">Views</h3>
+						<ul>
+															<li id="ca-view" class="selected"><span><a href="/wiki/Manual:Interface/Bridge" >Read</a></span></li>
+															<li id="ca-viewsource"><span><a href="/index.php?title=Manual:Interface/Bridge&amp;action=edit"  title="This page is protected.&#10;You can view its source [e]" accesskey="e">View source</a></span></li>
+															<li id="ca-history" class="collapsible"><span><a href="/index.php?title=Manual:Interface/Bridge&amp;action=history"  title="Past revisions of this page [h]" accesskey="h">View history</a></span></li>
+													</ul>
+					</div>
+										<div id="p-cactions" role="navigation" class="vectorMenu emptyPortlet" aria-labelledby="p-cactions-label">
+						<h3 id="p-cactions-label"><span>More</span><a href="#"></a></h3>
+
+						<div class="menu">
+							<ul>
+															</ul>
+						</div>
+					</div>
+										<div id="p-search" role="search">
+						<h3>
+							<label for="searchInput">Search</label>
+						</h3>
+
+						<form action="/index.php" id="searchform">
+							<div id="simpleSearch">
+							<input type="search" name="search" placeholder="Search MikroTik Wiki" title="Search MikroTik Wiki [f]" accesskey="f" id="searchInput"/><input type="hidden" value="Special:Search" name="title"/><input type="submit" name="fulltext" value="Search" title="Search the pages for this text" id="mw-searchButton" class="searchButton mw-fallbackSearchButton"/><input type="submit" name="go" value="Go" title="Go to a page with this exact name if it exists" id="searchButton" class="searchButton"/>							</div>
+						</form>
+					</div>
+									</div>
+			</div>
+			<div id="mw-panel">
+				<div id="p-logo" role="banner"><a class="mw-wiki-logo" href="/wiki/Main_Page"  title="Visit the main page"></a></div>
+						<div class="portal" role="navigation" id='p-navigation' aria-labelledby='p-navigation-label'>
+			<h3 id='p-navigation-label'>Navigation</h3>
+
+			<div class="body">
+									<ul>
+						<li id="n-mainpage"><a href="/wiki/Main_Page" title="Visit the main page [z]" accesskey="z">Main Page</a></li><li id="n-recentchanges"><a href="/wiki/Special:RecentChanges" title="A list of recent changes in the wiki [r]" accesskey="r">Recent changes</a></li>					</ul>
+							</div>
+		</div>
+			<div class="portal" role="navigation" id='p-tb' aria-labelledby='p-tb-label'>
+			<h3 id='p-tb-label'>Tools</h3>
+
+			<div class="body">
+									<ul>
+						<li id="t-whatlinkshere"><a href="/wiki/Special:WhatLinksHere/Manual:Interface/Bridge" title="A list of all wiki pages that link here [j]" accesskey="j">What links here</a></li><li id="t-recentchangeslinked"><a href="/wiki/Special:RecentChangesLinked/Manual:Interface/Bridge" rel="nofollow" title="Recent changes in pages linked from this page [k]" accesskey="k">Related changes</a></li><li id="t-specialpages"><a href="/wiki/Special:SpecialPages" title="A list of all special pages [q]" accesskey="q">Special pages</a></li><li id="t-print"><a href="/index.php?title=Manual:Interface/Bridge&amp;printable=yes" rel="alternate" title="Printable version of this page [p]" accesskey="p">Printable version</a></li><li id="t-permalink"><a href="/index.php?title=Manual:Interface/Bridge&amp;oldid=34205" title="Permanent link to this revision of the page">Permanent link</a></li><li id="t-info"><a href="/index.php?title=Manual:Interface/Bridge&amp;action=info" title="More information about this page">Page information</a></li>					</ul>
+							</div>
+		</div>
+				</div>
+		</div>
+		<div id="footer" role="contentinfo">
+							<ul id="footer-info">
+											<li id="footer-info-lastmod"> This page was last edited on 31 August 2020, at 16:18.</li>
+									</ul>
+							<ul id="footer-places">
+											<li id="footer-places-privacy"><a href="/wiki/MikroTik_Wiki:Privacy_policy" title="MikroTik Wiki:Privacy policy">Privacy policy</a></li>
+											<li id="footer-places-about"><a href="/wiki/MikroTik_Wiki:About" title="MikroTik Wiki:About">About MikroTik Wiki</a></li>
+											<li id="footer-places-disclaimer"><a href="/wiki/MikroTik_Wiki:General_disclaimer" title="MikroTik Wiki:General disclaimer">Disclaimers</a></li>
+									</ul>
+										<ul id="footer-icons" class="noprint">
+											<li id="footer-poweredbyico">
+							<a href="//www.mediawiki.org/"><img src="/resources/assets/poweredby_mediawiki_88x31.png" alt="Powered by MediaWiki" srcset="/resources/assets/poweredby_mediawiki_132x47.png 1.5x, /resources/assets/poweredby_mediawiki_176x62.png 2x" width="88" height="31"/></a>						</li>
+									</ul>
+						<div style="clear:both"></div>
+		</div>
+		<script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgPageParseReport":{"limitreport":{"cputime":"0.213","walltime":"0.268","ppvisitednodes":{"value":3383,"limit":1000000},"ppgeneratednodes":{"value":11349,"limit":1000000},"postexpandincludesize":{"value":71608,"limit":2097152},"templateargumentsize":{"value":49797,"limit":2097152},"expansiondepth":{"value":3,"limit":40},"expensivefunctioncount":{"value":0,"limit":100},"timingprofile":["100.00%   71.997      1 -total"," 37.74%   27.170    127 Template:Mr-arg-table","  6.54%    4.709      8 Template:Mr-arg-table-end","  6.04%    4.348     16 Template:Note","  5.63%    4.051     13 Template:Warning","  5.00%    3.603      8 Template:Mr-arg-table-h","  4.76%    3.428      1 Template:Cont","  4.13%    2.972      1 Template:Versions"]},"cachereport":{"timestamp":"20200911132817","ttl":86400,"transientcontent":false}}});});</script><script>(window.RLQ=window.RLQ||[]).push(function(){mw.config.set({"wgBackendResponseTime":131});});</script>
+	</body>
+</html>

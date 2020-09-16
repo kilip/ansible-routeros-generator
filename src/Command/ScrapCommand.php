@@ -14,67 +14,47 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Command;
 
-use Psr\Log\LoggerInterface;
-use RouterOS\Generator\Scraper\DocumentationScraper;
+use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
+use RouterOS\Generator\Processor\ScrapingProcessor;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ScrapCommand extends Command
 {
     protected static $defaultName = 'routeros:scrap';
 
     /**
-     * @var DocumentationScraper
+     * @var ConsoleProcessEventSubscriber
      */
-    private $scraper;
+    private $consoleProcessEventSubscriber;
 
     /**
-     * @var LoggerInterface
+     * @var ScrapingProcessor
      */
-    private $logger;
-
-    /**
-     * @var ProgressBar
-     */
-    private $progressBar;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $dispatcher;
-
-    private $progressBarStarted = false;
+    private $scrapingProcessor;
 
     public function __construct(
-        EventDispatcherInterface $dispatcher,
-        LoggerInterface $logger,
-        DocumentationScraper $scraper
+        ConsoleProcessEventSubscriber $consoleProcessEventSubscriber,
+        ScrapingProcessor $scrapingProcessor
     ) {
+        $this->consoleProcessEventSubscriber = $consoleProcessEventSubscriber;
+        $this->scrapingProcessor = $scrapingProcessor;
         parent::__construct(static::$defaultName);
-        $this->scraper = $scraper;
-        $this->logger = $logger;
-        $this->dispatcher = $dispatcher;
     }
 
-    /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     *
-     * @throws \Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface
-     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
-     *
-     * @return int
-     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $scraper = $this->scraper;
-        $scraper->start();
-        $output->writeln('');
-        $output->writeln('Finished');
+        $consoleProcessEventSubscriber = $this->consoleProcessEventSubscriber;
+        $scrapingProcessor = $this->scrapingProcessor;
+        $consoleProcessEventSubscriber->setOutput($output);
+        $scrapingProcessor->process();
+
+        if ($consoleProcessEventSubscriber->hasException()) {
+            $consoleProcessEventSubscriber->renderException();
+
+            return Command::FAILURE;
+        }
 
         return Command::SUCCESS;
     }

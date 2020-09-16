@@ -1,0 +1,19 @@
+name: bridge
+package: interface.bridge
+command: '/interface bridge'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge'
+  table_index: 0
+properties_override:
+  disabled:
+    type: string
+    choices:
+      - 'yes'
+      - 'no'
+    default: 'no'
+  mld_version:
+    type: integer
+    default: 1
+  name:
+    options:
+      - ignore-default

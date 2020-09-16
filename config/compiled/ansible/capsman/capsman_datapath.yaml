@@ -1,0 +1,136 @@
+name: capsman_datapath
+package: capsman
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_capsman_datapath
+export_command: '/caps-man datapath export'
+resource_class_name: CapsmanDatapathResource
+documentation:
+  module: ros_capsman_datapath
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'CAPsMan DataPath Configuration Module'
+  description:
+    - 'This modules manages CAPsMan DataPath Configuration on Mikrotik RouterOS network devices'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        arp:
+          type: str
+          choices: [disabled, enabled, proxy-arp, reply-only]
+          default: enabled
+        bridge:
+          type: str
+        bridge_cost:
+          type: int
+        bridge_horizon:
+          type: int
+        client_to_client_forwarding:
+          type: bool
+          default: 'False'
+        comment:
+          type: str
+        interface_list:
+          type: list
+        l2mtu:
+          type: str
+        local_forwarding:
+          type: bool
+          default: 'False'
+        mtu:
+          type: str
+        name:
+          type: str
+          required: 'True'
+        openflow_switch:
+          type: str
+        vlan_id:
+          type: int
+        vlan_mode:
+          type: str
+          choices: [use-service-tag, use-tag]
+examples:
+  - title: 'Using Merged'
+    name: 'Merge with device configuration'
+    argument_spec:
+      state: merged
+      config:
+        - name: test
+          bridge: br-trunk
+          arp: reply-only
+        - name: new
+          bridge: br-trunk
+          arp: reply-only
+    before: |
+      /caps-man datapath
+      add name=test
+    after: |
+      /caps-man datapath
+      add arp=reply-only bridge=br-trunk name=test
+      add arp=reply-only bridge=br-trunk name=new
+    commands:
+      - '/caps-man datapath set [ find name=test ] arp=reply-only bridge=br-trunk'
+      - '/caps-man datapath add arp=reply-only bridge=br-trunk name=new'
+resource:
+  name: capsman_datapath
+  package: capsman
+  command: '/caps-man datapath'
+  config_type: config
+  keys:
+    - name
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        arp:
+          type: str
+          choices: [disabled, enabled, proxy-arp, reply-only]
+          default: enabled
+        bridge:
+          type: str
+        bridge_cost:
+          type: int
+        bridge_horizon:
+          type: int
+        client_to_client_forwarding:
+          type: bool
+          default: 'False'
+        comment:
+          type: str
+        interface_list:
+          type: list
+        l2mtu:
+          type: str
+        local_forwarding:
+          type: bool
+          default: 'False'
+        mtu:
+          type: str
+        name:
+          type: str
+          required: 'True'
+        openflow_switch:
+          type: str
+        vlan_id:
+          type: int
+        vlan_mode:
+          type: str
+          choices: [use-service-tag, use-tag]

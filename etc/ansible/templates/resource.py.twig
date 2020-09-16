@@ -1,0 +1,17 @@
+{% include "@ansible/header.txt.twig" %}
+from __future__ import absolute_import, division, print_function
+__metaclass__ = type
+
+{{ package|resource_base_import|raw }}
+
+
+class {{ name|classify }}Resource(ResourceBase):
+    resource_name = "{{ name }}"
+    command = "{{ command }}"
+    gather_network_resources = ["{{ name }}"]
+    keys = {{ keys|json_encode|raw }}
+    config_type = "{{ config_type }}"
+{% if supports is defined %}
+    supports = {{ supports|json_encode|raw }}
+{% endif %}
+    argument_spec = {{ argument_spec|to_json(2)|raw }}

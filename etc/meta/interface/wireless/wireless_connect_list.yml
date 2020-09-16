@@ -1,0 +1,17 @@
+name: wireless_connect_list
+package: interface.wireless
+command: '/interface wireless connect-list'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'
+  table_index: 7
+properties_override:
+  ssid:
+    options:
+      - ignore-default
+  interface:
+    required: true
+  signal_range:
+    type: string
+    default: '-120..120'
+keys:
+  - comment

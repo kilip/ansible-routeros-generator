@@ -19,26 +19,37 @@ use Twig\TwigFilter;
 
 class AnsibleExtension extends AbstractExtension
 {
-    /**
-     * @var string
-     */
-    private $modulePrefix;
-
-    public function __construct(
-        string $modulePrefix
-    ) {
-        $this->modulePrefix = $modulePrefix;
-    }
-
     public function getFilters()
     {
         return [
-            new TwigFilter('full_module_name', [$this, 'formatModuleName']),
+            new TwigFilter('ansible_normalize_output', [$this, 'normalizeOutput']),
+            new TwigFilter('resource_base_import', [$this, 'resourceBaseImport']),
         ];
     }
 
-    public function formatModuleName($module)
+    public function normalizeOutput($output)
     {
-        return "{$this->modulePrefix}.{$module}";
+        // replace quoted links
+        $pattern = '#(\[\s+]?)([^\]]+)\]\((.+)(\s+?\".+\")([\s+]?\))#im';
+        $output = preg_replace($pattern, 'L(\\2, \\3)', $output);
+
+        $pattern = '#(\[[\s+]?)([^\]]+)\]\(([^\s?\)]+)([\s+]?\))#im';
+        $output = preg_replace($pattern, 'L(\\2, \\3)', $output);
+
+        $pattern = '#L\((.+)(\s+\".+\")\)#im';
+        $output = preg_replace($pattern, 'L(\\1)', $output);
+
+        // decorize code output
+        $output = preg_replace('#\<var>([^<\/]+)<\/var>#im', 'C(\\1)', $output);
+
+        return preg_replace('#\`(.+)\`#im', 'C(\\1)', $output);
+    }
+
+    public function resourceBaseImport($package)
+    {
+        $exp = explode(".", $package);
+        $prefix = str_repeat('.', count($exp));
+        $contents = "from {$prefix}.base import ResourceBase";
+        return $contents;
     }
 }

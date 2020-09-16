@@ -1,0 +1,75 @@
+name: capsman_configuration
+package: capsman
+command: '/caps-man configuration'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index: 4
+properties_override:
+  rx_chains:
+    type: list
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+    default:
+      - 0
+    options:
+      - ignore-default
+  tx_chains:
+    type: list
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+    default:
+      - 0
+    options:
+      - ignore-default
+  security_authentication_types:
+    type: list
+    choices:
+      - wpa-psk
+      - wpa2-psk
+      - wpa-eap
+      - wpa2-eap
+    options:
+      - ignore-default
+  security_encryption:
+    type: list
+  channel:
+    type: string
+  channel_width:
+    type: string
+  datapath:
+    type: string
+  datapath_bridge:
+    type: string
+  datapath_interface_list:
+    type: string
+  datapath_l2mtu:
+    type: string
+  datapath_mtu:
+    type: string
+  datapath_openflow_switch:
+    type: string
+  disconnect_timeout:
+    type: string
+  distance:
+    type: string
+  frame_lifetime:
+    type: string
+  hw_protection_mode:
+    type: string
+  hw_retries:
+    type: string
+  mode:
+    type: string
+    default: ap
+  rates:
+    type: string
+  security_disable_pmkid:
+    type: string
+  security_eap_radius_accounting:
+    type: string

@@ -1,0 +1,50 @@
+name: interface
+package: interface
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_interface
+short_description: 'Interface Resource Module'
+description:
+  - 'This module manages the interface configuration of Mikrotik RouterOS network devices.'
+supports:
+  - export-verbose-mode
+states:
+  - merged
+fixtures:
+  - action: set
+    values:
+      default_name: ether2
+      comment: 'ether2 comment'
+      mtu: '1500'
+  - action: set
+    values:
+      default_name: ether3
+      comment: 'ether3 comment'
+      mtu: '1500'
+      disabled: 'yes'
+examples:
+  merged:
+    name: 'Merge configuration with device configuration'
+    argument_spec:
+      config:
+        - name: ether2
+          comment: 'ether2 updated'
+          mtu: '2000'
+        - name: ether3
+          comment: 'ether3 updated'
+          disabled: 'no'
+          mtu: '3000'
+      state: merged
+    title: 'Using Merged'
+    verify:
+      - action: set
+        values:
+          name: ether2
+          comment: 'ether2 updated'
+          mtu: '2000'
+      - action: set
+        values:
+          name: ether3
+          comment: 'ether3 updated'
+          disabled: 'no'
+          mtu: '3000'

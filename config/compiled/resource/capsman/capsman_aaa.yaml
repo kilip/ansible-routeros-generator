@@ -1,0 +1,77 @@
+name: capsman_aaa
+package: capsman
+type: setting
+command: '/caps-man aaa'
+keys:
+  - name
+properties:
+  called_format:
+    name: called_format
+    type: string
+    required: false
+    default: 'mac:ssid'
+    choices:
+      - mac
+      - 'mac:ssid'
+      - ssid
+    choice_type: null
+    description: 'Format of how the "called-id" identifier will be passed to RADIUS. When configuring radius server clients, you can specify "called-id" in order to separate multiple entires.'
+    original_name: called-format
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Short note for capsman_aaa resource'
+    original_name: comment
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set capsman_aaa resource disability'
+    original_name: disabled
+  interim_update:
+    name: interim_update
+    type: string
+    required: false
+    default: disabled
+    choice_type: null
+    description: 'When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies default update interval that can be overridden by the RADIUS server using the [ Acct-Interim-Interval](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication "Manual:Interface/Wireless") attribute.'
+    options:
+      - ignore-choices
+    original_name: interim-update
+  mac_caching:
+    name: mac_caching
+    type: string
+    required: false
+    default: disabled
+    choice_type: null
+    description: 'If this value is set to time interval, the Access Point will cache RADIUS MAC authentication responses for specified time, and will not contact RADIUS server if matching cache entry already exists. Value disabled will disable cache, Access Point will always contact RADIUS server.'
+    options:
+      - ignore-choices
+    original_name: mac-caching
+  mac_format:
+    name: mac_format
+    type: string
+    required: false
+    default: 'XX:XX:XX:XX:XX:XX'
+    choice_type: null
+    description: 'Controls how MAC address of the client is encoded by Access Point in the User-Name attribute of the MAC authentication and MAC accounting RADIUS requests.'
+    original_name: mac-format
+  mac_mode:
+    name: mac_mode
+    type: string
+    required: false
+    default: null
+    choices:
+      - as-username
+      - as-username-and-password
+    choice_type: null
+    description: 'By default Access Point uses an empty password, when sending Access-Request during MAC authentication. When this property is set to as-username-and-password, Access Point will use the same value for User-Password attribute as for the User-Name attribute.'
+    original_name: mac-mode

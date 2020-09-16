@@ -7,9 +7,6 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "composer/package-versions-deprecated": "^1.11",
-        "doctrine/doctrine-bundle": "^2.1",
-        "doctrine/doctrine-migrations-bundle": "^3.0",
-        "doctrine/orm": "^2.7",
         "league/html-to-markdown": "^4.10",
         "symfony/console": "5.1.*",
         "symfony/css-selector": "5.1.*",
@@ -22,15 +19,16 @@
         "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.1.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+      "ext-json": "*"
     },
     "require-dev": {
-        "doctrine/doctrine-fixtures-bundle": "^3.3",
         "friendsofphp/php-cs-fixer": "^2.16",
         "phpstan/phpstan": "^0.12.42",
         "phpstan/phpstan-phpunit": "^0.12.16",
         "phpstan/phpstan-symfony": "^0.12.7",
-        "symfony/phpunit-bridge": "dev-master"
+        "symfony/phpunit-bridge": "dev-master",
+        "webmozart/assert": "^1.9"
     },
     "config": {
         "optimize-autoloader": true,

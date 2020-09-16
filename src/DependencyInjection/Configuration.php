@@ -22,7 +22,7 @@ class Configuration implements ConfigurationInterface
 {
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder('routeros_scraper');
+        $builder = new TreeBuilder('routeros');
 
         $root = $builder->getRootNode()->children();
 
@@ -35,12 +35,12 @@ class Configuration implements ConfigurationInterface
     private function configureGeneralConfig(NodeBuilder $root)
     {
         $root
-            ->scalarNode('scraper_config_dir')->end()
-            ->scalarNode('cache_dir')->end()
+            ->scalarNode('cache_dir')->isRequired()->end()
+            ->scalarNode('config_dir')->isRequired()->end()
+            ->scalarNode('compiled_dir')->isRequired()->end()
             ->arrayNode('ansible')
                 ->isRequired()
                 ->children()
-                    ->scalarNode('modules_config_dir')->isRequired()->end()
                     ->scalarNode('target_dir')->isRequired()->end()
                     ->scalarNode('module_name_prefix')->isRequired()->end()
                 ->end()

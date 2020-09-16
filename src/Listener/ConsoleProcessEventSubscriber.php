@@ -38,6 +38,11 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
      */
     private $logger;
 
+    /**
+     * @var Exception[]
+     */
+    private $exceptions = [];
+
     public function __construct(
         LoggerInterface $logger
     ) {
@@ -51,7 +56,13 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
             ProcessEvent::EVENT_LOOP => 'onLoopEvent',
             ProcessEvent::EVENT_END => 'onEndProcessEvent',
             ProcessEvent::EVENT_LOG => 'onLogEvent',
+            ProcessEvent::EVENT_EXCEPTION => 'onExceptionEvent',
         ];
+    }
+
+    public function hasException()
+    {
+        return \count($this->exceptions) > 0;
     }
 
     /**
@@ -95,6 +106,13 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
         if (null !== $this->progressBar) {
             $this->progressBar->finish();
         }
+
+        $this->output->writeln("\n");
+    }
+
+    public function onExceptionEvent(ProcessEvent $event)
+    {
+        $this->exceptions = $event->getExceptions();
     }
 
     /**
@@ -117,6 +135,10 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
         $progressBar = new ProgressBar($output);
         $progressBar->setFormat('%current%/%max% [%bar%] - %message%');
 
+        $progressBar->setRedrawFrequency(1);
+        $progressBar->minSecondsBetweenRedraws(0.00);
+        $progressBar->maxSecondsBetweenRedraws(0.00);
+
         $this->progressBar = $progressBar;
     }
 
@@ -134,5 +156,14 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
 
         $rendered = strtr($rendered, $replacements);
         $progressBar->setMessage($rendered);
+    }
+
+    public function renderException()
+    {
+        $output = $this->output;
+
+        foreach ($this->exceptions as $exception) {
+            $output->writeln($exception->getMessage());
+        }
     }
 }

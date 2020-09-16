@@ -29,7 +29,7 @@ class RouterosExtensionTest extends TestCase
     public function testYamlDump($pattern, $message = '', $indent = 1)
     {
         $filter = new RouterosExtension();
-        $data = Yaml::parseFile(__DIR__.'/../Fixtures/scraper/routeros/bridge.yml');
+        $data = Yaml::parseFile(__DIR__.'/../Fixtures/routeros-extension/bridge.yaml');
         $output = $filter->yamlDump($data, $indent);
 
         $pattern = "#{$pattern}#";

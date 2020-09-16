@@ -1,0 +1,59 @@
+name: wireless
+package: interface.wireless
+command: '/interface wireless'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'
+  table_index:
+    - 0
+properties_override:
+  update_stats_interval:
+    type: string
+  wps_mode:
+    type: string
+  disconnect_timeout:
+    type: string
+  ssid:
+    options:
+      - ignore-default
+  radio_name:
+    options:
+      - ignore-default
+  ampdu_priorities:
+    type: list
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+    default: 'a:1:{i:0;i:0;}'
+    options:
+      - ignore-default
+  rx_chains:
+    type: list
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+    default: 'a:1:{i:0;i:0;}'
+    options:
+      - ignore-default
+  tx_chains:
+    type: list
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+    default: 'a:1:{i:0;i:0;}'
+    options:
+      - ignore-default
+  scan_list:
+    type: list
+    default: 'a:1:{i:0;s:7:"default";}'
+    options:
+      - ignore-default

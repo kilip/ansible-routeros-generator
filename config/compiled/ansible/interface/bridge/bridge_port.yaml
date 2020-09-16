@@ -1,0 +1,291 @@
+name: bridge_port
+package: interface.bridge
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_bridge_port
+export_command: '/interface bridge port export'
+resource_class_name: BridgePortResource
+documentation:
+  module: ros_bridge_port
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Bridge Port Module'
+  description:
+    - 'This module manages RouterOS sub menu `/interface bridge port`'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        auto_isolate:
+          type: bool
+          default: 'False'
+        bpdu_guard:
+          type: bool
+          default: 'False'
+        bridge:
+          type: str
+          required: 'True'
+        broadcast_flood:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        edge:
+          type: str
+          choices: [auto, 'no', no-discover, 'yes', yes-discover]
+          default: auto
+        external_fdb:
+          type: str
+          choices: [auto, 'no', 'yes']
+          default: auto
+        fast_leave:
+          type: bool
+          default: 'False'
+        frame_types:
+          type: str
+          choices: [admit-all, admit-only-untagged-and-priority-tagged, admit-only-vlan-tagged]
+          default: admit-all
+        horizon:
+          type: int
+          default: 0
+        ingress_filtering:
+          type: bool
+          default: 'False'
+        interface:
+          type: str
+          required: 'True'
+        internal_path_cost:
+          type: int
+          default: 10
+        learn:
+          type: str
+          choices: [auto, 'no', 'yes']
+          default: auto
+        multicast_router:
+          type: str
+          choices: [disabled, permanent, temporary-query]
+          default: temporary-query
+        path_cost:
+          type: int
+          default: 10
+        point_to_point:
+          type: str
+          choices: [auto, 'no', 'yes']
+          default: auto
+        priority:
+          type: int
+          default: 128
+        pvid:
+          type: int
+          default: 1
+        restricted_role:
+          type: bool
+          default: 'False'
+        restricted_tcn:
+          type: bool
+          default: 'False'
+        tag_stacking:
+          type: bool
+          default: 'False'
+        trusted:
+          type: bool
+          default: 'False'
+        unknown_multicast_flood:
+          type: bool
+          default: 'True'
+        unknown_unicast_flood:
+          type: bool
+          default: 'True'
+examples:
+  - title: 'Merged Configuration'
+    name: 'Merge configuration with device configuration'
+    argument_spec:
+      config:
+        - bridge: br-wan
+          interface: ether1
+          comment: 'new comment'
+        - bridge: br-trunk
+          interface: ether2
+          comment: 'new comment'
+      state: merged
+    before: |
+      /interface bridge port
+      add bridge=br-wan interface=ether1
+      add bridge=br-trunk disabled=yes interface=ether2
+    after: |
+      /interface bridge port
+      add bridge=br-wan comment="new comment" interface=ether1
+      add bridge=br-trunk comment="new comment" disabled=no interface=ether2
+    commands:
+      - '/interface bridge port set [ find bridge=br-wan interface=ether1 ] comment="new comment"'
+      - '/interface bridge port set [ find bridge=br-trunk interface=ether2 ] comment="new comment" disabled=no'
+  - title: 'Using replaced state'
+    name: 'Replace device configuration'
+    argument_spec:
+      config:
+        - bridge: br-wan
+          interface: ether1
+          comment: 'new comment'
+        - bridge: br-trunk
+          interface: ether2
+          comment: 'new comment'
+      state: replaced
+    before: |
+      /interface bridge port
+      add bridge=br-wan interface=ether1
+      add bridge=br-trunk disabled=yes interface=ether2
+    after: |
+      /interface bridge port
+      add bridge=br-wan comment="new comment" interface=ether1
+      add bridge=br-trunk comment="new comment" disabled=no interface=ether2
+    commands:
+      - '/interface bridge port set [ find bridge=br-wan interface=ether1 ] comment="new comment"'
+      - '/interface bridge port set [ find bridge=br-trunk interface=ether2 ] comment="new comment" disabled=no'
+  - title: 'Using overridden state'
+    name: 'Override device configuration'
+    argument_spec:
+      config:
+        - bridge: br-new
+          interface: ether2
+          comment: 'new comment'
+      state: overridden
+    before: |
+      /interface bridge port
+      add bridge=br-wan interface=ether1
+      add bridge=br-trunk disabled=yes interface=ether2
+    after: |
+      /interface bridge port
+      add bridge=br-new comment="new comment" interface=ether2
+    commands:
+      - '/interface bridge port remove bridge=br-wan interface=ether1'
+      - '/interface bridge port remove bridge=br-trunk interface=ether2'
+      - '/interface bridge port add bridge=br-new comment="new comment" interface=ether2'
+      - '/system script run ansible-remove-invalid'
+  - title: 'Using deleted state'
+    name: 'Delete bridge port'
+    argument_spec:
+      config:
+        - bridge: br-trunk
+          interface: ether2
+      state: deleted
+    before: |
+      /interface bridge port
+      add bridge=br-wan interface=ether1
+      add bridge=br-trunk disabled=yes interface=ether2
+    after: '/interface bridge port'
+    commands:
+      - '/interface bridge port remove bridge=br-trunk interface=ether2'
+      - '/system script run ansible-remove-invalid'
+resource:
+  name: bridge_port
+  package: interface.bridge
+  command: '/interface bridge port'
+  config_type: config
+  keys:
+    - bridge
+    - interface
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        auto_isolate:
+          type: bool
+          default: 'False'
+        bpdu_guard:
+          type: bool
+          default: 'False'
+        bridge:
+          type: str
+          required: 'True'
+        broadcast_flood:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        edge:
+          type: str
+          choices: [auto, 'no', no-discover, 'yes', yes-discover]
+          default: auto
+        external_fdb:
+          type: str
+          choices: [auto, 'no', 'yes']
+          default: auto
+        fast_leave:
+          type: bool
+          default: 'False'
+        frame_types:
+          type: str
+          choices: [admit-all, admit-only-untagged-and-priority-tagged, admit-only-vlan-tagged]
+          default: admit-all
+        horizon:
+          type: int
+          default: 0
+        ingress_filtering:
+          type: bool
+          default: 'False'
+        interface:
+          type: str
+          required: 'True'
+        internal_path_cost:
+          type: int
+          default: 10
+        learn:
+          type: str
+          choices: [auto, 'no', 'yes']
+          default: auto
+        multicast_router:
+          type: str
+          choices: [disabled, permanent, temporary-query]
+          default: temporary-query
+        path_cost:
+          type: int
+          default: 10
+        point_to_point:
+          type: str
+          choices: [auto, 'no', 'yes']
+          default: auto
+        priority:
+          type: int
+          default: 128
+        pvid:
+          type: int
+          default: 1
+        restricted_role:
+          type: bool
+          default: 'False'
+        restricted_tcn:
+          type: bool
+          default: 'False'
+        tag_stacking:
+          type: bool
+          default: 'False'
+        trusted:
+          type: bool
+          default: 'False'
+        unknown_multicast_flood:
+          type: bool
+          default: 'True'
+        unknown_unicast_flood:
+          type: bool
+          default: 'True'
+        comment:
+          type: str

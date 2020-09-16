@@ -1,0 +1,361 @@
+name: bridge
+package: interface.bridge
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_bridge
+export_command: '/interface bridge export'
+resource_class_name: BridgeResource
+documentation:
+  module: ros_bridge
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Bridge Resource Module'
+  description:
+    - 'This modules manages configuration in submenu `/interface bridge`.'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        add_dhcp_option82:
+          type: bool
+          default: 'False'
+        admin_mac:
+          type: str
+        ageing_time:
+          type: str
+          default: '00:05:00'
+        arp:
+          type: str
+          choices: [disabled, enabled, proxy-arp, reply-only]
+          default: enabled
+        arp_timeout:
+          type: str
+          default: auto
+        auto_mac:
+          type: bool
+          default: 'True'
+        comment:
+          type: str
+        dhcp_snooping:
+          type: bool
+          default: 'False'
+        disabled:
+          type: bool
+          default: 'False'
+        ether_type:
+          type: str
+          choices: ['0x8100', '0x88a8', '0x9100']
+          default: '0x8100'
+        fast_forward:
+          type: bool
+          default: 'True'
+        forward_delay:
+          type: str
+          default: '00:00:15'
+        frame_types:
+          type: str
+          choices: [admit-all, admit-only-untagged-and-priority-tagged, admit-only-vlan-tagged]
+          default: admit-all
+        igmp_snooping:
+          type: bool
+          default: 'False'
+        igmp_version:
+          type: int
+          choices: [2, 3]
+          default: 2
+        ingress_filtering:
+          type: bool
+          default: 'False'
+        last_member_interval:
+          type: str
+          default: 1s
+        last_member_query_count:
+          type: int
+          default: 2
+        max_hops:
+          type: int
+          default: 20
+        max_message_age:
+          type: str
+          default: '00:00:20'
+        membership_interval:
+          type: str
+          default: 4m20s
+        mld_version:
+          type: int
+          choices: [1, 2]
+          default: 1
+        mtu:
+          type: str
+          default: auto
+        multicast_querier:
+          type: bool
+          default: 'False'
+        multicast_router:
+          type: str
+          choices: [disabled, permanent, temporary-query]
+          default: temporary-query
+        name:
+          type: str
+          required: 'True'
+        priority:
+          type: int
+          default: 32768
+        protocol_mode:
+          type: str
+          choices: [mstp, none, rstp, stp]
+          default: rstp
+        pvid:
+          type: int
+          default: 1
+        querier_interval:
+          type: str
+          default: 4m15s
+        query_interval:
+          type: str
+          default: 2m5s
+        query_response_interval:
+          type: str
+          default: 10s
+        region_name:
+          type: str
+        region_revision:
+          type: int
+          default: 0
+        startup_query_count:
+          type: int
+          default: 2
+        startup_query_interval:
+          type: str
+          default: 31s250ms
+        transmit_hold_count:
+          type: int
+          default: 6
+        vlan_filtering:
+          type: bool
+          default: 'False'
+examples:
+  - title: 'Using Merged'
+    name: 'Merge configuration with device configuration'
+    argument_spec:
+      config:
+        - name: br-wan
+          comment: 'updated comment'
+          arp: enabled
+        - name: br-trunk
+          comment: 'updated comment'
+          arp: enabled
+          vlan_filtering: 'yes'
+      state: merged
+    before: |
+      /interface bridge
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
+    after: |
+      /interface bridge
+      add arp=enabled comment="updated comment" name=br-wan
+      add arp=enabled comment="updated comment" name=br-trunk vlan-filtering=yes
+    commands:
+      - '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"'
+      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="updated comment" vlan-filtering=yes'
+  - title: 'Using Replaced'
+    name: 'Replace device configuration'
+    argument_spec:
+      config:
+        - name: br-wan
+          comment: 'replaced comment'
+        - name: br-trunk
+          comment: 'replaced comment'
+      state: replaced
+    before: |
+      /interface bridge
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
+    after: |
+      /interface bridge
+      add arp=enabled comment="replaced comment" name=br-wan
+      add arp=enabled comment="replaced comment" name=br-trunk
+    commands:
+      - '/interface bridge set [ find name=br-wan ] arp=enabled comment="replaced comment"'
+      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="replaced comment"'
+  - title: 'Using Overridden'
+    name: 'Override bridge configuration'
+    argument_spec:
+      config:
+        - comment: 'new bridge'
+          name: br-new
+      state: overridden
+    before: |
+      /interface bridge
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
+    after: |
+      /interface bridge
+      add comment="new bridge" name=br-new
+    commands:
+      - '/interface bridge remove name=br-trunk'
+      - '/interface bridge remove name=br-wan'
+      - '/interface bridge add comment="new bridge" name=br-new'
+      - '/system script run ansible-remove-invalid'
+  - title: 'Using deleted state'
+    name: 'Delete bridge'
+    argument_spec:
+      config:
+        - name: br-trunk
+        - name: br-wan
+      state: deleted
+    before: |
+      /interface bridge
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
+    after: '/interface bridge'
+    commands:
+      - '/interface bridge remove name=br-trunk'
+      - '/interface bridge remove name=br-wan'
+      - '/system script run ansible-remove-invalid'
+resource:
+  name: bridge
+  package: interface.bridge
+  command: '/interface bridge'
+  config_type: config
+  keys:
+    - name
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        add_dhcp_option82:
+          type: bool
+          default: 'False'
+        admin_mac:
+          type: str
+        ageing_time:
+          type: str
+          default: '00:05:00'
+        arp:
+          type: str
+          choices: [disabled, enabled, proxy-arp, reply-only]
+          default: enabled
+        arp_timeout:
+          type: str
+          default: auto
+        auto_mac:
+          type: bool
+          default: 'True'
+        comment:
+          type: str
+        dhcp_snooping:
+          type: bool
+          default: 'False'
+        disabled:
+          type: bool
+          default: 'False'
+        ether_type:
+          type: str
+          choices: ['0x8100', '0x88a8', '0x9100']
+          default: '0x8100'
+        fast_forward:
+          type: bool
+          default: 'True'
+        forward_delay:
+          type: str
+          default: '00:00:15'
+        frame_types:
+          type: str
+          choices: [admit-all, admit-only-untagged-and-priority-tagged, admit-only-vlan-tagged]
+          default: admit-all
+        igmp_snooping:
+          type: bool
+          default: 'False'
+        igmp_version:
+          type: int
+          choices: [2, 3]
+          default: 2
+        ingress_filtering:
+          type: bool
+          default: 'False'
+        last_member_interval:
+          type: str
+          default: 1s
+        last_member_query_count:
+          type: int
+          default: 2
+        max_hops:
+          type: int
+          default: 20
+        max_message_age:
+          type: str
+          default: '00:00:20'
+        membership_interval:
+          type: str
+          default: 4m20s
+        mld_version:
+          type: int
+          choices: [1, 2]
+          default: 1
+        mtu:
+          type: str
+          default: auto
+        multicast_querier:
+          type: bool
+          default: 'False'
+        multicast_router:
+          type: str
+          choices: [disabled, permanent, temporary-query]
+          default: temporary-query
+        name:
+          type: str
+          required: 'True'
+        priority:
+          type: int
+          default: 32768
+        protocol_mode:
+          type: str
+          choices: [mstp, none, rstp, stp]
+          default: rstp
+        pvid:
+          type: int
+          default: 1
+        querier_interval:
+          type: str
+          default: 4m15s
+        query_interval:
+          type: str
+          default: 2m5s
+        query_response_interval:
+          type: str
+          default: 10s
+        region_name:
+          type: str
+        region_revision:
+          type: int
+          default: 0
+        startup_query_count:
+          type: int
+          default: 2
+        startup_query_interval:
+          type: str
+          default: 31s250ms
+        transmit_hold_count:
+          type: int
+          default: 6
+        vlan_filtering:
+          type: bool
+          default: 'False'

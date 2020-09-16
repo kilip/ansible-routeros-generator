@@ -1,0 +1,104 @@
+name: capsman_manager
+package: capsman
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_capsman_manager
+export_command: '/caps-man manager export'
+resource_class_name: CapsmanManagerResource
+documentation:
+  module: ros_capsman_manager
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'CAPsMan Manager Setting Module'
+  description:
+    - 'This modules manages CAPsMan Maanager Setting on Mikrotik RouterOS network devices'
+  supports:
+    - export-verbose-mode
+  options:
+    state:
+      choices:
+        - present
+        - reset
+      default: present
+      description: 'Set state for this module'
+    config:
+      type: dict
+      suboptions:
+        ca_certificate:
+          type: str
+        certificate:
+          type: str
+          choices: [auto, 'certificate name', none]
+        comment:
+          type: str
+        disabled:
+          type: bool
+          default: 'False'
+        enabled:
+          type: bool
+          default: 'False'
+        package_path:
+          type: str
+        require_peer_certificate:
+          type: bool
+          default: 'False'
+        upgrade_policy:
+          type: str
+          choices: [none, require-same-version, suggest-same-upgrade]
+examples:
+  - title: 'Using Present State'
+    name: 'Update Settings'
+    argument_spec:
+      state: present
+      config:
+        ca_certificate:
+          - auto
+        enabled:
+          - 'yes'
+    before: |
+      /caps-man manager
+      set ca-certificate=none certificate=none enabled=no require-peer-certificate=no upgrade-policy=none
+    after: |
+      /caps-man manager
+      set ca-certificate=auto enabled=yes
+    commands:
+      - '/caps-man manager set ca-certificate=auto enabled=yes'
+resource:
+  name: capsman_manager
+  package: capsman
+  command: '/caps-man manager'
+  config_type: setting
+  keys:
+    - name
+  supports:
+    - export-verbose-mode
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - present
+        - reset
+      default: present
+    config:
+      type: dict
+      options:
+        ca_certificate:
+          type: str
+        certificate:
+          type: str
+          choices: [auto, 'certificate name', none]
+        comment:
+          type: str
+        disabled:
+          type: bool
+          default: 'False'
+        enabled:
+          type: bool
+          default: 'False'
+        package_path:
+          type: str
+        require_peer_certificate:
+          type: bool
+          default: 'False'
+        upgrade_policy:
+          type: str
+          choices: [none, require-same-version, suggest-same-upgrade]

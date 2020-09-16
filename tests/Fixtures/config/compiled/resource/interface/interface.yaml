@@ -1,0 +1,42 @@
+name: interface
+package: interface
+type: config
+command: /interface
+keys:
+  - name
+properties:
+  disabled:
+    name: null
+    type: str
+    required: false
+    default_value: null
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set interface disability.'
+    original_name: null
+  l2mtu:
+    name: null
+    type: str
+    required: false
+    default_value: null
+    choice_type: null
+    description: 'Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. [ Read more&gt;&gt; ](/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
+    original_name: l2mtu
+  mtu:
+    name: null
+    type: str
+    required: false
+    default_value: null
+    choice_type: null
+    description: 'Layer3 Maximum transmission unit'
+    original_name: mtu
+  name:
+    name: name
+    type: string
+    required: false
+    default_value: null
+    choice_type: null
+    description: 'Name of an interface'
+    original_name: name

@@ -1,0 +1,25 @@
+name: wireless_access_list
+package: interface.wireless
+command: '/interface wireless access-list'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'
+  table_index: 4
+properties_override:
+  signal_range:
+    type: string
+    default: '-120..120'
+  management_protection_key:
+    options:
+      - ignore-default
+  private_key:
+    options:
+      - ignore-default
+  private_pre_shared_key:
+    options:
+      - ignore-default
+  time:
+    type: string
+    options:
+      - ignore-choices
+keys:
+  - comment

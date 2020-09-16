@@ -1,0 +1,14 @@
+name: bridge_settings
+package: interface.bridge
+type: setting
+command: '/interface bridge settings'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge'
+  ignores:
+    - bridge-fast-path-active
+    - bridge-fast-path-packets
+    - bridge-fast-path-bytes
+    - bridge-fast-forward-packets
+    - bridge-fast-forward-bytes
+  table_index:
+    - 1
