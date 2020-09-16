@@ -32,7 +32,7 @@ class ResourceStructureTest extends TestCase
         $this->assertFalse($resource->hasProperty('test'));
 
         $property = $resource->getProperty('test', true);
-        $this->assertIsObject($property);
+        $this->assertInstanceOf(ResourceProperty::class, $property);
         $this->assertTrue($resource->hasProperty('test'));
 
         $this->expectException(\InvalidArgumentException::class);
