@@ -2,4 +2,12 @@
 
 from __future__ import absolute_import, division, print_function
 __metaclass__ = type
+{% for module in modules %}
+from .{{ module.package }}.{{ module.name }} import {{ module.resource_class }}
+{% endfor %}
 
+RESOURCE_SUBSETS = dict(
+{% for module in modules %}
+    {{ module.name }}={{ module.resource_class }}
+{% endfor %}
+)

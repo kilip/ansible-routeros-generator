@@ -27,23 +27,30 @@ documentation:
           type: str
           choices: [mac, 'mac:ssid', ssid]
           default: 'mac:ssid'
+          description: 'Format of how the "called-id" identifier will be passed to RADIUS. When configuring radius server clients, you can specify "called-id" in order to separate multiple entires.'
         comment:
           type: str
+          description: 'Short note for capsman_aaa resource'
         disabled:
           type: bool
           default: 'False'
+          description: 'Set capsman_aaa resource disability'
         interim_update:
           type: str
           default: disabled
+          description: 'When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies default update interval that can be overridden by the RADIUS server using the [ Acct-Interim-Interval](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication "Manual:Interface/Wireless") attribute.'
         mac_caching:
           type: str
           default: disabled
+          description: 'If this value is set to time interval, the Access Point will cache RADIUS MAC authentication responses for specified time, and will not contact RADIUS server if matching cache entry already exists. Value disabled will disable cache, Access Point will always contact RADIUS server.'
         mac_format:
           type: str
           default: 'XX:XX:XX:XX:XX:XX'
+          description: 'Controls how MAC address of the client is encoded by Access Point in the User-Name attribute of the MAC authentication and MAC accounting RADIUS requests.'
         mac_mode:
           type: str
           choices: [as-username, as-username-and-password]
+          description: 'By default Access Point uses an empty password, when sending Access-Request during MAC authentication. When this property is set to as-username-and-password, Access Point will use the same value for User-Password attribute as for the User-Name attribute.'
 examples:
   - title: 'Using present state'
     name: 'Change configuration'

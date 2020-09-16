@@ -28,21 +28,28 @@ documentation:
           type: str
           choices: [disabled, enabled, proxy-arp, reply-only]
           default: enabled
+          description: 'Address Resolution Protocol mode'
         interface:
           type: str
+          description: 'Name of physical interface on top of which VLAN will work'
         l2mtu:
           type: int
+          description: 'Layer2 MTU. For VLANS this value is not configurable. [ Read more&gt;&gt;](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
         mtu:
           type: int
           default: 1500
+          description: 'Layer3 Maximum transmission unit'
         name:
           type: str
           required: 'True'
+          description: 'Interface name'
         use_service_tag:
           type: bool
+          description: '802.1ad compatible Service Tag'
         vlan_id:
           type: int
           default: 1
+          description: 'Virtual LAN identifier or tag that is used to distinguish VLANs. Must be equal for all computers that belong to the same VLAN.'
 examples:
   - title: 'Using merged state'
     name: 'Merge configuration with device configuration'

@@ -70,7 +70,7 @@ class CompileProcessor
             $resources[$name] = $config['resource'];
         }
 
-        $this->compileSubset($resources);
+        $this->compileSubset($list);
     }
 
     public function compileModule($name, $config)
@@ -102,13 +102,15 @@ class CompileProcessor
         }
     }
 
-    private function compileSubset($resource)
+    private function compileSubset(array $list)
     {
         $compiler = $this->compiler;
         $template = '@ansible/subset.py.twig';
         $targetDir = $this->targetDir;
         $target = "{$targetDir}/plugins/module_utils/resources/subset.py";
 
-        $compiler->compile($template, $target, $resource);
+        $compiler->compile($template, $target, [
+            'modules' => $list,
+        ]);
     }
 }

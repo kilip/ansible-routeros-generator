@@ -21,6 +21,7 @@ use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Provider\Ansible\Event\ModuleEvent;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceStructure;
+use RouterOS\Generator\Util\Text;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -110,6 +111,8 @@ class ModuleRefreshProcessor
             $target = $this->compile($module, $moduleEvent->getConfig());
             $index[$name] = [
                 'name' => $name,
+                'package' => $resource->getPackage(),
+                'resource_class' => Text::classify($name).'Resource',
                 'config_file' => $target,
             ];
         }

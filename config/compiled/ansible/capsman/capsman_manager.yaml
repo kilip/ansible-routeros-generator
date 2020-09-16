@@ -25,25 +25,39 @@ documentation:
       suboptions:
         ca_certificate:
           type: str
+          description: 'Device CA certificate'
         certificate:
           type: str
           choices: [auto, 'certificate name', none]
+          description: 'Device certificate'
         comment:
           type: str
+          description: 'Short note for capsman_manager resource'
         disabled:
           type: bool
           default: 'False'
+          description: 'Set capsman_manager resource disability'
         enabled:
           type: bool
           default: 'False'
+          description: 'Disable or enable CAPsMAN functionality'
         package_path:
           type: str
+          description: 'Folder location for the RouterOS packages. For example, use "/upgrade" to specify the upgrade folder from the files section. If empty string is set, CAPsMAN can use built-in RouterOS packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.'
         require_peer_certificate:
           type: bool
           default: 'False'
+          description: 'Require all connecting CAPs to have a valid certificate'
         upgrade_policy:
           type: str
           choices: [none, require-same-version, suggest-same-upgrade]
+          description: |
+            Upgrade policy options
+            
+            - none - do not perform upgrade
+            - require-same-version - CAPsMAN suggest to upgrade the CAP RouterOS version and if it fails it will not provision the CAP. (Manual provision is still possible)
+            - suggest-same-version - CAPsMAN suggests to upgrade the CAP RouterOS version and if it fails it will still be provisioned
+            
 examples:
   - title: 'Using Present State'
     name: 'Update Settings'

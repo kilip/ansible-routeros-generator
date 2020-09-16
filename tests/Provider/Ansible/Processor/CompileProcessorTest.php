@@ -95,7 +95,7 @@ class CompileProcessorTest extends KernelTestCase
                 [
                     '@ansible/subset.py.twig',
                     $this->targetDir.'/plugins/module_utils/resources/subset.py',
-                    ['bridge' => ['resource']],
+                    ['modules' => ['bridge' => ['name' => 'bridge']]],
                 ]
             );
 

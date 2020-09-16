@@ -102,7 +102,9 @@ class ModuleReindexProcessorTest extends KernelTestCase
         $compiler = $this->compiler;
 
         $resource = new ResourceStructure();
-        $resource->setCommand('/interface');
+        $resource
+            ->setCommand('/interface')
+            ->setPackage('interface');
         $config = [
             'interface' => $this->getConfig('interface'),
         ];
