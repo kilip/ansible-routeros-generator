@@ -1,0 +1,92 @@
+name: interface
+package: interface
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_interface
+export_command: '/interface export'
+resource_class_name: InterfaceResource
+documentation:
+  module: ros_interface
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Interface Resource Module'
+  description:
+    - 'This module manages the interface configuration of Mikrotik RouterOS network devices.'
+  supports:
+    - export-verbose-mode
+  options:
+    state:
+      choices:
+        - merged
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        disabled:
+          type: bool
+          default: 'False'
+        l2mtu:
+          type: str
+        mtu:
+          type: str
+        name:
+          type: str
+          required: 'True'
+examples:
+  - title: 'Using Merged'
+    name: 'Merge configuration with device configuration'
+    argument_spec:
+      config:
+        - name: ether2
+          comment: 'ether2 updated'
+          mtu: '2000'
+        - name: ether3
+          comment: 'ether3 updated'
+          disabled: 'no'
+          mtu: '3000'
+      state: merged
+    before: |
+      /interface
+      set comment="ether2 comment" default-name=ether2 mtu=1500
+      set comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
+    after: |
+      /interface
+      add comment="ether2 updated" mtu=2000 name=ether2
+      add comment="ether3 updated" disabled=no mtu=3000 name=ether3
+    commands:
+      - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
+      - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
+resource:
+  name: interface
+  package: interface
+  command: /interface
+  config_type: config
+  keys:
+    - name
+  supports:
+    - export-verbose-mode
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        disabled:
+          type: bool
+          default: 'False'
+        l2mtu:
+          type: str
+        mtu:
+          type: str
+        name:
+          type: str
+          required: 'True'
+        comment:
+          type: str
+        default_name:
+          type: str

@@ -1,0 +1,161 @@
+name: vlan
+package: interface
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_vlan
+export_command: '/interface vlan export'
+resource_class_name: VlanResource
+documentation:
+  module: ros_vlan
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'VLAN Resource Module'
+  description:
+    - 'This module manages the vlan configuration of Mikrotik RouterOS network devices.'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        arp:
+          type: str
+          choices: [disabled, enabled, proxy-arp, reply-only]
+          default: enabled
+        interface:
+          type: str
+        l2mtu:
+          type: int
+        mtu:
+          type: int
+          default: 1500
+        name:
+          type: str
+          required: 'True'
+        use_service_tag:
+          type: bool
+        vlan_id:
+          type: int
+          default: 1
+examples:
+  - title: 'Using merged state'
+    name: 'Merge configuration with device configuration'
+    argument_spec:
+      config:
+        - name: vlan-100
+          interface: br-trunk
+          vlan_id: 100
+          comment: 'new comment'
+        - name: vlan-200
+          interface: br-trunk
+          vlan_id: 200
+          comment: 'new comment'
+      state: merged
+    before: |
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    after: |
+      /interface vlan
+      add arp=enabled comment="new comment" name=vlan-100
+      add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200
+    commands:
+      - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+      - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200'
+  - title: 'Using replaced state'
+    name: 'Replace device configuration'
+    argument_spec:
+      config:
+        - name: vlan-100
+          interface: br-trunk
+          vlan_id: 100
+          comment: 'new comment'
+      state: replaced
+    before: |
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    after: |
+      /interface vlan
+      add arp=enabled comment="new comment" name=vlan-100
+    commands:
+      - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+  - title: 'Using overridden state'
+    name: 'Override device configuration'
+    argument_spec:
+      config:
+        - name: vlan-new
+          interface: br-trunk
+          vlan_id: 100
+          comment: 'new comment'
+      state: overridden
+    before: |
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    after: |
+      /interface vlan
+      add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100
+    commands:
+      - '/interface vlan remove name=vlan-100'
+      - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100'
+      - '/system script run ansible-remove-invalid'
+  - title: 'Using deleted state'
+    name: 'Delete VLAN Interface'
+    argument_spec:
+      config:
+        - name: vlan-100
+          interface: br-trunk
+          vlan_id: 100
+      state: deleted
+    before: |
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    after: '/interface vlan'
+    commands:
+      - '/interface vlan remove name=vlan-100'
+      - '/system script run ansible-remove-invalid'
+resource:
+  name: vlan
+  package: interface
+  command: '/interface vlan'
+  config_type: config
+  keys:
+    - name
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        arp:
+          type: str
+          choices: [disabled, enabled, proxy-arp, reply-only]
+          default: enabled
+        interface:
+          type: str
+        l2mtu:
+          type: int
+        mtu:
+          type: int
+          default: 1500
+        name:
+          type: str
+          required: 'True'
+        use_service_tag:
+          type: bool
+        vlan_id:
+          type: int
+          default: 1
+        comment:
+          type: str

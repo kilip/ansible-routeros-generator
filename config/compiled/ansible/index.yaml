@@ -1,0 +1,51 @@
+bridge:
+  name: bridge
+  config_file: config/compiled/ansible/interface/bridge/bridge.yaml
+bridge_port:
+  name: bridge_port
+  config_file: config/compiled/ansible/interface/bridge/bridge_port.yaml
+bridge_settings:
+  name: bridge_settings
+  config_file: config/compiled/ansible/interface/bridge/bridge_settings.yaml
+capsman_aaa:
+  name: capsman_aaa
+  config_file: config/compiled/ansible/capsman/capsman_aaa.yaml
+capsman_channel:
+  name: capsman_channel
+  config_file: config/compiled/ansible/capsman/capsman_channel.yaml
+capsman_configuration:
+  name: capsman_configuration
+  config_file: config/compiled/ansible/capsman/capsman_configuration.yaml
+capsman_datapath:
+  name: capsman_datapath
+  config_file: config/compiled/ansible/capsman/capsman_datapath.yaml
+capsman_manager:
+  name: capsman_manager
+  config_file: config/compiled/ansible/capsman/capsman_manager.yaml
+capsman_provisioning:
+  name: capsman_provisioning
+  config_file: config/compiled/ansible/capsman/capsman_provisioning.yaml
+ethernet:
+  name: ethernet
+  config_file: config/compiled/ansible/interface/ethernet.yaml
+interface:
+  name: interface
+  config_file: config/compiled/ansible/interface/interface.yaml
+vlan:
+  name: vlan
+  config_file: config/compiled/ansible/interface/vlan.yaml
+wireless:
+  name: wireless
+  config_file: config/compiled/ansible/interface/wireless/wireless.yaml
+wireless_access_list:
+  name: wireless_access_list
+  config_file: config/compiled/ansible/interface/wireless/wireless_access_list.yaml
+wireless_cap:
+  name: wireless_cap
+  config_file: config/compiled/ansible/interface/wireless/wireless_cap.yaml
+wireless_connect_list:
+  name: wireless_connect_list
+  config_file: config/compiled/ansible/interface/wireless/wireless_connect_list.yaml
+wireless_security_profiles:
+  name: wireless_security_profiles
+  config_file: config/compiled/ansible/interface/wireless/wireless_security_profiles.yaml

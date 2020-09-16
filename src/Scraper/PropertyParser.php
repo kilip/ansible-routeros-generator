@@ -12,30 +12,30 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Scraper;
+namespace RouterOS\Generator\Scraper;
 
-use RouterOS\Model\Property;
-use RouterOS\Model\SubMenu;
-use RouterOS\Util\Text;
+use RouterOS\Generator\Structure\ResourceProperty;
+use RouterOS\Generator\Structure\ResourceStructure;
+use RouterOS\Generator\Util\Text;
 
 class PropertyParser
 {
     private $mapTypes = [
-        'integer' => Property::TYPE_INTEGER,
-        'string' => Property::TYPE_STRING,
-        'bool' => Property::TYPE_BOOL,
-        'mac address' => Property::TYPE_STRING,
-        'mac' => Property::TYPE_STRING,
-        'time' => Property::TYPE_STRING,
-        'text' => Property::TYPE_STRING,
-        'name' => Property::TYPE_STRING,
-        'bridge interface' => Property::TYPE_STRING,
-        'default' => Property::TYPE_STRING,
-        'auto' => Property::TYPE_STRING,
-        'list' => Property::TYPE_LIST,
+        'integer' => ResourceProperty::TYPE_INTEGER,
+        'string' => ResourceProperty::TYPE_STRING,
+        'bool' => ResourceProperty::TYPE_BOOL,
+        'mac address' => ResourceProperty::TYPE_STRING,
+        'mac' => ResourceProperty::TYPE_STRING,
+        'time' => ResourceProperty::TYPE_STRING,
+        'text' => ResourceProperty::TYPE_STRING,
+        'name' => ResourceProperty::TYPE_STRING,
+        'bridge interface' => ResourceProperty::TYPE_STRING,
+        'default' => ResourceProperty::TYPE_STRING,
+        'auto' => ResourceProperty::TYPE_STRING,
+        'list' => ResourceProperty::TYPE_LIST,
     ];
 
-    public function parse(SubMenu $subMenu, $info, $description)
+    public function parse(ResourceStructure $resource, string $info, string $description)
     {
         if (
             false !== strpos($info, 'read-only')
@@ -46,14 +46,17 @@ class PropertyParser
         $rosName = $this->parseName($info);
         $name = Text::normalizeName($rosName);
 
-        $property = $subMenu->getProperty($name);
+        $property = $resource->getProperty($name, true);
 
+        $property->setName($name);
         $property->setDescription($description);
-        $property->setOriginalName($name);
+        $property->setOriginalName($rosName);
 
         $this->parseChoices($property, $info);
         $this->parseType($property, $info);
         $this->parseDefault($property, $info);
+
+        return $resource;
     }
 
     private function parseName($text)
@@ -64,7 +67,7 @@ class PropertyParser
         }
     }
 
-    private function parseType(Property $property, $text)
+    private function parseType(ResourceProperty $property, $text)
     {
         if (
             null !== $property->getType()
@@ -81,7 +84,7 @@ class PropertyParser
             false !== strpos($text, 'list of')
             || false !== strpos($text, 'comma separated list')
         ) {
-            $property->setType(Property::TYPE_LIST);
+            $property->setType(ResourceProperty::TYPE_LIST);
 
             return;
         }
@@ -90,13 +93,13 @@ class PropertyParser
         if (isset($choices[0])) {
             $choice = $choices[0];
             if (\in_array($choice, ['yes', 'no'], true)) {
-                $property->setType(Property::TYPE_STRING);
+                $property->setType(ResourceProperty::TYPE_STRING);
 
                 return;
             }
 
             if (\is_string($choice)) {
-                $property->setType(Property::TYPE_STRING);
+                $property->setType(ResourceProperty::TYPE_STRING);
 
                 return;
             }
@@ -104,13 +107,12 @@ class PropertyParser
 
         if (0 != preg_match('#\(\*([^\:|^\*]+)#im', $text, $matches)) {
             $match = $matches[1];
-        }
+            foreach ($map as $key => $type) {
+                if (false !== strpos($match, $key)) {
+                    $property->setType($type);
 
-        foreach ($map as $key => $type) {
-            if (false !== strpos($match, $key)) {
-                $property->setType($type);
-
-                return;
+                    return;
+                }
             }
         }
 
@@ -120,9 +122,9 @@ class PropertyParser
         $property->setType($map[$match]);
     }
 
-    private function parseChoices(Property $property, $text)
+    private function parseChoices(ResourceProperty $property, $text)
     {
-        if ($property->hasOption(Property::OPTION_IGNORE_CHOICES)) {
+        if ($property->hasOption(ResourceProperty::OPTION_IGNORE_CHOICES)) {
             return $this;
         }
 
@@ -169,10 +171,10 @@ class PropertyParser
         return $this;
     }
 
-    private function parseDefault(Property $property, $text)
+    private function parseDefault(ResourceProperty $property, $text)
     {
         if (
-            $property->hasOption(Property::OPTION_IGNORE_DEFAULT)
+            $property->hasOption(ResourceProperty::OPTION_IGNORE_DEFAULT)
         ) {
             return;
         }
@@ -195,7 +197,7 @@ class PropertyParser
         }
 
         if (null !== $default) {
-            if (Property::TYPE_INTEGER == $type) {
+            if (ResourceProperty::TYPE_INTEGER == $type) {
                 $default = (int) $default;
             }
         }
@@ -223,7 +225,7 @@ class PropertyParser
         }
 
         if (null !== $default) {
-            $property->setDefaultValue($default);
+            $property->setDefault($default);
         }
     }
 }

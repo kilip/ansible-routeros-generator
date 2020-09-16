@@ -1,0 +1,106 @@
+name: capsman_channel
+package: capsman
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_capsman_channel
+export_command: '/caps-man channel export'
+resource_class_name: CapsmanChannelResource
+documentation:
+  module: ros_capsman_channel
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'CAPsMan Channels Configuration Module'
+  description:
+    - 'This modules manages CAPsMan Channels configuration on Mikrotik RouterOS network devices'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        band:
+          type: str
+          choices: [2ghz-b, 2ghz-b/g, 2ghz-b/g/n, 2ghz-onlyg, 2ghz-onlyn, 5ghz-a, 5ghz-a/n, 5ghz-onlyn]
+        comment:
+          type: str
+        extension_channel:
+          type: str
+          choices: [Ce, Ceee, disabled, eC, eCee, eeCe, eeeC]
+        frequency:
+          type: int
+        name:
+          type: str
+          required: 'True'
+        save_selected:
+          type: bool
+          default: 'True'
+        tx_power:
+          type: int
+        width:
+          type: str
+examples:
+  - title: 'Using merged'
+    name: 'Merge with device configuration'
+    argument_spec:
+      config:
+        - name: test
+          save_selected: 'no'
+        - name: new
+          extension_channel: Ce
+      state: merged
+    before: |
+      /caps-man channel
+      add name=test
+    after: |
+      /caps-man channel
+      add name=test save-selected=no
+      add extension-channel=Ce name=new
+    commands:
+      - '/caps-man channel set [ find name=test ] save-selected=no'
+      - '/caps-man channel add extension-channel=Ce name=new'
+resource:
+  name: capsman_channel
+  package: capsman
+  command: '/caps-man channel'
+  config_type: config
+  keys:
+    - name
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        band:
+          type: str
+          choices: [2ghz-b, 2ghz-b/g, 2ghz-b/g/n, 2ghz-onlyg, 2ghz-onlyn, 5ghz-a, 5ghz-a/n, 5ghz-onlyn]
+        comment:
+          type: str
+        extension_channel:
+          type: str
+          choices: [Ce, Ceee, disabled, eC, eCee, eeCe, eeeC]
+        frequency:
+          type: int
+        name:
+          type: str
+          required: 'True'
+        save_selected:
+          type: bool
+          default: 'True'
+        tx_power:
+          type: int
+        width:
+          type: str

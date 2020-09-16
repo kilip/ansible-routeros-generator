@@ -5,3 +5,7 @@ indent_size = 2
 [*.yml]
 indent_style = space
 indent_size = 2
+
+[*.neon.dist]
+indent_style = space
+indent_size = 2

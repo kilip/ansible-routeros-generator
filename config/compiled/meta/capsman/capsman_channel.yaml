@@ -1,0 +1,15 @@
+name: capsman_channel
+package: capsman
+command: '/caps-man channel'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index:
+    - 5
+properties_override:
+  width:
+    type: string
+  save_selected:
+    type: string
+    choices:
+      - 'yes'
+      - 'no'

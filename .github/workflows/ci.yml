@@ -11,6 +11,7 @@ env:
   COMPOSER_INSTALLER_COMMIT: fb22b78362d31c0d2bf516d1f8cdfd2745caa431
   COVERAGE: '0'
   EXT_PCOV_VERSION: '1.0.6'
+  SYMFONY_PHPUNIT_VERSION: '8.5'
 
 jobs:
   php-cs-fixer:
@@ -74,6 +75,8 @@ jobs:
           mkdir -p /var/cache/php-cs-fixer
           php-cs-fixer fix --dry-run --diff --cache-file=/var/cache/php-cs-fixer/.php_cs.cache --ansi
 
+
+
   phpstan:
     name: PHPStan (${{ matrix.php }})
     runs-on: ubuntu-latest
@@ -113,13 +116,11 @@ jobs:
             symfony/flex
       - name: Update project dependencies
         run: |
-          mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
-          ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
+          mkdir -p /tmp/kilip/routeros-generator/vendor
+          ln -s /tmp/kilip/routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
       - name: Install PHPUnit
-        env:
-          SYMFONY_PHPUNIT_VERSION: '9.2'
-        run: vendor/bin/simple-phpunit --version
+        run: composer prepare-test
       - name: Cache PHPStan results
         uses: actions/cache@v2
         with:
@@ -195,20 +196,20 @@ jobs:
             symfony/flex
       - name: Update project dependencies
         run: |
-          mkdir -p /tmp/kilip/ansible-routeros-generator/vendor
-          ln -s /tmp/kilip/ansible-routeros-generator/vendor vendor
+          mkdir -p /tmp/kilip/routeros-generator/vendor
+          ln -s /tmp/kilip/routeros-generator/vendor vendor
           composer update --no-progress --no-suggest --ansi
+          composer prepare-test
       - name: Enable code coverage
         if: matrix.coverage
         run: echo '::set-env name=COVERAGE::1'
       - name: Run PHPUnit tests
         run: |
           mkdir -p build/logs/phpunit
-          composer prepare-test
           if [ "$COVERAGE" = '1' ]; then
-            ./vendor/bin/phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
+            ./vendor/bin/simple-phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
           else
-            ./vendor/bin/phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
+            ./vendor/bin/simple-phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
           fi
       - name: Upload test artifacts
         if: always()

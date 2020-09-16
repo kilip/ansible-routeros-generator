@@ -1,0 +1,139 @@
+name: capsman_provisioning
+package: capsman
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_capsman_provisioning
+export_command: '/caps-man provisioning export'
+resource_class_name: CapsmanProvisioningResource
+documentation:
+  module: ros_capsman_provisioning
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'CAPsMan Provisioning Module'
+  description:
+    - 'This modules manages CAPsMan Provisioning on Mikrotik RouterOS network devices'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        action:
+          type: str
+          choices: [create-disabled, create-dynamic-enabled, create-enabled, none]
+        comment:
+          type: str
+          required: 'True'
+        common_name_regexp:
+          type: str
+        hw_supported_modes:
+          type: str
+          choices: [a, a-turbo, ac, an, b, g, g-turbo, gn]
+        identity_regexp:
+          type: str
+        ip_address_ranges:
+          type: str
+        master_configuration:
+          type: str
+        name_format:
+          type: str
+          choices: [cap, identity, prefix, prefix-identity]
+          default: cap
+        name_prefix:
+          type: str
+        radio_mac:
+          type: str
+          default: '00:00:00:00:00:00'
+        slave_configurations:
+          type: list
+examples:
+  - title: 'Using merged state'
+    name: 'Merge with device configuration'
+    argument_spec:
+      state: merged
+      config:
+        - comment: test
+          action: create-disabled
+        - comment: 'Olympus Wireless Network'
+          identity_regexp: olympus
+          master_configuration: olympus
+          name_format: identity
+          slave_configurations: 'troy-network,gaia-network'
+          action: create-enabled
+    before: |
+      /caps-man provisioning
+      add comment=test
+    after: |
+      /caps-man provisioning
+      add action=create-disabled comment=test
+      add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network
+    commands:
+      - '/caps-man provisioning set [ find comment=test ] action=create-disabled'
+      - '/caps-man provisioning add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
+  - title: 'Using deleted state'
+    name: 'Delete provisioning config'
+    argument_spec:
+      state: deleted
+      config:
+        - comment: test
+    before: |
+      /caps-man provisioning
+      add comment=test
+    after: '/caps-man provisioning'
+    commands:
+      - '/caps-man provisioning remove comment=test'
+      - '/system script run ansible-remove-invalid'
+resource:
+  name: capsman_provisioning
+  package: capsman
+  command: '/caps-man provisioning'
+  config_type: config
+  keys:
+    - comment
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        action:
+          type: str
+          choices: [create-disabled, create-dynamic-enabled, create-enabled, none]
+        comment:
+          type: str
+          required: 'True'
+        common_name_regexp:
+          type: str
+        hw_supported_modes:
+          type: str
+          choices: [a, a-turbo, ac, an, b, g, g-turbo, gn]
+        identity_regexp:
+          type: str
+        ip_address_ranges:
+          type: str
+        master_configuration:
+          type: str
+        name_format:
+          type: str
+          choices: [cap, identity, prefix, prefix-identity]
+          default: cap
+        name_prefix:
+          type: str
+        radio_mac:
+          type: str
+          default: '00:00:00:00:00:00'
+        slave_configurations:
+          type: list

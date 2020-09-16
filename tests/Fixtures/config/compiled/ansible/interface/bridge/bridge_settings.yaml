@@ -1,0 +1,88 @@
+name: bridge_settings
+package: interface.bridge
+template: '@ansible/module/module.py.twig'
+documentation:
+  name: bridge_settings
+  package: interface.bridge
+  author: 'Anthonius Munthi (@kilip)'
+  module_name: kilip.routeros.ros_bridge_settings
+  short_description: 'Bridge Setting Module'
+  description:
+    - 'This modules manages configuration in submenu `/interface bridge settings`.'
+  module_template: '@ansible/module/module.py.twig'
+  options:
+    state:
+      choices:
+        - present
+        - reset
+      default: present
+    config:
+      type: dict
+      suboptions:
+        allow_fast_path:
+          type: bool
+          default: 'True'
+          description: 'Whether to enable a bridge [ FastPath](/wiki/Manual:Fast_Path "Manual:Fast Path") globally.'
+        bridge_fast_forward_bytes:
+          type: int
+          description: 'Shows byte count forwarded by Bridge Fast Forward.'
+        bridge_fast_forward_packets:
+          type: int
+          description: 'Shows packet count forwarded by Bridge Fast Forward.'
+        bridge_fast_path_active:
+          type: bool
+          description: 'Shows whether a bridge FastPath is active globally, FastPatch status per bridge interface is not displayed.'
+        bridge_fast_path_bytes:
+          type: int
+          description: 'Shows byte count forwarded by Bridge Fast Path.'
+        bridge_fast_path_packets:
+          type: int
+          description: 'Shows packet count forwarded by Bridge FastPath.'
+        use_ip_firewall:
+          type: bool
+          default: 'False'
+          description: 'Force bridged traffic to also be processed by prerouting, forward and postrouting sections of IP routing ([ Packet Flow](/wiki/Manual:Packet_Flow_v6 "Manual:Packet Flow v6")). This does not apply to routed traffic. This property is required in case you want to assign [ Simple Queues](/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to traffic in a bridge. Property <var>use-ip-firewall-for-vlan</var> is required in case bridge <var>vlan-filtering</var> is used.'
+        use_ip_firewall_for_pppoe:
+          type: bool
+          default: 'False'
+          description: 'Send bridged un-encrypted PPPoE traffic to also be processed by [ IP/Firewall](/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when <var>use-ip-firewall</var> is set to `yes`. This property is required in case you want to assign [ Simple Queues](/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to PPPoE traffic in a bridge.'
+        use_ip_firewall_for_vlan:
+          type: bool
+          default: 'False'
+          description: 'Send bridged VLAN traffic to also be processed by [ IP/Firewall](/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when <var>use-ip-firewall</var> is set to `yes`. This property is required in case you want to assign [ Simple Queues](/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to VLAN traffic in a bridge.'
+examples:
+  - title: 'Change Bridge Setting Configuration'
+    name: 'Configure Bridge Settings'
+    argument_spec:
+      config:
+        allow_fast_path:
+          - 'yes'
+        use_ip_firewall:
+          - 'no'
+        use_ip_firewall_for_pppoe:
+          - 'no'
+        use_ip_firewall_for_vlan:
+          - 'no'
+      state: present
+    before: |
+      /interface bridge settings
+      set allow-fast-path=no use-ip-firewall=yes use-ip-firewall-for-pppoe=yes use-ip-firewall-for-vlan=yes
+    after: |
+      /interface bridge settings
+      set allow-fast-path=yes use-ip-firewall=no use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no
+    commands:
+      - '/interface bridge settings set allow-fast-path=yes use-ip-firewall=no use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no'
+  - title: 'Change Bridge Setting Configuration'
+    name: 'Configure Bridge Settings'
+    argument_spec:
+      state: reset
+    before: |
+      /interface bridge settings
+      set allow-fast-path=no use-ip-firewall=yes use-ip-firewall-for-pppoe=yes use-ip-firewall-for-vlan=yes
+    after: |
+      /interface bridge settings
+      set allow-fast-path=yes use-ip-firewall=no use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no
+    commands:
+      - '/interface bridge settings set allow-fast-path=yes use-ip-firewall=no use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no'
+resource:
+  hello: world

@@ -1,0 +1,16 @@
+name: capsman_aaa
+package: capsman
+command: '/caps-man aaa'
+type: setting
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index: 2
+properties_override:
+  interim_update:
+    type: string
+    options:
+      - ignore-choices
+  mac_caching:
+    type: string
+    options:
+      - ignore-choices

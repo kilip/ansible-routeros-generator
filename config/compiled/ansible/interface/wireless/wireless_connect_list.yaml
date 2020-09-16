@@ -1,0 +1,124 @@
+name: wireless_connect_list
+package: interface.wireless
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_wireless_connect_list
+export_command: '/interface wireless connect-list export'
+resource_class_name: WirelessConnectListResource
+documentation:
+  module: ros_wireless_connect_list
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Wireless Connect List Module'
+  description:
+    - 'This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        3gpp:
+          type: str
+        area_prefix:
+          type: str
+        comment:
+          type: str
+          required: 'True'
+        connect:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        interface:
+          type: str
+        mac_address:
+          type: str
+          default: '00:00:00:00:00:00'
+        security_profile:
+          type: str
+        signal_range:
+          type: str
+          default: '-120..120'
+        ssid:
+          type: str
+        wireless_protocol:
+          type: str
+          choices: ['802.11', any, nstreme, tdma]
+          default: any
+examples:
+  - title: 'Using merged state'
+    name: 'Merge device configuration'
+    argument_spec:
+      config:
+        - comment: existing
+          interface: wlan1
+          signal_range: '-50..120'
+          wireless_protocol: 802.11
+      state: merged
+    before: |
+      /interface wireless connect-list
+      add comment=existing interfce=wlan1 signal-range=-79..120
+    after: |
+      /interface wireless connect-list
+      add comment=existing interface=wlan1 signal-range=-50..120 wireless-protocol=802.11
+    commands:
+      - '/interface wireless connect-list set [ find comment=existing ] interface=wlan1 signal-range=-50..120 wireless-protocol=802.11'
+resource:
+  name: wireless_connect_list
+  package: interface.wireless
+  command: '/interface wireless connect-list'
+  config_type: config
+  keys:
+    - comment
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        3gpp:
+          type: str
+        area_prefix:
+          type: str
+        comment:
+          type: str
+          required: 'True'
+        connect:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
+        interface:
+          type: str
+        mac_address:
+          type: str
+          default: '00:00:00:00:00:00'
+        security_profile:
+          type: str
+        signal_range:
+          type: str
+          default: '-120..120'
+        ssid:
+          type: str
+        wireless_protocol:
+          type: str
+          choices: ['802.11', any, nstreme, tdma]
+          default: any
+        interfce:
+          type: str

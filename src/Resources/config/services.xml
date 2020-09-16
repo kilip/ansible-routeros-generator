@@ -7,51 +7,96 @@
     <parameters>
         <parameter key="routeros.scraper.page_cache_namespace">routeros</parameter>
         <parameter key="routeros.scraper.page_cache_lifetime">604800</parameter>
-        <parameter key="routeros.scraper.cache_dir">%kernel.project_dir%/var/static-wiki</parameter>
+        <parameter key="routeros.cache_dir"/>
         <parameter key="routeros.model.max_results">1000</parameter>
-        <parameter key="routeros.scraper.config_dir"/>
+        <parameter key="routeros.config_dir"/>
+        <parameter key="routeros.twig.contexts" type="collection"/>
+        <parameter key="routeros.meta.config_dir" type="string"/>
+        <parameter key="routeros.meta.compiled_dir" type="string"/>
+        <parameter key="routeros.resource.compiled_dir" type="string"/>
     </parameters>
     <services>
-        <service id="routeros.model.submenu_manager" class="RouterOS\Model\SubMenuManager">
-            <argument type="service" id="doctrine.orm.default_entity_manager"/>
-            <argument>%routeros.model.max_results%</argument>
-        </service>
-
         <service id="routeros.scraper.page_cache" class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
             <argument>%routeros.scraper.page_cache_namespace%</argument>
             <argument>%routeros.scraper.page_cache_lifetime%</argument>
-            <argument>%routeros.scraper.cache_dir%</argument>
+            <argument>%routeros.cache_dir%</argument>
         </service>
 
-        <service id="routeros.scraper.configuration" class="RouterOS\Scraper\Configuration"/>
-        <service id="RouterOS\Scraper\Configuration" alias="routeros.scraper.configuration"/>
-
-        <service id="routeros.scraper.documentation" class="RouterOS\Scraper\DocumentationScraper">
+        <service id="routeros.util.cache_manager" class="RouterOS\Generator\Util\CacheManager" public="true">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.scraper.page_cache"/>
-            <argument type="service" id="routeros.scraper.configuration"/>
-            <argument type="service" id="routeros.model.submenu_manager"/>
-            <argument>%routeros.scraper.config_dir%</argument>
+            <argument type="service" id="http_client"/>
+            <argument>%routeros.cache_dir%</argument>
+            <argument>%kernel.project_dir%</argument>
+            <argument>%kernel.debug%</argument>
         </service>
 
-        <!--
-        <service id="routeros.listener.process" class="RouterOS\Listener\ProcessEventListener">
+        <service id="routeros.util.compiler" class="RouterOS\Generator\Util\Compiler" public="true">
+            <argument type="service" id="twig"/>
+            <argument>%kernel.project_dir%</argument>
+        </service>
+
+        <service id="routeros.twig.routeros_extension" class="RouterOS\Generator\Twig\RouterosExtension">
+            <tag name="twig.extension"/>
+        </service>
+
+        <service id="routeros.listener.console_process_subscriber" class="RouterOS\Generator\Listener\ConsoleProcessEventSubscriber" public="true">
             <argument type="service" id="logger"/>
-            <argument type="service" id="console"/>
-            <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
-            <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
+            <tag name="kernel.event_subscriber"/>
         </service>
-        -->
 
-        <service id="routeros.command.scrap" class="RouterOS\Command\ScrapCommand">
+        <service id="routeros.configuration.meta" class="RouterOS\Generator\Structure\MetaConfiguration"/>
+
+        <service id="routeros.manager.meta" class="RouterOS\Generator\Structure\MetaManager">
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument>%routeros.meta.compiled_dir%</argument>
+        </service>
+
+        <service id="routeros.manager.resource" class="RouterOS\Generator\Structure\ResourceManager">
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument>%routeros.resource.compiled_dir%</argument>
+        </service>
+
+        <service id="routeros.scraper.table_parser" class="RouterOS\Generator\Scraper\TableParser">
+            <argument type="service" id="routeros.util.cache_manager"/>
+        </service>
+
+        <service id="routeros.scraper.property_parser" class="RouterOS\Generator\Scraper\PropertyParser"/>
+
+        <service id="routeros.scraper.scraper" class="RouterOS\Generator\Scraper\Scraper">
+            <argument type="service" id="routeros.scraper.table_parser"/>
+            <argument type="service" id="routeros.scraper.property_parser"/>
+        </service>
+
+        <service id="routeros.processor.reindex_meta" class="RouterOS\Generator\Processor\ReindexMetaProcessor">
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="logger"/>
-            <argument type="service" id="routeros.scraper.documentation"/>
-            <tag name="console.command"/>
-
-            <tag name="kernel.event_listener" event="routeros.process.loop" method="onLoopEvent"/>
-            <tag name="kernel.event_listener" event="routeros.process.log" method="onLogEvent"/>
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument type="service" id="routeros.configuration.meta"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument>%routeros.meta.config_dir%</argument>
+            <argument>%routeros.meta.compiled_dir%</argument>
         </service>
-        <service id="RouterOS\Command\ScrapCommand" alias="routeros.command.scrap"/>
+
+        <service id="routeros.processor.scraping" class="RouterOS\Generator\Processor\ScrapingProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.manager.meta"/>
+            <argument type="service" id="routeros.manager.resource"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument type="service" id="routeros.scraper.scraper"/>
+            <argument>%routeros.resource.compiled_dir%</argument>
+        </service>
+
+        <service id="routeros.command.meta" class="RouterOS\Generator\Command\MetaCommand">
+            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="routeros.processor.reindex_meta"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="routeros.command.scrap" class="RouterOS\Generator\Command\ScrapCommand">
+            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="routeros.processor.scraping"/>
+            <tag name="console.command"/>
+        </service>
+
     </services>
 </container>

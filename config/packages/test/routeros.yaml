@@ -1,0 +1,3 @@
+routeros:
+  ansible:
+    target_dir: "%kernel.cache_dir%/routeros/compiled-templates/ansible"

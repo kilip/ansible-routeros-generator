@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="ansible.config_dir"/>
+        <parameter key="ansible.compiled_dir"/>
+        <parameter key="ansible.default_author">%env(AUTHOR)%</parameter>
+        <parameter key="ansible.target_dir"/>
+    </parameters>
+    <services>
+        <service id="ansible.configuration.module" class="RouterOS\Generator\Provider\Ansible\ModuleConfiguration"/>
+        <service id="ansible.processor.module_refresh" class="RouterOS\Generator\Provider\Ansible\Processor\ModuleRefreshProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument type="service" id="routeros.manager.resource"/>
+            <argument type="service" id="ansible.configuration.module"/>
+            <argument>%ansible.config_dir%</argument>
+            <argument>%ansible.compiled_dir%</argument>
+        </service>
+
+        <service id="ansible.manager.module" class="RouterOS\Generator\Provider\Ansible\Structure\ModuleManager">
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument>%ansible.compiled_dir%</argument>
+        </service>
+
+        <service id="ansible.processor.compile" class="RouterOS\Generator\Provider\Ansible\Processor\CompileProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="ansible.manager.module"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument>%ansible.target_dir%</argument>
+        </service>
+
+        <service id="ansible.command.refresh" class="RouterOS\Generator\Provider\Ansible\Command\RefreshCommand">
+            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="ansible.processor.module_refresh"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="ansible.command.compile" class="RouterOS\Generator\Provider\Ansible\Command\CompileCommand">
+            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="ansible.processor.compile"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="ansible.listener.module_documentation" class="RouterOS\Generator\Provider\Ansible\Listener\ModuleDocumentationListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="ansible.listener.module_example" class="RouterOS\Generator\Provider\Ansible\Listener\ModuleExampleListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service id="ansible.listener.resource" class="RouterOS\Generator\Provider\Ansible\Listener\ResourceListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">
+            <tag name="twig.extension"/>
+        </service>
+    </services>
+</container>

@@ -1,0 +1,33 @@
+name: wireless_security_profiles
+package: interface.wireless
+version_added: 1.0.0
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_wireless_security_profiles
+short_description: 'Wireless Security Profiles Module'
+description:
+  - 'This module manages the Wireless Security Profiles of Mikrotik RouterOS network devices.'
+fixtures:
+  - action: add
+    values:
+      name: test
+      supplicant_identity: MikroTik
+examples:
+  merged:
+    title: 'Using merged state'
+    name: 'Merge with device configuration'
+    argument_spec:
+      config:
+        - name: test
+          supplicant_identity: test
+        - name: new
+          supplicant_identity: new
+      state: merged
+    verify:
+      - action: set
+        values:
+          name: test
+          supplicant_identity: test
+      - action: add
+        values:
+          name: new
+          supplicant_identity: new

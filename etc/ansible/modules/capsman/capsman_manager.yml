@@ -1,0 +1,38 @@
+name: capsman_manager
+package: capsman
+version_added: 1.0.0
+type: setting
+author: 'Anthonius Munthi (@kilip)'
+module_name: kilip.routeros.ros_capsman_manager
+short_description: 'CAPsMan Manager Setting Module'
+description:
+  - 'This modules manages CAPsMan Maanager Setting on Mikrotik RouterOS network devices'
+states:
+  - present
+  - reset
+default_state: present
+supports:
+  - export-verbose-mode
+fixtures:
+  - action: set
+    values:
+      ca_certificate: none
+      certificate: none
+      enabled: 'no'
+      package_path: ''
+      require_peer_certificate: 'no'
+      upgrade_policy: none
+examples:
+  present:
+    title: 'Using Present State'
+    name: 'Update Settings'
+    argument_spec:
+      state: present
+      config:
+        ca_certificate: auto
+        enabled: 'yes'
+    verify:
+      - action: set
+        values:
+          ca_certificate: auto
+          enabled: 'yes'

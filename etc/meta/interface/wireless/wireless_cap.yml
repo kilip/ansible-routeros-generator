@@ -1,0 +1,29 @@
+name: wireless_cap
+package: interface.wireless
+command: '/interface wireless cap'
+type: setting
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index: 0
+properties_override:
+  bridge:
+    type: string
+  interfaces:
+    type: list
+  discovery_interfaces:
+    type: list
+  caps_man_addresses:
+    type: list
+  caps_man_names:
+    type: list
+  caps_man_certificate_common_names:
+    type: list
+  static_virtual:
+    type: string
+    choices:
+      - 'yes'
+      - 'no'
+    default: 'no'
+  certificate:
+    options:
+      - ignore-choices

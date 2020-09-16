@@ -1,0 +1,12 @@
+bridge:
+  name: bridge
+  config_file: tests/Fixtures/config/compiled/ansible/interface/bridge/bridge.yaml
+bridge_port:
+  name: bridge_port
+  config_file: tests/Fixtures/config/compiled/ansible/interface/bridge/bridge_port.yaml
+bridge_settings:
+  name: bridge_settings
+  config_file: tests/Fixtures/config/compiled/ansible/interface/bridge/bridge_settings.yaml
+interface:
+  name: interface
+  config_file: config/compiled/ansible/interface/interface.yaml

@@ -1,0 +1,12 @@
+name: capsman_manager
+package: capsman
+command: '/caps-man manager'
+type: setting
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index: 1
+properties_override:
+  ca_certificate:
+    type: string
+    options:
+      - ignore-choices

@@ -1,0 +1,8 @@
+name: interface
+package: interface
+command: /interface
+properties:
+  mtu:
+    type: string
+  l2mtu:
+    type: string

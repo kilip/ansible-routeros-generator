@@ -18,6 +18,8 @@ $finder = PhpCsFixer\Finder::create()
         'build',
         'vendor',
         "var",
+        "tests/Fixtures",
+        "tests/Provider/Ansible/Fixtures"
     ])
 ;
 

@@ -1,0 +1,212 @@
+name: wireless_security_profiles
+package: interface.wireless
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_wireless_security_profiles
+export_command: '/interface wireless security-profiles export'
+resource_class_name: WirelessSecurityProfilesResource
+documentation:
+  module: ros_wireless_security_profiles
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'Wireless Security Profiles Module'
+  description:
+    - 'This module manages the Wireless Security Profiles of Mikrotik RouterOS network devices.'
+  options:
+    state:
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+      description: 'Set state for this module'
+    config:
+      type: list
+      elements: dict
+      suboptions:
+        authentication_types:
+          type: list
+          choices: [wpa-eap, wpa-psk, wpa2-eap, wpa2-psk]
+        disable_pmkid:
+          type: bool
+          default: 'False'
+        eap_methods:
+          type: str
+          choices: [eap-tls, eap-ttls-mschapv2, passthrough, peap]
+          default: passthrough
+        group_ciphers:
+          type: str
+          choices: [aes-ccm, tkip]
+          default: aes-ccm
+        group_key_update:
+          type: str
+          default: 5m
+        interim_update:
+          type: str
+          default: '0'
+        mode:
+          type: str
+          choices: [dynamic-keys, none, static-keys-optional, static-keys-required]
+        mschapv2_password:
+          type: str
+        mschapv2_username:
+          type: str
+        name:
+          type: str
+          required: 'True'
+        radius_called_format:
+          type: str
+          choices: [mac, 'mac:ssid', ssid]
+          default: 'mac:ssid'
+        radius_eap_accounting:
+          type: bool
+          default: 'False'
+        radius_mac_accounting:
+          type: bool
+          default: 'False'
+        radius_mac_authentication:
+          type: bool
+          default: 'False'
+        radius_mac_caching:
+          type: str
+          choices: [disabled, time]
+          default: disabled
+        radius_mac_format:
+          type: str
+          choices: ['XX XX XX XX XX XX', XX-XX-XX-XX-XX-XX, 'XX:XX:XX:XX:XX:XX', 'XXXX:XXXX:XXXX', XXXXXX-XXXXXX, 'XXXXXX:XXXXXX', XXXXXXXXXXXX]
+          default: 'XX:XX:XX:XX:XX:XX'
+        radius_mac_mode:
+          type: str
+          choices: [as-username, as-username-and-password]
+          default: as-username
+        supplicant_identity:
+          type: str
+          default: '[ Identity](https://wiki.mikrotik.com/wiki/Manual:System/identity "Manual:System/identity")'
+        tls_certificate:
+          type: str
+          choices: [name, none]
+        tls_mode:
+          type: str
+          choices: [dont-verify-certificate, no-certificates, verify-certificate, verify-certificate-with-crl]
+          default: no-certificates
+        unicast_ciphers:
+          type: str
+          choices: [aes-ccm, tkip]
+          default: aes-ccm
+        wpa2_pre_shared_key:
+          type: str
+        wpa_pre_shared_key:
+          type: str
+examples:
+  - title: 'Using merged state'
+    name: 'Merge with device configuration'
+    argument_spec:
+      config:
+        - name: test
+          supplicant_identity: test
+        - name: new
+          supplicant_identity: new
+      state: merged
+    before: |
+      /interface wireless security-profiles
+      add name=test supplicant-identity=MikroTik
+    after: |
+      /interface wireless security-profiles
+      add name=test supplicant-identity=test
+      add name=new supplicant-identity=new
+    commands:
+      - '/interface wireless security-profiles set [ find name=test ] supplicant-identity=test'
+      - '/interface wireless security-profiles add name=new supplicant-identity=new'
+resource:
+  name: wireless_security_profiles
+  package: interface.wireless
+  command: '/interface wireless security-profiles'
+  config_type: config
+  keys:
+    - name
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - merged
+        - replaced
+        - overridden
+        - deleted
+      default: merged
+    config:
+      type: list
+      elements: dict
+      options:
+        authentication_types:
+          type: list
+          choices: [wpa-eap, wpa-psk, wpa2-eap, wpa2-psk]
+        disable_pmkid:
+          type: bool
+          default: 'False'
+        eap_methods:
+          type: str
+          choices: [eap-tls, eap-ttls-mschapv2, passthrough, peap]
+          default: passthrough
+        group_ciphers:
+          type: str
+          choices: [aes-ccm, tkip]
+          default: aes-ccm
+        group_key_update:
+          type: str
+          default: 5m
+        interim_update:
+          type: str
+          default: '0'
+        mode:
+          type: str
+          choices: [dynamic-keys, none, static-keys-optional, static-keys-required]
+        mschapv2_password:
+          type: str
+        mschapv2_username:
+          type: str
+        name:
+          type: str
+          required: 'True'
+        radius_called_format:
+          type: str
+          choices: [mac, 'mac:ssid', ssid]
+          default: 'mac:ssid'
+        radius_eap_accounting:
+          type: bool
+          default: 'False'
+        radius_mac_accounting:
+          type: bool
+          default: 'False'
+        radius_mac_authentication:
+          type: bool
+          default: 'False'
+        radius_mac_caching:
+          type: str
+          choices: [disabled, time]
+          default: disabled
+        radius_mac_format:
+          type: str
+          choices: ['XX XX XX XX XX XX', XX-XX-XX-XX-XX-XX, 'XX:XX:XX:XX:XX:XX', 'XXXX:XXXX:XXXX', XXXXXX-XXXXXX, 'XXXXXX:XXXXXX', XXXXXXXXXXXX]
+          default: 'XX:XX:XX:XX:XX:XX'
+        radius_mac_mode:
+          type: str
+          choices: [as-username, as-username-and-password]
+          default: as-username
+        supplicant_identity:
+          type: str
+          default: '[ Identity](https://wiki.mikrotik.com/wiki/Manual:System/identity "Manual:System/identity")'
+        tls_certificate:
+          type: str
+          choices: [name, none]
+        tls_mode:
+          type: str
+          choices: [dont-verify-certificate, no-certificates, verify-certificate, verify-certificate-with-crl]
+          default: no-certificates
+        unicast_ciphers:
+          type: str
+          choices: [aes-ccm, tkip]
+          default: aes-ccm
+        wpa2_pre_shared_key:
+          type: str
+        wpa_pre_shared_key:
+          type: str

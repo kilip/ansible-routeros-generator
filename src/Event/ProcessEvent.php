@@ -12,14 +12,17 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Event;
+namespace RouterOS\Generator\Event;
 
 use Symfony\Contracts\EventDispatcher\Event;
 
 class ProcessEvent extends Event
 {
+    public const EVENT_START = 'routeros.process.start';
     public const EVENT_LOOP = 'routeros.process.loop';
+    public const EVENT_END = 'routeros.process.end';
     public const EVENT_LOG = 'routeros.process.log';
+    public const EVENT_EXCEPTION = 'routeros.process.exception';
 
     /**
      * @var string
@@ -41,6 +44,11 @@ class ProcessEvent extends Event
      */
     private $current;
 
+    /**
+     * @var \Exception[]
+     */
+    private $exceptions;
+
     public function __construct(
         string $message,
         array $context,
@@ -51,6 +59,11 @@ class ProcessEvent extends Event
         $this->context = $context;
         $this->count = $count;
         $this->current = $current;
+    }
+
+    public function hasException()
+    {
+        return \count($this->exceptions) > 0;
     }
 
     public function getRenderedMessage(): string
@@ -142,5 +155,21 @@ class ProcessEvent extends Event
         $this->current = $current;
 
         return $this;
+    }
+
+    /**
+     * @return \Exception[]
+     */
+    public function getExceptions(): array
+    {
+        return $this->exceptions;
+    }
+
+    /**
+     * @param \Exception[] $exceptions
+     */
+    public function setExceptions(array $exceptions): void
+    {
+        $this->exceptions = $exceptions;
     }
 }

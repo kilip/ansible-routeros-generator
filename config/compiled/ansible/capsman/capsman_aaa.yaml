@@ -1,0 +1,122 @@
+name: capsman_aaa
+package: capsman
+template: '@ansible/module/module.py.twig'
+module_name: kilip.routeros.ros_capsman_aaa
+export_command: '/caps-man aaa export'
+resource_class_name: CapsmanAaaResource
+documentation:
+  module: ros_capsman_aaa
+  version_added: 1.0.0
+  author: 'Anthonius Munthi (@kilip)'
+  short_description: 'CAPsMan AAA Configuration Module'
+  description:
+    - 'This modules manages CAPsMan AAA configuration on Mikrotik RouterOS network devices'
+  supports:
+    - export-verbose-mode
+  options:
+    state:
+      choices:
+        - present
+        - reset
+      default: present
+      description: 'Set state for this module'
+    config:
+      type: dict
+      suboptions:
+        called_format:
+          type: str
+          choices: [mac, 'mac:ssid', ssid]
+          default: 'mac:ssid'
+        comment:
+          type: str
+        disabled:
+          type: bool
+          default: 'False'
+        interim_update:
+          type: str
+          default: disabled
+        mac_caching:
+          type: str
+          default: disabled
+        mac_format:
+          type: str
+          default: 'XX:XX:XX:XX:XX:XX'
+        mac_mode:
+          type: str
+          choices: [as-username, as-username-and-password]
+examples:
+  - title: 'Using present state'
+    name: 'Change configuration'
+    argument_spec:
+      config:
+        called_format:
+          - mac
+        interim_update:
+          - 10s
+        mac_caching:
+          - 10m
+        mac_format:
+          - XX-XX-XX-XX-XX-XX
+        mac_mode:
+          - as-username-and-password
+      state: present
+    before: |
+      /caps-man aaa
+      set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username
+    after: |
+      /caps-man aaa
+      set called-format=mac interim-update=10s mac-caching=10m mac-format=XX-XX-XX-XX-XX-XX mac-mode=as-username-and-password
+    commands:
+      - '/caps-man aaa set called-format=mac interim-update=10s mac-caching=10m mac-format=XX-XX-XX-XX-XX-XX mac-mode=as-username-and-password'
+  - title: 'Using reset state'
+    name: 'Reset to default value'
+    argument_spec:
+      state: reset
+    before: |
+      /caps-man aaa
+      set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username
+    after: |
+      /caps-man aaa
+      set mac-format=XX:XX:XX:XX:XX:XX
+    commands:
+      - '/caps-man aaa set mac-format=XX:XX:XX:XX:XX:XX'
+resource:
+  name: capsman_aaa
+  package: capsman
+  command: '/caps-man aaa'
+  config_type: setting
+  keys:
+    - name
+  supports:
+    - export-verbose-mode
+  argument_spec:
+    states:
+      type: str
+      choices:
+        - present
+        - reset
+      default: present
+    config:
+      type: dict
+      options:
+        called_format:
+          type: str
+          choices: [mac, 'mac:ssid', ssid]
+          default: 'mac:ssid'
+        comment:
+          type: str
+        disabled:
+          type: bool
+          default: 'False'
+        interim_update:
+          type: str
+          default: disabled
+        mac_caching:
+          type: str
+          default: disabled
+        mac_format:
+          type: str
+          default: 'XX:XX:XX:XX:XX:XX'
+        mac_mode:
+          type: str
+          choices: [as-username, as-username-and-password]
