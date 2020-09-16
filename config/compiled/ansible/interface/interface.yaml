@@ -29,14 +29,8 @@ documentation:
           description: 'Set interface disability.'
         l2mtu:
           type: str
-          description: 'Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. [ Read more&gt;&gt; ](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
         mtu:
           type: str
-          description: 'Layer3 Maximum transmission unit'
-        name:
-          type: str
-          required: 'True'
-          description: 'Name of an interface'
 examples:
   - title: 'Using Merged'
     name: 'Merge configuration with device configuration'
@@ -55,6 +49,8 @@ examples:
       set comment="ether2 comment" default-name=ether2 mtu=1500
       set comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
     after: |
+      # 2020-09-16
+      #
       /interface
       add comment="ether2 updated" mtu=2000 name=ether2
       add comment="ether3 updated" disabled=no mtu=3000 name=ether3
@@ -87,10 +83,46 @@ resource:
           type: str
         mtu:
           type: str
-        name:
-          type: str
-          required: 'True'
         comment:
           type: str
         default_name:
           type: str
+        name:
+          type: str
+          required: 'True'
+tests:
+  facts:
+    name: interface
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /interface
+      add comment="ether2 comment" default-name=ether2 mtu=1500
+      add comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
+    fixtures:
+      - action: set
+        values:
+          comment: 'ether2 comment'
+          default_name: ether2
+          mtu: '1500'
+      - action: set
+        values:
+          comment: 'ether3 comment'
+          default_name: ether3
+          disabled: 'yes'
+          mtu: '1500'
+  unit:
+    module_name: ros_interface
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /interface
+      add comment="ether2 comment" default-name=ether2 mtu=1500
+      add comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
+    tests:
+      - commands:
+          - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
+          - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
+        argument_spec:
+          config: [{ comment: 'ether2 updated', mtu: '2000', name: ether2 }, { comment: 'ether3 updated', disabled: 'no', mtu: '3000', name: ether3 }]
+          state: merged

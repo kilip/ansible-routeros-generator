@@ -66,6 +66,8 @@ class CompileProcessor
             $config = $moduleManager->getConfig($name);
             $this->compileModule($name, $config);
             $this->compileResource($name, $config);
+            $this->compileFactsTests($name, $config);
+            $this->compileUnitTests($name, $config);
 
             $resources[$name] = $config['resource'];
         }
@@ -102,6 +104,18 @@ class CompileProcessor
         }
     }
 
+    public function compileFactsTests($name, $config)
+    {
+        $compiler = $this->compiler;
+        $template = '@ansible/tests/facts.yaml.twig';
+        $package = $config['package'];
+        $targetDir = $this->targetDir;
+        $target = "{$targetDir}/tests/unit/modules/fixtures/facts/{$package}.{$name}.yaml";
+        $compiler->compile($template, $target, [
+            'facts' => $config['tests']['facts'],
+        ]);
+    }
+
     private function compileSubset(array $list)
     {
         $compiler = $this->compiler;
@@ -111,6 +125,18 @@ class CompileProcessor
 
         $compiler->compile($template, $target, [
             'modules' => $list,
+        ]);
+    }
+
+    private function compileUnitTests($name, array $config)
+    {
+        $compiler = $this->compiler;
+        $template = '@ansible/tests/unit.yaml.twig';
+        $package = $config['package'];
+        $targetDir = $this->targetDir;
+        $target = "{$targetDir}/tests/unit/modules/fixtures/units/{$package}.{$name}.yaml";
+        $compiler->compile($template, $target, [
+            'unit' => $config['tests']['unit'],
         ]);
     }
 }

@@ -5,129 +5,33 @@ command: '/interface wireless access-list'
 keys:
   - comment
 properties:
-  ap_tx_limit:
-    name: ap_tx_limit
-    type: integer
-    required: false
-    default: 0
-    choice_type: null
-    description: 'Limit rate of data transmission to this client. Value 0 means no limit. Value is in bits per second.'
-    original_name: ap-tx-limit
-  authentication:
-    name: authentication
-    type: string
-    required: false
-    default: 'yes'
-    choices:
-      - 'no'
-      - 'yes'
-    choice_type: null
-    description: |2
-       - *no* - Client association will always fail.
-      - *yes* - Use authentication procedure that is specified in the [ **security-profile**](#Security_Profiles) of the interface.
-    original_name: authentication
-  client_tx_limit:
-    name: client_tx_limit
-    type: integer
-    required: false
-    default: 0
-    choice_type: null
-    description: |
-      Ask client to limit rate of data transmission. Value 0 means no limit.
-      
-      This is a proprietary extension that is supported by RouterOS clients.
-      
-      Value is in bits per second.
-    original_name: client-tx-limit
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short description of an entry'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'no'
-      - 'yes'
-    choice_type: null
-    description: ''
-    original_name: disabled
-  forwarding:
-    name: forwarding
-    type: string
-    required: false
-    default: 'yes'
-    choices:
-      - 'no'
-      - 'yes'
-    choice_type: null
-    description: |2
-       - *no* - Client cannot send frames to other station that are connected to same access point.
-      - *yes* - Client can send frames to other stations on the same access point.
-    original_name: forwarding
-  interface:
-    name: interface
-    type: string
-    required: false
-    default: any
-    choice_type: null
-    description: 'Rules with **interface**=*any* are used for any wireless interface and the **interface**=*all* defines [interface-list](https://wiki.mikrotik.com/wiki/Manual:Interface/List#Lists "Manual:Interface/List") “all” name. To make rule that applies only to one wireless interface, specify that interface as a value of this property.'
-    original_name: interface
-  mac_address:
-    name: mac_address
-    type: string
-    required: false
-    default: '00:00:00:00:00:00'
-    choice_type: null
-    description: 'Rule matches client with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
-    original_name: mac-address
   management_protection_key:
     name: management_protection_key
-    type: string
+    type: null
     required: false
     default: null
     choice_type: null
-    description: ''
+    description: null
     options:
       - ignore-default
     original_name: management-protection-key
-  private_algo:
-    name: private_algo
-    type: string
-    required: false
-    default: none
-    choices:
-      - 104bit-wep
-      - 40bit-wep
-      - aes-ccm
-      - none
-      - tkip
-    choice_type: null
-    description: 'Only for WEP modes.'
-    original_name: private-algo
   private_key:
     name: private_key
-    type: string
+    type: null
     required: false
     default: null
     choice_type: null
-    description: 'Only for WEP modes.'
+    description: null
     options:
       - ignore-default
     original_name: private-key
   private_pre_shared_key:
     name: private_pre_shared_key
-    type: string
+    type: null
     required: false
     default: null
     choice_type: null
-    description: 'Used in WPA PSK mode.'
+    description: null
     options:
       - ignore-default
     original_name: private-pre-shared-key
@@ -137,10 +41,7 @@ properties:
     required: false
     default: '-120..120'
     choice_type: null
-    description: |
-      Rule matches if signal strength of the station is within the range.
-      
-      <dl><dd>If signal strength of the station will go out of the range that is specified in the rule, access point will disconnect that station.</dd></dl>
+    description: null
     original_name: signal-range
   time:
     name: time
@@ -148,12 +49,7 @@ properties:
     required: false
     default: null
     choice_type: null
-    description: |
-      Rule will match only during specified time.
-      
-      Station will be disconnected after specified time ends. Both start and end time is expressed as time since midnight, 00:00.
-      
-      Rule will match only during specified days of the week.
+    description: null
     options:
       - ignore-choices
     original_name: time

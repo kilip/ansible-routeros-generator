@@ -24,18 +24,69 @@ class CompileCommandTest extends KernelTestCase
 
     private static $isCompiled = false;
 
+    public function verifyContains($expected, $contents)
+    {
+        try {
+            MozartAssert::contains($contents, $expected);
+            $this->assertTrue(true);
+        } catch (\Exception $e) {
+            $this->fail($e->getMessage());
+        }
+    }
+
+    public function testCompileUnitTests()
+    {
+        $this->compileTemplate();
+        $file = $this->getRealpath('tests/unit/modules/fixtures/units/interface.bridge.bridge.yaml');
+        $this->assertFileExists($file);
+        $contents = file_get_contents($file);
+        $this->verifyContains(
+            'module: ros_bridge',
+            $contents
+        );
+        $this->verifyContains(
+            '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"',
+            $contents
+        );
+    }
+
+    public function testCompileFacts()
+    {
+        $this->compileTemplate();
+        $file = $this->getRealpath('tests/unit/modules/fixtures/facts/interface.bridge.bridge.yaml');
+        $date = (new \DateTime())->format('Y-m-d');
+        $expected = <<<EOC
+asserts:
+  - 'self.assertEqual(result[0]["arp"], "reply-only")'
+  - 'self.assertEqual(result[0]["comment"], "trunk bridge")'
+  - 'self.assertEqual(result[0]["name"], "br-trunk")'
+  - 'self.assertEqual(result[1]["arp"], "reply-only")'
+  - 'self.assertEqual(result[1]["comment"], "wan bridge")'
+  - 'self.assertEqual(result[1]["name"], "br-wan")'
+resource: bridge
+fixtures: |
+  # {$date}
+  #
+  /interface bridge
+  add arp=reply-only comment="trunk bridge" name=br-trunk
+  add arp=reply-only comment="wan bridge" name=br-wan
+
+
+EOC;
+
+        $this->assertStringEqualsFile($file, $expected);
+    }
+
     /**
-     * @param string $module
+     * @param mixed  $file
      * @param string $pattern
      * @param string $message
-     * @param mixed  $file
      * @dataProvider getCompiledModulesData
      */
     public function testCompiledModules($file, $pattern, $message = null)
     {
         $this->compileTemplate();
-        $targetDir = $this->getContainer()->getParameter('ansible.target_dir');
-        $realpath = "{$targetDir}/$file";
+        $realpath = $this->getRealpath($file);
         $contents = file_get_contents($realpath);
 
         if (null === $message) {
@@ -71,5 +122,12 @@ class CompileCommandTest extends KernelTestCase
             $tester->execute([]);
             static::$isCompiled = true;
         }
+    }
+
+    private function getRealpath($file)
+    {
+        $targetDir = $this->getContainer()->getParameter('ansible.target_dir');
+
+        return "{$targetDir}/$file";
     }
 }

@@ -9,24 +9,12 @@ properties:
     name: ca_certificate
     type: string
     required: false
-    default: none
+    default: null
     choice_type: null
-    description: 'Device CA certificate'
+    description: null
     options:
       - ignore-choices
     original_name: ca-certificate
-  certificate:
-    name: certificate
-    type: string
-    required: false
-    default: none
-    choices:
-      - auto
-      - 'certificate name'
-      - none
-    choice_type: null
-    description: 'Device certificate'
-    original_name: certificate
   comment:
     name: comment
     type: string
@@ -46,50 +34,3 @@ properties:
     choice_type: null
     description: 'Set capsman_manager resource disability'
     original_name: disabled
-  enabled:
-    name: enabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'no'
-      - 'yes'
-    choice_type: null
-    description: 'Disable or enable CAPsMAN functionality'
-    original_name: enabled
-  package_path:
-    name: package_path
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Folder location for the RouterOS packages. For example, use "/upgrade" to specify the upgrade folder from the files section. If empty string is set, CAPsMAN can use built-in RouterOS packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.'
-    original_name: package-path
-  require_peer_certificate:
-    name: require_peer_certificate
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'no'
-      - 'yes'
-    choice_type: null
-    description: 'Require all connecting CAPs to have a valid certificate'
-    original_name: require-peer-certificate
-  upgrade_policy:
-    name: upgrade_policy
-    type: string
-    required: false
-    default: none
-    choices:
-      - none
-      - require-same-version
-      - suggest-same-upgrade
-    choice_type: null
-    description: |
-      Upgrade policy options
-      
-      - none - do not perform upgrade
-      - require-same-version - CAPsMAN suggest to upgrade the CAP RouterOS version and if it fails it will not provision the CAP. (Manual provision is still possible)
-      - suggest-same-version - CAPsMAN suggests to upgrade the CAP RouterOS version and if it fails it will still be provisioned
-    original_name: upgrade-policy

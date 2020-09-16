@@ -244,6 +244,12 @@ class ModuleStructure
      */
     public function setFixtures(array $fixtures)
     {
+        foreach ($fixtures as $index => $fixture) {
+            if (isset($fixture['values'])) {
+                ksort($fixture['values']);
+            }
+            $fixtures[$index] = $fixture;
+        }
         $this->fixtures = $fixtures;
 
         return $this;

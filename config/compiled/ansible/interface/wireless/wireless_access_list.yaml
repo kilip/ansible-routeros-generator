@@ -24,80 +24,17 @@ documentation:
       type: list
       elements: dict
       suboptions:
-        ap_tx_limit:
-          type: int
-          default: 0
-          description: 'Limit rate of data transmission to this client. Value 0 means no limit. Value is in bits per second.'
-        authentication:
-          type: bool
-          default: 'True'
-          description: |2
-             - *no* - Client association will always fail.
-            - *yes* - Use authentication procedure that is specified in the [ **security-profile**](#Security_Profiles) of the interface.
-            
-        client_tx_limit:
-          type: int
-          default: 0
-          description: |
-            Ask client to limit rate of data transmission. Value 0 means no limit.
-            
-            This is a proprietary extension that is supported by RouterOS clients.
-            
-            Value is in bits per second.
-            
-        comment:
-          type: str
-          required: 'True'
-          description: 'Short description of an entry'
-        disabled:
-          type: bool
-          default: 'False'
-          description: ''
-        forwarding:
-          type: bool
-          default: 'True'
-          description: |2
-             - *no* - Client cannot send frames to other station that are connected to same access point.
-            - *yes* - Client can send frames to other stations on the same access point.
-            
-        interface:
-          type: str
-          default: any
-          description: 'Rules with **interface**=*any* are used for any wireless interface and the **interface**=*all* defines [interface-list](https://wiki.mikrotik.com/wiki/Manual:Interface/List#Lists "Manual:Interface/List") “all” name. To make rule that applies only to one wireless interface, specify that interface as a value of this property.'
-        mac_address:
-          type: str
-          default: '00:00:00:00:00:00'
-          description: 'Rule matches client with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
         management_protection_key:
           type: str
-          description: ''
-        private_algo:
-          type: str
-          choices: [104bit-wep, 40bit-wep, aes-ccm, none, tkip]
-          description: 'Only for WEP modes.'
         private_key:
           type: str
-          description: 'Only for WEP modes.'
         private_pre_shared_key:
           type: str
-          description: 'Used in WPA PSK mode.'
         signal_range:
           type: str
           default: '-120..120'
-          description: |
-            Rule matches if signal strength of the station is within the range.
-            
-            <dl><dd>If signal strength of the station will go out of the range that is specified in the rule, access point will disconnect that station.</dd></dl>
-            
         time:
           type: str
-          description: |
-            Rule will match only during specified time.
-            
-            Station will be disconnected after specified time ends. Both start and end time is expressed as time since midnight, 00:00.
-            
-            Rule will match only during specified days of the week.
-            
 examples:
   - title: 'Using merge state'
     name: 'Merge with device configuration'
@@ -113,6 +50,8 @@ examples:
       /interface wireless access-list
       add comment=existing signal-range=-79..120
     after: |
+      # 2020-09-16
+      #
       /interface wireless access-list
       add comment=existing signal-range=-80..120
       add comment=new interface=wlan1 signal-range=-50..120
@@ -139,35 +78,8 @@ resource:
       type: list
       elements: dict
       options:
-        ap_tx_limit:
-          type: int
-          default: 0
-        authentication:
-          type: bool
-          default: 'True'
-        client_tx_limit:
-          type: int
-          default: 0
-        comment:
-          type: str
-          required: 'True'
-        disabled:
-          type: bool
-          default: 'False'
-        forwarding:
-          type: bool
-          default: 'True'
-        interface:
-          type: str
-          default: any
-        mac_address:
-          type: str
-          default: '00:00:00:00:00:00'
         management_protection_key:
           type: str
-        private_algo:
-          type: str
-          choices: [104bit-wep, 40bit-wep, aes-ccm, none, tkip]
         private_key:
           type: str
         private_pre_shared_key:
@@ -177,3 +89,35 @@ resource:
           default: '-120..120'
         time:
           type: str
+        comment:
+          type: str
+          required: 'True'
+        interface:
+          type: str
+tests:
+  facts:
+    name: wireless_access_list
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /interface wireless access-list
+      add comment=existing signal-range=-79..120
+    fixtures:
+      - action: add
+        values:
+          comment: existing
+          signal_range: '-79..120'
+  unit:
+    module_name: ros_wireless_access_list
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /interface wireless access-list
+      add comment=existing signal-range=-79..120
+    tests:
+      - commands:
+          - '/interface wireless access-list set [ find comment=existing ] signal-range=-80..120'
+          - '/interface wireless access-list add comment=new interface=wlan1 signal-range=-50..120'
+        argument_spec:
+          config: [{ comment: existing, signal_range: '-80..120' }, { comment: new, interface: wlan1, signal_range: '-50..120' }]
+          state: merged

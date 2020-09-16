@@ -19,6 +19,24 @@ use RouterOS\Generator\Structure\ResourceStructure;
 
 class Text
 {
+    public static function toRouterosExport(ResourceStructure $resource, array $values)
+    {
+        $type = $resource->getType();
+        $contents = self::arrayToRouteros($resource, $values);
+        if ('config' == $type) {
+            $contents = preg_replace("#(remove .*[\n]?)#", '', $contents);
+            $contents = preg_replace('#(set) (.*)#', 'add \\2', $contents);
+            $contents = preg_replace("#\/system script run .*\\n?#", '', $contents);
+        }
+        $date = (new \DateTime())->format('Y-m-d');
+
+        return <<<EOC
+# {$date}
+#
+{$contents}
+EOC;
+    }
+
     public static function quoteRouterOSValue($value)
     {
         if (false !== strpos($value, ' ')) {
@@ -28,7 +46,46 @@ class Text
         return $value;
     }
 
-    public static function arrayToRouteros(ResourceStructure $resource, $values)
+    public static function toRouterosCommands(ResourceStructure $resource, $values)
+    {
+        $command = $resource->getCommand();
+        $commands = [];
+
+        foreach ($values as $value) {
+            $action = $value['action'];
+            $cmds = [];
+            if ('script' == $action) {
+                $cmds[] = $value['script'];
+            } else {
+                $type = $resource->getType();
+                $keys = $resource->getKeys();
+                $cmds = [$command, $action];
+                $vals = $value['values'];
+                if ('config' === $type && \in_array($action, ['set', 'remove'], true)) {
+                    $finds = [];
+                    foreach ($vals as $name => $val) {
+                        if (\in_array($name, $keys, true)) {
+                            $val = static::quoteRouterOSValue($val);
+                            $originalName = static::getOriginalName($resource, $name);
+                            $finds[] = "{$originalName}=$val";
+                            unset($vals[$name]);
+                        }
+                    }
+                    $cmds[] = '[ find '.implode(' ', $finds).' ]';
+                }
+                foreach ($vals as $name => $val) {
+                    $originalName = static::getOriginalName($resource, $name);
+                    $val = static::quoteRouterOSValue($val);
+                    $cmds[] = "{$originalName}={$val}";
+                }
+            }
+            $commands[] = implode(' ', $cmds);
+        }
+
+        return $commands;
+    }
+
+    public static function arrayToRouteros(ResourceStructure $resource, $values, $asCommandList = false)
     {
         $command = $resource->getCommand();
         $configs = [];
@@ -56,6 +113,13 @@ class Text
             $configs[] = implode(' ', $cmds);
         }
 
+        if ($asCommandList) {
+            foreach ($configs as $index => $config) {
+                $configs[$index] = $command.' '.$config;
+            }
+
+            return $configs;
+        }
         $contents = "{$command}\n".implode("\n", $configs);
 
         return $contents;

@@ -56,6 +56,9 @@
         <service id="ansible.listener.resource" class="RouterOS\Generator\Provider\Ansible\Listener\ResourceListener">
             <tag name="kernel.event_subscriber"/>
         </service>
+        <service id="ansible.listener.tests" class="RouterOS\Generator\Provider\Ansible\Listener\TestListener">
+            <tag name="kernel.event_subscriber"/>
+        </service>
 
         <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">
             <tag name="twig.extension"/>

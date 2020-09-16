@@ -1,0 +1,9 @@
+asserts:
+{% for index,fixture in facts.fixtures %}
+{% for name,value in fixture.values %}
+  - 'self.assertEqual(result[{{ index }}]["{{ name }}"], "{{ value }}")'
+{% endfor %}
+{% endfor %}
+resource: {{ facts.name }}
+fixtures: |
+{{ facts.fixture_contents|routeros_prefix("  ")|raw }}

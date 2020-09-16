@@ -1,0 +1,9 @@
+{% include "@ansible/header.txt.twig" %}
+---
+module: {{ unit.module_name }}
+
+fixtures: |
+{{ unit.fixture_contents|routeros_prefix("  ")|raw }}
+
+tests:
+{{ unit.tests|routeros_yaml_dump(1)|raw }}

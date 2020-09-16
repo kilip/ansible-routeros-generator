@@ -61,13 +61,7 @@ class ModuleExampleListener implements EventSubscriberInterface
 
     private function generateAfter(ResourceStructure $resource, $verify)
     {
-        $type = $resource->getType();
-        $after = Text::arrayToRouteros($resource, $verify);
-        if ('config' == $type) {
-            $after = preg_replace("#(remove .*[\n]?)#", '', $after);
-            $after = preg_replace('#(set) (.*)#', 'add \\2', $after);
-            $after = preg_replace("#\/system script run .*\\n?#", '', $after);
-        }
+        $after = Text::toRouterosExport($resource, $verify);
 
         return trim($after);
     }

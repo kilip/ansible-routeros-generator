@@ -5,67 +5,19 @@ command: '/interface vlan'
 keys:
   - name
 properties:
-  arp:
-    name: arp
-    type: string
-    required: false
-    default: enabled
-    choices:
-      - disabled
-      - enabled
-      - proxy-arp
-      - reply-only
-    choice_type: null
-    description: 'Address Resolution Protocol mode'
-    original_name: arp
   interface:
     name: interface
-    type: string
+    type: null
     required: true
     default: null
     choice_type: null
-    description: 'Name of physical interface on top of which VLAN will work'
+    description: null
     original_name: interface
-  l2mtu:
-    name: l2mtu
-    type: integer
-    required: false
-    default: null
-    choice_type: null
-    description: 'Layer2 MTU. For VLANS this value is not configurable. [ Read more&gt;&gt;](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
-    original_name: l2mtu
-  mtu:
-    name: mtu
-    type: integer
-    required: false
-    default: 1500
-    choice_type: null
-    description: 'Layer3 Maximum transmission unit'
-    original_name: mtu
-  name:
-    name: name
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Interface name'
-    original_name: name
-  use_service_tag:
-    name: use_service_tag
-    type: string
-    required: false
-    default: null
-    choices:
-      - 'no'
-      - 'yes'
-    choice_type: null
-    description: '802.1ad compatible Service Tag'
-    original_name: use-service-tag
   vlan_id:
     name: vlan_id
-    type: integer
+    type: null
     required: true
-    default: 1
+    default: null
     choice_type: null
-    description: 'Virtual LAN identifier or tag that is used to distinguish VLANs. Must be equal for all computers that belong to the same VLAN.'
+    description: null
     original_name: vlan-id

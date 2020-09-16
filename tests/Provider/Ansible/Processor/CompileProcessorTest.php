@@ -67,6 +67,10 @@ class CompileProcessorTest extends KernelTestCase
             'examples' => [],
             'template' => '@ansible/module/module.py.twig',
             'resource' => ['resource'],
+            'tests' => [
+                'facts' => [],
+                'unit' => [],
+            ],
         ];
 
         $moduleManager->expects($this->once())
@@ -79,7 +83,7 @@ class CompileProcessorTest extends KernelTestCase
             ->willReturn($config);
 
         $compiler
-            ->expects($this->exactly(3))
+            ->expects($this->exactly(5))
             ->method('compile')
             ->withConsecutive(
                 [
@@ -91,6 +95,16 @@ class CompileProcessorTest extends KernelTestCase
                     '@ansible/resource.py.twig',
                     $this->targetDir.'/plugins/module_utils/resources/interface/bridge/bridge.py',
                     $config['resource'],
+                ],
+                [
+                    '@ansible/tests/facts.yaml.twig',
+                    $this->targetDir.'/tests/unit/modules/fixtures/facts/interface.bridge.bridge.yaml',
+                    ['facts' => []],
+                ],
+                [
+                    '@ansible/tests/unit.yaml.twig',
+                    $this->targetDir.'/tests/unit/modules/fixtures/units/interface.bridge.bridge.yaml',
+                    ['unit' => []],
                 ],
                 [
                     '@ansible/subset.py.twig',

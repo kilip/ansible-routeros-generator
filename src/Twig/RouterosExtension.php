@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Twig;
 
 use Doctrine\Inflector\InflectorFactory;
+use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;
 use Symfony\Component\Yaml\Yaml;
 use Twig\Extension\AbstractExtension;
@@ -30,7 +31,13 @@ class RouterosExtension extends AbstractExtension
             new TwigFilter('classify', [$this, 'classify']),
             new TwigFilter('to_json', [$this, 'toJson']),
             new TwigFilter('fix_json', [$this, 'fixJson']),
+            new TwigFilter('to_routeros_export', [$this, 'toRouterOSExport']),
         ];
+    }
+
+    public function toRouterOSExport(array $values, ResourceStructure $resource, $spacing = 0)
+    {
+        return Text::arrayToRouteros($resource, $values);
     }
 
     public function yamlDump(array $data, int $indent = 0)
@@ -56,7 +63,7 @@ class RouterosExtension extends AbstractExtension
         $lines = explode("\n", $contents);
         $output = [];
         foreach ($lines as $line) {
-            $output[] = $prefix.$line;
+            $output[] = rtrim($prefix.$line);
         }
 
         return implode("\n", $output);

@@ -111,6 +111,8 @@ examples:
       /caps-man datapath
       add name=test
     after: |
+      # 2020-09-16
+      #
       /caps-man datapath
       add arp=reply-only bridge=br-trunk name=test
       add arp=reply-only bridge=br-trunk name=new
@@ -171,3 +173,29 @@ resource:
         vlan_mode:
           type: str
           choices: [use-service-tag, use-tag]
+tests:
+  facts:
+    name: capsman_datapath
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /caps-man datapath
+      add name=test
+    fixtures:
+      - action: add
+        values:
+          name: test
+  unit:
+    module_name: ros_capsman_datapath
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /caps-man datapath
+      add name=test
+    tests:
+      - commands:
+          - '/caps-man datapath set [ find name=test ] arp=reply-only bridge=br-trunk'
+          - '/caps-man datapath add arp=reply-only bridge=br-trunk name=new'
+        argument_spec:
+          state: merged
+          config: [{ arp: reply-only, bridge: br-trunk, name: test }, { arp: reply-only, bridge: br-trunk, name: new }]

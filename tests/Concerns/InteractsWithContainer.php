@@ -19,6 +19,16 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 trait InteractsWithContainer
 {
     /**
+     * @param string $id
+     *
+     * @return object|null
+     */
+    protected function getService(string $id)
+    {
+        return $this->getContainer()->get($id);
+    }
+
+    /**
      * @param string $name
      *
      * @return mixed

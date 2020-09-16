@@ -24,32 +24,10 @@ documentation:
       type: list
       elements: dict
       suboptions:
-        arp:
-          type: str
-          choices: [disabled, enabled, proxy-arp, reply-only]
-          default: enabled
-          description: 'Address Resolution Protocol mode'
         interface:
           type: str
-          description: 'Name of physical interface on top of which VLAN will work'
-        l2mtu:
-          type: int
-          description: 'Layer2 MTU. For VLANS this value is not configurable. [ Read more&gt;&gt;](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
-        mtu:
-          type: int
-          default: 1500
-          description: 'Layer3 Maximum transmission unit'
-        name:
-          type: str
-          required: 'True'
-          description: 'Interface name'
-        use_service_tag:
-          type: bool
-          description: '802.1ad compatible Service Tag'
         vlan_id:
-          type: int
-          default: 1
-          description: 'Virtual LAN identifier or tag that is used to distinguish VLANs. Must be equal for all computers that belong to the same VLAN.'
+          type: str
 examples:
   - title: 'Using merged state'
     name: 'Merge configuration with device configuration'
@@ -68,6 +46,8 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
+      # 2020-09-16
+      #
       /interface vlan
       add arp=enabled comment="new comment" name=vlan-100
       add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200
@@ -87,6 +67,8 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
+      # 2020-09-16
+      #
       /interface vlan
       add arp=enabled comment="new comment" name=vlan-100
     commands:
@@ -104,6 +86,8 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
+      # 2020-09-16
+      #
       /interface vlan
       add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100
     commands:
@@ -121,7 +105,10 @@ examples:
     before: |
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
-    after: '/interface vlan'
+    after: |
+      # 2020-09-16
+      #
+      /interface vlan
     commands:
       - '/interface vlan remove name=vlan-100'
       - '/system script run ansible-remove-invalid'
@@ -145,24 +132,61 @@ resource:
       type: list
       elements: dict
       options:
-        arp:
-          type: str
-          choices: [disabled, enabled, proxy-arp, reply-only]
-          default: enabled
         interface:
           type: str
-        l2mtu:
-          type: int
-        mtu:
-          type: int
-          default: 1500
+        vlan_id:
+          type: str
+        arp:
+          type: str
         name:
           type: str
           required: 'True'
-        use_service_tag:
-          type: bool
-        vlan_id:
-          type: int
-          default: 1
         comment:
           type: str
+tests:
+  facts:
+    name: vlan
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    fixtures:
+      - action: add
+        values:
+          arp: reply-only
+          interface: br-trunk
+          name: vlan-100
+          vlan_id: '100'
+  unit:
+    module_name: ros_vlan
+    fixture_contents: |
+      # 2020-09-16
+      #
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    tests:
+      - commands:
+          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+          - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200'
+        argument_spec:
+          config: [{ comment: 'new comment', interface: br-trunk, name: vlan-100, vlan_id: 100 }, { comment: 'new comment', interface: br-trunk, name: vlan-200, vlan_id: 200 }]
+          state: merged
+      - commands:
+          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+        argument_spec:
+          config: [{ comment: 'new comment', interface: br-trunk, name: vlan-100, vlan_id: 100 }]
+          state: replaced
+      - commands:
+          - '/interface vlan remove [ find name=vlan-100 ]'
+          - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100'
+          - '/system script run ansible-remove-invalid'
+        argument_spec:
+          config: [{ comment: 'new comment', interface: br-trunk, name: vlan-new, vlan_id: 100 }]
+          state: overridden
+      - commands:
+          - '/interface vlan remove [ find name=vlan-100 ]'
+          - '/system script run ansible-remove-invalid'
+        argument_spec:
+          config: [{ interface: br-trunk, name: vlan-100, vlan_id: 100 }]
+          state: deleted
