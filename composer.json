@@ -27,7 +27,7 @@
         "phpstan/phpstan": "^0.12.42",
         "phpstan/phpstan-phpunit": "^0.12.16",
         "phpstan/phpstan-symfony": "^0.12.7",
-        "symfony/phpunit-bridge": "dev-master",
+        "symfony/phpunit-bridge": "^5.1",
         "webmozart/assert": "^1.9"
     },
     "config": {
@@ -70,10 +70,9 @@
         "scrap": "./bin/console routeros:scrap --ansi",
         "phpstan": "./vendor/bin/phpstan analyse --ansi",
         "phpcs": "./vendor/bin/php-cs-fixer fix --ansi",
-        "phpunit": "phpunit --colors=always",
+        "phpunit": "SYMFONY_PHPUNIT_VERSION=8.5 ./vendor/bin/simple-phpunit --colors=always",
         "prepare-test": [
-            "./bin/console doctrine:database:create --ansi --env=test",
-            "./bin/console doctrine:schema:update --force --env=test"
+            "@phpunit --version"
         ],
         "test": [
             "@prepare-test",
