@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
             ->arrayNode('ansible')
                 ->isRequired()
                 ->children()
+                    ->scalarNode('git_repository')->isRequired()->end()
                     ->scalarNode('target_dir')->isRequired()->end()
                     ->scalarNode('module_name_prefix')->isRequired()->end()
                 ->end()

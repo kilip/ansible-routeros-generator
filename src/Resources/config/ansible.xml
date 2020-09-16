@@ -9,6 +9,7 @@
         <parameter key="ansible.compiled_dir"/>
         <parameter key="ansible.default_author">%env(AUTHOR)%</parameter>
         <parameter key="ansible.target_dir"/>
+        <parameter key="ansible.repository"/>
     </parameters>
     <services>
         <service id="ansible.configuration.module" class="RouterOS\Generator\Provider\Ansible\ModuleConfiguration"/>
@@ -47,6 +48,11 @@
             <tag name="console.command"/>
         </service>
 
+        <service id="ansible.command.build" class="RouterOS\Generator\Provider\Ansible\Command\BuildCommand">
+            <argument type="service" id="event_dispatcher"/>
+            <tag name="console.command"/>
+        </service>
+
         <service id="ansible.listener.module_documentation" class="RouterOS\Generator\Provider\Ansible\Listener\ModuleDocumentationListener">
             <tag name="kernel.event_subscriber"/>
         </service>
@@ -58,6 +64,14 @@
         </service>
         <service id="ansible.listener.tests" class="RouterOS\Generator\Provider\Ansible\Listener\TestListener">
             <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <!-- build event listeners -->
+        <service id="ansible.build.listeners.checkout" class="RouterOS\Generator\Provider\Ansible\Bridge\CheckoutAnsibleCollection">
+            <argument>%ansible.git_repository%</argument>
+            <argument>%ansible.target_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+            <tag name="ansible.build_event"/>
         </service>
 
         <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">

@@ -7,5 +7,6 @@ routeros:
   compiled_dir: "%kernel.project_dir%/config/compiled"
   cache_dir: "%kernel.cache_dir%/routeros"
   ansible:
+    git_repository: "https://github.com/kilip/ansible-collection-routeros.git"
     module_name_prefix: "kilip.routeros"
-    target_dir: "%kernel.project_dir%/var/ansible"
+    target_dir: "%kernel.project_dir%/var/ansible_collections/kilip/routeros"

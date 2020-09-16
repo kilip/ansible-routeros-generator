@@ -22,6 +22,11 @@ class TestPass implements CompilerPassInterface
         $definition = new Definition(MockHttpClient::class);
         $definition->addArgument([$container->findDefinition('test.html_pages'),'handleRequest']);
         $container->setDefinition('http_client', $definition);
+
+        $definitions = $container->findTaggedServiceIds('ansible.build_event');
+        foreach($definitions as $id => $tags){
+            $container->removeDefinition($id);
+        }
     }
 
 }
