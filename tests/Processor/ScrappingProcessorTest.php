@@ -30,8 +30,8 @@ use Tests\RouterOS\Generator\Concerns\InteractsWithYaml;
 
 class ScrappingProcessorTest extends KernelTestCase
 {
-    use InteractsWithContainer,
-        InteractsWithYaml;
+    use InteractsWithContainer;
+    use InteractsWithYaml;
 
     /**
      * @var MockObject|EventDispatcherInterface
@@ -96,7 +96,7 @@ class ScrappingProcessorTest extends KernelTestCase
     {
         $metaManager = $this->metaManager;
         $processor = $this->processor;
-        $metaCompiledFileName = __DIR__ . '/../Fixtures/yaml/meta-compiled-interface.yaml';
+        $metaCompiledFileName = __DIR__.'/../Fixtures/yaml/meta-compiled-interface.yaml';
         $scraper = $this->scraper;
         $compiler = $this->templateCompiler;
         $resourceCompiledDir = $this->resourceCompiledDir;

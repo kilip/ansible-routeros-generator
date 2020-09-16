@@ -81,8 +81,8 @@ class CompileProcessor
         $target = "{$targetDir}/plugins/modules/ros_{$name}.py";
         $compiler->compile($template, $target, $config);
 
-        $dir = dirname($target);
-        if(!file_exists($file = $dir.'/__init__.py')){
+        $dir = \dirname($target);
+        if (!file_exists($file = $dir.'/__init__.py')) {
             touch($file);
         }
     }
@@ -96,8 +96,8 @@ class CompileProcessor
         $target = "{$targetDir}/plugins/module_utils/resources/{$package}/{$name}.py";
         $compiler->compile($template, $target, $config['resource']);
 
-        $dir = dirname($target);
-        if(!file_exists($file = $dir.'/__init__.py')){
+        $dir = \dirname($target);
+        if (!file_exists($file = $dir.'/__init__.py')) {
             touch($file);
         }
     }

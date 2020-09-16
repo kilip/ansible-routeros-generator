@@ -39,7 +39,7 @@ class ConsoleProcessEventSubscriber implements EventSubscriberInterface
     private $logger;
 
     /**
-     * @var Exception[]
+     * @var \Exception[]
      */
     private $exceptions = [];
 

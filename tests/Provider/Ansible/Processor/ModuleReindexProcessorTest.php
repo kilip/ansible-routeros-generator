@@ -129,11 +129,11 @@ class ModuleReindexProcessorTest extends KernelTestCase
             ->withConsecutive(
                 [
                     $this->isType('array'),
-                    $this->moduleCompiledDir.'/interface/interface.yaml'
+                    $this->moduleCompiledDir.'/interface/interface.yaml',
                 ],
                 [
                     $this->isType('array'),
-                    $this->moduleCompiledDir.'/index.yaml'
+                    $this->moduleCompiledDir.'/index.yaml',
                 ]
             );
 

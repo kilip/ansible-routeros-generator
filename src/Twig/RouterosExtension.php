@@ -29,7 +29,7 @@ class RouterosExtension extends AbstractExtension
             new TwigFilter('routeros_prefix', [$this, 'prefix']),
             new TwigFilter('classify', [$this, 'classify']),
             new TwigFilter('to_json', [$this, 'toJson']),
-            new TwigFilter('fix_json', [$this, 'fixJson'])
+            new TwigFilter('fix_json', [$this, 'fixJson']),
         ];
     }
 
@@ -65,31 +65,32 @@ class RouterosExtension extends AbstractExtension
     public function classify($input)
     {
         $inflector = InflectorFactory::create()->build();
+
         return $inflector->classify($input);
     }
 
-    public function fixJson($input, $spacing=0)
+    public function fixJson($input, $spacing = 0)
     {
-        $prefix = str_repeat("  ", $spacing);
+        $prefix = str_repeat('  ', $spacing);
         $input = Text::stripPythonBool($input);
 
         $lines = explode("\n", $input);
 
         $contents = [];
-        foreach($lines as $index => $line){
-            if($index > 0){
+        foreach ($lines as $index => $line) {
+            if ($index > 0) {
                 $line = $prefix.$line;
             }
             $contents[] = $line;
         }
-        $contents = implode("\n", $contents);
 
-        return $contents;
+        return implode("\n", $contents);
     }
 
-    public function toJson(array $value, $spacing=0)
+    public function toJson(array $value, $spacing = 0)
     {
         $contents = json_encode($value, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK);
+
         return $this->fixJson($contents, $spacing);
     }
 }

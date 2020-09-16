@@ -32,7 +32,7 @@ class ResourceStructureTest extends TestCase
         $this->assertFalse($resource->hasProperty('test'));
 
         $property = $resource->getProperty('test', true);
-        $this->assertTrue(is_object($property));
+        $this->assertIsObject($property);
         $this->assertTrue($resource->hasProperty('test'));
 
         $this->expectException(\InvalidArgumentException::class);
@@ -55,10 +55,13 @@ class ResourceStructureTest extends TestCase
 
     /**
      * @dataProvider getTestFromMetaData
+     *
+     * @param mixed $name
+     * @param mixed $expectedValue
      */
     public function testFromMeta($name, $expectedValue)
     {
-        $config = $this->parseYamlFile("yaml/test-meta.yaml");
+        $config = $this->parseYamlFile('yaml/test-meta.yaml');
         $meta = new Meta();
         $meta->fromArray($config);
 
@@ -66,15 +69,14 @@ class ResourceStructureTest extends TestCase
         $structure->fromMeta($meta);
 
         $data = $structure->toArray();
-        $exp = explode(".", $name);
-        if(count($exp) === 1){
+        $exp = explode('.', $name);
+        if (1 === \count($exp)) {
             $this->assertSame($expectedValue, $data[$name]);
-            return;
-        }else{
-            $value = $data[$exp[0]][$exp[1]][$exp[2]];
-            $this->assertSame($expectedValue, $value);
-        }
 
+            return;
+        }
+        $value = $data[$exp[0]][$exp[1]][$exp[2]];
+        $this->assertSame($expectedValue, $value);
     }
 
     public function getTestFromMetaData()
@@ -115,6 +117,6 @@ class ResourceStructureTest extends TestCase
 
     private function fromYamlFile()
     {
-        return Yaml::parseFile(__DIR__ . '/../Fixtures/yaml/interface-resource.yml');
+        return Yaml::parseFile(__DIR__.'/../Fixtures/yaml/interface-resource.yml');
     }
 }

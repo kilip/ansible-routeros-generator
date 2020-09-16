@@ -88,17 +88,19 @@ class ResourceStructure
 
     public function getProperty($name, $createIfNotExists = false)
     {
-        if(!$this->hasProperty($name)){
-            if($createIfNotExists){
+        if (!$this->hasProperty($name)) {
+            if ($createIfNotExists) {
                 $property = new ResourceProperty();
                 $property->setName($name);
                 $this->addProperty($property);
-            }else{
+            } else {
                 throw new \InvalidArgumentException("Resource {$this->name} doesn't have property {$name}.");
             }
         }
+
         return $this->properties[$name];
     }
+
     /**
      * @return ResourceProperty[]
      */
@@ -109,11 +111,13 @@ class ResourceStructure
 
     /**
      * @param ResourceProperty[] $properties
+     *
      * @return static
      */
     public function setProperties(array $properties)
     {
         $this->properties = $properties;
+
         return $this;
     }
 
@@ -128,7 +132,7 @@ class ResourceStructure
     {
         $this->traitFromArray($config);
 
-        if(isset($config['properties'])){
+        if (isset($config['properties'])) {
             $this->importProperties($config['properties']);
         }
     }
@@ -148,9 +152,11 @@ class ResourceStructure
         $data = $this->traitToArray();
 
         unset($data['exceptions']);
-        foreach($this->properties as $name => $property){
-            $prop = $property instanceof ResourceProperty ? $property->toArray():$property;
-            $data['properties'][$name] = $prop;
+        foreach ($this->properties as $name => $property) {
+            if ($property instanceof ResourceProperty) {
+                $property = $property->toArray();
+            }
+            $data['properties'][$name] = $property;
         }
 
         return $data;

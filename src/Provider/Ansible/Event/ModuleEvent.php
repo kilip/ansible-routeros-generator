@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Event;
 
-use Doctrine\Inflector\InflectorFactory;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;

@@ -27,10 +27,10 @@ trait ListenerTrait
         $keys = $resource->getKeys();
         $props = [];
         foreach ($resource->getProperties() as $name => $property) {
-            if(
-                in_array($name, $ignores)
-                || in_array($property->getOriginalName(), $ignores)
-            ){
+            if (
+                \in_array($name, $ignores, true)
+                || \in_array($property->getOriginalName(), $ignores, true)
+            ) {
                 continue;
             }
 
@@ -45,14 +45,13 @@ trait ListenerTrait
                     $prop['type'] = 'bool';
                 } else {
                     $choices = $property->getChoices();
-                    foreach($choices as $index => $choice){
-                        if($type == 'int'){
-                            $choices[$index] = intval($choice);
+                    foreach ($choices as $index => $choice) {
+                        if ('int' == $type) {
+                            $choices[$index] = (int) $choice;
                         }
                     }
                     $prop['choices'] = $choices;
                 }
-
             }
 
             if (
@@ -72,7 +71,7 @@ trait ListenerTrait
             }
 
             if (
-                !ModuleEvent::PROPERTY_NO_DESCRIPTION & $options
+                !(ModuleEvent::PROPERTY_NO_DESCRIPTION & $options)
                 && null !== $property->getDescription()
             ) {
                 $prop['description'] = $property->getDescription();

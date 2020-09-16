@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Util;
 
 use Doctrine\Inflector\InflectorFactory;
-use RouterOS\Generator\Structure\ResourceProperties;
 
 trait ArrayStructureTrait
 {
@@ -27,7 +26,7 @@ trait ArrayStructureTrait
     {
         $inflector = InflectorFactory::create()->build();
         foreach ($config as $name => $value) {
-            if(in_array($name, $this->ignoredImports)){
+            if (\in_array($name, $this->ignoredImports, true)) {
                 continue;
             }
             $setter = 'set'.ucfirst($inflector->camelize($name));
@@ -78,9 +77,6 @@ trait ArrayStructureTrait
                 $key = $inflector->tableize($key);
                 $value = \call_user_func([$this, $getter]);
 
-                if ($value instanceof ResourceProperties) {
-                    $value = $value->toArray();
-                }
                 $data[$key] = $value;
             }
         }

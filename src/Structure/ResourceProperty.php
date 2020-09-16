@@ -97,6 +97,7 @@ class ResourceProperty
     public function setName(?string $name)
     {
         $this->name = $name;
+
         return $this;
     }
 
@@ -155,9 +156,9 @@ class ResourceProperty
      */
     public function setDefault($default)
     {
-        if(is_string($default)){
+        if (\is_string($default)) {
             $data = @unserialize($default);
-            if(false !== $data){
+            if (false !== $data) {
                 $default = $data;
             }
         }
@@ -182,9 +183,9 @@ class ResourceProperty
      */
     public function setChoices(array $choices)
     {
-        foreach($choices as $index => $choice){
-            if($this->getType() == self::TYPE_INTEGER){
-                $choices[$index] = intval($choice);
+        foreach ($choices as $index => $choice) {
+            if (self::TYPE_INTEGER == $this->getType()) {
+                $choices[$index] = (int) $choice;
             }
         }
         $this->choices = $choices;
@@ -257,11 +258,12 @@ class ResourceProperty
      */
     public function getOriginalName(): string
     {
-        if(is_null($this->originalName)){
+        if (null === $this->originalName) {
             $this->originalName = strtr($this->name, [
-                '_' => '-'
+                '_' => '-',
             ]);
         }
+
         return $this->originalName;
     }
 

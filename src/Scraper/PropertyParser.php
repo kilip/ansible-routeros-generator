@@ -57,7 +57,6 @@ class PropertyParser
         $this->parseDefault($property, $info);
 
         return $resource;
-
     }
 
     private function parseName($text)
@@ -98,7 +97,7 @@ class PropertyParser
 
                 return;
             }
-            
+
             if (\is_string($choice)) {
                 $property->setType(ResourceProperty::TYPE_STRING);
 

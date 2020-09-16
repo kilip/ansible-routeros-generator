@@ -47,9 +47,9 @@ class AnsibleExtension extends AbstractExtension
 
     public function resourceBaseImport($package)
     {
-        $exp = explode(".", $package);
-        $prefix = str_repeat('.', count($exp));
-        $contents = "from {$prefix}.base import ResourceBase";
-        return $contents;
+        $exp = explode('.', $package);
+        $prefix = str_repeat('.', \count($exp));
+
+        return "from {$prefix}.base import ResourceBase";
     }
 }

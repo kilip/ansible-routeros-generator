@@ -20,6 +20,7 @@ trait InteractsWithContainer
 {
     /**
      * @param string $name
+     *
      * @return mixed
      */
     protected function getParameter(string $name)

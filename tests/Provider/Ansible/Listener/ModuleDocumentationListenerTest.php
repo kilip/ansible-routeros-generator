@@ -28,8 +28,7 @@ class ModuleDocumentationListenerTest extends TestCase
         $module = $this->createModule('interface.bridge.bridge');
         $module
             ->setModuleTemplate('test')
-            ->setVersionAdded('1.0.0')
-        ;
+            ->setVersionAdded('1.0.0');
         $resource = $this->createResource('interface.bridge.bridge');
         $event = new ModuleEvent($module, $resource);
 

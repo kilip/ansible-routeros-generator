@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Processor;
 
-use Psr\EventDispatcher\EventDispatcherInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\MetaManagerInterface;
 use RouterOS\Generator\Contracts\ResourceManagerInterface;
@@ -25,6 +24,7 @@ use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ScrapingProcessor
 {

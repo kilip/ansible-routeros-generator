@@ -327,6 +327,7 @@ class ModuleStructure
     public function setSupports(array $supports)
     {
         $this->supports = $supports;
+
         return $this;
     }
 
