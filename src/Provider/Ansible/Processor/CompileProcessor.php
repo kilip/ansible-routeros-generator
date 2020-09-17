@@ -112,12 +112,8 @@ class CompileProcessor implements EventSubscriberInterface
         $target = "{$targetDir}/plugins/modules/ros_{$name}.py";
         $compiler->compile($template, $target, $config);
 
-        $dir = \dirname($target);
-        filesystem($dir)->ensureDir();
-
-        if (!file_exists($file = $dir.'/__init__.py')) {
-            touch($file);
-        }
+        $file = \dirname($target).'/__init__.py';
+        filesystem()->ensureFileExists($file);
     }
 
     public function compileResource($name, $config)
@@ -129,12 +125,8 @@ class CompileProcessor implements EventSubscriberInterface
         $target = "{$targetDir}/plugins/module_utils/resources/{$package}/{$name}.py";
         $compiler->compile($template, $target, $config['resource']);
 
-        $dir = \dirname($target);
-        filesystem($dir)->ensureDir();
-
-        if (!file_exists($file = $dir.'/__init__.py')) {
-            touch($file);
-        }
+        $file = \dirname($target).'/__init__.py';
+        filesystem()->ensureFileExists($file);
     }
 
     public function compileFactsTests($name, $config)

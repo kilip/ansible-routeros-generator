@@ -14,9 +14,11 @@ declare(strict_types=1);
 
 use RouterOS\Generator\Util\Filesystem;
 
-function filesystem()
-{
-    $args = func_get_args();
+if (!function_exists('filesystem')) {
+    function filesystem()
+    {
+        $args = func_get_args();
 
-    return new Filesystem($args);
+        return new Filesystem();
+    }
 }

@@ -14,20 +14,42 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Util;
 
+use Symfony\Component\Filesystem\Filesystem as SymfonyFileSystem;
+
+/**
+ * Class Filesystem.
+ */
 class Filesystem
 {
-    private $args;
-
-    public function __construct($args)
+    public function cleanupDirectory($directory)
     {
-        $this->args = $args;
+        $fs = new SymfonyFilesystem();
+        $fs->remove($directory);
     }
 
-    public function ensureDir()
+    public function mirror($source, $target)
     {
-        $dir = $this->args[0];
+        $fs = new SymfonyFileSystem();
+        $fs->mirror($source, $target);
+    }
+
+    public function ensureFileExists(string $file)
+    {
+        $this->ensureDirExists(\dirname($file));
+        if (!is_file($file)) {
+            touch($file);
+            chmod($file, 0775);
+        }
+
+        return $this;
+    }
+
+    public function ensureDirExists(string $dir)
+    {
         if (!is_dir($dir)) {
             mkdir($dir, 0775, true);
         }
+
+        return $this;
     }
 }
