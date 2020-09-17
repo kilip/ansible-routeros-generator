@@ -90,6 +90,7 @@ class ProcessEventSubscriber implements EventSubscriberInterface
             $this->progressBar->start();
             $this->setMaxSteps($event);
         }
+        $this->progressBarStarted = true;
     }
 
     public function onLoopEvent(ProcessEvent $event)
@@ -101,12 +102,13 @@ class ProcessEventSubscriber implements EventSubscriberInterface
         }
     }
 
-    public function onEndProcessEvent()
+    public function onEndProcessEvent(ProcessEvent $event)
     {
+        $this->showMessage($event);
         if (null !== $this->progressBar) {
             $this->progressBar->finish();
         }
-
+        $this->progressBarStarted = false;
         $this->output->writeln("\n");
     }
 
@@ -136,8 +138,8 @@ class ProcessEventSubscriber implements EventSubscriberInterface
         $progressBar->setFormat('%current%/%max% [%bar%] - %message%');
 
         $progressBar->setRedrawFrequency(1);
-        $progressBar->minSecondsBetweenRedraws(0.00);
-        $progressBar->maxSecondsBetweenRedraws(0.00);
+        $progressBar->minSecondsBetweenRedraws(0);
+        $progressBar->maxSecondsBetweenRedraws(0);
 
         $this->progressBar = $progressBar;
     }

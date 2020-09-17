@@ -35,6 +35,7 @@ class AnsibleProvider implements ProviderInterface
      */
     public function load(ContainerBuilder $container, array $config): void
     {
+        $environment = $container->getParameter('kernel.environment');
         $configDir = $container->getParameter('routeros.config_dir');
         $compiledDir = $container->getParameter('routeros.compiled_dir');
 
@@ -52,8 +53,10 @@ class AnsibleProvider implements ProviderInterface
             new FileLocator(__DIR__.'/Resources/config')
         );
         $loader->load('services.xml');
-        $loader->load('config.xml');
-        $loader->load('command.xml');
+        if ('test' !== $environment) {
+            $loader->load('prepare.xml');
+            $loader->Load('build.xml');
+        }
     }
 
     public function configure(ArrayNodeDefinition $builder): void

@@ -14,47 +14,47 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Command;
 
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Listener\ProcessEventSubscriber;
-use RouterOS\Generator\Processor\ScrapingProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ScrapCommand extends Command
+class BuildCommand extends Command
 {
-    protected static $defaultName = 'routeros:scrap';
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $dispatcher;
 
     /**
      * @var ProcessEventSubscriber
      */
     private $processListener;
 
-    /**
-     * @var ScrapingProcessor
-     */
-    private $scrapingProcessor;
-
     public function __construct(
-        ProcessEventSubscriber $processListener,
-        ScrapingProcessor $scrapingProcessor
+        EventDispatcherInterface $dispatcher,
+        ProcessEventSubscriber $processListener
     ) {
+        parent::__construct('build');
+        $this->dispatcher = $dispatcher;
         $this->processListener = $processListener;
-        $this->scrapingProcessor = $scrapingProcessor;
-        parent::__construct(static::$defaultName);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $dispatcher = $this->dispatcher;
         $processListener = $this->processListener;
-        $scrapingProcessor = $this->scrapingProcessor;
+
         $processListener->setOutput($output);
-        $scrapingProcessor->process();
+        $output->writeln('<info>Building RouterOS</info>');
+        $output->writeln('');
 
-        if ($processListener->hasException()) {
-            $processListener->renderException();
-
-            return Command::FAILURE;
-        }
+        // start build
+        $event = new BuildEvent($output);
+        $dispatcher->dispatch($event, BuildEvent::PREPARE);
+        $dispatcher->dispatch($event, BuildEvent::BUILD);
 
         return Command::SUCCESS;
     }

@@ -6,37 +6,11 @@
 
     <services>
         <service id="ansible.configuration.module" class="RouterOS\Generator\Provider\Ansible\Structure\ModuleStructureConfiguration"/>
-        <service id="ansible.processor.module_refresh" class="RouterOS\Generator\Provider\Ansible\Processor\ModuleRefreshProcessor">
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="routeros.util.cache_manager"/>
-            <argument type="service" id="routeros.util.compiler"/>
-            <argument type="service" id="routeros.manager.resource"/>
-            <argument type="service" id="ansible.configuration.module"/>
-            <argument>%ansible.config_dir%</argument>
-            <argument>%ansible.compiled_dir%</argument>
-        </service>
 
         <service id="ansible.manager.module" class="RouterOS\Generator\Provider\Ansible\Structure\ModuleManager">
             <argument type="service" id="routeros.util.cache_manager"/>
             <argument>%ansible.compiled_dir%</argument>
         </service>
-
-        <service id="ansible.processor.compile" class="RouterOS\Generator\Provider\Ansible\Processor\CompileProcessor">
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="ansible.manager.module"/>
-            <argument type="service" id="routeros.util.compiler"/>
-            <argument type="service" id="routeros.util.cache_manager"/>
-            <argument>%ansible.target_dir%</argument>
-        </service>
-
-        <!-- build event listeners -->
-        <service id="ansible.build.listeners.checkout" class="RouterOS\Generator\Provider\Ansible\Build\CheckoutAnsibleCollection">
-            <argument>%ansible.git_repository%</argument>
-            <argument>%ansible.target_dir%</argument>
-            <tag name="kernel.event_subscriber"/>
-            <tag name="ansible.build_event"/>
-        </service>
-
         <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">
             <tag name="twig.extension"/>
         </service>

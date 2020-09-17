@@ -67,36 +67,13 @@
             <argument type="service" id="routeros.scraper.table_parser"/>
             <argument type="service" id="routeros.scraper.property_parser"/>
         </service>
-
-        <service id="routeros.processor.reindex_meta" class="RouterOS\Generator\Processor\ReindexMetaProcessor">
+        
+        <service id="routeros.command.build" class="RouterOS\Generator\Command\BuildCommand">
             <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="routeros.util.cache_manager"/>
-            <argument type="service" id="routeros.configuration.meta"/>
-            <argument type="service" id="routeros.util.compiler"/>
-            <argument>%routeros.meta.config_dir%</argument>
-            <argument>%routeros.meta.compiled_dir%</argument>
-        </service>
-
-        <service id="routeros.processor.scraping" class="RouterOS\Generator\Processor\ScrapingProcessor">
-            <argument type="service" id="event_dispatcher"/>
-            <argument type="service" id="routeros.manager.meta"/>
-            <argument type="service" id="routeros.manager.resource"/>
-            <argument type="service" id="routeros.util.compiler"/>
-            <argument type="service" id="routeros.scraper.scraper"/>
-            <argument>%routeros.resource.compiled_dir%</argument>
-        </service>
-
-        <service id="routeros.command.meta" class="RouterOS\Generator\Command\MetaCommand">
             <argument type="service" id="routeros.listener.process"/>
-            <argument type="service" id="routeros.processor.reindex_meta"/>
             <tag name="console.command"/>
         </service>
 
-        <service id="routeros.command.scrap" class="RouterOS\Generator\Command\ScrapCommand">
-            <argument type="service" id="routeros.listener.process"/>
-            <argument type="service" id="routeros.processor.scraping"/>
-            <tag name="console.command"/>
-        </service>
 
     </services>
 </container>

@@ -29,6 +29,7 @@ class RouterosExtensionTest extends AbstractExtensionTestCase
 
     public function testLoad()
     {
+        $this->container->setParameter('kernel.environment', 'test');
         $this->load();
         $this->assertContainerBuilderHasParameter('ansible.compiled_dir');
     }

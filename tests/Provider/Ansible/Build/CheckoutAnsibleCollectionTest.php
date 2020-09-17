@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Provider\Ansible\Build;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Provider\Ansible\Build\CheckoutAnsibleCollection;
-use RouterOS\Generator\Provider\Ansible\Event\BuildEvent;
 use RouterOS\Generator\Util\ProcessHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

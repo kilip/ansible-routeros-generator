@@ -51,6 +51,6 @@ class ProcessListenerTest extends TestCase
             $this->assertMatchesRegularExpression("#{$i}/10#", $display);
         }
 
-        $listener->onEndProcessEvent();
+        $listener->onEndProcessEvent($event);
     }
 }

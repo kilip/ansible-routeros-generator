@@ -32,8 +32,7 @@ properties:
     name: ampdu_priorities
     type: list
     required: false
-    default:
-      - 0
+    default: 'a:1:{i:0;i:0;}'
     choices:
       - 0
       - 1
@@ -894,8 +893,7 @@ properties:
     name: rx_chains
     type: list
     required: false
-    default:
-      - 0
+    default: 'a:1:{i:0;i:0;}'
     choices:
       - 0
       - 1
@@ -910,8 +908,7 @@ properties:
     name: scan_list
     type: list
     required: false
-    default:
-      - default
+    default: 'a:1:{i:0;s:7:"default";}'
     choice_type: null
     description: null
     options:
@@ -1029,8 +1026,7 @@ properties:
     name: tx_chains
     type: list
     required: false
-    default:
-      - 0
+    default: 'a:1:{i:0;i:0;}'
     choices:
       - 0
       - 1

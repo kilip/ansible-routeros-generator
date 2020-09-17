@@ -18,15 +18,17 @@ use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\MetaManagerInterface;
 use RouterOS\Generator\Contracts\ResourceManagerInterface;
 use RouterOS\Generator\Contracts\ScraperInterface;
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Exception\ScrappingException;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ScrapingProcessor
+class ScrapingProcessor implements EventSubscriberInterface
 {
     /**
      * @var EventDispatcherInterface
@@ -74,6 +76,19 @@ class ScrapingProcessor
         $this->scraper = $scraper;
     }
 
+    public static function getSubscribedEvents()
+    {
+        return [
+            BuildEvent::PREPARE => ['onBuildEvent', 999],
+        ];
+    }
+
+    public function onBuildEvent(BuildEvent $event)
+    {
+        $event->getOutput()->writeln('<info>Generating Resources</info>');
+        $this->process();
+    }
+
     public function process()
     {
         $metaManager = $this->metaManager;
@@ -84,9 +99,11 @@ class ScrapingProcessor
         $index = [];
         $exceptions = [];
 
-        $event = new ProcessEvent('Start Scrapping', [], \count($metas));
+        $event = new ProcessEvent('Starting...', [], \count($metas));
         $dispatcher->dispatch($event, ProcessEvent::EVENT_START);
         foreach ($metas as $name => $config) {
+            $event->setMessage('Scraping {0}')->setContext([$name]);
+            $dispatcher->dispatch($event, ProcessEvent::EVENT_LOOP);
             $meta = $metaManager->getMeta($name);
             $resource = $this->processMeta($meta);
             $resources[] = $resource;
@@ -99,6 +116,7 @@ class ScrapingProcessor
                 $exceptions[$name] = $resource;
             }
         }
+        $event->setMessage('Completed');
         $dispatcher->dispatch($event, ProcessEvent::EVENT_END);
 
         $this->compileResources($resources);

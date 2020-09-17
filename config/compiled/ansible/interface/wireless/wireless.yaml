@@ -44,8 +44,7 @@ documentation:
             - 5
             - 6
             - 7
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
           description: 'Frame priorities for which AMPDU sending (aggregating frames and sending using block acknowledgment) should get negotiated and used. Using AMPDUs will increase throughput, but may increase latency, therefore, may not be desirable for real-time traffic (voice, video). Due to this, by default AMPDUs are enabled only for best-effort traffic.'
         amsdu_limit:
           type: int
@@ -620,13 +619,11 @@ documentation:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
           description: 'Which antennas to use for receive. In current MikroTik routers, both RX and TX chain must be enabled, for the chain to be enabled.'
         scan_list:
           type: list
-          default:
-            - default
+          default: 'a:1:{i:0;s:7:"default";}'
         secondary_channel:
           type: int
           default: 0
@@ -703,8 +700,7 @@ documentation:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
           description: 'Which antennas to use for transmitting. In current MikroTik routers, both RX and TX chain must be enabled, for the chain to be enabled.'
         tx_power:
           type: int
@@ -850,8 +846,13 @@ examples:
       config:
         - name: wlan1
           comment: 'updated comment'
-          ampdu_priorities: '0,1,2'
-          supported_rates_ag: '6Mbps,24Mbps'
+          ampdu_priorities:
+            - 0
+            - 1
+            - 2
+          supported_rates_ag:
+            - 6Mbps
+            - 24Mbps
       state: merged
     before: |
       /interface wireless
@@ -920,8 +921,7 @@ resource:
             - 5
             - 6
             - 7
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
         amsdu_limit:
           type: int
           default: 8192
@@ -1322,12 +1322,10 @@ resource:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
         scan_list:
           type: list
-          default:
-            - default
+          default: 'a:1:{i:0;s:7:"default";}'
         secondary_channel:
           type: int
           default: 0
@@ -1389,8 +1387,7 @@ resource:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
         tx_power:
           type: int
         tx_power_mode:
@@ -1496,7 +1493,7 @@ tests:
           - '/interface wireless set [ find name=wlan1 ] ampdu-priorities=0,1,2 comment="updated comment" security-profile=default supported-rates-a/g=6Mbps,24Mbps'
         argument_spec:
           config:
-            - { ampdu_priorities: '0,1,2', comment: 'updated comment', name: wlan1, supported_rates_ag: '6Mbps,24Mbps' }
+            - { ampdu_priorities: [0, 1, 2], comment: 'updated comment', name: wlan1, supported_rates_ag: [6Mbps, 24Mbps] }
           state: merged
       - commands:
           - '/interface wireless set [ find name=wlan1 ] comment="new olympus" security-profile=new-olympus ssid=Olympus'

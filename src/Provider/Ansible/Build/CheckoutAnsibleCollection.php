@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Build;
 
-use RouterOS\Generator\Provider\Ansible\Event\BuildEvent;
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Util\ProcessHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -61,8 +61,10 @@ class CheckoutAnsibleCollection implements EventSubscriberInterface
         $processHelper = $this->processHelper;
         $repository = $this->gitRepository;
         $targetDir = $this->targetDir;
+        $output = $event->getOutput();
 
         if (!is_dir($targetDir)) {
+            $output->writeln("<info>Creating Target Dir: </info><comment>{$targetDir}</comment>");
             mkdir($targetDir, 0775, true);
         }
         if (!is_dir($targetDir.'/.git')) {

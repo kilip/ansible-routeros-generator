@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="routeros.processor.reindex_meta" class="RouterOS\Generator\Processor\ReindexMetaProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument type="service" id="routeros.configuration.meta"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument>%routeros.meta.config_dir%</argument>
+            <argument>%routeros.meta.compiled_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+
+        <service id="routeros.processor.scraping" class="RouterOS\Generator\Processor\ScrapingProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.manager.meta"/>
+            <argument type="service" id="routeros.manager.resource"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument type="service" id="routeros.scraper.scraper"/>
+            <argument>%routeros.resource.compiled_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+    </services>
+</container>

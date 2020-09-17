@@ -16,12 +16,14 @@ namespace RouterOS\Generator\Processor;
 
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Util\Text;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ReindexMetaProcessor
+class ReindexMetaProcessor implements EventSubscriberInterface
 {
     /**
      * @var EventDispatcherInterface
@@ -66,6 +68,19 @@ class ReindexMetaProcessor
         $this->templateCompiler = $templateCompiler;
     }
 
+    public static function getSubscribedEvents()
+    {
+        return [
+            BuildEvent::PREPARE => ['onBuildEvent', 1000],
+        ];
+    }
+
+    public function onBuildEvent(BuildEvent $event)
+    {
+        $event->getOutput()->writeln('<info>Reindexing Meta</info>');
+        $this->process();
+    }
+
     public function process()
     {
         $dispatcher = $this->dispatcher;
@@ -91,7 +106,7 @@ class ReindexMetaProcessor
             $path
         );
 
-        $event = new ProcessEvent('Reindex Meta Started', [], \count($metas));
+        $event = new ProcessEvent('Starting...', [], \count($metas));
         $dispatcher->dispatch($event, ProcessEvent::EVENT_START);
         $index = [];
         foreach ($metas as $name => $config) {
@@ -111,7 +126,8 @@ class ReindexMetaProcessor
 
             $templateCompiler->compileYaml($config, $target);
         }
-
+        $event->setMessage('Completed');
+        $dispatcher->dispatch($event, ProcessEvent::EVENT_END);
         $target = "{$metaCompiledDir}/index.yaml";
         $templateCompiler->compileYaml($index, $target);
     }

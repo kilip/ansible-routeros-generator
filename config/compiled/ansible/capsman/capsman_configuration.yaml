@@ -374,8 +374,7 @@ documentation:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
           description: 'Which antennas to use for receive.'
         security:
           type: str
@@ -459,8 +458,7 @@ documentation:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
           description: 'Which antennas to use for transmit.'
 examples:
   - title: 'Using merged'
@@ -470,7 +468,10 @@ examples:
       config:
         - name: test
           datapath_bridge: br-trunk
-          rx_chains: '0,1,2'
+          rx_chains:
+            - 0
+            - 1
+            - 2
         - name: new
           datapath_bridge: br-trunk
     before: |
@@ -781,8 +782,7 @@ resource:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
         security:
           type: str
         security_authentication_types:
@@ -838,8 +838,7 @@ resource:
             - 1
             - 2
             - 3
-          default:
-            - 0
+          default: 'a:1:{i:0;i:0;}'
   custom_props:
     channel_band:
       original_name: channel.band
@@ -941,5 +940,5 @@ tests:
         argument_spec:
           state: merged
           config:
-            - { datapath_bridge: br-trunk, name: test, rx_chains: '0,1,2' }
+            - { datapath_bridge: br-trunk, name: test, rx_chains: [0, 1, 2] }
             - { datapath_bridge: br-trunk, name: new }

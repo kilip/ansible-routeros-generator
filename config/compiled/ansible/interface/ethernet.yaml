@@ -161,7 +161,10 @@ examples:
     argument_spec:
       config:
         - name: ether1
-          advertise: '10M-full,100M-full,1000M-full'
+          advertise:
+            - 10M-full
+            - 100M-full
+            - 1000M-full
           comment: 'updated comment'
       state: merged
     before: |
@@ -318,5 +321,5 @@ tests:
           - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"'
         argument_spec:
           config:
-            - { advertise: '10M-full,100M-full,1000M-full', comment: 'updated comment', name: ether1 }
+            - { advertise: [10M-full, 100M-full, 1000M-full], comment: 'updated comment', name: ether1 }
           state: merged

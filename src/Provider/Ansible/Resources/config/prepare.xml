@@ -5,6 +5,16 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="ansible.processor.module_refresh" class="RouterOS\Generator\Provider\Ansible\Processor\ModuleRefreshProcessor">
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument type="service" id="routeros.util.compiler"/>
+            <argument type="service" id="routeros.manager.resource"/>
+            <argument type="service" id="ansible.configuration.module"/>
+            <argument>%ansible.config_dir%</argument>
+            <argument>%ansible.compiled_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
         <service id="ansible.config.documentation" class="RouterOS\Generator\Provider\Ansible\Config\DocumentationConfig">
             <tag name="kernel.event_subscriber"/>
         </service>

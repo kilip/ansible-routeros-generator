@@ -17,15 +17,17 @@ namespace RouterOS\Generator\Provider\Ansible\Processor;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\ResourceManagerInterface;
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Provider\Ansible\Event\ModuleEvent;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ModuleRefreshProcessor
+class ModuleRefreshProcessor implements EventSubscriberInterface
 {
     /**
      * @var EventDispatcherInterface
@@ -74,6 +76,18 @@ class ModuleRefreshProcessor
         $this->configuration = $configuration;
     }
 
+    public static function getSubscribedEvents()
+    {
+        return [
+            BuildEvent::PREPARE => 'onPrepare',
+        ];
+    }
+
+    public function onPrepare(BuildEvent $event)
+    {
+        $event->getOutput()->writeln('<info>Compiling Ansible Module Config</info>');
+    }
+
     public function process()
     {
         $dispatcher = $this->dispatcher;
@@ -88,7 +102,7 @@ class ModuleRefreshProcessor
         );
 
         $processEvent = new ProcessEvent(
-            'Start processing ansible modules',
+            'Starting',
             [],
             \count($modules)
         );
@@ -115,7 +129,7 @@ class ModuleRefreshProcessor
                 'config_file' => $target,
             ];
         }
-        $processEvent->setMessage('End Process');
+        $processEvent->setMessage('Completed');
         $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_END);
 
         $this->compileIndex($index);

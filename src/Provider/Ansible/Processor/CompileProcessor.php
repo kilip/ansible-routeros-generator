@@ -16,10 +16,13 @@ namespace RouterOS\Generator\Provider\Ansible\Processor;
 
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
+use RouterOS\Generator\Event\BuildEvent;
+use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CompileProcessor
+class CompileProcessor implements EventSubscriberInterface
 {
     /**
      * @var ModuleManagerInterface
@@ -56,13 +59,29 @@ class CompileProcessor
         $this->dispatcher = $dispatcher;
     }
 
+    public static function getSubscribedEvents()
+    {
+        return [
+            BuildEvent::BUILD => ['onBuild'],
+        ];
+    }
+
+    public function onBuild(BuildEvent $event)
+    {
+        $event->getOutput()->writeln('<info>Generating Ansible Modules</info>');
+    }
+
     public function process()
     {
         $moduleManager = $this->moduleManager;
         $list = $moduleManager->getList();
+        $dispatcher = $this->dispatcher;
+        $processEvent = new ProcessEvent('Starting...', []);
 
+        $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_START);
         $resources = [];
         foreach ($list as $name => $config) {
+            $processEvent->setMessage('Processing {0}')->setContext([$name]);
             $config = $moduleManager->getConfig($name);
             $this->compileModule($name, $config);
             $this->compileResource($name, $config);
@@ -72,6 +91,9 @@ class CompileProcessor
 
             $resources[$name] = $config['resource'];
         }
+
+        $processEvent->setMessage('Completed');
+        $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_END);
 
         $this->compileSubset($list);
     }

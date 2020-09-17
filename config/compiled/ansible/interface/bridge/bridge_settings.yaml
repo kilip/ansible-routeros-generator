@@ -57,14 +57,10 @@ examples:
     name: 'Configure Bridge Settings'
     argument_spec:
       config:
-        allow_fast_path:
-          - 'yes'
-        use_ip_firewall:
-          - 'no'
-        use_ip_firewall_for_pppoe:
-          - 'no'
-        use_ip_firewall_for_vlan:
-          - 'no'
+        allow_fast_path: 'yes'
+        use_ip_firewall: 'no'
+        use_ip_firewall_for_pppoe: 'no'
+        use_ip_firewall_for_vlan: 'no'
       state: present
     before: |
       /interface bridge settings
@@ -153,10 +149,10 @@ tests:
           - '/interface bridge settings set allow-fast-path=yes use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no use-ip-firewall=no'
         argument_spec:
           config:
-            allow_fast_path: ['yes']
-            use_ip_firewall: ['no']
-            use_ip_firewall_for_pppoe: ['no']
-            use_ip_firewall_for_vlan: ['no']
+            allow_fast_path: 'yes'
+            use_ip_firewall: 'no'
+            use_ip_firewall_for_pppoe: 'no'
+            use_ip_firewall_for_vlan: 'no'
           state: present
       - commands:
           - '/interface bridge settings set allow-fast-path=yes use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no use-ip-firewall=no'

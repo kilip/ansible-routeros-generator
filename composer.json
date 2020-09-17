@@ -73,6 +73,7 @@
         "phpstan": "./vendor/bin/phpstan analyse --ansi",
         "phpcs": "./vendor/bin/php-cs-fixer fix --ansi",
         "phpunit": "SYMFONY_PHPUNIT_VERSION=9.3 ./vendor/bin/simple-phpunit --colors=always",
+        "coverage-html":"@phpunit --coverage-html=var/build/coverage",
         "prepare-test": [
             "@phpunit --version"
         ],

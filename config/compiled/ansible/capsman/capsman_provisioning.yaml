@@ -105,7 +105,9 @@ examples:
           identity_regexp: olympus
           master_configuration: olympus
           name_format: identity
-          slave_configurations: 'troy-network,gaia-network'
+          slave_configurations:
+            - troy-network
+            - gaia-network
           action: create-enabled
     before: |
       /caps-man provisioning
@@ -226,7 +228,7 @@ tests:
           state: merged
           config:
             - { action: create-disabled, comment: test }
-            - { action: create-enabled, comment: 'Olympus Wireless Network', identity_regexp: olympus, master_configuration: olympus, name_format: identity, slave_configurations: 'troy-network,gaia-network' }
+            - { action: create-enabled, comment: 'Olympus Wireless Network', identity_regexp: olympus, master_configuration: olympus, name_format: identity, slave_configurations: [troy-network, gaia-network] }
       - commands:
           - '/caps-man provisioning remove [ find comment=test ]'
           - '/system script run ansible-remove-invalid'

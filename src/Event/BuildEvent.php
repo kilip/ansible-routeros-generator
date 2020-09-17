@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Generator\Provider\Ansible\Event;
+namespace RouterOS\Generator\Event;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -21,8 +21,6 @@ class BuildEvent extends Event
 {
     public const PREPARE = 'build.prepare';
     public const BUILD = 'build';
-    public const TEST_PREPARE = 'test.prepare';
-
     /**
      * @var OutputInterface
      */
@@ -31,5 +29,13 @@ class BuildEvent extends Event
     public function __construct(OutputInterface $output)
     {
         $this->output = $output;
+    }
+
+    /**
+     * @return OutputInterface
+     */
+    public function getOutput(): OutputInterface
+    {
+        return $this->output;
     }
 }

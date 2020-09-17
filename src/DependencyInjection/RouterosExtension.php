@@ -31,12 +31,16 @@ class RouterosExtension extends Extension implements PrependExtensionInterface
 
     public function load(array $configs, ContainerBuilder $container)
     {
+        $environment = $container->getParameter('kernel.environment');
         $loader = new XmlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
         );
 
         $loader->load('services.xml');
+        if ('test' !== $environment) {
+            $loader->load('build.xml');
+        }
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

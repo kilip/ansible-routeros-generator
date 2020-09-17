@@ -61,16 +61,11 @@ examples:
     name: 'Change configuration'
     argument_spec:
       config:
-        called_format:
-          - mac
-        interim_update:
-          - 10s
-        mac_caching:
-          - 10m
-        mac_format:
-          - XX-XX-XX-XX-XX-XX
-        mac_mode:
-          - as-username-and-password
+        called_format: mac
+        interim_update: 10s
+        mac_caching: 10m
+        mac_format: XX-XX-XX-XX-XX-XX
+        mac_mode: as-username-and-password
       state: present
     before: |
       /caps-man aaa
@@ -169,11 +164,11 @@ tests:
           - '/caps-man aaa set called-format=mac interim-update=10s mac-caching=10m mac-format=XX-XX-XX-XX-XX-XX mac-mode=as-username-and-password'
         argument_spec:
           config:
-            called_format: [mac]
-            interim_update: [10s]
-            mac_caching: [10m]
-            mac_format: [XX-XX-XX-XX-XX-XX]
-            mac_mode: [as-username-and-password]
+            called_format: mac
+            interim_update: 10s
+            mac_caching: 10m
+            mac_format: XX-XX-XX-XX-XX-XX
+            mac_mode: as-username-and-password
           state: present
       - commands:
           - '/caps-man aaa set mac-format=XX:XX:XX:XX:XX:XX'

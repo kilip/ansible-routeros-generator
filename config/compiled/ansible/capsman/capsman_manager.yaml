@@ -70,10 +70,8 @@ examples:
     argument_spec:
       state: present
       config:
-        ca_certificate:
-          - auto
-        enabled:
-          - 'yes'
+        ca_certificate: auto
+        enabled: 'yes'
     before: |
       /caps-man manager
       set ca-certificate=none certificate=none enabled=no require-peer-certificate=no upgrade-policy=none
@@ -160,5 +158,5 @@ tests:
         argument_spec:
           state: present
           config:
-            ca_certificate: [auto]
-            enabled: ['yes']
+            ca_certificate: auto
+            enabled: 'yes'

@@ -576,8 +576,7 @@ properties:
     name: rx_chains
     type: list
     required: false
-    default:
-      - 0
+    default: 'a:1:{i:0;i:0;}'
     choices:
       - 0
       - 1
@@ -724,8 +723,7 @@ properties:
     name: tx_chains
     type: list
     required: false
-    default:
-      - 0
+    default: 'a:1:{i:0;i:0;}'
     choices:
       - 0
       - 1

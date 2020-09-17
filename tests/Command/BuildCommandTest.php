@@ -17,19 +17,18 @@ namespace Tests\RouterOS\Generator\Command;
 use RouterOS\Generator\Concerns\InteractsWithCommand;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class MetaCommandTest extends KernelTestCase
+class BuildCommandTest extends KernelTestCase
 {
     use InteractsWithCommand;
 
     public function testExecute()
     {
-        $tester = $this->getCommandTester('routeros:meta:reindex');
+        $tester = $this->getCommandTester('build');
+
         $tester->execute([]);
 
-        $output = $tester->getDisplay(true);
+        $display = $tester->getDisplay(true);
 
-        $this->assertMatchesRegularExpression('#Reindex Meta Started#', $output);
-        $this->assertMatchesRegularExpression('#1/1#', $output);
-        $this->assertMatchesRegularExpression('#Processing interface#', $output);
+        $this->assertStringContainsString('Building RouterOS', $display);
     }
 }
