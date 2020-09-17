@@ -102,7 +102,6 @@ class CacheManagerTest extends KernelTestCase
 
         $result = $cache->processYamlConfig(
             $configuration,
-            'metas',
             $path
         );
 

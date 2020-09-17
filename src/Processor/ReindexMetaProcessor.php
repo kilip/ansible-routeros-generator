@@ -88,7 +88,6 @@ class ReindexMetaProcessor
 
         $metas = $cacheManager->processYamlConfig(
             $configuration,
-            'metas',
             $path
         );
 

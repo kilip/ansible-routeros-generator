@@ -120,7 +120,6 @@ class ModuleReindexProcessorTest extends KernelTestCase
             ->method('processYamlConfig')
             ->with(
                 $this->configuration,
-                'modules',
                 $this->moduleConfigDir
             )
             ->willReturn($config);

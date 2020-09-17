@@ -5,7 +5,7 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="ansible.configuration.module" class="RouterOS\Generator\Provider\Ansible\ModuleConfiguration"/>
+        <service id="ansible.configuration.module" class="RouterOS\Generator\Provider\Ansible\Structure\ModuleStructureConfiguration"/>
         <service id="ansible.processor.module_refresh" class="RouterOS\Generator\Provider\Ansible\Processor\ModuleRefreshProcessor">
             <argument type="service" id="event_dispatcher"/>
             <argument type="service" id="routeros.util.cache_manager"/>

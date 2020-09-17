@@ -100,12 +100,11 @@ class CacheManager implements CacheManagerInterface
 
     public function processYamlConfig(
         ConfigurationInterface $configuration,
-        $rootName,
         string $path,
         bool $addFilePath = false
     ): array {
         $cacheDir = $this->cacheDir;
-        $id = md5("{$rootName}-{$path}");
+        $id = md5("{$path}");
         $cachePath = "{$cacheDir}/processed-yml/{$id}.php";
         $cache = new ConfigCache($cachePath, $this->debug);
         $buildTree = $configuration->getConfigTreeBuilder()->buildTree();
@@ -121,7 +120,7 @@ class CacheManager implements CacheManagerInterface
                     $data['config_file'] = $file->getRealPath();
                 }
                 //$configs[$exp[0]][$exp[1]][] = $data;
-                $configs[$root][$rootName][] = $data;
+                $configs[$root][] = $data;
                 $resources[] = new FileResource($file->getRealPath());
             }
             $r = new \ReflectionClass(\get_class($configuration));
@@ -131,7 +130,7 @@ class CacheManager implements CacheManagerInterface
             $processed = $processor->processConfiguration($configuration, $configs);
 
             $contents = "<?php\n".
-                'return '.var_export($processed[$rootName], true)
+                'return '.var_export($processed, true)
                 .";\n";
             $cache->write($contents, $resources);
         }

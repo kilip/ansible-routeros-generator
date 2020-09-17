@@ -84,7 +84,6 @@ class ModuleRefreshProcessor
 
         $modules = $cacheManager->processYamlConfig(
             $configuration,
-            'modules',
             $moduleConfigDir
         );
 
