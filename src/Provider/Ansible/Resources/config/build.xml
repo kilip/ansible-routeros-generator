@@ -22,6 +22,11 @@
             <tag name="ansible.build_event"/>
         </service>
 
-
+        <service id="ansible.build.listeners.cleanup_target" class="RouterOS\Generator\Provider\Ansible\Build\CleanupTarget">
+            <argument type="service" id="ansible.manager.module"/>
+            <argument>%ansible.module_prefix%</argument>
+            <argument>%ansible.target_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
     </services>
 </container>

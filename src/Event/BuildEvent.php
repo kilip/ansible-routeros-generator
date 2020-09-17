@@ -38,4 +38,20 @@ class BuildEvent extends Event
     {
         return $this->output;
     }
+
+    public function log($message, array $context = [])
+    {
+        $message = $this->renderMessage($message, $context);
+        $this->output->writeln($message);
+    }
+
+    public function renderMessage($message, array $context = [])
+    {
+        foreach ($context as $key => $value) {
+            $text = "<info>{$value}</info>";
+            $message = str_replace('{'.$key.'}', $text, $message);
+        }
+
+        return "<info>{$message}</info>";
+    }
 }

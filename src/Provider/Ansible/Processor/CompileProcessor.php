@@ -69,6 +69,7 @@ class CompileProcessor implements EventSubscriberInterface
     public function onBuild(BuildEvent $event)
     {
         $event->getOutput()->writeln('<info>Generating Ansible Modules</info>');
+        $this->process();
     }
 
     public function process()
@@ -88,6 +89,8 @@ class CompileProcessor implements EventSubscriberInterface
 
         foreach ($list as $name => $config) {
             $processEvent->setMessage('Processing {0}')->setContext([$name]);
+            $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_LOOP);
+
             $config = $moduleManager->getConfig($name);
             $this->compileModule($name, $config);
             $this->compileResource($name, $config);
