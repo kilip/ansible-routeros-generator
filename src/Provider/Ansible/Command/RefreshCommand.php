@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Command;
 
-use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
+use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use RouterOS\Generator\Provider\Ansible\Processor\ModuleRefreshProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,9 +24,9 @@ class RefreshCommand extends Command
 {
     protected static $defaultName = 'ansible:refresh';
     /**
-     * @var ConsoleProcessEventSubscriber
+     * @var ProcessEventSubscriber
      */
-    private $consoleProcessEventSubscriber;
+    private $processListener;
 
     /**
      * @var ModuleRefreshProcessor
@@ -34,19 +34,19 @@ class RefreshCommand extends Command
     private $processor;
 
     public function __construct(
-        ConsoleProcessEventSubscriber $consoleProcessEventSubscriber,
+        ProcessEventSubscriber $processListener,
         ModuleRefreshProcessor $processor
     ) {
         parent::__construct(static::$defaultName);
 
-        $this->consoleProcessEventSubscriber = $consoleProcessEventSubscriber;
+        $this->processListener = $processListener;
         $this->processor = $processor;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $processor = $this->processor;
-        $consoleProcessSubscriber = $this->consoleProcessEventSubscriber;
+        $consoleProcessSubscriber = $this->processListener;
 
         $consoleProcessSubscriber->setOutput($output);
         $processor->process();

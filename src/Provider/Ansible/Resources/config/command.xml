@@ -6,13 +6,13 @@
 
     <services>
         <service id="ansible.command.refresh" class="RouterOS\Generator\Provider\Ansible\Command\RefreshCommand">
-            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="routeros.listener.process"/>
             <argument type="service" id="ansible.processor.module_refresh"/>
             <tag name="console.command"/>
         </service>
 
         <service id="ansible.command.compile" class="RouterOS\Generator\Provider\Ansible\Command\CompileCommand">
-            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="routeros.listener.process"/>
             <argument type="service" id="ansible.processor.compile"/>
             <tag name="console.command"/>
         </service>

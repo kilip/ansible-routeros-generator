@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Provider\Ansible\Command;
 
-use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
+use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use RouterOS\Generator\Provider\Ansible\Processor\CompileProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +25,7 @@ class CompileCommand extends Command
     protected static $defaultName = 'ansible:compile';
 
     /**
-     * @var ConsoleProcessEventSubscriber
+     * @var ProcessEventSubscriber
      */
     private $consoleListener;
 
@@ -35,7 +35,7 @@ class CompileCommand extends Command
     private $processor;
 
     public function __construct(
-        ConsoleProcessEventSubscriber $consoleListener,
+        ProcessEventSubscriber $consoleListener,
         CompileProcessor $processor
     ) {
         parent::__construct(static::$defaultName);

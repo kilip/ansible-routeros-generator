@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Command;
 
-use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
+use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use RouterOS\Generator\Processor\ScrapingProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,9 +25,9 @@ class ScrapCommand extends Command
     protected static $defaultName = 'routeros:scrap';
 
     /**
-     * @var ConsoleProcessEventSubscriber
+     * @var ProcessEventSubscriber
      */
-    private $consoleProcessEventSubscriber;
+    private $processListener;
 
     /**
      * @var ScrapingProcessor
@@ -35,23 +35,23 @@ class ScrapCommand extends Command
     private $scrapingProcessor;
 
     public function __construct(
-        ConsoleProcessEventSubscriber $consoleProcessEventSubscriber,
+        ProcessEventSubscriber $processListener,
         ScrapingProcessor $scrapingProcessor
     ) {
-        $this->consoleProcessEventSubscriber = $consoleProcessEventSubscriber;
+        $this->processListener = $processListener;
         $this->scrapingProcessor = $scrapingProcessor;
         parent::__construct(static::$defaultName);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $consoleProcessEventSubscriber = $this->consoleProcessEventSubscriber;
+        $processListener = $this->processListener;
         $scrapingProcessor = $this->scrapingProcessor;
-        $consoleProcessEventSubscriber->setOutput($output);
+        $processListener->setOutput($output);
         $scrapingProcessor->process();
 
-        if ($consoleProcessEventSubscriber->hasException()) {
-            $consoleProcessEventSubscriber->renderException();
+        if ($processListener->hasException()) {
+            $processListener->renderException();
 
             return Command::FAILURE;
         }

@@ -14,7 +14,7 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Command;
 
-use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
+use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use RouterOS\Generator\Processor\ReindexMetaProcessor;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,23 +28,23 @@ class MetaCommand extends Command
      */
     private $metaProcessor;
     /**
-     * @var ConsoleProcessEventSubscriber
+     * @var ProcessEventSubscriber
      */
-    private $consoleProcessEventSubscriber;
+    private $processListener;
 
     public function __construct(
-        ConsoleProcessEventSubscriber $consoleProcessEventSubscriber,
+        ProcessEventSubscriber $processListener,
         ReindexMetaProcessor $metaProcessor
     ) {
         $this->metaProcessor = $metaProcessor;
-        $this->consoleProcessEventSubscriber = $consoleProcessEventSubscriber;
+        $this->processListener = $processListener;
 
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $consoleEventSubscriber = $this->consoleProcessEventSubscriber;
+        $consoleEventSubscriber = $this->processListener;
         $metaProcessor = $this->metaProcessor;
 
         try {

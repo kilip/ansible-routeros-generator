@@ -17,7 +17,7 @@ namespace Tests\RouterOS\Generator\Listener;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use RouterOS\Generator\Event\ProcessEvent;
-use RouterOS\Generator\Listener\ConsoleProcessEventSubscriber;
+use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use Symfony\Component\Console\Tester\TesterTrait;
 
 class ConsoleProcessEventListenerTest extends TestCase
@@ -30,7 +30,7 @@ class ConsoleProcessEventListenerTest extends TestCase
 
         $logger = $this->createMock(LoggerInterface::class);
         $output = $this->getOutput();
-        $listener = new ConsoleProcessEventSubscriber($logger);
+        $listener = new ProcessEventSubscriber($logger);
         $listener->setOutput($output);
 
         $listener->getProgressBar()->setRedrawFrequency(1);

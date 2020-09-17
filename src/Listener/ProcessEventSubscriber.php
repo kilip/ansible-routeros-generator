@@ -20,7 +20,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ConsoleProcessEventSubscriber implements EventSubscriberInterface
+class ProcessEventSubscriber implements EventSubscriberInterface
 {
     /**
      * @var OutputInterface

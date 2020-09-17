@@ -40,7 +40,7 @@
             <tag name="twig.extension"/>
         </service>
 
-        <service id="routeros.listener.console_process_subscriber" class="RouterOS\Generator\Listener\ConsoleProcessEventSubscriber" public="true">
+        <service id="routeros.listener.process" class="RouterOS\Generator\Listener\ProcessEventSubscriber" public="true">
             <argument type="service" id="logger"/>
             <tag name="kernel.event_subscriber"/>
         </service>
@@ -87,13 +87,13 @@
         </service>
 
         <service id="routeros.command.meta" class="RouterOS\Generator\Command\MetaCommand">
-            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="routeros.listener.process"/>
             <argument type="service" id="routeros.processor.reindex_meta"/>
             <tag name="console.command"/>
         </service>
 
         <service id="routeros.command.scrap" class="RouterOS\Generator\Command\ScrapCommand">
-            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="routeros.listener.process"/>
             <argument type="service" id="routeros.processor.scraping"/>
             <tag name="console.command"/>
         </service>
