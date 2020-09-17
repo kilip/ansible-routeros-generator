@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ansible.command.refresh" class="RouterOS\Generator\Provider\Ansible\Command\RefreshCommand">
+            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="ansible.processor.module_refresh"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="ansible.command.compile" class="RouterOS\Generator\Provider\Ansible\Command\CompileCommand">
+            <argument type="service" id="routeros.listener.console_process_subscriber"/>
+            <argument type="service" id="ansible.processor.compile"/>
+            <tag name="console.command"/>
+        </service>
+
+        <service id="ansible.command.build" class="RouterOS\Generator\Provider\Ansible\Command\BuildCommand">
+            <argument type="service" id="event_dispatcher"/>
+            <tag name="console.command"/>
+        </service>
+    </services>
+</container>

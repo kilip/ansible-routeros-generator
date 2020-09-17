@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Generator\Provider\Ansible\Listener;
+namespace RouterOS\Generator\Provider\Ansible\Config;
 
 use RouterOS\Generator\Provider\Ansible\Event\ModuleEvent;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
@@ -20,9 +20,9 @@ use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class ModuleDocumentationListener implements EventSubscriberInterface
+class DocumentationConfig implements EventSubscriberInterface
 {
-    use ListenerTrait;
+    use ConfigTrait;
 
     public static function getSubscribedEvents()
     {

@@ -15,8 +15,8 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Provider\Ansible\Listener;
 
 use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Provider\Ansible\Config\DocumentationConfig;
 use RouterOS\Generator\Provider\Ansible\Event\ModuleEvent;
-use RouterOS\Generator\Provider\Ansible\Listener\ModuleDocumentationListener;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceStructure;
 use Symfony\Component\Yaml\Yaml;
@@ -32,7 +32,7 @@ class ModuleDocumentationListenerTest extends TestCase
         $resource = $this->createResource('interface.bridge.bridge');
         $event = new ModuleEvent($module, $resource);
 
-        $listener = new ModuleDocumentationListener();
+        $listener = new DocumentationConfig();
         $listener->onPreCompile($event);
 
         $config = $event->getConfig();

@@ -12,14 +12,14 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Generator\Provider\Ansible\Listener;
+namespace RouterOS\Generator\Provider\Ansible\Config;
 
 use RouterOS\Generator\Provider\Ansible\Event\ModuleEvent;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
 
-trait ListenerTrait
+trait ConfigTrait
 {
     protected function normalizeProperties(ModuleStructure $module, ResourceStructure $resource, $options = null)
     {

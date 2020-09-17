@@ -156,13 +156,6 @@ class ResourceProperty
      */
     public function setDefault($default)
     {
-        if (\is_string($default)) {
-            $data = @unserialize($default);
-            if (false !== $data) {
-                $default = $data;
-            }
-        }
-
         $this->default = $default;
 
         return $this;

@@ -29,9 +29,9 @@ class CompileCommandTest extends KernelTestCase
     }
 
     /**
-     * @param $module
-     * @param $file
-     * @param $pattern
+     * @param string $module
+     * @param string $file
+     * @param string $pattern
      * @param string $message
      * @dataProvider getCompileIntegrationData
      */
@@ -143,7 +143,7 @@ EOC;
 
     private function getRealpath($file)
     {
-        $targetDir = $this->getContainer()->getParameter('ansible.target_dir');
+        $targetDir = $this->getParameter('ansible.target_dir');
 
         return "{$targetDir}/$file";
     }

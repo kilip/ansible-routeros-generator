@@ -90,16 +90,7 @@ class ModuleConfiguration implements ConfigurationInterface
                                             ->children()
                                                 ->scalarNode('state')->isRequired()->end()
                                                 ->arrayNode('config')
-                                                    ->arrayPrototype()
-                                                        ->beforeNormalization()->castToArray()->end()
-                                                        ->scalarPrototype()
-                                                            ->beforeNormalization()
-                                                                ->ifArray()->then(function ($v) {
-                                                                    return implode(',', $v);
-                                                                })
-                                                            ->end()
-                                                        ->end()
-                                                    ->end()
+                                                    ->variablePrototype()->end()
                                                 ->end()
                                             ->end()
                                         ->end()

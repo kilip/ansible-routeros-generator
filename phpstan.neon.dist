@@ -17,3 +17,5 @@ parameters:
       path: src/DependencyInjection/Configuration.php
     - message: "#Call to an undefined method#"
       path: src/Provider/Ansible/ModuleConfiguration.php
+    - message: "#Call to an undefined method#"
+      path: src/Provider/Ansible/AnsibleProvider.php

@@ -38,6 +38,9 @@ class ModuleManager implements ModuleManagerInterface
         CacheManagerInterface $cacheManager,
         string $ansibleCompiledDir
     ) {
+        if (empty($ansibleCompiledDir)) {
+            throw new \InvalidArgumentException('Ansible compiled directory not exists');
+        }
         $this->cacheManager = $cacheManager;
         $this->ansibleCompiledDir = $ansibleCompiledDir;
     }
