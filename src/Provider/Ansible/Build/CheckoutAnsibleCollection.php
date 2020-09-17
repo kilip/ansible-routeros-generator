@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace RouterOS\Generator\Provider\Ansible\Bridge;
+namespace RouterOS\Generator\Provider\Ansible\Build;
 
 use RouterOS\Generator\Provider\Ansible\Event\BuildEvent;
 use RouterOS\Generator\Util\ProcessHelper;

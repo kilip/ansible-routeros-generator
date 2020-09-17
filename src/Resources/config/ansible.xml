@@ -67,7 +67,7 @@
         </service>
 
         <!-- build event listeners -->
-        <service id="ansible.build.listeners.checkout" class="RouterOS\Generator\Provider\Ansible\Bridge\CheckoutAnsibleCollection">
+        <service id="ansible.build.listeners.checkout" class="RouterOS\Generator\Provider\Ansible\Build\CheckoutAnsibleCollection">
             <argument>%ansible.git_repository%</argument>
             <argument>%ansible.target_dir%</argument>
             <tag name="kernel.event_subscriber"/>
