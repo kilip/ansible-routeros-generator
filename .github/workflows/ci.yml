@@ -74,8 +74,6 @@ jobs:
           mkdir -p /var/cache/php-cs-fixer
           php-cs-fixer fix --dry-run --diff --cache-file=/var/cache/php-cs-fixer/.php_cs.cache --ansi
 
-
-
   phpstan:
     name: PHPStan (${{ matrix.php }})
     runs-on: ubuntu-latest
@@ -204,9 +202,9 @@ jobs:
         run: |
           mkdir -p build/logs/phpunit
           if [ "$COVERAGE" = '1' ]; then
-            ./vendor/bin/simple-phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
+            composer phpunit -- --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml
           else
-            ./vendor/bin/simple-phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
+            composer phpunit -- --log-junit build/logs/phpunit/junit.xml
           fi
       - name: Upload test artifacts
         if: always()
