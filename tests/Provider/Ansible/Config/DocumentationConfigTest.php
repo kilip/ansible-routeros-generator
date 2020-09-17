@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\RouterOS\Generator\Provider\Ansible\Listener;
+namespace Tests\RouterOS\Generator\Provider\Ansible\Config;
 
 use PHPUnit\Framework\TestCase;
 use RouterOS\Generator\Provider\Ansible\Config\DocumentationConfig;
@@ -21,7 +21,7 @@ use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceStructure;
 use Symfony\Component\Yaml\Yaml;
 
-class ModuleDocumentationListenerTest extends TestCase
+class DocumentationConfigTest extends TestCase
 {
     public function testOnPreCompile()
     {

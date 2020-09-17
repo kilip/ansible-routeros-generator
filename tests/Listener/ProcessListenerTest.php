@@ -20,7 +20,7 @@ use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use Symfony\Component\Console\Tester\TesterTrait;
 
-class ConsoleProcessEventListenerTest extends TestCase
+class ProcessListenerTest extends TestCase
 {
     use TesterTrait;
 
