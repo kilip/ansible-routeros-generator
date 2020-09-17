@@ -50,7 +50,7 @@ examples:
       /interface wireless access-list
       add comment=existing signal-range=-79..120
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless access-list
       add comment=existing signal-range=-80..120
@@ -98,7 +98,7 @@ tests:
   facts:
     name: wireless_access_list
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless access-list
       add comment=existing signal-range=-79..120
@@ -110,7 +110,7 @@ tests:
   unit:
     module_name: ros_wireless_access_list
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless access-list
       add comment=existing signal-range=-79..120

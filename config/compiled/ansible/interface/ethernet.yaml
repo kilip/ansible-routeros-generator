@@ -43,7 +43,7 @@ examples:
       /interface ethernet
       set comment="ether1 comment" default-name=ether1
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface ethernet
       add advertise=10M-full,100M-full,1000M-full comment="updated comment" name=ether1
@@ -85,7 +85,7 @@ tests:
   facts:
     name: ethernet
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface ethernet
       add comment="ether1 comment" default-name=ether1
@@ -97,7 +97,7 @@ tests:
   unit:
     module_name: ros_ethernet
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface ethernet
       add comment="ether1 comment" default-name=ether1

@@ -27,6 +27,6 @@ class BuildCommandTest extends KernelTestCase
         $tester->execute([]);
 
         $display = $tester->getDisplay(true);
-        $this->assertRegExp('/Preparing Build/', $display);
+        $this->assertMatchesRegularExpression('/Preparing Build/', $display);
     }
 }

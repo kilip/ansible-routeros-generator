@@ -50,6 +50,6 @@ class CompilerTest extends KernelTestCase
 
         $contents = file_get_contents($target);
         $this->assertFileExists($target);
-        $this->assertRegExp('/foo=bar/', $contents);
+        $this->assertMatchesRegularExpression('/foo=bar/', $contents);
     }
 }

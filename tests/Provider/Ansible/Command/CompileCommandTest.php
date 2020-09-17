@@ -16,7 +16,6 @@ namespace Tests\RouterOS\Generator\Provider\Ansible\Command;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Tests\RouterOS\Generator\Concerns\InteractsWithCommand;
-use Webmozart\Assert\Assert as MozartAssert;
 
 class CompileCommandTest extends KernelTestCase
 {
@@ -26,12 +25,7 @@ class CompileCommandTest extends KernelTestCase
 
     public function verifyContains($expected, $contents)
     {
-        try {
-            MozartAssert::contains($contents, $expected);
-            $this->assertTrue(true);
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $this->assertContains($expected, $contents);
     }
 
     public function testCompileUnitTests()
@@ -40,11 +34,11 @@ class CompileCommandTest extends KernelTestCase
         $file = $this->getRealpath('tests/unit/modules/fixtures/units/interface.bridge.bridge.yaml');
         $this->assertFileExists($file);
         $contents = file_get_contents($file);
-        $this->verifyContains(
+        $this->assertStringContainsString(
             'module: ros_bridge',
             $contents
         );
-        $this->verifyContains(
+        $this->assertStringContainsString(
             '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"',
             $contents
         );
@@ -54,7 +48,7 @@ class CompileCommandTest extends KernelTestCase
     {
         $this->compileTemplate();
         $file = $this->getRealpath('tests/unit/modules/fixtures/facts/interface.bridge.bridge.yaml');
-        $date = (new \DateTime())->format('Y-m-d');
+        $contents = file_get_contents($file);
         $expected = <<<EOC
 asserts:
   - 'self.assertEqual(result[0]["arp"], "reply-only")'
@@ -65,7 +59,7 @@ asserts:
   - 'self.assertEqual(result[1]["name"], "br-wan")'
 resource: bridge
 fixtures: |
-  # {$date}
+  # RouterOS Output
   #
   /interface bridge
   add arp=reply-only comment="trunk bridge" name=br-trunk
@@ -73,8 +67,7 @@ fixtures: |
 
 
 EOC;
-
-        $this->assertStringEqualsFile($file, $expected);
+        $this->assertEquals($expected, $contents);
     }
 
     /**
@@ -93,12 +86,7 @@ EOC;
             $message = "file {$file} doesn't contain \"{$pattern}\"";
         }
 
-        try {
-            MozartAssert::contains($contents, $pattern, $message);
-            $this->assertTrue(true);
-        } catch (\Exception $e) {
-            $this->fail($e->getMessage());
-        }
+        $this->assertStringContainsString($pattern, $contents, $message);
     }
 
     public function getCompiledModulesData()

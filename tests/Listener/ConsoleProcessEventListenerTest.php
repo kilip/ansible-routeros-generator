@@ -39,7 +39,7 @@ class ConsoleProcessEventListenerTest extends TestCase
 
         $event = new ProcessEvent('Start Processing bar', [], 10);
         $listener->onStartProcessEvent($event);
-        $this->assertRegExp('#Start Processing#', $this->getDisplay());
+        $this->assertMatchesRegularExpression('#Start Processing#', $this->getDisplay());
         for ($i = 1; $i <= 10; ++$i) {
             $event
                 ->setContext([$i])
@@ -47,8 +47,8 @@ class ConsoleProcessEventListenerTest extends TestCase
             $listener->onLoopEvent($event);
 
             $display = $this->getDisplay(true);
-            $this->assertRegExp("#Process {$i}#", $display);
-            $this->assertRegExp("#{$i}/10#", $display);
+            $this->assertMatchesRegularExpression("#Process {$i}#", $display);
+            $this->assertMatchesRegularExpression("#{$i}/10#", $display);
         }
 
         $listener->onEndProcessEvent();

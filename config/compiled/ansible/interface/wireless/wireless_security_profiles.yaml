@@ -40,7 +40,7 @@ examples:
       /interface wireless security-profiles
       add name=test supplicant-identity=MikroTik
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless security-profiles
       add name=test supplicant-identity=test
@@ -79,7 +79,7 @@ tests:
   facts:
     name: wireless_security_profiles
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless security-profiles
       add name=test supplicant-identity=MikroTik
@@ -91,7 +91,7 @@ tests:
   unit:
     module_name: ros_wireless_security_profiles
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless security-profiles
       add name=test supplicant-identity=MikroTik

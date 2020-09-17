@@ -46,7 +46,7 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface vlan
       add arp=enabled comment="new comment" name=vlan-100
@@ -67,7 +67,7 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface vlan
       add arp=enabled comment="new comment" name=vlan-100
@@ -86,7 +86,7 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface vlan
       add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100
@@ -106,7 +106,7 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface vlan
     commands:
@@ -147,7 +147,7 @@ tests:
   facts:
     name: vlan
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
@@ -161,7 +161,7 @@ tests:
   unit:
     module_name: ros_vlan
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100

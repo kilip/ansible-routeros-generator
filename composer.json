@@ -29,8 +29,7 @@
         "phpstan/phpstan": "^0.12.42",
         "phpstan/phpstan-phpunit": "^0.12.16",
         "phpstan/phpstan-symfony": "^0.12.7",
-        "symfony/phpunit-bridge": "^5.1",
-        "webmozart/assert": "^1.9"
+        "symfony/phpunit-bridge": "^5.1"
     },
     "config": {
         "optimize-autoloader": true,
@@ -72,7 +71,7 @@
         "scrap": "./bin/console routeros:scrap --ansi",
         "phpstan": "./vendor/bin/phpstan analyse --ansi",
         "phpcs": "./vendor/bin/php-cs-fixer fix --ansi",
-        "phpunit": "SYMFONY_PHPUNIT_VERSION=8.5 ./vendor/bin/simple-phpunit --colors=always",
+        "phpunit": "SYMFONY_PHPUNIT_VERSION=9.3 ./vendor/bin/simple-phpunit --colors=always",
         "prepare-test": [
             "@phpunit --version"
         ],

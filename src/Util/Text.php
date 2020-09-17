@@ -28,10 +28,9 @@ class Text
             $contents = preg_replace('#(set) (.*)#', 'add \\2', $contents);
             $contents = preg_replace("#\/system script run .*\\n?#", '', $contents);
         }
-        $date = (new \DateTime())->format('Y-m-d');
 
         return <<<EOC
-# {$date}
+# RouterOS Output
 #
 {$contents}
 EOC;

@@ -28,8 +28,8 @@ class MetaCommandTest extends KernelTestCase
 
         $output = $tester->getDisplay(true);
 
-        $this->assertRegExp('#Reindex Meta Started#', $output);
-        $this->assertRegExp('#1/1#', $output);
-        $this->assertRegExp('#Processing interface#', $output);
+        $this->assertMatchesRegularExpression('#Reindex Meta Started#', $output);
+        $this->assertMatchesRegularExpression('#1/1#', $output);
+        $this->assertMatchesRegularExpression('#Processing interface#', $output);
     }
 }

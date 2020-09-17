@@ -56,7 +56,7 @@ examples:
       add arp=reply-only comment="trunk bridge" name=br-trunk
       add arp=reply-only comment="wan bridge" name=br-wan
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge
       add arp=enabled comment="updated comment" name=br-wan
@@ -78,7 +78,7 @@ examples:
       add arp=reply-only comment="trunk bridge" name=br-trunk
       add arp=reply-only comment="wan bridge" name=br-wan
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge
       add arp=enabled comment="replaced comment" name=br-wan
@@ -98,7 +98,7 @@ examples:
       add arp=reply-only comment="trunk bridge" name=br-trunk
       add arp=reply-only comment="wan bridge" name=br-wan
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge
       add comment="new bridge" name=br-new
@@ -119,7 +119,7 @@ examples:
       add arp=reply-only comment="trunk bridge" name=br-trunk
       add arp=reply-only comment="wan bridge" name=br-wan
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge
     commands:
@@ -170,7 +170,7 @@ tests:
   facts:
     name: bridge
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge
       add arp=reply-only comment="trunk bridge" name=br-trunk
@@ -189,7 +189,7 @@ tests:
   unit:
     module_name: ros_bridge
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge
       add arp=reply-only comment="trunk bridge" name=br-trunk

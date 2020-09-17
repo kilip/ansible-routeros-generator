@@ -49,7 +49,7 @@ examples:
       set comment="ether2 comment" default-name=ether2 mtu=1500
       set comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface
       add comment="ether2 updated" mtu=2000 name=ether2
@@ -94,7 +94,7 @@ tests:
   facts:
     name: interface
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface
       add comment="ether2 comment" default-name=ether2 mtu=1500
@@ -114,7 +114,7 @@ tests:
   unit:
     module_name: ros_interface
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface
       add comment="ether2 comment" default-name=ether2 mtu=1500

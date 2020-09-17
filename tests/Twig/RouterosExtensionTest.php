@@ -37,7 +37,7 @@ class RouterosExtensionTest extends TestCase
         if ('' == $message) {
             $message = "pattern not match: {$pattern}";
         }
-        $this->assertRegExp($pattern, $output, $message);
+        $this->assertMatchesRegularExpression($pattern, $output, $message);
     }
 
     public function getTestYamlDumpData()

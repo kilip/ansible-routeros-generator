@@ -152,29 +152,25 @@ class ModuleReindexProcessorTest extends KernelTestCase
     private function configureDispatcherExpectations(MockObject $dispatcher)
     {
         $dispatcher
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_START
-            );
-        $dispatcher
-            ->expects($this->at(1))
-            ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_LOOP
-            );
-        $dispatcher->expects($this->at(2))
-            ->method('dispatch')
-            ->with($this->isInstanceOf(ModuleEvent::class), ModuleEvent::PRE_COMPILE);
-
-        $dispatcher
-            ->expects($this->at(3))
-            ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_END
+            ->withConsecutive(
+                [
+                    $this->isInstanceOf(ProcessEvent::class),
+                    ProcessEvent::EVENT_START,
+                ],
+                [
+                    $this->isInstanceOf(ProcessEvent::class),
+                    ProcessEvent::EVENT_LOOP,
+                ],
+                [
+                    $this->isInstanceOf(ModuleEvent::class),
+                    ModuleEvent::PRE_COMPILE,
+                ],
+                [
+                    $this->isInstanceOf(ProcessEvent::class),
+                    ProcessEvent::EVENT_END,
+                ]
             );
     }
 }

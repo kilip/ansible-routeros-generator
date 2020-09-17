@@ -54,7 +54,7 @@ examples:
       /caps-man aaa
       set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man aaa
       set called-format=mac interim-update=10s mac-caching=10m mac-format=XX-XX-XX-XX-XX-XX mac-mode=as-username-and-password
@@ -68,7 +68,7 @@ examples:
       /caps-man aaa
       set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man aaa
       set mac-format=XX:XX:XX:XX:XX:XX
@@ -112,7 +112,7 @@ tests:
   facts:
     name: capsman_aaa
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man aaa
       set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username
@@ -127,7 +127,7 @@ tests:
   unit:
     module_name: ros_capsman_aaa
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man aaa
       set called-format=mac:ssid interim-update=disabled mac-caching=disabled mac-format=XX.XX.XX.XX.XX.XX mac-mode=as-username

@@ -45,7 +45,7 @@ examples:
       /interface wireless connect-list
       add comment=existing interfce=wlan1 signal-range=-79..120
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless connect-list
       add comment=existing interface=wlan1 signal-range=-50..120 wireless-protocol=802.11
@@ -89,7 +89,7 @@ tests:
   facts:
     name: wireless_connect_list
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless connect-list
       add comment=existing interfce=wlan1 signal-range=-79..120
@@ -102,7 +102,7 @@ tests:
   unit:
     module_name: ros_wireless_connect_list
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless connect-list
       add comment=existing interfce=wlan1 signal-range=-79..120

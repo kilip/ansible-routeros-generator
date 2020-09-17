@@ -46,7 +46,7 @@ examples:
       /caps-man manager
       set ca-certificate=none certificate=none enabled=no require-peer-certificate=no upgrade-policy=none
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man manager
       set ca-certificate=auto enabled=yes
@@ -90,7 +90,7 @@ tests:
   facts:
     name: capsman_manager
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man manager
       set ca-certificate=none certificate=none enabled=no require-peer-certificate=no upgrade-policy=none
@@ -106,7 +106,7 @@ tests:
   unit:
     module_name: ros_capsman_manager
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man manager
       set ca-certificate=none certificate=none enabled=no require-peer-certificate=no upgrade-policy=none

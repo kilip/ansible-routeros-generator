@@ -111,7 +111,7 @@ examples:
       /caps-man datapath
       add name=test
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man datapath
       add arp=reply-only bridge=br-trunk name=test
@@ -177,7 +177,7 @@ tests:
   facts:
     name: capsman_datapath
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man datapath
       add name=test
@@ -188,7 +188,7 @@ tests:
   unit:
     module_name: ros_capsman_datapath
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man datapath
       add name=test

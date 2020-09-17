@@ -54,7 +54,7 @@ examples:
       /interface bridge settings
       set allow-fast-path=no use-ip-firewall=yes use-ip-firewall-for-pppoe=yes use-ip-firewall-for-vlan=yes
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge settings
       set allow-fast-path=yes use-ip-firewall=no use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no
@@ -68,7 +68,7 @@ examples:
       /interface bridge settings
       set allow-fast-path=no use-ip-firewall=yes use-ip-firewall-for-pppoe=yes use-ip-firewall-for-vlan=yes
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge settings
       set allow-fast-path=yes use-ip-firewall=no use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no
@@ -110,7 +110,7 @@ tests:
   facts:
     name: bridge_settings
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge settings
       set allow-fast-path=no use-ip-firewall=yes use-ip-firewall-for-pppoe=yes use-ip-firewall-for-vlan=yes
@@ -124,7 +124,7 @@ tests:
   unit:
     module_name: ros_bridge_settings
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface bridge settings
       set allow-fast-path=no use-ip-firewall=yes use-ip-firewall-for-pppoe=yes use-ip-firewall-for-vlan=yes

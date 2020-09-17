@@ -61,7 +61,7 @@ examples:
       /interface wireless
       set comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless
       add ampdu-priorities=0,1,2 comment="updated comment" name=wlan1 security-profile=default supported-rates-ag=6Mbps,24Mbps
@@ -80,7 +80,7 @@ examples:
       /interface wireless
       set comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless
       add comment="new olympus" name=wlan1 security-profile=new-olympus ssid=Olympus
@@ -144,7 +144,7 @@ tests:
   facts:
     name: wireless
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless
       add comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
@@ -157,7 +157,7 @@ tests:
   unit:
     module_name: ros_wireless
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /interface wireless
       add comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus

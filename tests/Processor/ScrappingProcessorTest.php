@@ -130,14 +130,12 @@ class ScrappingProcessorTest extends KernelTestCase
             ->willReturn($resource);
 
         $compiler
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('compileYaml')
-            ->with($this->isType('array'), "{$resourceCompiledDir}/interface/interface.yaml");
-
-        $compiler
-            ->expects($this->at(1))
-            ->method('compileYaml')
-            ->with($this->isType('array'), "{$resourceCompiledDir}/index.yaml");
+            ->withConsecutive(
+                [$this->isType('array'), "{$resourceCompiledDir}/interface/interface.yaml"],
+                [$this->isType('array'), "{$resourceCompiledDir}/index.yaml"]
+            );
 
         $processor->process();
     }

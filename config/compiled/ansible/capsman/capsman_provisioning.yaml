@@ -46,7 +46,7 @@ examples:
       /caps-man provisioning
       add comment=test
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man provisioning
       add action=create-disabled comment=test
@@ -64,7 +64,7 @@ examples:
       /caps-man provisioning
       add comment=test
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man provisioning
     commands:
@@ -109,7 +109,7 @@ tests:
   facts:
     name: capsman_provisioning
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man provisioning
       add comment=test
@@ -120,7 +120,7 @@ tests:
   unit:
     module_name: ros_capsman_provisioning
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man provisioning
       add comment=test

@@ -42,7 +42,7 @@ examples:
       /caps-man channel
       add name=test
     after: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man channel
       add name=test save-selected=no
@@ -83,7 +83,7 @@ tests:
   facts:
     name: capsman_channel
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man channel
       add name=test
@@ -94,7 +94,7 @@ tests:
   unit:
     module_name: ros_capsman_channel
     fixture_contents: |
-      # 2020-09-16
+      # RouterOS Output
       #
       /caps-man channel
       add name=test
