@@ -40,6 +40,9 @@
         "sort-packages": true
     },
     "autoload": {
+        "files": [
+            "./src/Util/helpers.php"
+        ],
         "psr-4": {
             "RouterOS\\Generator\\": "src/"
         }
@@ -86,9 +89,9 @@
             "@phpunit --coverage-text --coverage-clover=var/log/clover.xml"
         ],
         "verify": [
-            "@phpunit",
             "@phpcs --dry-run --diff",
-            "@phpstan"
+            "@phpstan",
+            "@phpunit"
         ]
     },
     "conflict": {

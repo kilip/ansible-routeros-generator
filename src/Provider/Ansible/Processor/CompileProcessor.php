@@ -76,10 +76,16 @@ class CompileProcessor implements EventSubscriberInterface
         $moduleManager = $this->moduleManager;
         $list = $moduleManager->getList();
         $dispatcher = $this->dispatcher;
-        $processEvent = new ProcessEvent('Starting...', []);
-
-        $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_START);
+        $targetDir = $this->targetDir;
         $resources = [];
+
+        $processEvent = new ProcessEvent('Starting...', []);
+        $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_START);
+
+        if (!is_dir($targetDir)) {
+            mkdir($targetDir, 0775, true);
+        }
+
         foreach ($list as $name => $config) {
             $processEvent->setMessage('Processing {0}')->setContext([$name]);
             $config = $moduleManager->getConfig($name);
@@ -107,6 +113,8 @@ class CompileProcessor implements EventSubscriberInterface
         $compiler->compile($template, $target, $config);
 
         $dir = \dirname($target);
+        filesystem($dir)->ensureDir();
+
         if (!file_exists($file = $dir.'/__init__.py')) {
             touch($file);
         }
@@ -122,6 +130,8 @@ class CompileProcessor implements EventSubscriberInterface
         $compiler->compile($template, $target, $config['resource']);
 
         $dir = \dirname($target);
+        filesystem($dir)->ensureDir();
+
         if (!file_exists($file = $dir.'/__init__.py')) {
             touch($file);
         }
