@@ -29,6 +29,10 @@ documentation:
     config:
       type: dict
       suboptions:
+        allow_fast_path:
+          type: bool
+          default: 'True'
+          description: 'Whether to enable a bridge [ FastPath](https://wiki.mikrotik.com/wiki/Manual:Fast_Path "Manual:Fast Path") globally.'
         comment:
           type: str
           description: 'Short note for bridge_settings resource'
@@ -36,6 +40,18 @@ documentation:
           type: bool
           default: 'False'
           description: 'Set bridge_settings resource disability'
+        use_ip_firewall:
+          type: bool
+          default: 'False'
+          description: 'Force bridged traffic to also be processed by prerouting, forward and postrouting sections of IP routing ([ Packet Flow](https://wiki.mikrotik.com/wiki/Manual:Packet_Flow_v6 "Manual:Packet Flow v6")). This does not apply to routed traffic. This property is required in case you want to assign [ Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to traffic in a bridge. Property <var>use-ip-firewall-for-vlan</var> is required in case bridge <var>vlan-filtering</var> is used.'
+        use_ip_firewall_for_pppoe:
+          type: bool
+          default: 'False'
+          description: 'Send bridged un-encrypted PPPoE traffic to also be processed by [ IP/Firewall](https://wiki.mikrotik.com/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when <var>use-ip-firewall</var> is set to `yes`. This property is required in case you want to assign [ Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to PPPoE traffic in a bridge.'
+        use_ip_firewall_for_vlan:
+          type: bool
+          default: 'False'
+          description: 'Send bridged VLAN traffic to also be processed by [ IP/Firewall](https://wiki.mikrotik.com/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when <var>use-ip-firewall</var> is set to `yes`. This property is required in case you want to assign [ Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to VLAN traffic in a bridge.'
 examples:
   - title: 'Change Bridge Setting Configuration'
     name: 'Configure Bridge Settings'
@@ -93,19 +109,23 @@ resource:
     config:
       type: dict
       options:
+        allow_fast_path:
+          type: bool
+          default: 'True'
         comment:
           type: str
         disabled:
           type: bool
           default: 'False'
-        allow_fast_path:
-          type: str
         use_ip_firewall:
-          type: str
+          type: bool
+          default: 'False'
         use_ip_firewall_for_pppoe:
-          type: str
+          type: bool
+          default: 'False'
         use_ip_firewall_for_vlan:
-          type: str
+          type: bool
+          default: 'False'
 tests:
   facts:
     name: bridge_settings
@@ -132,7 +152,11 @@ tests:
       - commands:
           - '/interface bridge settings set allow-fast-path=yes use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no use-ip-firewall=no'
         argument_spec:
-          config: { allow_fast_path: ['yes'], use_ip_firewall: ['no'], use_ip_firewall_for_pppoe: ['no'], use_ip_firewall_for_vlan: ['no'] }
+          config:
+            allow_fast_path: ['yes']
+            use_ip_firewall: ['no']
+            use_ip_firewall_for_pppoe: ['no']
+            use_ip_firewall_for_vlan: ['no']
           state: present
       - commands:
           - '/interface bridge settings set allow-fast-path=yes use-ip-firewall-for-pppoe=no use-ip-firewall-for-vlan=no use-ip-firewall=no'

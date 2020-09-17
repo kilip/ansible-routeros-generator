@@ -15,15 +15,15 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Provider\Ansible\Processor;
 
 use RouterOS\Generator\Contracts\CompilerInterface;
+use RouterOS\Generator\Provider\Ansible\Concerns\InteractsWithAnsibleStructure;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
 use RouterOS\Generator\Provider\Ansible\Processor\CompileProcessor;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class CompileProcessorTest extends KernelTestCase
 {
-    use InteractsWithContainer;
+    use InteractsWithAnsibleStructure;
 
     private $moduleManager;
     private $compiler;
@@ -60,18 +60,7 @@ class CompileProcessorTest extends KernelTestCase
                 'name' => 'bridge',
             ],
         ];
-        $config = [
-            'name' => 'bridge',
-            'package' => 'interface.bridge',
-            'documentation' => [],
-            'examples' => [],
-            'template' => '@ansible/module/module.py.twig',
-            'resource' => ['resource'],
-            'tests' => [
-                'facts' => [],
-                'unit' => [],
-            ],
-        ];
+        $config = $this->getModuleConfig('interface.bridge.bridge');
 
         $moduleManager->expects($this->once())
             ->method('getList')
@@ -83,7 +72,7 @@ class CompileProcessorTest extends KernelTestCase
             ->willReturn($config);
 
         $compiler
-            ->expects($this->exactly(5))
+            ->expects($this->any())
             ->method('compile')
             ->withConsecutive(
                 [
@@ -99,12 +88,49 @@ class CompileProcessorTest extends KernelTestCase
                 [
                     '@ansible/tests/facts.yaml.twig',
                     $this->targetDir.'/tests/unit/modules/fixtures/facts/interface.bridge.bridge.yaml',
-                    ['facts' => []],
+                    ['facts' => $config['tests']['facts']],
                 ],
                 [
                     '@ansible/tests/unit.yaml.twig',
                     $this->targetDir.'/tests/unit/modules/fixtures/units/interface.bridge.bridge.yaml',
-                    ['unit' => []],
+                    ['unit' => $config['tests']['unit']],
+                ],
+                [
+                    '@ansible/integration/pre_task.yaml.twig',
+                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/pre_tasks.yml',
+                    ['integration' => $config['integration']],
+                ],
+                [
+                    '@ansible/integration/task.yaml.twig',
+                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/merged.yaml',
+                    [
+                        'name' => 'bridge',
+                        'example' => $config['examples'][0],
+                    ],
+                ],
+                [
+                    '@ansible/integration/task.yaml.twig',
+                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/replaced.yaml',
+                    [
+                        'name' => 'bridge',
+                        'example' => $config['examples'][1],
+                    ],
+                ],
+                [
+                    '@ansible/integration/task.yaml.twig',
+                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/overridden.yaml',
+                    [
+                        'name' => 'bridge',
+                        'example' => $config['examples'][2],
+                    ],
+                ],
+                [
+                    '@ansible/integration/task.yaml.twig',
+                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/deleted.yaml',
+                    [
+                        'name' => 'bridge',
+                        'example' => $config['examples'][3],
+                    ],
                 ],
                 [
                     '@ansible/subset.py.twig',

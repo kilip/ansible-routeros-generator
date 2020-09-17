@@ -25,6 +25,14 @@ documentation:
       suboptions:
         ca_certificate:
           type: str
+          description: 'Device CA certificate'
+        certificate:
+          type: str
+          choices:
+            - auto
+            - 'certificate name'
+            - none
+          description: 'Device certificate'
         comment:
           type: str
           description: 'Short note for capsman_manager resource'
@@ -32,6 +40,30 @@ documentation:
           type: bool
           default: 'False'
           description: 'Set capsman_manager resource disability'
+        enabled:
+          type: bool
+          default: 'False'
+          description: 'Disable or enable CAPsMAN functionality'
+        package_path:
+          type: str
+          description: 'Folder location for the RouterOS packages. For example, use "/upgrade" to specify the upgrade folder from the files section. If empty string is set, CAPsMAN can use built-in RouterOS packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.'
+        require_peer_certificate:
+          type: bool
+          default: 'False'
+          description: 'Require all connecting CAPs to have a valid certificate'
+        upgrade_policy:
+          type: str
+          choices:
+            - none
+            - require-same-version
+            - suggest-same-upgrade
+          description: |
+            Upgrade policy options
+            
+            - none - do not perform upgrade
+            - require-same-version - CAPsMAN suggest to upgrade the CAP RouterOS version and if it fails it will not provision the CAP. (Manual provision is still possible)
+            - suggest-same-version - CAPsMAN suggests to upgrade the CAP RouterOS version and if it fails it will still be provisioned
+            
 examples:
   - title: 'Using Present State'
     name: 'Update Settings'
@@ -73,19 +105,31 @@ resource:
       options:
         ca_certificate:
           type: str
+        certificate:
+          type: str
+          choices:
+            - auto
+            - 'certificate name'
+            - none
         comment:
           type: str
         disabled:
           type: bool
           default: 'False'
-        certificate:
-          type: str
         enabled:
+          type: bool
+          default: 'False'
+        package_path:
           type: str
         require_peer_certificate:
-          type: str
+          type: bool
+          default: 'False'
         upgrade_policy:
           type: str
+          choices:
+            - none
+            - require-same-version
+            - suggest-same-upgrade
 tests:
   facts:
     name: capsman_manager
@@ -115,4 +159,6 @@ tests:
           - '/caps-man manager set ca-certificate=auto enabled=yes'
         argument_spec:
           state: present
-          config: { ca_certificate: [auto], enabled: ['yes'] }
+          config:
+            ca_certificate: [auto]
+            enabled: ['yes']

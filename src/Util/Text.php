@@ -19,6 +19,11 @@ use RouterOS\Generator\Structure\ResourceStructure;
 
 class Text
 {
+    public static function namespaceToPath($namespace)
+    {
+        return str_replace('.', '/', $namespace);
+    }
+
     public static function toRouterosExport(ResourceStructure $resource, array $values)
     {
         $type = $resource->getType();

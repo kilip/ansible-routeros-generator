@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Provider\Ansible\Command;
 
+use RouterOS\Generator\Concerns\InteractsWithCommand;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Tests\RouterOS\Generator\Concerns\InteractsWithCommand;
 
 class CompileCommandTest extends KernelTestCase
 {
@@ -26,6 +26,35 @@ class CompileCommandTest extends KernelTestCase
     public function verifyContains($expected, $contents)
     {
         $this->assertContains($expected, $contents);
+    }
+
+    /**
+     * @param $module
+     * @param $file
+     * @param $pattern
+     * @param string $message
+     * @dataProvider getCompileIntegrationData
+     */
+    public function testCompileIntegrationOutput($module, $file, $pattern, $message = '')
+    {
+        $this->compileTemplate();
+        $file = $this->getRealpath(
+            "tests/integration/targets/{$module}/tests/cli/{$file}"
+        );
+
+        $this->assertFileIsReadable($file);
+        $contents = file_get_contents($file);
+        $this->assertMatchesRegularExpression('#'.$pattern.'#', $contents, $message);
+    }
+
+    public function getCompileIntegrationData()
+    {
+        return [
+            ['ros_bridge', 'pre_tasks.yml', 'AUTO GENERATED CODE', 'should have header'],
+            ['ros_bridge', 'pre_tasks.yml', 'name: remove created bridge', 'should render pre tasks'],
+            ['ros_bridge', 'pre_tasks.yml', 'AUTO GENERATED CODE', 'should have read only header'],
+            ['ros_bridge', 'merged.yaml', 'include_tasks: pre_tasks.yml', 'should include pre-tasks'],
+        ];
     }
 
     public function testCompileUnitTests()

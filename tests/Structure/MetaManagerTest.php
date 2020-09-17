@@ -15,11 +15,11 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Structure;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\MetaManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class MetaManagerTest extends KernelTestCase
 {

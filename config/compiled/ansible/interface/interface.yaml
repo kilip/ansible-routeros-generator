@@ -13,6 +13,14 @@ documentation:
     - 'This module manages the interface configuration of Mikrotik RouterOS network devices.'
   supports:
     - export-verbose-mode
+  integration:
+    pre_tasks:
+      - name: 'reset interface configuration'
+        kilip.routeros.ros_interface:
+          state: merged
+          config:
+            - { name: ether2, comment: 'ether2 comment', mtu: '1500' }
+            - { name: ether3, comment: 'ether3 comment', mtu: '1500', disabled: 'yes' }
   options:
     state:
       choices:
@@ -29,8 +37,14 @@ documentation:
           description: 'Set interface disability.'
         l2mtu:
           type: str
+          description: 'Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. [ Read more&gt;&gt; ](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
         mtu:
           type: str
+          description: 'Layer3 Maximum transmission unit'
+        name:
+          type: str
+          required: 'True'
+          description: 'Name of an interface'
 examples:
   - title: 'Using Merged'
     name: 'Merge configuration with device configuration'
@@ -83,13 +97,13 @@ resource:
           type: str
         mtu:
           type: str
+        name:
+          type: str
+          required: 'True'
         comment:
           type: str
         default_name:
           type: str
-        name:
-          type: str
-          required: 'True'
 tests:
   facts:
     name: interface
@@ -124,5 +138,20 @@ tests:
           - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
           - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
         argument_spec:
-          config: [{ comment: 'ether2 updated', mtu: '2000', name: ether2 }, { comment: 'ether3 updated', disabled: 'no', mtu: '3000', name: ether3 }]
+          config:
+            - { comment: 'ether2 updated', mtu: '2000', name: ether2 }
+            - { comment: 'ether3 updated', disabled: 'no', mtu: '3000', name: ether3 }
           state: merged
+integration:
+  pre_tasks:
+    - name: 'reset interface configuration'
+      kilip.routeros.ros_interface:
+        state: merged
+        config:
+          - name: ether2
+            comment: 'ether2 comment'
+            mtu: '1500'
+          - name: ether3
+            comment: 'ether3 comment'
+            mtu: '1500'
+            disabled: 'yes'

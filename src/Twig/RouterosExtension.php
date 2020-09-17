@@ -28,6 +28,7 @@ class RouterosExtension extends AbstractExtension
         return [
             new TwigFilter('routeros_yaml_dump', [$this, 'yamlDump']),
             new TwigFilter('routeros_prefix', [$this, 'prefix']),
+            new TwigFilter('spacing', [$this, 'spacing']),
             new TwigFilter('classify', [$this, 'classify']),
             new TwigFilter('to_json', [$this, 'toJson']),
             new TwigFilter('fix_json', [$this, 'fixJson']),
@@ -35,7 +36,21 @@ class RouterosExtension extends AbstractExtension
         ];
     }
 
-    public function toRouterOSExport(array $values, ResourceStructure $resource, $spacing = 0)
+    public function spacing($contents, int $indent = 0)
+    {
+        $prefix = str_repeat('  ', $indent);
+
+        $lines = explode("\n", $contents);
+        $contents = [];
+
+        foreach ($lines as $line) {
+            $contents[] = $prefix.$line;
+        }
+
+        return implode("\n", $contents);
+    }
+
+    public function toRouterOSExport(array $values, ResourceStructure $resource)
     {
         return Text::arrayToRouteros($resource, $values);
     }

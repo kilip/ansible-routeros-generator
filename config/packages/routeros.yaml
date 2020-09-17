@@ -5,7 +5,7 @@ twig:
 routeros:
   config_dir: "%kernel.project_dir%/etc"
   compiled_dir: "%kernel.project_dir%/config/compiled"
-  cache_dir: "%kernel.cache_dir%/routeros"
+  cache_dir: "%kernel.project_dir%/var/cache/routeros"
   ansible:
     git_repository: "https://github.com/kilip/ansible-collection-routeros.git"
     module_name_prefix: "kilip.routeros"

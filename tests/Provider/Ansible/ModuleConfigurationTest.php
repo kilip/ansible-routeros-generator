@@ -14,13 +14,13 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Provider\Ansible;
 
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Provider\Ansible\ModuleConfiguration;
 use RouterOS\Generator\Util\CacheManager;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class ModuleConfigurationTest extends KernelTestCase
 {

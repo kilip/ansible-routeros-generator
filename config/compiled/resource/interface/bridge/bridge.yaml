@@ -5,32 +5,227 @@ command: '/interface bridge'
 keys:
   - name
 properties:
+  add_dhcp_option82:
+    name: add_dhcp_option82
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Whether to add DHCP Option-82 information (Agent Remote ID and Agent Circuit ID) to DHCP packets. Can be used together with Option-82 capable DHCP server to assign IP addresses and implement policies. This property only has effect when <var>dhcp-snooping</var> is set to `yes`.'
+    original_name: add-dhcp-option82
+  admin_mac:
+    name: admin_mac
+    type: string
+    required: false
+    default: none
+    choice_type: null
+    description: 'Static MAC address of the bridge. This property only has effect when <var>auto-mac</var> is set to `no`.'
+    original_name: admin-mac
+  ageing_time:
+    name: ageing_time
+    type: string
+    required: false
+    default: '00:05:00'
+    choice_type: null
+    description: 'How long a host''s information will be kept in the bridge database.'
+    original_name: ageing-time
+  arp:
+    name: arp
+    type: string
+    required: false
+    default: enabled
+    choices:
+      - disabled
+      - enabled
+      - proxy-arp
+      - reply-only
+    choice_type: null
+    description: |
+      Address Resolution Protocol setting
+      
+      - `disabled` - the interface will not use ARP
+      - `enabled` - the interface will use ARP
+      - `proxy-arp` - the interface will use the ARP proxy feature
+      - `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the [ IP/ARP](https://wiki.mikrotik.com/wiki/Manual:IP/ARP "Manual:IP/ARP") table. No dynamic entries will be automatically stored in the [ IP/ARP](https://wiki.mikrotik.com/wiki/Manual:IP/ARP "Manual:IP/ARP") table. Therefore for communications to be successful, a valid static entry must already exist.
+    original_name: arp
+  arp_timeout:
+    name: arp_timeout
+    type: string
+    required: false
+    default: auto
+    choice_type: null
+    description: 'ARP timeout is time how long ARP record is kept in ARP table after no packets are received from IP. Value `auto` equals to the value of <var>arp-timeout</var> in [ IP/Settings](https://wiki.mikrotik.com/wiki/Manual:IP/Settings "Manual:IP/Settings"), default is 30s.'
+    original_name: arp-timeout
+  auto_mac:
+    name: auto_mac
+    type: string
+    required: false
+    default: 'yes'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Automatically select one MAC address of bridge ports as a bridge MAC address, bridge MAC will be chosen from the first added bridge port. After a device reboot, the bridge MAC can change depending on the port-number.'
+    original_name: auto-mac
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Short description of the interface.'
+    original_name: comment
+  dhcp_snooping:
+    name: dhcp_snooping
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Enables or disables DHCP Snooping on the bridge.'
+    original_name: dhcp-snooping
   disabled:
     name: disabled
     type: string
     required: false
     default: 'no'
     choices:
-      - 'yes'
       - 'no'
+      - 'yes'
     choice_type: null
-    description: null
+    description: 'Changes whether the bridge is disabled.'
     original_name: disabled
+  ether_type:
+    name: ether_type
+    type: string
+    required: false
+    default: '0x8100'
+    choices:
+      - '0x8100'
+      - '0x88a8'
+      - '0x9100'
+    choice_type: null
+    description: 'Changes the EtherType, which will be used to determine if a packet has a VLAN tag. Packets that have a matching EtherType are considered as tagged packets. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+    original_name: ether-type
+  fast_forward:
+    name: fast_forward
+    type: string
+    required: false
+    default: 'yes'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Special and faster case of [ FastPath](https://wiki.mikrotik.com/wiki/Manual:Fast_Path "Manual:Fast Path") which works only on bridges with 2 interfaces (enabled by default only for new bridges). More details can be found in the [ Fast Forward](https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge#Fast_Forward "Manual:Interface/Bridge") section.'
+    original_name: fast-forward
+  forward_delay:
+    name: forward_delay
+    type: string
+    required: false
+    default: '00:00:15'
+    choice_type: null
+    description: 'Time which is spent during the initialization phase of the bridge interface (i.e., after router startup or enabling the interface) in listening/learning state before the bridge will start functioning normally.'
+    original_name: forward-delay
+  frame_types:
+    name: frame_types
+    type: string
+    required: false
+    default: admit-all
+    choices:
+      - admit-all
+      - admit-only-untagged-and-priority-tagged
+      - admit-only-vlan-tagged
+    choice_type: null
+    description: 'Specifies allowed frame types on a bridge port. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+    original_name: frame-types
+  igmp_snooping:
+    name: igmp_snooping
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Enables multicast group and port learning to prevent multicast traffic from flooding all interfaces in a bridge.'
+    original_name: igmp-snooping
   igmp_version:
     name: igmp_version
     type: integer
     required: false
-    default: null
+    default: 2
+    choices:
+      - 2
+      - 3
     choice_type: null
-    description: null
+    description: 'Selects the IGMP version in which IGMP general membership queries will be generated. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
     original_name: igmp-version
+  ingress_filtering:
+    name: ingress_filtering
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Enables or disables VLAN ingress filtering, which checks if the ingress port is a member of the received VLAN ID in the bridge VLAN table. By default, VLANs that don''t exist in the bridge VLAN table are dropped before they are sent out (egress), but this property allows you to drop the packets when they are received (ingress). Should be used with <var>frame-types</var> to specify if the ingress traffic should be tagged or untagged. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+    original_name: ingress-filtering
+  last_member_interval:
+    name: last_member_interval
+    type: string
+    required: false
+    default: 1s
+    choice_type: null
+    description: 'If a port has <var>fast-leave</var> set to `no` and a bridge port receives a IGMP Leave message, then a IGMP Snooping enabled bridge will send a IGMP query to make sure that no devices has subscribed to a certain multicast stream on a bridge port. If a IGMP Snooping enabled bridge does not receive a IGMP membership report after amount of <var>last-member-interval</var>, then the bridge considers that no one has subscribed to a certain multicast stream and can stop forwarding it. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+    original_name: last-member-interval
+  last_member_query_count:
+    name: last_member_query_count
+    type: integer
+    required: false
+    default: 2
+    choice_type: null
+    description: 'How many times should <var>last-member-interval</var> pass until a IGMP Snooping bridge will stop forwarding a certain multicast stream. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+    original_name: last-member-query-count
+  max_hops:
+    name: max_hops
+    type: integer
+    required: false
+    default: 20
+    choice_type: null
+    description: 'Bridge count which BPDU can pass in a MSTP enabled network in the same region before BPDU is being ignored. This property only has effect when <var>protocol-mode</var> is set to `mstp`.'
+    original_name: max-hops
+  max_message_age:
+    name: max_message_age
+    type: string
+    required: false
+    default: '00:00:20'
+    choice_type: null
+    description: 'How long to remember Hello messages received from other STP/RSTP enabled bridges. This property only has effect when <var>protocol-mode</var> is set to `stp` or `rstp`.'
+    original_name: max-message-age
+  membership_interval:
+    name: membership_interval
+    type: string
+    required: false
+    default: 4m20s
+    choice_type: null
+    description: 'Amount of time after an entry in the Multicast Database (MDB) is removed if a IGMP membership report is not received on a certain port. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+    original_name: membership-interval
   mld_version:
     name: mld_version
     type: integer
     required: false
     default: 1
+    choices:
+      - 1
+      - 2
     choice_type: null
-    description: null
+    description: 'Selects the MLD version. Version 2 adds support for source-specific multicast. This property only has effect when RouterOS IPv6 package is enabled and <var>igmp-snooping</var> is set to `yes`.'
     original_name: mld-version
   mtu:
     name: mtu
@@ -38,17 +233,149 @@ properties:
     required: false
     default: auto
     choice_type: null
-    description: null
+    description: 'Maximum transmission unit, by default, the bridge will set MTU automatically and it will use the lowest MTU value of any associated bridge port. The default bridge MTU value without any bridge ports added is 1500. The MTU value can be set manually, but it cannot exceed the bridge L2MTU or the lowest bridge port L2MTU. If a new bridge port is added with L2MTU which is smaller than the actual-mtu of the bridge (set by the <var>mtu</var> property), then manually set value will be ignored and the bridge will act as if `mtu=auto` is set.'
     options:
       - ignore-default
     original_name: mtu
+  multicast_querier:
+    name: multicast_querier
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Multicast querier generates IGMP general membership queries to which all IGMP capable devices respond with a IGMP membership report, usually a PIM (multicast) router generates these queries. By using this property you can make a IGMP Snooping enabled bridge to generate IGMP general membership queries. This property should be used whenever there is no PIM (multicast) router in a Layer2 network or IGMP packets must be sent through multiple IGMP Snooping enabled bridges to reach a PIM (multicast) router. Without a multicast querier in a Layer2 network the Multicast Database (MDB) is not being updated and IGMP Snooping will not function properly. Only untagged IGMP general membership queries are generated. This property only has effect when <var>igmp-snooping</var> is set to `yes`. Additionally, the <var>igmp-snooping</var> should be disabled/enabled after changing <var>multicast-querier</var> property.'
+    original_name: multicast-querier
+  multicast_router:
+    name: multicast_router
+    type: string
+    required: false
+    default: temporary-query
+    choices:
+      - disabled
+      - permanent
+      - temporary-query
+    choice_type: null
+    description: |
+      Changes the state of a bridge itself if IGMP membership reports are going to be forwarded to it. This property can be used to forward IGMP membership reports to the bridge for statistics or to analyse them.
+      
+      - `disabled` - IGMP membership reports are not forwarded to the bridge itself regardless what is connected to it.
+      - `permanent` - IGMP membership reports are forwarded through this the bridge itself regardless what is connected to it.
+      - `temporary-query` - automatically detect multicast routers and IGMP Snooping enabled bridges. This property only has effect when <var>igmp-snooping</var> is set to `yes`.
+    original_name: multicast-router
   name:
     name: name
-    type: null
+    type: string
     required: false
     default: null
     choice_type: null
-    description: null
+    description: 'Name of the bridge interface'
     options:
       - ignore-default
     original_name: name
+  priority:
+    name: priority
+    type: integer
+    required: false
+    default: 32768
+    choice_type: null
+    description: 'Bridge priority, used by STP to determine root bridge, used by MSTP to determine CIST and IST regional root bridge. This property has no effect when <var>protocol-mode</var> is set to `none`.'
+    original_name: priority
+  protocol_mode:
+    name: protocol_mode
+    type: string
+    required: false
+    default: rstp
+    choices:
+      - mstp
+      - none
+      - rstp
+      - stp
+    choice_type: null
+    description: 'Select Spanning tree protocol (STP) or Rapid spanning tree protocol (RSTP) to ensure a loop-free topology for any bridged LAN. RSTP provides for faster spanning tree convergence after a topology change. Select MSTP to ensure loop-free topology across multiple VLANs. Since RouterOS v6.43 it is possible to forward Reserved MAC addresses that are in **01:80:C2:00:00:0X** range, this can be done by setting the <var>protocol-mode</var> to `none`.'
+    original_name: protocol-mode
+  pvid:
+    name: pvid
+    type: integer
+    required: false
+    default: 1
+    choice_type: null
+    description: 'Port VLAN ID (pvid) specifies which VLAN the untagged ingress traffic is assigned to. It applies e.g. to frames sent from bridge IP and destined to a bridge port. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+    original_name: pvid
+  querier_interval:
+    name: querier_interval
+    type: string
+    required: false
+    default: 4m15s
+    choice_type: null
+    description: 'Used to change the interval how often a bridge checks if it is the active multicast querier. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+    original_name: querier-interval
+  query_interval:
+    name: query_interval
+    type: string
+    required: false
+    default: 2m5s
+    choice_type: null
+    description: 'Used to change the interval how often IGMP general membership queries are sent out. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+    original_name: query-interval
+  query_response_interval:
+    name: query_response_interval
+    type: string
+    required: false
+    default: 10s
+    choice_type: null
+    description: 'Interval in which a IGMP capable device must reply to a IGMP query with a IGMP membership report. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+    original_name: query-response-interval
+  region_name:
+    name: region_name
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'MSTP region name. This property only has effect when <var>protocol-mode</var> is set to `mstp`.'
+    original_name: region-name
+  region_revision:
+    name: region_revision
+    type: integer
+    required: false
+    default: 0
+    choice_type: null
+    description: 'MSTP configuration revision number. This property only has effect when <var>protocol-mode</var> is set to `mstp`.'
+    original_name: region-revision
+  startup_query_count:
+    name: startup_query_count
+    type: integer
+    required: false
+    default: 2
+    choice_type: null
+    description: 'Specifies how many times must <var>startup-query-interval</var> pass until the bridge starts sending out IGMP general membership queries periodically. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+    original_name: startup-query-count
+  startup_query_interval:
+    name: startup_query_interval
+    type: string
+    required: false
+    default: 31s250ms
+    choice_type: null
+    description: 'Used to change the amount of time after a bridge starts sending out IGMP general membership queries after the bridge is enabled. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+    original_name: startup-query-interval
+  transmit_hold_count:
+    name: transmit_hold_count
+    type: integer
+    required: false
+    default: 6
+    choice_type: null
+    description: 'The Transmit Hold Count used by the Port Transmit state machine to limit transmission rate.'
+    original_name: transmit-hold-count
+  vlan_filtering:
+    name: vlan_filtering
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Globally enables or disables VLAN functionality for bridge.'
+    original_name: vlan-filtering

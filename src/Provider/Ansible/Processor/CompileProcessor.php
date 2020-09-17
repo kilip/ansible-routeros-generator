@@ -68,6 +68,7 @@ class CompileProcessor
             $this->compileResource($name, $config);
             $this->compileFactsTests($name, $config);
             $this->compileUnitTests($name, $config);
+            $this->compileIntegration($name, $config);
 
             $resources[$name] = $config['resource'];
         }
@@ -138,5 +139,33 @@ class CompileProcessor
         $compiler->compile($template, $target, [
             'unit' => $config['tests']['unit'],
         ]);
+    }
+
+    private function compileIntegration($name, array $config)
+    {
+        $compiler = $this->compiler;
+        $targetDir = $this->targetDir;
+        $moduleName = 'ros_'.$name;
+        $targetCli = "{$targetDir}/tests/integration/targets/{$moduleName}/tests/cli";
+
+        if (isset($config['integration'])) {
+            $integration = $config['integration'];
+            $template = '@ansible/integration/pre_task.yaml.twig';
+            $target = "{$targetCli}/pre_tasks.yml";
+            $compiler->compile($template, $target, ['integration' => $integration]);
+        }
+
+        if (isset($config['examples'])) {
+            $examples = $config['examples'];
+            $template = '@ansible/integration/task.yaml.twig';
+            foreach ($examples as $example) {
+                $state = $example['argument_spec']['state'];
+                $target = "{$targetCli}/{$state}.yaml";
+                $compiler->compile($template, $target, [
+                    'name' => $name,
+                    'example' => $example,
+                ]);
+            }
+        }
     }
 }

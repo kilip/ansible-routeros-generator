@@ -1,0 +1,3 @@
+{% include "@ansible/header.txt.twig" %}
+---
+{{ integration.pre_tasks|routeros_yaml_dump|raw }}

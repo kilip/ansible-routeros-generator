@@ -16,11 +16,11 @@ namespace Tests\RouterOS\Generator\Structure;
 
 use Doctrine\Inflector\InflectorFactory;
 use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Concerns\InteractsWithYaml;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
 use Symfony\Component\Yaml\Yaml;
-use Tests\RouterOS\Generator\Concerns\InteractsWithYaml;
 
 class ResourceStructureTest extends TestCase
 {

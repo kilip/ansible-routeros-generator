@@ -10,9 +10,106 @@ properties:
     type: list
     required: false
     default: null
+    choices:
+      - 10000M-full
+      - 1000M-full
+      - 1000M-half
+      - 100M-full
+      - 100M-half
+      - 10M-full
+      - 10M-half
+      - 2500M-full
+      - 5000M-full
     choice_type: null
-    description: null
+    description: 'Advertised speed and duplex modes for Ethernet interfaces over twisted pair, only applies when <var>auto-negotiation</var> is enabled. Advertising higher speeds than the actual interface supported speed will have no effect, multiple options are allowed.'
     original_name: advertise
+  arp:
+    name: arp
+    type: string
+    required: false
+    default: enabled
+    choices:
+      - disabled
+      - enabled
+      - local-proxy-arp
+      - proxy-arp
+      - reply-only
+    choice_type: null
+    description: |
+      Address Resolution Protocol mode:
+      
+      - <var>disabled</var> - the interface will not use ARP
+      - <var>enabled</var> - the interface will use ARP
+      - <var>local-proxy-arp</var> - the router performs proxy ARP on the interface and sends replies to the same interface
+      - <var>proxy-arp</var> - the router performs proxy ARP on the interface and sends replies to other interfaces
+      - <var>reply-only</var> - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the [ ARP](https://wiki.mikrotik.com/wiki/Manual:IP/ARP "Manual:IP/ARP") table. No dynamic entries will be automatically stored in the ARP table. Therefore for communications to be successful, a valid static entry must already exist.
+    original_name: arp
+  auto_negotiation:
+    name: auto_negotiation
+    type: string
+    required: false
+    default: 'yes'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: |
+      When enabled, the interface "advertises" its maximum capabilities to achieve the best connection possible.
+      
+      - **Note1:** Auto-negotiation should not be disabled on one end only, otherwise Ethernet Interfaces may not work properly.
+      - **Note2:** Gigabit Ethernet and NBASE-T Ethernet links cannot work with auto-negotiation disabled.
+    original_name: auto-negotiation
+  bandwidth:
+    name: bandwidth
+    type: integer
+    required: false
+    default: 0
+    choice_type: null
+    description: 'Sets max rx/tx bandwidth in kbps that will be handled by an interface. TX limit is supported on all Atheros [ switch-chip](https://wiki.mikrotik.com/wiki/Manual:Switch_Chip_Features "Manual:Switch Chip Features") ports. RX limit is supported only on Atheros8327/QCA8337 switch-chip ports.'
+    original_name: bandwidth
+  cable_setting:
+    name: cable_setting
+    type: string
+    required: false
+    default: default
+    choices:
+      - default
+      - short
+      - standard
+    choice_type: null
+    description: 'Changes the cable length setting (only applicable to NS DP83815/6 cards)'
+    original_name: cable-setting
+  combo_mode:
+    name: combo_mode
+    type: string
+    required: false
+    default: auto
+    choices:
+      - auto
+      - copper
+      - sfp
+    choice_type: null
+    description: 'When <var>auto</var> mode is selected, the port that was first connected will establish the link. In case this link fails, the other port will try to establish a new link. If both ports are connected at the same time (e.g. after reboot), the priority will be the SFP/SFP+ port. When <var>sfp</var> mode is selected, the interface will only work through SFP/SFP+ cage. When <var>copper</var> mode is selected, the interface will only work through RJ45 Ethernet port.'
+    original_name: combo-mode
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Descriptive name of an item'
+    original_name: comment
+  disable_running_check:
+    name: disable_running_check
+    type: string
+    required: false
+    default: 'yes'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Disable running check. If this value is set to ''no'', the router automatically detects whether the NIC is connected with a device in the network or not. Default value is ''yes'' because older NICs do not support it. (only applicable to x86)'
+    original_name: disable-running-check
   disabled:
     name: disabled
     type: string
@@ -24,3 +121,122 @@ properties:
     choice_type: null
     description: 'Set interface disability.'
     original_name: disabled
+  full_duplex:
+    name: full_duplex
+    type: string
+    required: false
+    default: 'yes'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Defines whether the transmission of data appears in two directions simultaneously, only applies when <var>auto-negotiation</var> is disabled.'
+    original_name: full-duplex
+  l2mtu:
+    name: l2mtu
+    type: integer
+    required: false
+    default: null
+    choice_type: null
+    description: 'Layer2 Maximum transmission unit. [ Read more&gt;&gt; ](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
+    original_name: l2mtu
+  mac_address:
+    name: mac_address
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Media Access Control number of an interface.'
+    original_name: mac-address
+  master_port:
+    name: master_port
+    type: string
+    required: false
+    default: none
+    choice_type: null
+    description: 'Outdated property, more details about this property can be found in the [ Master-port](https://wiki.mikrotik.com/wiki/Manual:Master-port "Manual:Master-port") page.'
+    original_name: master-port
+  mdix_enable:
+    name: mdix_enable
+    type: string
+    required: false
+    default: 'yes'
+    choices:
+      - 'no'
+      - 'yes'
+    choice_type: null
+    description: 'Whether the MDI/X auto cross over cable correction feature is enabled for the port (Hardware specific, e.g. ether1 on RB500 can be set to yes/no. Fixed to ''yes'' on other hardware.)'
+    original_name: mdix-enable
+  mtu:
+    name: mtu
+    type: integer
+    required: false
+    default: 1500
+    choice_type: null
+    description: 'Layer3 Maximum transmission unit'
+    original_name: mtu
+  name:
+    name: name
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Name of an interface'
+    original_name: name
+  poe_out:
+    name: poe_out
+    type: string
+    required: false
+    default: 'off'
+    choices:
+      - auto-on
+      - forced-on
+      - 'off'
+    choice_type: null
+    description: 'Poe Out settings. [ `Read more >>`](https://wiki.mikrotik.com/wiki/Manual:PoE-Out "Manual:PoE-Out")'
+    original_name: poe-out
+  poe_priority:
+    name: poe_priority
+    type: integer
+    required: false
+    default: null
+    choice_type: null
+    description: 'Poe Out settings. [ `Read more >>`](https://wiki.mikrotik.com/wiki/Manual:PoE-Out "Manual:PoE-Out")'
+    original_name: poe-priority
+  rx_flow_control:
+    name: rx_flow_control
+    type: string
+    required: false
+    default: 'off'
+    choices:
+      - auto
+      - 'off'
+      - 'on'
+    choice_type: null
+    description: 'When set to on, the port will process received pause frames and suspend transmission if required. **auto** is the same as **on** except when auto-negotiation=yes flow control status is resolved by taking into account what other end advertises.'
+    original_name: rx-flow-control
+  speed:
+    name: speed
+    type: string
+    required: false
+    default: null
+    choices:
+      - 100Mbps
+      - 10Gbps
+      - 10Mbps
+      - 1Gbps
+    choice_type: null
+    description: 'Sets interface data transmission speed which takes effect only when <var>auto-negotiation</var> is disabled.'
+    original_name: speed
+  tx_flow_control:
+    name: tx_flow_control
+    type: string
+    required: false
+    default: 'off'
+    choices:
+      - auto
+      - 'off'
+      - 'on'
+    choice_type: null
+    description: 'When set to on, the port will generate pause frames to the upstream device to temporarily stop the packet transmission. Pause frames are only generated when some routers output interface is congested and packets cannot be transmitted anymore. **auto** is the same as **on** except when auto-negotiation=yes flow control status is resolved by taking into account what other end advertises.'
+    original_name: tx-flow-control

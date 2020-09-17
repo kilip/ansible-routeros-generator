@@ -65,6 +65,9 @@
         <service id="ansible.listener.tests" class="RouterOS\Generator\Provider\Ansible\Listener\TestListener">
             <tag name="kernel.event_subscriber"/>
         </service>
+        <service id="ansible.config.integration" class="RouterOS\Generator\Provider\Ansible\Config\IntegrationConfig">
+            <tag name="kernel.event_subscriber"/>
+        </service>
 
         <!-- build event listeners -->
         <service id="ansible.build.listeners.checkout" class="RouterOS\Generator\Provider\Ansible\Build\CheckoutAnsibleCollection">

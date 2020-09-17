@@ -26,7 +26,11 @@ documentation:
       suboptions:
         arp:
           type: str
-          choices: [disabled, enabled, proxy-arp, reply-only]
+          choices:
+            - disabled
+            - enabled
+            - proxy-arp
+            - reply-only
           default: enabled
           description: |
             Address Resolution Protocol setting
@@ -91,7 +95,9 @@ documentation:
             
         vlan_mode:
           type: str
-          choices: [use-service-tag, use-tag]
+          choices:
+            - use-service-tag
+            - use-tag
           description: |
             Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows the interface to only send out data tagged with given tag)
             
@@ -141,7 +147,11 @@ resource:
       options:
         arp:
           type: str
-          choices: [disabled, enabled, proxy-arp, reply-only]
+          choices:
+            - disabled
+            - enabled
+            - proxy-arp
+            - reply-only
           default: enabled
         bridge:
           type: str
@@ -172,7 +182,9 @@ resource:
           type: int
         vlan_mode:
           type: str
-          choices: [use-service-tag, use-tag]
+          choices:
+            - use-service-tag
+            - use-tag
 tests:
   facts:
     name: capsman_datapath
@@ -198,4 +210,6 @@ tests:
           - '/caps-man datapath add arp=reply-only bridge=br-trunk name=new'
         argument_spec:
           state: merged
-          config: [{ arp: reply-only, bridge: br-trunk, name: test }, { arp: reply-only, bridge: br-trunk, name: new }]
+          config:
+            - { arp: reply-only, bridge: br-trunk, name: test }
+            - { arp: reply-only, bridge: br-trunk, name: new }

@@ -25,14 +25,19 @@ documentation:
       suboptions:
         bridge:
           type: str
+          description: 'Bridge to which interfaces should be added when local forwarding mode is used'
         caps_man_addresses:
           type: list
+          description: 'List of Manager IP addresses that CAP will attempt to contact during discovery'
         caps_man_certificate_common_names:
           type: list
+          description: 'List of Manager certificate CommonNames that CAP will connect to, if empty - CAP does not check Manager certificate CommonName'
         caps_man_names:
           type: list
+          description: 'An ordered list of CAPs Manager names that the CAP will connect to, if empty - CAP does not check Manager name'
         certificate:
           type: str
+          description: 'Certificate to use for authenticating'
         comment:
           type: str
           description: 'Short note for wireless_cap resource'
@@ -42,11 +47,18 @@ documentation:
           description: 'Set wireless_cap resource disability'
         discovery_interfaces:
           type: list
+          description: 'List of interfaces over which CAP should attempt to discover Manager'
+        enabled:
+          type: bool
+          default: 'False'
+          description: 'Disable or enable CAP feature'
         interfaces:
           type: list
+          description: 'List of wireless interfaces to be controlled by Manager'
         static_virtual:
           type: bool
           default: 'False'
+          description: 'CAP will create Static Virtual Interfaces instead of Dynamic and will try to reuse the same interface on reconnect to CAPsMAN if the MAC address will be the same. Note if two or more interfaces will have the same MAC address the assignment from the CAPsMAN could be random between those interfaces.'
 examples:
   - title: 'Change Wireless CAP Setting'
     name: 'Configure Wireless CAP'
@@ -102,13 +114,14 @@ resource:
           default: 'False'
         discovery_interfaces:
           type: list
+        enabled:
+          type: bool
+          default: 'False'
         interfaces:
           type: list
         static_virtual:
           type: bool
           default: 'False'
-        enabled:
-          type: str
         lock_to_caps_man:
           type: str
 tests:
@@ -141,5 +154,6 @@ tests:
       - commands:
           - '/interface wireless cap set interfaces=wlan1,wlan2'
         argument_spec:
-          config: { interfaces: [wlan1, wlan2] }
+          config:
+            interfaces: [wlan1, wlan2]
           state: present

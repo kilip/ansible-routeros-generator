@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Scraper;
 
 use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Concerns\InteractsWithCacheManager;
 use RouterOS\Generator\Scraper\TableParser;
 use RouterOS\Generator\Structure\Meta;
-use Tests\RouterOS\Generator\Concerns\InteractsWithCacheManager;
 
 class TableParserTest extends TestCase
 {

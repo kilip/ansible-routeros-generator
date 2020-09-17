@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\RouterOS\Generator\Concerns;
+namespace RouterOS\Generator\Concerns;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
@@ -31,7 +31,7 @@ trait InteractsWithCacheManager
         $pages = [
             [
                 'https://wiki.mikrotik.com/wiki/Manual:Interface',
-                file_get_contents(__DIR__.'/../Fixtures/pages/interface.html'),
+                file_get_contents(__DIR__.'/../../tests/Fixtures/pages/interface.html'),
             ],
         ];
         $this->cacheManager = $this->createMock(CacheManagerInterface::class);

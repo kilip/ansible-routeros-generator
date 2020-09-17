@@ -5,7 +5,7 @@
         https://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="routeros.scraper.page_cache_namespace">routeros</parameter>
+        <parameter key="routeros.scraper.page_cache_namespace">static-wiki</parameter>
         <parameter key="routeros.scraper.page_cache_lifetime">604800</parameter>
         <parameter key="routeros.cache_dir"/>
         <parameter key="routeros.model.max_results">1000</parameter>

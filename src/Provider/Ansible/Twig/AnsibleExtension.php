@@ -19,11 +19,29 @@ use Twig\TwigFilter;
 
 class AnsibleExtension extends AbstractExtension
 {
+    /**
+     * @var string
+     */
+    private $modulePrefix;
+    /**
+     * @var string
+     */
+    private $moduleCompletePrefix;
+
+    public function __construct(
+        $modulePrefix = 'ros_',
+        $moduleCompletePrefix = 'kilip.routeros'
+    ) {
+        $this->modulePrefix = $modulePrefix;
+        $this->moduleCompletePrefix = $moduleCompletePrefix;
+    }
+
     public function getFilters()
     {
         return [
             new TwigFilter('ansible_normalize_output', [$this, 'normalizeOutput']),
             new TwigFilter('resource_base_import', [$this, 'resourceBaseImport']),
+            new TwigFilter('ansible_module_name', [$this, 'moduleName']),
         ];
     }
 
@@ -51,5 +69,18 @@ class AnsibleExtension extends AbstractExtension
         $prefix = str_repeat('.', \count($exp));
 
         return "from {$prefix}.base import ResourceBase";
+    }
+
+    public function moduleName($name, $complete = false)
+    {
+        $modulePrefix = $this->modulePrefix;
+        $moduleCompletePrefix = $this->moduleCompletePrefix;
+
+        $moduleName = "{$modulePrefix}_{$name}";
+        if ($complete) {
+            $moduleName = "{$moduleCompletePrefix}.{$moduleName}";
+        }
+
+        return $moduleName;
     }
 }

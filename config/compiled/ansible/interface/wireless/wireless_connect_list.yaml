@@ -24,13 +24,55 @@ documentation:
       type: list
       elements: dict
       suboptions:
+        3gpp:
+          type: str
+          description: ''
+        area_prefix:
+          type: str
+          description: 'Rule matches if area value of AP (a proprietary extension) begins with specified value.**area** value is a proprietary extension.'
+        comment:
+          type: str
+          required: 'True'
+          description: 'Short description of an entry'
+        connect:
+          type: bool
+          default: 'True'
+          description: |
+            Available options:
+            
+            - *yes* - Connect to access point that matches this rule.
+            - *no* - Do not connect to any access point that matches this rule.
+            
+        disabled:
+          type: bool
+          default: 'False'
+          description: ''
         interface:
           type: str
+          description: 'Each rule in connect list applies only to one wireless interface that is specified by this setting.'
+        mac_address:
+          type: str
+          default: '00:00:00:00:00:00'
+          description: 'Rule matches only AP with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
+        security_profile:
+          type: str
+          description: 'Name of [ security profile](#Security_Profiles) that is used when connecting to matching access points, If value of this property is *none*, then security profile specified in the interface configuration will be used. In station mode, rule will match only access points that can support specified security profile. Value *none* will match access point that supports security profile that is specified in the interface configuration. In access point mode value of this property will not be used to match remote devices.'
         signal_range:
           type: str
           default: '-120..120'
+          description: 'Rule matches if signal strength of the access point is within the range. If station establishes connection to access point that is matched by this rule, it will disconnect from that access point when signal strength goes out of the specified range.'
         ssid:
           type: str
+          description: 'Rule matches access points that have this SSID. Empty value matches any SSID. This property has effect only when station mode interface **ssid** is empty, or when access point mode interface has **wds-ignore-ssid**=*yes*'
+        wireless_protocol:
+          type: str
+          choices:
+            - '802.11'
+            - any
+            - nstreme
+            - tdma
+          default: any
+          description: ''
 examples:
   - title: 'Using merged state'
     name: 'Merge device configuration'
@@ -71,19 +113,40 @@ resource:
       type: list
       elements: dict
       options:
+        3gpp:
+          type: str
+        area_prefix:
+          type: str
+        comment:
+          type: str
+          required: 'True'
+        connect:
+          type: bool
+          default: 'True'
+        disabled:
+          type: bool
+          default: 'False'
         interface:
+          type: str
+        mac_address:
+          type: str
+          default: '00:00:00:00:00:00'
+        security_profile:
           type: str
         signal_range:
           type: str
           default: '-120..120'
         ssid:
           type: str
-        comment:
-          type: str
-          required: 'True'
-        interfce:
-          type: str
         wireless_protocol:
+          type: str
+          choices:
+            - '802.11'
+            - any
+            - nstreme
+            - tdma
+          default: any
+        interfce:
           type: str
 tests:
   facts:
@@ -110,5 +173,6 @@ tests:
       - commands:
           - '/interface wireless connect-list set [ find comment=existing ] interface=wlan1 signal-range=-50..120 wireless-protocol=802.11'
         argument_spec:
-          config: [{ comment: existing, interface: wlan1, signal_range: '-50..120', wireless_protocol: 802.11 }]
+          config:
+            - { comment: existing, interface: wlan1, signal_range: '-50..120', wireless_protocol: 802.11 }
           state: merged

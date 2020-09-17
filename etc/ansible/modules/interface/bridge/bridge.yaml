@@ -11,6 +11,19 @@ states:
   - replaced
   - overridden
   - deleted
+integration:
+  pre_tasks:
+    - name: 'remove created bridge'
+      kilip.routeros.ros_bridge:
+        state: deleted
+        config:
+          - { name: br-new }
+    - name: 'reset bridge configuration'
+      kilip.routeros.ros_bridge:
+        state: merged
+        config:
+          - { name: br-trunk, comment: 'trunk bridge', arp: reply-only }
+          - { name: br-wan, comment: 'wan bridge', arp: reply-only, vlan_filtering: 'no' }
 fixtures:
   - action: add
     values:

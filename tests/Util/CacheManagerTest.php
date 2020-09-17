@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Util;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\MetaConfiguration;
 use RouterOS\Generator\Util\CacheManager;
@@ -27,7 +28,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class CacheManagerTest extends KernelTestCase
 {

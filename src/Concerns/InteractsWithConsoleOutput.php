@@ -12,16 +12,11 @@
 
 declare(strict_types=1);
 
-namespace Tests\RouterOS\Generator\Concerns;
+namespace RouterOS\Generator\Concerns;
 
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Console\Tester\TesterTrait;
 
-trait InteractsWithYaml
+trait InteractsWithConsoleOutput
 {
-    public function parseYamlFile($file)
-    {
-        $file = __DIR__.'/../Fixtures/'.$file;
-
-        return Yaml::parseFile($file);
-    }
+    use TesterTrait;
 }

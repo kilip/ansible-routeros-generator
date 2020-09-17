@@ -12,7 +12,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\RouterOS\Generator\Concerns;
+namespace RouterOS\Generator\Concerns;
 
 use Symfony\Component\Filesystem\Filesystem;
 

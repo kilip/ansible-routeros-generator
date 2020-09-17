@@ -10,6 +10,14 @@ supports:
   - export-verbose-mode
 states:
   - merged
+integration:
+  pre_tasks:
+    - name: 'reset interface configuration'
+      kilip.routeros.ros_interface:
+        state: merged
+        config:
+          - { name: ether2, comment: 'ether2 comment', mtu: '1500' }
+          - { name: ether3, comment: 'ether3 comment', mtu: '1500', disabled: 'yes' }
 fixtures:
   - action: set
     values:

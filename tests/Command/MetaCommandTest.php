@@ -14,8 +14,8 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Command;
 
+use RouterOS\Generator\Concerns\InteractsWithCommand;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Tests\RouterOS\Generator\Concerns\InteractsWithCommand;
 
 class MetaCommandTest extends KernelTestCase
 {

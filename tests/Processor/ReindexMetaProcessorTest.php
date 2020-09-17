@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Processor;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\MetaManagerInterface;
@@ -22,7 +23,6 @@ use RouterOS\Generator\Processor\ReindexMetaProcessor;
 use RouterOS\Generator\Structure\MetaConfiguration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class ReindexMetaProcessorTest extends KernelTestCase
 {

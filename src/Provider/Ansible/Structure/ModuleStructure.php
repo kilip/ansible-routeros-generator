@@ -70,6 +70,11 @@ class ModuleStructure
     private $supports = [];
 
     /**
+     * @var array
+     */
+    private $integration = [];
+
+    /**
      * @return mixed
      */
     public function getName()
@@ -340,5 +345,25 @@ class ModuleStructure
     public function getSupports()
     {
         return $this->supports;
+    }
+
+    /**
+     * @return array
+     */
+    public function getIntegration(): array
+    {
+        return $this->integration;
+    }
+
+    /**
+     * @param array $integration
+     *
+     * @return $this
+     */
+    public function setIntegration(array $integration)
+    {
+        $this->integration = $integration;
+
+        return $this;
     }
 }
