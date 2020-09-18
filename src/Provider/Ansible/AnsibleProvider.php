@@ -56,6 +56,7 @@ class AnsibleProvider implements ProviderInterface
         if ('test' !== $environment) {
             $loader->load('prepare.xml');
             $loader->Load('build.xml');
+            $loader->Load('qa.xml');
         }
     }
 

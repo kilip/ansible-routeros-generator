@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service
+                id="ansible.qa.prepare"
+                class="RouterOS\Generator\Provider\Ansible\QA\Prepare"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument>%ansible.target_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service
+                id="ansible.qa.facts"
+                class="RouterOS\Generator\Provider\Ansible\QA\Facts"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="ansible.manager.module"/>
+            <argument>%ansible.target_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+    </services>
+
+</container>
