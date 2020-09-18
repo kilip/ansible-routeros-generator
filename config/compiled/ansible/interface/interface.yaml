@@ -109,6 +109,7 @@ tests:
   facts:
     name: interface
     type: config
+    package: interface
     fixture_contents: |
       # RouterOS Output
       #

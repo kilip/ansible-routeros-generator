@@ -14,8 +14,10 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Provider\Ansible\Processor;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Provider\Ansible\Concerns\InteractsWithAnsibleStructure;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
 use RouterOS\Generator\Provider\Ansible\Processor\CompileProcessor;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -28,7 +30,11 @@ class CompileProcessorTest extends KernelTestCase
     private $moduleManager;
     private $compiler;
     private $cacheManager;
-    private $targetDir;
+
+    /**
+     * @var MockObject|Constant
+     */
+    private $constant;
     private $processor;
     private $dispatcher;
 
@@ -39,14 +45,14 @@ class CompileProcessorTest extends KernelTestCase
         $this->moduleManager = $this->createMock(ModuleManagerInterface::class);
         $this->compiler = $this->createMock(CompilerInterface::class);
         $this->cacheManager = $container->get('routeros.util.cache_manager');
-        $this->targetDir = $container->getParameter('ansible.target_dir');
+        $this->constant = $this->getService('ansible.constant');
 
         $this->processor = new CompileProcessor(
             $this->dispatcher,
             $this->moduleManager,
             $this->compiler,
             $this->cacheManager,
-            $this->targetDir
+            $this->constant
         );
     }
 
@@ -55,6 +61,7 @@ class CompileProcessorTest extends KernelTestCase
         $processor = $this->processor;
         $moduleManager = $this->moduleManager;
         $compiler = $this->compiler;
+        $constant = $this->constant;
         $lists = [
             'bridge' => [
                 'name' => 'bridge',
@@ -77,32 +84,42 @@ class CompileProcessorTest extends KernelTestCase
             ->withConsecutive(
                 [
                     $config['template'],
-                    $this->targetDir.'/plugins/modules/ros_bridge.py',
+                    $constant->getModulesDir().'/ros_bridge.py',
                     $config,
                 ],
                 [
                     '@ansible/resource.py.twig',
-                    $this->targetDir.'/plugins/module_utils/resources/interface/bridge/bridge.py',
+                    $constant->getResourcesDir().'/interface/bridge/bridge.py',
                     $config['resource'],
                 ],
                 [
                     '@ansible/tests/facts.yaml.twig',
-                    $this->targetDir.'/tests/unit/modules/fixtures/facts/interface.bridge.bridge.yaml',
+                    $constant->getModuleTestFactsFixtureDir().'/interface.bridge.bridge.yaml',
+                    ['facts' => $config['tests']['facts']],
+                ],
+                [
+                    '@ansible/tests/facts-test.py.twig',
+                    $constant->getModuleTestFactsDir().'/test_bridge.py',
                     ['facts' => $config['tests']['facts']],
                 ],
                 [
                     '@ansible/tests/unit.yaml.twig',
-                    $this->targetDir.'/tests/unit/modules/fixtures/units/interface.bridge.bridge.yaml',
+                    $constant->getModuleTestFixtureDir().'/interface.bridge.bridge.yaml',
+                    ['unit' => $config['tests']['unit']],
+                ],
+                [
+                    '@ansible/tests/unit-test.py.twig',
+                    $constant->getModuleTestDir().'/test_ros_bridge.py',
                     ['unit' => $config['tests']['unit']],
                 ],
                 [
                     '@ansible/integration/pre_task.yaml.twig',
-                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/pre_tasks.yml',
+                    $constant->getModuleIntegrationDir().'/ros_bridge/tests/cli/pre_tasks.yml',
                     ['integration' => $config['integration']],
                 ],
                 [
                     '@ansible/integration/task.yaml.twig',
-                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/merged.yaml',
+                    $constant->getModuleIntegrationDir().'/ros_bridge/tests/cli/merged.yaml',
                     [
                         'name' => 'bridge',
                         'example' => $config['examples'][0],
@@ -110,7 +127,7 @@ class CompileProcessorTest extends KernelTestCase
                 ],
                 [
                     '@ansible/integration/task.yaml.twig',
-                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/replaced.yaml',
+                    $constant->getModuleIntegrationDir().'/ros_bridge/tests/cli/replaced.yaml',
                     [
                         'name' => 'bridge',
                         'example' => $config['examples'][1],
@@ -118,7 +135,7 @@ class CompileProcessorTest extends KernelTestCase
                 ],
                 [
                     '@ansible/integration/task.yaml.twig',
-                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/overridden.yaml',
+                    $constant->getModuleIntegrationDir().'/ros_bridge/tests/cli/overridden.yaml',
                     [
                         'name' => 'bridge',
                         'example' => $config['examples'][2],
@@ -126,7 +143,7 @@ class CompileProcessorTest extends KernelTestCase
                 ],
                 [
                     '@ansible/integration/task.yaml.twig',
-                    $this->targetDir.'/tests/integration/targets/ros_bridge/tests/cli/deleted.yaml',
+                    $constant->getModuleIntegrationDir().'/ros_bridge/tests/cli/deleted.yaml',
                     [
                         'name' => 'bridge',
                         'example' => $config['examples'][3],
@@ -134,7 +151,7 @@ class CompileProcessorTest extends KernelTestCase
                 ],
                 [
                     '@ansible/subset.py.twig',
-                    $this->targetDir.'/plugins/module_utils/resources/subset.py',
+                    $constant->getResourcesDir().'/subset.py',
                     ['modules' => ['bridge' => ['name' => 'bridge']]],
                 ]
             );

@@ -298,6 +298,7 @@ tests:
   facts:
     name: ethernet
     type: config
+    package: interface
     fixture_contents: |
       # RouterOS Output
       #

@@ -10,13 +10,14 @@
             <argument type="service" id="ansible.manager.module"/>
             <argument type="service" id="routeros.util.compiler"/>
             <argument type="service" id="routeros.util.cache_manager"/>
-            <argument>%ansible.target_dir%</argument>
+            <argument type="service" id="ansible.constant"/>
             <tag name="kernel.event_subscriber"/>
         </service>
 
         <!-- build event listeners -->
         <service id="ansible.build.listeners.checkout" class="RouterOS\Generator\Provider\Ansible\Build\CheckoutAnsibleCollection">
-            <argument>%ansible.git_repository%</argument>
+            <argument>%ansible.git.repository%</argument>
+            <argument>%ansible.git.branch%</argument>
             <argument>%ansible.target_dir%</argument>
             <tag name="kernel.event_subscriber"/>
             <tag name="ansible.build_event"/>
@@ -24,8 +25,7 @@
 
         <service id="ansible.build.listeners.cleanup_target" class="RouterOS\Generator\Provider\Ansible\Build\CleanupTarget">
             <argument type="service" id="ansible.manager.module"/>
-            <argument>%ansible.module_prefix%</argument>
-            <argument>%ansible.target_dir%</argument>
+            <argument type="service" id="ansible.constant"/>
             <tag name="kernel.event_subscriber"/>
         </service>
     </services>

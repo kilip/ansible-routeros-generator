@@ -50,6 +50,7 @@ class TestConfig implements EventSubscriberInterface
         return [
             'name' => $resource->getName(),
             'type' => $resource->getType(),
+            'package' => $resource->getPackage(),
             'fixture_contents' => $fixtureContents,
             'fixtures' => $fixtures,
         ];

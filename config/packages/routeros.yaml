@@ -11,3 +11,6 @@ routeros:
     module_prefix: "ros_"
     module_full_prefix: "kilip.routeros"
     target_dir: "%kernel.project_dir%/var/ansible_collections/kilip/routeros"
+    git:
+      repository: "https://github.com/kilip/ansible-routeros-collection.git"
+      branch: wip

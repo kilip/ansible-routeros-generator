@@ -11,8 +11,20 @@
             <argument type="service" id="routeros.util.cache_manager"/>
             <argument>%ansible.compiled_dir%</argument>
         </service>
+
         <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">
             <tag name="twig.extension"/>
+        </service>
+
+        <service
+                id="ansible.constant"
+                class="RouterOS\Generator\Provider\Ansible\Constant"
+                public="true"
+        >
+            <argument>%ansible.module_prefix%</argument>
+            <argument>%ansible.module_full_prefix%</argument>
+            <argument>%ansible.target_dir%</argument>
+            <argument>%ansible.compiled_dir%</argument>
         </service>
     </services>
 </container>

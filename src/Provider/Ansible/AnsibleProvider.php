@@ -48,6 +48,16 @@ class AnsibleProvider implements ProviderInterface
             "{$configDir}/ansible/modules"
         );
 
+        $git = $config['git'];
+        $container->setParameter(
+            'ansible.git.repository',
+            $git['repository']
+        );
+        $container->setParameter(
+            'ansible.git.branch',
+            $git['branch']
+        );
+
         $loader = new XmlFileLoader(
             $container,
             new FileLocator(__DIR__.'/Resources/config')
@@ -68,12 +78,20 @@ class AnsibleProvider implements ProviderInterface
                 ->scalarNode('default_author')
                     ->defaultValue('Anthonius Munthi (@kilip)')
                 ->end()
-                ->scalarNode('git_repository')
-                    ->defaultValue('https://github.com/kilip/ansible-collection-routeros.git')
-                ->end()
                 ->scalarNode('target_dir')->isRequired()->end()
                 ->scalarNode('module_prefix')->isRequired()->end()
                 ->scalarNode('module_full_prefix')->isRequired()->end()
+                ->arrayNode('git')
+                    ->isRequired()
+                    ->children()
+                        ->scalarNode('repository')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('branch')
+                            ->isRequired()
+                        ->end()
+                    ->end()
+                ->end()
             ->end();
     }
 }

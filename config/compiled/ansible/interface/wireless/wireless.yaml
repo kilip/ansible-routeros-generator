@@ -1469,6 +1469,7 @@ tests:
   facts:
     name: wireless
     type: config
+    package: interface.wireless
     fixture_contents: |
       # RouterOS Output
       #

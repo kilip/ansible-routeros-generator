@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Provider\Ansible\Build;
 
 use RouterOS\Generator\Event\BuildEvent;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -25,23 +26,16 @@ class CleanupTarget implements EventSubscriberInterface
      */
     private $moduleManager;
     /**
-     * @var string
+     * @var Constant
      */
-    private $targetDir;
-
-    /**
-     * @var string
-     */
-    private $modulePrefix;
+    private $constant;
 
     public function __construct(
         ModuleManagerInterface $moduleManager,
-        string $modulePrefix,
-        string $targetDir
+        Constant $constant
     ) {
         $this->moduleManager = $moduleManager;
-        $this->modulePrefix = $modulePrefix;
-        $this->targetDir = $targetDir;
+        $this->constant = $constant;
     }
 
     public static function getSubscribedEvents()
@@ -53,10 +47,9 @@ class CleanupTarget implements EventSubscriberInterface
 
     public function onPrepare(BuildEvent $event)
     {
+        $constant = $this->constant;
         $moduleManager = $this->moduleManager;
-        $modulePrefix = $this->modulePrefix;
-        $targetDir = $this->targetDir;
-        $modules = [];
+        $modulePrefix = $constant->getModulePrefix();
 
         $event->log('Cleanup Target Dir');
 
@@ -65,17 +58,17 @@ class CleanupTarget implements EventSubscriberInterface
             $package = $config['package'];
 
             $exp = explode('.', $package);
-            $target = $targetDir.'/plugins/module_utils/resources/'.$exp[0];
+            $target = "{$constant->getResourcesDir()}/".$exp[0];
             filesystem()->remove($target);
 
-            $target = $targetDir."/plugins/modules/{$module}.py";
+            $target = "{$constant->getModulesDir()}/{$module}.py";
             filesystem()->remove($target);
 
-            $target = $targetDir."/tests/integration/targets/{$module}";
+            $target = "{$constant->getModuleIntegrationDir()}/{$module}";
             filesystem()->remove($target);
         }
 
-        filesystem()->remove($targetDir.'/tests/unit/modules/fixtures/facts');
-        filesystem()->remove($targetDir.'/tests/unit/modules/fixtures/units');
+        filesystem()->remove($constant->getModuleTestFactsDir());
+        filesystem()->remove($constant->getModuleTestDir());
     }
 }

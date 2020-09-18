@@ -155,6 +155,7 @@ tests:
   facts:
     name: capsman_channel
     type: config
+    package: capsman
     fixture_contents: |
       # RouterOS Output
       #

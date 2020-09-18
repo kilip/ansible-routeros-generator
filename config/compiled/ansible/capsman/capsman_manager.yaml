@@ -120,6 +120,7 @@ tests:
   facts:
     name: capsman_manager
     type: setting
+    package: capsman
     fixture_contents: |
       # RouterOS Output
       #

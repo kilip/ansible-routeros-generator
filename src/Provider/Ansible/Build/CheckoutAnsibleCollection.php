@@ -34,9 +34,14 @@ class CheckoutAnsibleCollection implements EventSubscriberInterface
      * @var string
      */
     private $gitRepository;
+    /**
+     * @var string
+     */
+    private $gitBranch;
 
     public function __construct(
         string $gitRepository,
+        string $gitBranch,
         string $targetDir,
         ProcessHelper $processHelper = null
     ) {
@@ -47,6 +52,7 @@ class CheckoutAnsibleCollection implements EventSubscriberInterface
         $this->gitRepository = $gitRepository;
         $this->targetDir = $targetDir;
         $this->processHelper = $processHelper;
+        $this->gitBranch = $gitBranch;
     }
 
     public static function getSubscribedEvents()
@@ -60,6 +66,7 @@ class CheckoutAnsibleCollection implements EventSubscriberInterface
     {
         $processHelper = $this->processHelper;
         $repository = $this->gitRepository;
+        $branch = $this->gitBranch;
         $targetDir = $this->targetDir;
         $output = $event->getOutput();
 
@@ -73,7 +80,7 @@ class CheckoutAnsibleCollection implements EventSubscriberInterface
                 $git,
                 'clone',
                 '--branch',
-                'wip',
+                $branch,
                 $repository,
                 $targetDir,
             ];

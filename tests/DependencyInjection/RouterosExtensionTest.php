@@ -41,7 +41,9 @@ config_dir: value
 compiled_dir: value
 cache_dir: value
 ansible:
-  git_repository: value
+  git:
+    repository: value
+    branch: value
   module_prefix: value
   module_full_prefix: value
   target_dir: value

@@ -197,6 +197,7 @@ tests:
   facts:
     name: vlan
     type: config
+    package: interface
     fixture_contents: |
       # RouterOS Output
       #

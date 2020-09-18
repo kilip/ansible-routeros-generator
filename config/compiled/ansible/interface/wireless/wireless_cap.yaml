@@ -120,6 +120,7 @@ tests:
   facts:
     name: wireless_cap
     type: setting
+    package: interface.wireless
     fixture_contents: |
       # RouterOS Output
       #

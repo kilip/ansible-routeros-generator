@@ -361,6 +361,7 @@ tests:
   facts:
     name: wireless_security_profiles
     type: config
+    package: interface.wireless
     fixture_contents: |
       # RouterOS Output
       #

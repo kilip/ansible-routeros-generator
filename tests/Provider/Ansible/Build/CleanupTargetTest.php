@@ -15,15 +15,18 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Provider\Ansible\Build;
 
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 use RouterOS\Generator\Concerns\EventSubscriberAssertions;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Provider\Ansible\Build\CleanupTarget;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-class CleanupTargetTest extends TestCase
+class CleanupTargetTest extends KernelTestCase
 {
     use EventSubscriberAssertions;
+    use InteractsWithContainer;
 
     /**
      * @var MockObject|ModuleManagerInterface
@@ -40,6 +43,11 @@ class CleanupTargetTest extends TestCase
      */
     private $targetDir;
 
+    /**
+     * @var Constant
+     */
+    private $constant;
+
     private $output;
 
     private $event;
@@ -48,15 +56,14 @@ class CleanupTargetTest extends TestCase
     {
         $this->subscriberEventClass = CleanupTarget::class;
         $this->moduleManager = $this->createMock(ModuleManagerInterface::class);
-        $this->targetDir = sys_get_temp_dir().'/routeros-generator/target';
+        $this->constant = $this->getService('ansible.constant');
         $this->event = $this->createMock(BuildEvent::class);
 
-        filesystem()->mirror(__DIR__.'/fixtures/target', $this->targetDir);
+        filesystem()->mirror(__DIR__.'/fixtures/target', $this->constant->getTargetDir());
 
         $this->listener = new CleanupTarget(
             $this->moduleManager,
-            'ros_',
-            $this->targetDir
+            $this->constant
         );
     }
 
@@ -70,7 +77,7 @@ class CleanupTargetTest extends TestCase
         $event = $this->event;
         $moduleManager = $this->moduleManager;
         $listener = $this->listener;
-        $targetDir = $this->targetDir;
+        $targetDir = $this->constant->getTargetDir();
 
         $list = [
             'capsman_configuration' => [
@@ -104,8 +111,8 @@ class CleanupTargetTest extends TestCase
         $this->assertDirectoryDoesNotExist($targetDir.'/tests/integration/targets/ros_bridge');
         $this->assertDirectoryDoesNotExist($targetDir.'/tests/integration/targets/ros_interface');
 
-        $this->assertDirectoryDoesNotExist($targetDir.'/tests/unit/modules/fixtures/facts');
-        $this->assertDirectoryDoesNotExist($targetDir.'/tests/unit/modules/fixtures/units');
+        $this->assertDirectoryDoesNotExist($targetDir.'/tests/unit/modules/generator/facts');
+        $this->assertDirectoryDoesNotExist($targetDir.'/tests/unit/modules/generator/modules');
 
         $this->assertFileExists($targetDir.'/plugins/module_utils/resources/__init__.py');
         $this->assertFileExists($targetDir.'/plugins/modules/ros_facts.py');

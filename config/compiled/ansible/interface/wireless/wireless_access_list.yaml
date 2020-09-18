@@ -193,6 +193,7 @@ tests:
   facts:
     name: wireless_access_list
     type: config
+    package: interface.wireless
     fixture_contents: |
       # RouterOS Output
       #

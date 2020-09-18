@@ -18,6 +18,7 @@ use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Event\ProcessEvent;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -37,26 +38,26 @@ class CompileProcessor implements EventSubscriberInterface
      */
     private $cacheManager;
     /**
-     * @var string
-     */
-    private $targetDir;
-    /**
      * @var EventDispatcherInterface
      */
     private $dispatcher;
+    /**
+     * @var Constant
+     */
+    private $constant;
 
     public function __construct(
         EventDispatcherInterface $dispatcher,
         ModuleManagerInterface $moduleManager,
         CompilerInterface $compiler,
         CacheManagerInterface $cacheManager,
-        string $targetDir
+        Constant $constant
     ) {
         $this->moduleManager = $moduleManager;
         $this->compiler = $compiler;
         $this->cacheManager = $cacheManager;
-        $this->targetDir = $targetDir;
         $this->dispatcher = $dispatcher;
+        $this->constant = $constant;
     }
 
     public static function getSubscribedEvents()
@@ -77,15 +78,13 @@ class CompileProcessor implements EventSubscriberInterface
         $moduleManager = $this->moduleManager;
         $list = $moduleManager->getList();
         $dispatcher = $this->dispatcher;
-        $targetDir = $this->targetDir;
+        $constant = $this->constant;
         $resources = [];
 
         $processEvent = new ProcessEvent('Starting...', []);
         $dispatcher->dispatch($processEvent, ProcessEvent::EVENT_START);
 
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0775, true);
-        }
+        filesystem()->ensureDirExists($constant->getTargetDir());
 
         foreach ($list as $name => $config) {
             $processEvent->setMessage('Processing {0}')->setContext([$name]);
@@ -111,8 +110,8 @@ class CompileProcessor implements EventSubscriberInterface
     {
         $compiler = $this->compiler;
         $template = $config['template'];
-        $targetDir = $this->targetDir;
-        $target = "{$targetDir}/plugins/modules/ros_{$name}.py";
+        $constant = $this->constant;
+        $target = "{$constant->getModulesDir()}/ros_{$name}.py";
         $compiler->compile($template, $target, $config);
 
         $file = \dirname($target).'/__init__.py';
@@ -124,8 +123,8 @@ class CompileProcessor implements EventSubscriberInterface
         $compiler = $this->compiler;
         $template = '@ansible/resource.py.twig';
         $package = str_replace('.', '/', $config['package']);
-        $targetDir = $this->targetDir;
-        $target = "{$targetDir}/plugins/module_utils/resources/{$package}/{$name}.py";
+        $constant = $this->constant;
+        $target = "{$constant->getResourcesDir()}/{$package}/{$name}.py";
         $compiler->compile($template, $target, $config['resource']);
 
         $file = \dirname($target).'/__init__.py';
@@ -137,8 +136,15 @@ class CompileProcessor implements EventSubscriberInterface
         $compiler = $this->compiler;
         $template = '@ansible/tests/facts.yaml.twig';
         $package = $config['package'];
-        $targetDir = $this->targetDir;
-        $target = "{$targetDir}/tests/unit/modules/fixtures/facts/{$package}.{$name}.yaml";
+        $constant = $this->constant;
+
+        $target = "{$constant->getModuleTestFactsFixtureDir()}/{$package}.{$name}.yaml";
+        $compiler->compile($template, $target, [
+            'facts' => $config['tests']['facts'],
+        ]);
+
+        $target = "{$constant->getModuleTestFactsDir()}/test_{$name}.py";
+        $template = '@ansible/tests/facts-test.py.twig';
         $compiler->compile($template, $target, [
             'facts' => $config['tests']['facts'],
         ]);
@@ -148,8 +154,8 @@ class CompileProcessor implements EventSubscriberInterface
     {
         $compiler = $this->compiler;
         $template = '@ansible/subset.py.twig';
-        $targetDir = $this->targetDir;
-        $target = "{$targetDir}/plugins/module_utils/resources/subset.py";
+        $constant = $this->constant;
+        $target = "{$constant->getResourcesDir()}/subset.py";
 
         $compiler->compile($template, $target, [
             'modules' => $list,
@@ -159,10 +165,17 @@ class CompileProcessor implements EventSubscriberInterface
     private function compileUnitTests($name, array $config)
     {
         $compiler = $this->compiler;
-        $template = '@ansible/tests/unit.yaml.twig';
         $package = $config['package'];
-        $targetDir = $this->targetDir;
-        $target = "{$targetDir}/tests/unit/modules/fixtures/units/{$package}.{$name}.yaml";
+        $constant = $this->constant;
+
+        $template = '@ansible/tests/unit.yaml.twig';
+        $target = "{$constant->getModuleTestFixtureDir()}/{$package}.{$name}.yaml";
+        $compiler->compile($template, $target, [
+            'unit' => $config['tests']['unit'],
+        ]);
+
+        $template = '@ansible/tests/unit-test.py.twig';
+        $target = "{$constant->getModuleTestDir()}/test_ros_{$name}.py";
         $compiler->compile($template, $target, [
             'unit' => $config['tests']['unit'],
         ]);
@@ -171,9 +184,9 @@ class CompileProcessor implements EventSubscriberInterface
     private function compileIntegration($name, array $config)
     {
         $compiler = $this->compiler;
-        $targetDir = $this->targetDir;
+        $constant = $this->constant;
         $moduleName = 'ros_'.$name;
-        $targetCli = "{$targetDir}/tests/integration/targets/{$moduleName}/tests/cli";
+        $targetCli = "{$constant->getModuleIntegrationDir()}/{$moduleName}/tests/cli";
 
         if (isset($config['integration'])) {
             $integration = $config['integration'];

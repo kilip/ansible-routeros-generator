@@ -392,6 +392,7 @@ tests:
   facts:
     name: bridge_port
     type: config
+    package: interface.bridge
     fixture_contents: |
       # RouterOS Output
       #

@@ -42,13 +42,20 @@ class CheckoutAnsibleCollectionTest extends KernelTestCase
      */
     private $gitRepository;
 
+    /**
+     * @var string
+     */
+    private $gitBranch;
+
     protected function setUp(): void
     {
         $this->processHelper = $this->createMock(ProcessHelper::class);
         $this->targetDir = sys_get_temp_dir().'/routeros-generator/ansible';
         $this->gitRepository = 'some-repo';
+        $this->gitBranch = 'some-branch';
         $this->checkout = new CheckoutAnsibleCollection(
             $this->gitRepository,
+            $this->gitBranch,
             $this->targetDir,
             $this->processHelper
         );
@@ -71,7 +78,7 @@ class CheckoutAnsibleCollectionTest extends KernelTestCase
             'test-git',
             'clone',
             '--branch',
-            'wip',
+            $this->gitBranch,
             $this->gitRepository,
             $this->targetDir,
         ];
