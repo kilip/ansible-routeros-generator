@@ -72,6 +72,8 @@ class CheckoutAnsibleCollection implements EventSubscriberInterface
             $commands = [
                 $git,
                 'clone',
+                '--branch',
+                'wip',
                 $repository,
                 $targetDir,
             ];

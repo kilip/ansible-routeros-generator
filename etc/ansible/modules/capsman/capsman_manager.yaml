@@ -19,7 +19,6 @@ fixtures:
       ca_certificate: none
       certificate: none
       enabled: 'no'
-      package_path: ''
       require_peer_certificate: 'no'
       upgrade_policy: none
 examples:

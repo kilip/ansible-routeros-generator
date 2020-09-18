@@ -28,5 +28,23 @@
             <argument>%ansible.target_dir%</argument>
             <tag name="kernel.event_subscriber"/>
         </service>
+
+        <service 
+            id="ansible.qa.test_preparation"
+            class="RouterOS\Generator\Provider\Ansible\Build\TestPreparation"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument>%ansible.target_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
+        <service 
+            id="ansible.qa.facts"
+            class="RouterOS\Generator\Provider\Ansible\QA\Facts"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="ansible.manager.module"/>
+            <argument>%ansible.target_dir%</argument>
+            <tag name="kernel.event_subscriber"/>
+        </service>
     </services>
 </container>

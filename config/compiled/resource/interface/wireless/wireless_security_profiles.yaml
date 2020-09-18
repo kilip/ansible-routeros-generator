@@ -18,6 +18,14 @@ properties:
     choice_type: null
     description: 'Set of supported authentication types, multiple values can be selected. Access Point will advertise supported authentication types, and client will connect to Access Point only if it supports any of the advertised authentication types.'
     original_name: authentication-types
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Short note for wireless_security_profiles resource'
+    original_name: comment
   disable_pmkid:
     name: disable_pmkid
     type: string
@@ -35,6 +43,17 @@ properties:
       
       This property only has effect on Access Points.
     original_name: disable-pmkid
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set wireless_security_profiles resource disability'
+    original_name: disabled
   eap_methods:
     name: eap_methods
     type: string

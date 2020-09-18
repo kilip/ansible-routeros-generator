@@ -39,6 +39,10 @@ documentation:
         comment:
           type: str
           description: 'Short description of the Channel Group profile'
+        disabled:
+          type: bool
+          default: 'False'
+          description: 'Set capsman_channel resource disability'
         extension_channel:
           type: str
           choices:
@@ -122,6 +126,9 @@ resource:
             - 5ghz-onlyn
         comment:
           type: str
+        disabled:
+          type: bool
+          default: 'False'
         extension_channel:
           type: str
           choices:
@@ -147,6 +154,7 @@ resource:
 tests:
   facts:
     name: capsman_channel
+    type: config
     fixture_contents: |
       # RouterOS Output
       #

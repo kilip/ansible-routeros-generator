@@ -8,6 +8,6 @@ from .{{ module.package }}.{{ module.name }} import {{ module.resource_class }}
 
 RESOURCE_SUBSETS = dict(
 {% for module in modules %}
-    {{ module.name }}={{ module.resource_class }}
+    {{ module.name }}={{ module.resource_class }},
 {% endfor %}
 )

@@ -12,7 +12,7 @@ fixtures:
   - action: add
     values:
       comment: existing
-      interfce: wlan1
+      interface: wlan1
       signal_range: '-79..120'
 examples:
   merged:

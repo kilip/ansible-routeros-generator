@@ -33,13 +33,6 @@ documentation:
             - 'certificate name'
             - none
           description: 'Device certificate'
-        comment:
-          type: str
-          description: 'Short note for capsman_manager resource'
-        disabled:
-          type: bool
-          default: 'False'
-          description: 'Set capsman_manager resource disability'
         enabled:
           type: bool
           default: 'False'
@@ -109,11 +102,6 @@ resource:
             - auto
             - 'certificate name'
             - none
-        comment:
-          type: str
-        disabled:
-          type: bool
-          default: 'False'
         enabled:
           type: bool
           default: 'False'
@@ -131,6 +119,7 @@ resource:
 tests:
   facts:
     name: capsman_manager
+    type: setting
     fixture_contents: |
       # RouterOS Output
       #
@@ -142,7 +131,6 @@ tests:
           ca_certificate: none
           certificate: none
           enabled: 'no'
-          package_path: ''
           require_peer_certificate: 'no'
           upgrade_policy: none
   unit:

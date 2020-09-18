@@ -133,12 +133,12 @@ class ScrapingProcessor implements EventSubscriberInterface
         }
     }
 
-    public function processMeta(Meta $meta): ?ResourceStructure
+    public function processMeta(Meta $meta): ResourceStructure
     {
         $scraper = $this->scraper;
         $resource = $scraper->scrapPage($meta);
 
-        if ('config' !== $resource->getType()) {
+        if ('config' === $resource->getType()) {
             if (
                 !$resource->hasProperty('comment')
                 && !$resource->hasOption(ResourceStructure::OPTIONS_NON_COMMENTED)

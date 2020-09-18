@@ -27,25 +27,6 @@ properties:
     choice_type: null
     description: 'Device certificate'
     original_name: certificate
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short note for capsman_manager resource'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'yes'
-      - 'no'
-    choice_type: null
-    description: 'Set capsman_manager resource disability'
-    original_name: disabled
   enabled:
     name: enabled
     type: string

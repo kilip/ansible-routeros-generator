@@ -248,6 +248,17 @@ properties:
     choice_type: null
     description: 'Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows the interface to only send out data tagged with given tag)'
     original_name: datapath.vlan-mode
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set capsman_configuration resource disability'
+    original_name: disabled
   disconnect_timeout:
     name: disconnect_timeout
     type: string

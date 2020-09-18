@@ -85,7 +85,7 @@ examples:
       state: merged
     before: |
       /interface wireless connect-list
-      add comment=existing interfce=wlan1 signal-range=-79..120
+      add comment=existing interface=wlan1 signal-range=-79..120
     after: |
       # RouterOS Output
       #
@@ -146,21 +146,20 @@ resource:
             - nstreme
             - tdma
           default: any
-        interfce:
-          type: str
 tests:
   facts:
     name: wireless_connect_list
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
       /interface wireless connect-list
-      add comment=existing interfce=wlan1 signal-range=-79..120
+      add comment=existing interface=wlan1 signal-range=-79..120
     fixtures:
       - action: add
         values:
           comment: existing
-          interfce: wlan1
+          interface: wlan1
           signal_range: '-79..120'
   unit:
     module_name: ros_wireless_connect_list
@@ -168,7 +167,7 @@ tests:
       # RouterOS Output
       #
       /interface wireless connect-list
-      add comment=existing interfce=wlan1 signal-range=-79..120
+      add comment=existing interface=wlan1 signal-range=-79..120
     tests:
       - commands:
           - '/interface wireless connect-list set [ find comment=existing ] interface=wlan1 signal-range=-50..120 wireless-protocol=802.11'

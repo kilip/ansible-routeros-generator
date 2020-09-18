@@ -27,3 +27,9 @@ properties_override:
   certificate:
     options:
       - ignore-choices
+  lock_to_caps_man:
+    type: string
+    choices:
+      - 'yes'
+      - 'no'
+    default: 'no'

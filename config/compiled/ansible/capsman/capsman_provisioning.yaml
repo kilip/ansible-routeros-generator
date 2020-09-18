@@ -46,6 +46,10 @@ documentation:
         common_name_regexp:
           type: str
           description: 'Regular expression to match radios by common name. Each CAP''s common name identifier can be found under "/caps-man radio" as value "REMOTE-CAP-NAME"'
+        disabled:
+          type: bool
+          default: 'False'
+          description: 'Set capsman_provisioning resource disability'
         hw_supported_modes:
           type: str
           choices:
@@ -117,10 +121,10 @@ examples:
       #
       /caps-man provisioning
       add action=create-disabled comment=test
-      add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network
+      add action=create-enabled comment=Olympus identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network
     commands:
       - '/caps-man provisioning set [ find comment=test ] action=create-disabled'
-      - '/caps-man provisioning add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
+      - '/caps-man provisioning add action=create-enabled comment=Olympus identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
   - title: 'Using deleted state'
     name: 'Delete provisioning config'
     argument_spec:
@@ -169,6 +173,9 @@ resource:
           required: 'True'
         common_name_regexp:
           type: str
+        disabled:
+          type: bool
+          default: 'False'
         hw_supported_modes:
           type: str
           choices:
@@ -204,6 +211,7 @@ resource:
 tests:
   facts:
     name: capsman_provisioning
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
@@ -223,7 +231,7 @@ tests:
     tests:
       - commands:
           - '/caps-man provisioning set [ find comment=test ] action=create-disabled'
-          - '/caps-man provisioning add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
+          - '/caps-man provisioning add action=create-enabled comment=Olympus identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
         argument_spec:
           state: merged
           config:

@@ -86,6 +86,7 @@ class ModuleRefreshProcessor implements EventSubscriberInterface
     public function onPrepare(BuildEvent $event)
     {
         $event->getOutput()->writeln('<info>Compiling Ansible Module Config</info>');
+        $this->process();
     }
 
     public function process()

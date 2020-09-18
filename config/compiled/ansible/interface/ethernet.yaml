@@ -169,14 +169,14 @@ examples:
       state: merged
     before: |
       /interface ethernet
-      set comment="ether1 comment" default-name=ether1
+      set comment=ether1 name=ether1
     after: |
       # RouterOS Output
       #
       /interface ethernet
-      add advertise=10M-full,100M-full,1000M-full comment="updated comment" name=ether1
+      add advertise=10M-full,100M-full,1000M-full comment=updated name=ether1
     commands:
-      - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"'
+      - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment=updated'
 resource:
   name: ethernet
   package: interface
@@ -294,31 +294,30 @@ resource:
             - 'off'
             - 'on'
           default: 'off'
-        default_name:
-          type: str
 tests:
   facts:
     name: ethernet
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
       /interface ethernet
-      add comment="ether1 comment" default-name=ether1
+      add comment=ether1 name=ether1
     fixtures:
       - action: set
         values:
-          comment: 'ether1 comment'
-          default_name: ether1
+          comment: ether1
+          name: ether1
   unit:
     module_name: ros_ethernet
     fixture_contents: |
       # RouterOS Output
       #
       /interface ethernet
-      add comment="ether1 comment" default-name=ether1
+      add comment=ether1 name=ether1
     tests:
       - commands:
-          - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"'
+          - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment=updated'
         argument_spec:
           config:
             - { advertise: [10M-full, 100M-full, 1000M-full], comment: 'updated comment', name: ether1 }

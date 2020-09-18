@@ -17,25 +17,6 @@ properties:
     choice_type: null
     description: 'Format of how the "called-id" identifier will be passed to RADIUS. When configuring radius server clients, you can specify "called-id" in order to separate multiple entires.'
     original_name: called-format
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short note for capsman_aaa resource'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'yes'
-      - 'no'
-    choice_type: null
-    description: 'Set capsman_aaa resource disability'
-    original_name: disabled
   interim_update:
     name: interim_update
     type: string

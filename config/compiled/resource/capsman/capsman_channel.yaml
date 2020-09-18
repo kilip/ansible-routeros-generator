@@ -30,6 +30,17 @@ properties:
     choice_type: null
     description: 'Short description of the Channel Group profile'
     original_name: comment
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set capsman_channel resource disability'
+    original_name: disabled
   extension_channel:
     name: extension_channel
     type: string

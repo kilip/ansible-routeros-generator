@@ -40,6 +40,17 @@ properties:
     choice_type: null
     description: 'Regular expression to match radios by common name. Each CAP''s common name identifier can be found under "/caps-man radio" as value "REMOTE-CAP-NAME"'
     original_name: common-name-regexp
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set capsman_provisioning resource disability'
+    original_name: disabled
   hw_supported_modes:
     name: hw_supported_modes
     type: string

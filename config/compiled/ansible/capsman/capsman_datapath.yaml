@@ -63,6 +63,10 @@ documentation:
         comment:
           type: str
           description: 'Short description of the datapath'
+        disabled:
+          type: bool
+          default: 'False'
+          description: 'Set capsman_datapath resource disability'
         interface_list:
           type: list
           description: 'interface list for this datapath'
@@ -164,6 +168,9 @@ resource:
           default: 'False'
         comment:
           type: str
+        disabled:
+          type: bool
+          default: 'False'
         interface_list:
           type: list
         l2mtu:
@@ -188,6 +195,7 @@ resource:
 tests:
   facts:
     name: capsman_datapath
+    type: config
     fixture_contents: |
       # RouterOS Output
       #

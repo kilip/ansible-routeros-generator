@@ -47,6 +47,13 @@ class Compiler implements CompilerInterface
         }
 
         $output = $twig->render($template, $context);
+        $output = strtr($output, [
+            '\\/' => '/',
+            "\_" => '/',
+            "\*" => '',
+        ]);
+        //$output = preg_replace("#[ \t]+$#", "", $output);
+
         file_put_contents($target, $output, LOCK_EX);
     }
 

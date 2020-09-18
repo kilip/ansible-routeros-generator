@@ -17,11 +17,8 @@ fixtures:
   - action: set
     values:
       bridge: none
-      caps_man_addresses: '" caps-man-certificate-common-names="" caps-man-names="'
       certificate: none
-      discovery_interfaces: ''
       enabled: 'no'
-      interfaces: ''
       lock_to_caps_man: 'no'
       static_virtual: 'no'
 examples:

@@ -15,7 +15,6 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Util;
 
 use PHPUnit\Framework\TestCase;
-use RouterOS\Generator\Util\Filesystem;
 
 class FilesystemTest extends TestCase
 {
@@ -46,10 +45,10 @@ class FilesystemTest extends TestCase
     /**
      * @depends testMirror
      */
-    public function testCleanupDirectory()
+    public function testRemove()
     {
         $targetDir = sys_get_temp_dir().'/routeros-generator/fs';
-        filesystem()->cleanupDirectory($targetDir);
+        filesystem()->remove($targetDir);
         $this->assertDirectoryDoesNotExist($targetDir);
     }
 }

@@ -21,13 +21,13 @@ integration:
 fixtures:
   - action: set
     values:
-      default_name: ether2
-      comment: 'ether2 comment'
+      name: ether2
+      comment: 'ether2'
       mtu: '1500'
   - action: set
     values:
-      default_name: ether3
-      comment: 'ether3 comment'
+      name: ether3
+      comment: 'ether3'
       mtu: '1500'
       disabled: 'yes'
 examples:
@@ -48,11 +48,11 @@ examples:
       - action: set
         values:
           name: ether2
-          comment: 'ether2 updated'
+          comment: 'ether2'
           mtu: '2000'
       - action: set
         values:
           name: ether3
-          comment: 'ether3 updated'
+          comment: 'ether3'
           disabled: 'no'
           mtu: '3000'

@@ -21,6 +21,10 @@ class BuildEvent extends Event
 {
     public const PREPARE = 'build.prepare';
     public const BUILD = 'build';
+
+    public const TEST_PREPARE = 'test.prepare';
+    public const TEST = 'test';
+
     /**
      * @var OutputInterface
      */
@@ -39,19 +43,27 @@ class BuildEvent extends Event
         return $this->output;
     }
 
+    public function logError($message, array $context = [])
+    {
+        $message = $this->renderMessage($message, $context);
+        $message = "<error>error: </error> <info>{$message}</info>";
+        $this->output->writeln($message);
+    }
+
     public function log($message, array $context = [])
     {
         $message = $this->renderMessage($message, $context);
+        $message = "<info>{$message}</info>";
         $this->output->writeln($message);
     }
 
     public function renderMessage($message, array $context = [])
     {
         foreach ($context as $key => $value) {
-            $text = "<info>{$value}</info>";
+            $text = "<comment>{$value}</comment>";
             $message = str_replace('{'.$key.'}', $text, $message);
         }
 
-        return "<info>{$message}</info>";
+        return $message;
     }
 }

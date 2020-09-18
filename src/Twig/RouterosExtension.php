@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace RouterOS\Generator\Twig;
 
 use Doctrine\Inflector\InflectorFactory;
+use RouterOS\Generator\Contracts\ResourceManagerInterface;
+use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
 use RouterOS\Generator\Util\Text;
 use Symfony\Component\Yaml\Yaml;
@@ -23,6 +25,16 @@ use Twig\TwigFilter;
 
 class RouterosExtension extends AbstractExtension
 {
+    /**
+     * @var ResourceManagerInterface
+     */
+    private $resourceManager;
+
+    public function __construct(ResourceManagerInterface $resourceManager)
+    {
+        $this->resourceManager = $resourceManager;
+    }
+
     public function getFilters()
     {
         return [
@@ -33,7 +45,39 @@ class RouterosExtension extends AbstractExtension
             new TwigFilter('to_json', [$this, 'toJson']),
             new TwigFilter('fix_json', [$this, 'fixJson']),
             new TwigFilter('to_routeros_export', [$this, 'toRouterOSExport']),
+            new TwigFilter('quote_value', [$this, 'quoteValue']),
+            new TwigFilter('convert', [$this, 'convert']),
         ];
+    }
+
+    public function convert($value, $name, $property, $andQuote = false)
+    {
+        $resourceManager = $this->resourceManager;
+        $resource = $resourceManager->getResource($name);
+        $property = $resource->getProperty($property);
+
+        $type = $property->getType();
+
+        if (ResourceProperty::TYPE_INTEGER == $type) {
+            $value = (int) $value;
+        } elseif (ResourceProperty::TYPE_STRING == $type) {
+            $value = (string) $value;
+
+            if ($andQuote) {
+                $value = '"'.$value.'"';
+            }
+        }
+
+        return $value;
+    }
+
+    public function quoteValue($value)
+    {
+        if (!is_numeric($value)) {
+            $value = '"'.$value.'"';
+        }
+
+        return $value;
     }
 
     public function spacing($contents, int $indent = 0)
@@ -67,7 +111,9 @@ class RouterosExtension extends AbstractExtension
         $contents = [];
         $lines = explode("\n", $output);
         foreach ($lines as $line) {
-            $contents[] = $spaces.$line;
+            if ('' !== trim($line)) {
+                $contents[] = $spaces.rtrim($line);
+            }
         }
 
         return implode("\n", $contents);

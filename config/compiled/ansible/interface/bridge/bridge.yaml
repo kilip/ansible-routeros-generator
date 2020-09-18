@@ -242,17 +242,17 @@ examples:
       state: merged
     before: |
       /interface bridge
-      add arp=reply-only comment="trunk bridge" name=br-trunk
-      add arp=reply-only comment="wan bridge" name=br-wan
+      add arp=reply-only comment=trunk name=br-trunk
+      add arp=reply-only comment=wan name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
-      add arp=enabled comment="updated comment" name=br-wan
-      add arp=enabled comment="updated comment" name=br-trunk vlan-filtering=yes
+      add arp=enabled comment=updated name=br-wan
+      add arp=enabled comment=updated name=br-trunk vlan-filtering=yes
     commands:
-      - '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"'
-      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="updated comment" vlan-filtering=yes'
+      - '/interface bridge set [ find name=br-wan ] arp=enabled comment=updated'
+      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=updated vlan-filtering=yes'
   - title: 'Using Replaced'
     name: 'Replace device configuration'
     argument_spec:
@@ -264,17 +264,17 @@ examples:
       state: replaced
     before: |
       /interface bridge
-      add arp=reply-only comment="trunk bridge" name=br-trunk
-      add arp=reply-only comment="wan bridge" name=br-wan
+      add arp=reply-only comment=trunk name=br-trunk
+      add arp=reply-only comment=wan name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
-      add arp=enabled comment="replaced comment" name=br-wan
-      add arp=enabled comment="replaced comment" name=br-trunk
+      add arp=enabled comment=replaced name=br-wan
+      add arp=enabled comment=replaced name=br-trunk
     commands:
-      - '/interface bridge set [ find name=br-wan ] arp=enabled comment="replaced comment"'
-      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="replaced comment"'
+      - '/interface bridge set [ find name=br-wan ] arp=enabled comment=replaced'
+      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=replaced'
   - title: 'Using Overridden'
     name: 'Override bridge configuration'
     argument_spec:
@@ -284,17 +284,17 @@ examples:
       state: overridden
     before: |
       /interface bridge
-      add arp=reply-only comment="trunk bridge" name=br-trunk
-      add arp=reply-only comment="wan bridge" name=br-wan
+      add arp=reply-only comment=trunk name=br-trunk
+      add arp=reply-only comment=wan name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
-      add comment="new bridge" name=br-new
+      add comment=new name=br-new
     commands:
       - '/interface bridge remove name=br-trunk'
       - '/interface bridge remove name=br-wan'
-      - '/interface bridge add comment="new bridge" name=br-new'
+      - '/interface bridge add comment=new name=br-new'
       - '/system script run ansible-remove-invalid'
   - title: 'Using deleted state'
     name: 'Delete bridge'
@@ -305,8 +305,8 @@ examples:
       state: deleted
     before: |
       /interface bridge
-      add arp=reply-only comment="trunk bridge" name=br-trunk
-      add arp=reply-only comment="wan bridge" name=br-wan
+      add arp=reply-only comment=trunk name=br-trunk
+      add arp=reply-only comment=wan name=br-wan
     after: |
       # RouterOS Output
       #
@@ -477,22 +477,23 @@ resource:
 tests:
   facts:
     name: bridge
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
       /interface bridge
-      add arp=reply-only comment="trunk bridge" name=br-trunk
-      add arp=reply-only comment="wan bridge" name=br-wan
+      add arp=reply-only comment=trunk name=br-trunk
+      add arp=reply-only comment=wan name=br-wan
     fixtures:
       - action: add
         values:
           arp: reply-only
-          comment: 'trunk bridge'
+          comment: trunk
           name: br-trunk
       - action: add
         values:
           arp: reply-only
-          comment: 'wan bridge'
+          comment: wan
           name: br-wan
   unit:
     module_name: ros_bridge
@@ -500,20 +501,20 @@ tests:
       # RouterOS Output
       #
       /interface bridge
-      add arp=reply-only comment="trunk bridge" name=br-trunk
-      add arp=reply-only comment="wan bridge" name=br-wan
+      add arp=reply-only comment=trunk name=br-trunk
+      add arp=reply-only comment=wan name=br-wan
     tests:
       - commands:
-          - '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"'
-          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="updated comment" vlan-filtering=yes'
+          - '/interface bridge set [ find name=br-wan ] arp=enabled comment=updated'
+          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=updated vlan-filtering=yes'
         argument_spec:
           config:
             - { arp: enabled, comment: 'updated comment', name: br-wan }
             - { arp: enabled, comment: 'updated comment', name: br-trunk, vlan_filtering: 'yes' }
           state: merged
       - commands:
-          - '/interface bridge set [ find name=br-wan ] arp=enabled comment="replaced comment"'
-          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="replaced comment"'
+          - '/interface bridge set [ find name=br-wan ] arp=enabled comment=replaced'
+          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=replaced'
         argument_spec:
           config:
             - { comment: 'replaced comment', name: br-wan }
@@ -522,7 +523,7 @@ tests:
       - commands:
           - '/interface bridge remove [ find name=br-trunk ]'
           - '/interface bridge remove [ find name=br-wan ]'
-          - '/interface bridge add comment="new bridge" name=br-new'
+          - '/interface bridge add comment=new name=br-new'
           - '/system script run ansible-remove-invalid'
         argument_spec:
           config:

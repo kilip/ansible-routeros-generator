@@ -37,6 +37,7 @@
         </service>
 
         <service id="routeros.twig.routeros_extension" class="RouterOS\Generator\Twig\RouterosExtension">
+            <argument type="service" id="routeros.manager.resource"/>
             <tag name="twig.extension"/>
         </service>
 
@@ -73,7 +74,6 @@
             <argument type="service" id="routeros.listener.process"/>
             <tag name="console.command"/>
         </service>
-
 
     </services>
 </container>

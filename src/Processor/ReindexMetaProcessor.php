@@ -103,7 +103,8 @@ class ReindexMetaProcessor implements EventSubscriberInterface
 
         $metas = $cacheManager->processYamlConfig(
             $configuration,
-            $path
+            $path,
+            true
         );
 
         $event = new ProcessEvent('Starting...', [], \count($metas));

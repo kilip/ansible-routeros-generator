@@ -32,6 +32,9 @@ documentation:
             - wpa2-eap
             - wpa2-psk
           description: 'Set of supported authentication types, multiple values can be selected. Access Point will advertise supported authentication types, and client will connect to Access Point only if it supports any of the advertised authentication types.'
+        comment:
+          type: str
+          description: 'Short note for wireless_security_profiles resource'
         disable_pmkid:
           type: bool
           default: 'False'
@@ -43,6 +46,10 @@ documentation:
             
             This property only has effect on Access Points.
             
+        disabled:
+          type: bool
+          default: 'False'
+          description: 'Set wireless_security_profiles resource disability'
         eap_methods:
           type: str
           choices:
@@ -243,7 +250,12 @@ resource:
             - wpa-psk
             - wpa2-eap
             - wpa2-psk
+        comment:
+          type: str
         disable_pmkid:
+          type: bool
+          default: 'False'
+        disabled:
           type: bool
           default: 'False'
         eap_methods:
@@ -348,6 +360,7 @@ resource:
 tests:
   facts:
     name: wireless_security_profiles
+    type: config
     fixture_contents: |
       # RouterOS Output
       #

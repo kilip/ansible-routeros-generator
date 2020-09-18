@@ -31,6 +31,9 @@ documentation:
       type: list
       elements: dict
       suboptions:
+        comment:
+          type: str
+          description: 'Short note for interface resource'
         disabled:
           type: bool
           default: 'False'
@@ -60,17 +63,17 @@ examples:
       state: merged
     before: |
       /interface
-      set comment="ether2 comment" default-name=ether2 mtu=1500
-      set comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
+      set comment=ether2 mtu=1500 name=ether2
+      set comment=ether3 disabled=yes mtu=1500 name=ether3
     after: |
       # RouterOS Output
       #
       /interface
-      add comment="ether2 updated" mtu=2000 name=ether2
-      add comment="ether3 updated" disabled=no mtu=3000 name=ether3
+      add comment=ether2 mtu=2000 name=ether2
+      add comment=ether3 disabled=no mtu=3000 name=ether3
     commands:
-      - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
-      - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
+      - '/interface set [ find name=ether2 ] comment=ether2 mtu=2000'
+      - '/interface set [ find name=ether3 ] comment=ether3 disabled=no mtu=3000'
 resource:
   name: interface
   package: interface
@@ -90,6 +93,8 @@ resource:
       type: list
       elements: dict
       options:
+        comment:
+          type: str
         disabled:
           type: bool
           default: 'False'
@@ -100,43 +105,40 @@ resource:
         name:
           type: str
           required: 'True'
-        comment:
-          type: str
-        default_name:
-          type: str
 tests:
   facts:
     name: interface
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
       /interface
-      add comment="ether2 comment" default-name=ether2 mtu=1500
-      add comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
+      add comment=ether2 mtu=1500 name=ether2
+      add comment=ether3 disabled=yes mtu=1500 name=ether3
     fixtures:
       - action: set
         values:
-          comment: 'ether2 comment'
-          default_name: ether2
+          comment: ether2
           mtu: '1500'
+          name: ether2
       - action: set
         values:
-          comment: 'ether3 comment'
-          default_name: ether3
+          comment: ether3
           disabled: 'yes'
           mtu: '1500'
+          name: ether3
   unit:
     module_name: ros_interface
     fixture_contents: |
       # RouterOS Output
       #
       /interface
-      add comment="ether2 comment" default-name=ether2 mtu=1500
-      add comment="ether3 comment" default-name=ether3 disabled=yes mtu=1500
+      add comment=ether2 mtu=1500 name=ether2
+      add comment=ether3 disabled=yes mtu=1500 name=ether3
     tests:
       - commands:
-          - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
-          - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
+          - '/interface set [ find name=ether2 ] comment=ether2 mtu=2000'
+          - '/interface set [ find name=ether3 ] comment=ether3 disabled=no mtu=3000'
         argument_spec:
           config:
             - { comment: 'ether2 updated', mtu: '2000', name: ether2 }

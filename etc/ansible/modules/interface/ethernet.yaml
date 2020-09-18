@@ -9,8 +9,8 @@ description:
 fixtures:
   - action: set
     values:
-      default_name: ether1
-      comment: 'ether1 comment'
+      name: ether1
+      comment: 'ether1'
 examples:
   merged:
     name: 'Merge configuration with device configuration'
@@ -26,4 +26,4 @@ examples:
         values:
           name: ether1
           advertise: '10M-full,100M-full,1000M-full'
-          comment: 'updated comment'
+          comment: 'updated'

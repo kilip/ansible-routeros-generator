@@ -856,14 +856,14 @@ examples:
       state: merged
     before: |
       /interface wireless
-      set comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
+      set comment=wlan1 name=wlan1 security-profile=to-olympus
     after: |
       # RouterOS Output
       #
       /interface wireless
-      add ampdu-priorities=0,1,2 comment="updated comment" name=wlan1 security-profile=default supported-rates-a/g=6Mbps,24Mbps
+      add ampdu-priorities=0,1,2 comment=updated name=wlan1 security-profile=default supported-rates-a/g=6Mbps,24Mbps
     commands:
-      - '/interface wireless set [ find name=wlan1 ] ampdu-priorities=0,1,2 comment="updated comment" security-profile=default supported-rates-a/g=6Mbps,24Mbps'
+      - '/interface wireless set [ find name=wlan1 ] ampdu-priorities=0,1,2 comment=updated security-profile=default supported-rates-a/g=6Mbps,24Mbps'
   - title: 'Using replaced state'
     name: 'Replace device wireless configuration'
     argument_spec:
@@ -875,14 +875,14 @@ examples:
       state: replaced
     before: |
       /interface wireless
-      set comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
+      set comment=wlan1 name=wlan1 security-profile=to-olympus
     after: |
       # RouterOS Output
       #
       /interface wireless
-      add comment="new olympus" name=wlan1 security-profile=new-olympus ssid=Olympus
+      add comment=new name=wlan1 security-profile=new-olympus ssid=Olympus
     commands:
-      - '/interface wireless set [ find name=wlan1 ] comment="new olympus" security-profile=new-olympus ssid=Olympus'
+      - '/interface wireless set [ find name=wlan1 ] comment=new security-profile=new-olympus ssid=Olympus'
 resource:
   name: wireless
   package: interface.wireless
@@ -1460,8 +1460,6 @@ resource:
             - disabled
             - push-button
             - push-button-virtual-only
-        default_name:
-          type: str
   custom_props:
     basic_rates_ag:
       original_name: basic-rates-a/g
@@ -1470,16 +1468,17 @@ resource:
 tests:
   facts:
     name: wireless
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
       /interface wireless
-      add comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
+      add comment=wlan1 name=wlan1 security-profile=to-olympus
     fixtures:
       - action: set
         values:
-          comment: 'wlan1 comment'
-          default_name: wlan1
+          comment: wlan1
+          name: wlan1
           security_profile: to-olympus
   unit:
     module_name: ros_wireless
@@ -1487,16 +1486,16 @@ tests:
       # RouterOS Output
       #
       /interface wireless
-      add comment="wlan1 comment" default-name=wlan1 security-profile=to-olympus
+      add comment=wlan1 name=wlan1 security-profile=to-olympus
     tests:
       - commands:
-          - '/interface wireless set [ find name=wlan1 ] ampdu-priorities=0,1,2 comment="updated comment" security-profile=default supported-rates-a/g=6Mbps,24Mbps'
+          - '/interface wireless set [ find name=wlan1 ] ampdu-priorities=0,1,2 comment=updated security-profile=default supported-rates-a/g=6Mbps,24Mbps'
         argument_spec:
           config:
             - { ampdu_priorities: [0, 1, 2], comment: 'updated comment', name: wlan1, supported_rates_ag: [6Mbps, 24Mbps] }
           state: merged
       - commands:
-          - '/interface wireless set [ find name=wlan1 ] comment="new olympus" security-profile=new-olympus ssid=Olympus'
+          - '/interface wireless set [ find name=wlan1 ] comment=new security-profile=new-olympus ssid=Olympus'
         argument_spec:
           config:
             - { comment: 'new olympus', name: wlan1, security_profile: new-olympus, ssid: Olympus }

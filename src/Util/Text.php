@@ -179,6 +179,10 @@ EOC;
 
     public static function extractParameters($command, $text)
     {
+        $text = strtr($text, [
+            "\n" => '',
+            '\\' => '',
+        ]);
         $exp = explode($command, $text);
         $info = $exp[1];
 
@@ -189,7 +193,7 @@ EOC;
 
         $parameters = [];
         foreach ($exp as $item) {
-            $regex = '#(\S+)\=(\".*\"|\S+)#';
+            $regex = '#(\S+)\=(\S+|\"\"|\".+\")#';
             preg_match_all($regex, $item, $matches);
             $param = [];
             for ($i = 0; $i < \count($matches[0]); ++$i) {
@@ -201,6 +205,9 @@ EOC;
                 'action' => $action,
                 'values' => $param,
             ];
+        }
+        if (false !== strpos($text, '/interface wireless cap')) {
+            //print_r($parameters);die();
         }
 
         return $parameters;

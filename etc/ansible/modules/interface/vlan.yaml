@@ -35,10 +35,10 @@ examples:
         values:
           name: vlan-100
           arp: enabled
-          comment: 'new comment'
+          comment: 'new'
       - action: add
         values:
-          comment: 'new comment'
+          comment: 'new'
           interface: br-trunk
           name: vlan-200
           vlan_id: '200'
@@ -57,7 +57,7 @@ examples:
         values:
           name: vlan-100
           arp: enabled
-          comment: 'new comment'
+          comment: 'new'
   overridden:
     name: 'Override device configuration'
     title: 'Using overridden state'
@@ -74,7 +74,7 @@ examples:
           name: vlan-100
       - action: add
         values:
-          comment: 'new comment'
+          comment: 'new'
           interface: br-trunk
           name: vlan-new
           vlan_id: '100'

@@ -47,25 +47,6 @@ properties:
     options:
       - ignore-choices
     original_name: certificate
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short note for wireless_cap resource'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'yes'
-      - 'no'
-    choice_type: null
-    description: 'Set wireless_cap resource disability'
-    original_name: disabled
   discovery_interfaces:
     name: discovery_interfaces
     type: list
@@ -93,6 +74,17 @@ properties:
     choice_type: null
     description: 'List of wireless interfaces to be controlled by Manager'
     original_name: interfaces
+  lock_to_caps_man:
+    name: lock_to_caps_man
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: null
+    original_name: lock-to-caps-man
   static_virtual:
     name: static_virtual
     type: string

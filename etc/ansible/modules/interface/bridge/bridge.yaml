@@ -27,12 +27,12 @@ integration:
 fixtures:
   - action: add
     values:
-      comment: 'trunk bridge'
+      comment: 'trunk'
       name: br-trunk
       arp: reply-only
   - action: add
     values:
-      comment: 'wan bridge'
+      comment: 'wan'
       name: br-wan
       arp: reply-only
 examples:
@@ -55,12 +55,12 @@ examples:
         values:
           name: br-wan
           arp: enabled
-          comment: 'updated comment'
+          comment: 'updated'
       - action: set
         values:
           name: br-trunk
           arp: enabled
-          comment: 'updated comment'
+          comment: 'updated'
           vlan_filtering: 'yes'
   replaced:
     name: 'Replace device configuration'
@@ -77,12 +77,12 @@ examples:
         values:
           name: br-wan
           arp: enabled
-          comment: 'replaced comment'
+          comment: 'replaced'
       - action: set
         values:
           name: br-trunk
           arp: enabled
-          comment: 'replaced comment'
+          comment: 'replaced'
   overridden:
     name: 'Override bridge configuration'
     title: 'Using Overridden'
@@ -100,7 +100,7 @@ examples:
           name: br-wan
       - action: add
         values:
-          comment: 'new bridge'
+          comment: 'new'
           name: br-new
       - action: script
         script: '/system script run ansible-remove-invalid'

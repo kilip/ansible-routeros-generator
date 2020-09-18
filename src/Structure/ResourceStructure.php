@@ -79,6 +79,7 @@ class ResourceStructure
     {
         $name = $property->getName();
         $this->properties[$name] = $property;
+        ksort($this->properties);
     }
 
     public function hasProperty($name)

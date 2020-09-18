@@ -18,6 +18,25 @@ properties:
     choice_type: null
     description: 'Address Resolution Protocol mode'
     original_name: arp
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Short note for vlan resource'
+    original_name: comment
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set vlan resource disability'
+    original_name: disabled
   interface:
     name: interface
     type: string

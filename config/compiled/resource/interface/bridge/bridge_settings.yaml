@@ -59,25 +59,6 @@ properties:
     choice_type: null
     description: 'Shows packet count forwarded by Bridge FastPath.'
     original_name: bridge-fast-path-packets
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short note for bridge_settings resource'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'yes'
-      - 'no'
-    choice_type: null
-    description: 'Set bridge_settings resource disability'
-    original_name: disabled
   use_ip_firewall:
     name: use_ip_firewall
     type: string

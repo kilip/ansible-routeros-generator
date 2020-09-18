@@ -14,12 +14,45 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Twig;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
+use RouterOS\Generator\Concerns\InteractsWithStructure;
+use RouterOS\Generator\Contracts\ResourceManagerInterface;
 use RouterOS\Generator\Twig\RouterosExtension;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 
-class RouterosExtensionTest extends TestCase
+class RouterosExtensionTest extends KernelTestCase
 {
+    use InteractsWithContainer;
+    use InteractsWithStructure;
+
+    /**
+     * @var MockObject|ResourceManagerInterface
+     */
+    private $resourceManager;
+
+    /**
+     * @var RouterosExtension
+     */
+    private $extension;
+
+    protected function setUp(): void
+    {
+        $this->resourceManager = $this->createMock(ResourceManagerInterface::class);
+
+        $this->resourceManager
+            ->expects($this->any())
+            ->method('getResource')
+            ->willReturnMap([
+                ['interface', $this->createResource('interface.interface')],
+                ['bridge'], $this->createResource('interface.bridge.bridge'),
+            ]);
+        $this->extension = new RouterosExtension(
+            $this->resourceManager
+        );
+    }
+
     /**
      * @param string $pattern
      * @param string $message
@@ -28,7 +61,7 @@ class RouterosExtensionTest extends TestCase
      */
     public function testYamlDump($pattern, $message = '', $indent = 1)
     {
-        $filter = new RouterosExtension();
+        $filter = $this->extension;
         $data = Yaml::parseFile(__DIR__.'/../Fixtures/routeros-extension/bridge.yaml');
         $output = $filter->yamlDump($data, $indent);
 
@@ -46,6 +79,29 @@ class RouterosExtensionTest extends TestCase
             ['name: bridge'],
             ['^\s{2}name: bridge', 'should prefixed by 2 space', 1],
             ['^\s{4}name: bridge', 'should prefixed by 4 space', 2],
+        ];
+    }
+
+    /**
+     * @param string $name
+     * @param string $property
+     * @param mixed  $value
+     * @param mixed  $expected
+     * @param bool   $andQuote
+     * @dataProvider getTestConvertData
+     */
+    public function testConvert($name, $property, $value, $expected, $andQuote = false)
+    {
+        $extension = $this->extension;
+        $result = $extension->convert($value, $name, $property, $andQuote);
+        $this->assertSame($expected, $result);
+    }
+
+    public function getTestConvertData()
+    {
+        return [
+            ['interface', 'mtu', 1500, '1500'],
+            ['interface', 'mtu', 1500, '"1500"', true],
         ];
     }
 }

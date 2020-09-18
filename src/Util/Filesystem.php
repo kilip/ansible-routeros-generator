@@ -21,10 +21,13 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFileSystem;
  */
 class Filesystem
 {
-    public function cleanupDirectory($directory)
+    /**
+     * @param mixed $filesOrDirectory
+     */
+    public function remove($filesOrDirectory)
     {
         $fs = new SymfonyFilesystem();
-        $fs->remove($directory);
+        $fs->remove($filesOrDirectory);
     }
 
     public function mirror($source, $target)

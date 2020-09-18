@@ -5,6 +5,14 @@ command: /interface
 keys:
   - name
 properties:
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Short note for interface resource'
+    original_name: comment
   disabled:
     name: disabled
     type: string

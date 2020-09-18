@@ -192,6 +192,7 @@ resource:
 tests:
   facts:
     name: wireless_access_list
+    type: config
     fixture_contents: |
       # RouterOS Output
       #

@@ -70,6 +70,8 @@ class CheckoutAnsibleCollectionTest extends KernelTestCase
         $expectedCommands = [
             'test-git',
             'clone',
+            '--branch',
+            'wip',
             $this->gitRepository,
             $this->targetDir,
         ];

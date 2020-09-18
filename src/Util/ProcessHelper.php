@@ -24,6 +24,26 @@ class ProcessHelper
      */
     private $process;
 
+    /**
+     * @var bool
+     */
+    private $directOutput = true;
+
+    public function setDirectOutput(bool $value)
+    {
+        $this->directOutput = $value;
+
+        return $this;
+    }
+
+    /**
+     * @return Process
+     */
+    public function getProcess(): Process
+    {
+        return $this->process;
+    }
+
     public function create(
         array $command,
         string $cwd = null,
@@ -38,8 +58,11 @@ class ProcessHelper
 
     public function run(array $env = [])
     {
-        $callback = function ($type, $buffer) {
-            echo $buffer;
+        $directOutput = $this->directOutput;
+        $callback = function ($type, $buffer) use ($directOutput) {
+            if ($directOutput) {
+                echo $buffer;
+            }
         };
 
         return $this->process->run($callback, $env);

@@ -18,6 +18,7 @@ use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Listener\ProcessEventSubscriber;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -42,19 +43,38 @@ class BuildCommand extends Command
         $this->processListener = $processListener;
     }
 
+    protected function configure()
+    {
+        $this->addOption(
+            'test-only',
+            null,
+            InputOption::VALUE_NONE,
+            'Running Test Only'
+        );
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $dispatcher = $this->dispatcher;
         $processListener = $this->processListener;
+        $testOnly = $input->getOption('test-only');
+        $event = new BuildEvent($output);
 
         $processListener->setOutput($output);
-        $output->writeln('<info>Building RouterOS</info>');
-        $output->writeln('');
 
-        // start build
-        $event = new BuildEvent($output);
-        $dispatcher->dispatch($event, BuildEvent::PREPARE);
-        $dispatcher->dispatch($event, BuildEvent::BUILD);
+        if (!$testOnly) {
+            $output->writeln('<info>Building RouterOS</info>');
+            $output->writeln('');
+
+            // start build
+
+            $dispatcher->dispatch($event, BuildEvent::PREPARE);
+            $dispatcher->dispatch($event, BuildEvent::BUILD);
+        }
+
+        // test
+        $dispatcher->dispatch($event, BuildEvent::TEST_PREPARE);
+        $dispatcher->dispatch($event, BuildEvent::TEST);
 
         return Command::SUCCESS;
     }

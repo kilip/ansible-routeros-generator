@@ -75,6 +75,17 @@ properties:
     choice_type: null
     description: 'Short description of the datapath'
     original_name: comment
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set capsman_datapath resource disability'
+    original_name: disabled
   interface_list:
     name: interface_list
     type: list

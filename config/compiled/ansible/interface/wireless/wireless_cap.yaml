@@ -38,13 +38,6 @@ documentation:
         certificate:
           type: str
           description: 'Certificate to use for authenticating'
-        comment:
-          type: str
-          description: 'Short note for wireless_cap resource'
-        disabled:
-          type: bool
-          default: 'False'
-          description: 'Set wireless_cap resource disability'
         discovery_interfaces:
           type: list
           description: 'List of interfaces over which CAP should attempt to discover Manager'
@@ -55,6 +48,9 @@ documentation:
         interfaces:
           type: list
           description: 'List of wireless interfaces to be controlled by Manager'
+        lock_to_caps_man:
+          type: bool
+          default: 'False'
         static_virtual:
           type: bool
           default: 'False'
@@ -70,7 +66,7 @@ examples:
       state: present
     before: |
       /interface wireless cap
-      set bridge=none caps-man-addresses="" caps-man-certificate-common-names="" caps-man-names="" certificate=none enabled=no lock-to-caps-man=no static-virtual=no
+      set bridge=none certificate=none enabled=no lock-to-caps-man=no static-virtual=no
     after: |
       # RouterOS Output
       #
@@ -107,11 +103,6 @@ resource:
           type: list
         certificate:
           type: str
-        comment:
-          type: str
-        disabled:
-          type: bool
-          default: 'False'
         discovery_interfaces:
           type: list
         enabled:
@@ -119,28 +110,27 @@ resource:
           default: 'False'
         interfaces:
           type: list
+        lock_to_caps_man:
+          type: bool
+          default: 'False'
         static_virtual:
           type: bool
           default: 'False'
-        lock_to_caps_man:
-          type: str
 tests:
   facts:
     name: wireless_cap
+    type: setting
     fixture_contents: |
       # RouterOS Output
       #
       /interface wireless cap
-      set bridge=none caps-man-addresses="" caps-man-certificate-common-names="" caps-man-names="" certificate=none enabled=no lock-to-caps-man=no static-virtual=no
+      set bridge=none certificate=none enabled=no lock-to-caps-man=no static-virtual=no
     fixtures:
       - action: set
         values:
           bridge: none
-          caps_man_addresses: '" caps-man-certificate-common-names="" caps-man-names="'
           certificate: none
-          discovery_interfaces: ''
           enabled: 'no'
-          interfaces: ''
           lock_to_caps_man: 'no'
           static_virtual: 'no'
   unit:
@@ -149,7 +139,7 @@ tests:
       # RouterOS Output
       #
       /interface wireless cap
-      set bridge=none caps-man-addresses="" caps-man-certificate-common-names="" caps-man-names="" certificate=none enabled=no lock-to-caps-man=no static-virtual=no
+      set bridge=none certificate=none enabled=no lock-to-caps-man=no static-virtual=no
     tests:
       - commands:
           - '/interface wireless cap set interfaces=wlan1,wlan2'

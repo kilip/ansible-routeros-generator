@@ -66,16 +66,16 @@ class CleanupTarget implements EventSubscriberInterface
 
             $exp = explode('.', $package);
             $target = $targetDir.'/plugins/module_utils/resources/'.$exp[0];
-            filesystem()->cleanupDirectory($target);
+            filesystem()->remove($target);
 
             $target = $targetDir."/plugins/modules/{$module}.py";
-            filesystem()->cleanupDirectory($target);
+            filesystem()->remove($target);
 
             $target = $targetDir."/tests/integration/targets/{$module}";
-            filesystem()->cleanupDirectory($target);
+            filesystem()->remove($target);
         }
 
-        filesystem()->cleanupDirectory($targetDir.'/tests/unit/modules/fixtures/facts');
-        filesystem()->cleanupDirectory($targetDir.'/tests/unit/modules/fixtures/units');
+        filesystem()->remove($targetDir.'/tests/unit/modules/fixtures/facts');
+        filesystem()->remove($targetDir.'/tests/unit/modules/fixtures/units');
     }
 }

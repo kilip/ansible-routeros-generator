@@ -33,6 +33,13 @@ documentation:
             - reply-only
           default: enabled
           description: 'Address Resolution Protocol mode'
+        comment:
+          type: str
+          description: 'Short note for vlan resource'
+        disabled:
+          type: bool
+          default: 'False'
+          description: 'Set vlan resource disability'
         interface:
           type: str
           description: 'Name of physical interface on top of which VLAN will work'
@@ -75,11 +82,11 @@ examples:
       # RouterOS Output
       #
       /interface vlan
-      add arp=enabled comment="new comment" name=vlan-100
-      add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200
+      add arp=enabled comment=new name=vlan-100
+      add comment=new interface=br-trunk name=vlan-200 vlan-id=200
     commands:
-      - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
-      - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200'
+      - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment=new'
+      - '/interface vlan add comment=new interface=br-trunk name=vlan-200 vlan-id=200'
   - title: 'Using replaced state'
     name: 'Replace device configuration'
     argument_spec:
@@ -96,9 +103,9 @@ examples:
       # RouterOS Output
       #
       /interface vlan
-      add arp=enabled comment="new comment" name=vlan-100
+      add arp=enabled comment=new name=vlan-100
     commands:
-      - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+      - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment=new'
   - title: 'Using overridden state'
     name: 'Override device configuration'
     argument_spec:
@@ -115,10 +122,10 @@ examples:
       # RouterOS Output
       #
       /interface vlan
-      add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100
+      add comment=new interface=br-trunk name=vlan-new vlan-id=100
     commands:
       - '/interface vlan remove name=vlan-100'
-      - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100'
+      - '/interface vlan add comment=new interface=br-trunk name=vlan-new vlan-id=100'
       - '/system script run ansible-remove-invalid'
   - title: 'Using deleted state'
     name: 'Delete VLAN Interface'
@@ -166,6 +173,11 @@ resource:
             - proxy-arp
             - reply-only
           default: enabled
+        comment:
+          type: str
+        disabled:
+          type: bool
+          default: 'False'
         interface:
           type: str
         l2mtu:
@@ -181,11 +193,10 @@ resource:
         vlan_id:
           type: int
           default: 1
-        comment:
-          type: str
 tests:
   facts:
     name: vlan
+    type: config
     fixture_contents: |
       # RouterOS Output
       #
@@ -207,22 +218,22 @@ tests:
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     tests:
       - commands:
-          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
-          - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200'
+          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment=new'
+          - '/interface vlan add comment=new interface=br-trunk name=vlan-200 vlan-id=200'
         argument_spec:
           config:
             - { comment: 'new comment', interface: br-trunk, name: vlan-100, vlan_id: 100 }
             - { comment: 'new comment', interface: br-trunk, name: vlan-200, vlan_id: 200 }
           state: merged
       - commands:
-          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment=new'
         argument_spec:
           config:
             - { comment: 'new comment', interface: br-trunk, name: vlan-100, vlan_id: 100 }
           state: replaced
       - commands:
           - '/interface vlan remove [ find name=vlan-100 ]'
-          - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100'
+          - '/interface vlan add comment=new interface=br-trunk name=vlan-new vlan-id=100'
           - '/system script run ansible-remove-invalid'
         argument_spec:
           config:

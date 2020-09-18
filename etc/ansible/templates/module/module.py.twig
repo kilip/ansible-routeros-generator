@@ -19,8 +19,8 @@ from ..module_utils.config.config import Config
 
 
 def main():
-    module = AnsibleModule(argument_spec=BridgeResource.argument_spec)
-    result = Config(module, BridgeResource).execute_module()
+    module = AnsibleModule(argument_spec={{ resource_class_name }}.argument_spec)
+    result = Config(module, {{ resource_class_name }}).execute_module()
     return module.exit_json(**result)
 
 
