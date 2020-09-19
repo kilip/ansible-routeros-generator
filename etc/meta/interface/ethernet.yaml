@@ -1,0 +1,17 @@
+name: ethernet
+package: interface
+command: '/interface ethernet'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Ethernet'
+  table_index: 0
+properties_override:
+  disabled:
+    type: string
+    choices:
+      - 'yes'
+      - 'no'
+    default: 'no'
+    description: 'Set interface disability.'
+  advertise:
+    type: list
+    elements: string

@@ -5,14 +5,6 @@ command: '/interface wireless connect-list'
 keys:
   - comment
 properties:
-  3gpp:
-    name: 3gpp
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: ''
-    original_name: 3gpp
   area_prefix:
     name: area_prefix
     type: string
@@ -21,6 +13,7 @@ properties:
     choice_type: null
     description: 'Rule matches if area value of AP (a proprietary extension) begins with specified value.**area** value is a proprietary extension.'
     original_name: area-prefix
+    elements: null
   comment:
     name: comment
     type: string
@@ -29,6 +22,7 @@ properties:
     choice_type: null
     description: 'Short description of an entry'
     original_name: comment
+    elements: null
   connect:
     name: connect
     type: string
@@ -44,6 +38,7 @@ properties:
       - *yes* - Connect to access point that matches this rule.
       - *no* - Do not connect to any access point that matches this rule.
     original_name: connect
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -55,6 +50,7 @@ properties:
     choice_type: null
     description: ''
     original_name: disabled
+    elements: null
   interface:
     name: interface
     type: string
@@ -63,6 +59,7 @@ properties:
     choice_type: null
     description: 'Each rule in connect list applies only to one wireless interface that is specified by this setting.'
     original_name: interface
+    elements: null
   mac_address:
     name: mac_address
     type: string
@@ -71,14 +68,16 @@ properties:
     choice_type: null
     description: 'Rule matches only AP with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
     original_name: mac-address
+    elements: null
   security_profile:
     name: security_profile
     type: string
     required: false
     default: none
     choice_type: null
-    description: 'Name of [ security profile](#Security_Profiles) that is used when connecting to matching access points, If value of this property is *none*, then security profile specified in the interface configuration will be used. In station mode, rule will match only access points that can support specified security profile. Value *none* will match access point that supports security profile that is specified in the interface configuration. In access point mode value of this property will not be used to match remote devices.'
+    description: 'Name of [security profile](#Security_Profiles) that is used when connecting to matching access points, If value of this property is *none*, then security profile specified in the interface configuration will be used. In station mode, rule will match only access points that can support specified security profile. Value *none* will match access point that supports security profile that is specified in the interface configuration. In access point mode value of this property will not be used to match remote devices.'
     original_name: security-profile
+    elements: null
   signal_range:
     name: signal_range
     type: string
@@ -87,6 +86,7 @@ properties:
     choice_type: null
     description: 'Rule matches if signal strength of the access point is within the range. If station establishes connection to access point that is matched by this rule, it will disconnect from that access point when signal strength goes out of the specified range.'
     original_name: signal-range
+    elements: null
   ssid:
     name: ssid
     type: string
@@ -97,6 +97,16 @@ properties:
     options:
       - ignore-default
     original_name: ssid
+    elements: null
+  three_gpp:
+    name: three_gpp
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: ''
+    original_name: 3gpp
+    elements: null
   wireless_protocol:
     name: wireless_protocol
     type: string
@@ -110,3 +120,4 @@ properties:
     choice_type: null
     description: ''
     original_name: wireless-protocol
+    elements: null

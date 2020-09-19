@@ -13,6 +13,7 @@ properties:
     choice_type: null
     description: 'Bridge to which interfaces should be added when local forwarding mode is used'
     original_name: bridge
+    elements: null
   caps_man_addresses:
     name: caps_man_addresses
     type: list
@@ -21,6 +22,7 @@ properties:
     choice_type: null
     description: 'List of Manager IP addresses that CAP will attempt to contact during discovery'
     original_name: caps-man-addresses
+    elements: string
   caps_man_certificate_common_names:
     name: caps_man_certificate_common_names
     type: list
@@ -29,6 +31,7 @@ properties:
     choice_type: null
     description: 'List of Manager certificate CommonNames that CAP will connect to, if empty - CAP does not check Manager certificate CommonName'
     original_name: caps-man-certificate-common-names
+    elements: string
   caps_man_names:
     name: caps_man_names
     type: list
@@ -37,6 +40,7 @@ properties:
     choice_type: null
     description: 'An ordered list of CAPs Manager names that the CAP will connect to, if empty - CAP does not check Manager name'
     original_name: caps-man-names
+    elements: string
   certificate:
     name: certificate
     type: string
@@ -47,25 +51,7 @@ properties:
     options:
       - ignore-choices
     original_name: certificate
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short note for wireless_cap resource'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'yes'
-      - 'no'
-    choice_type: null
-    description: 'Set wireless_cap resource disability'
-    original_name: disabled
+    elements: null
   discovery_interfaces:
     name: discovery_interfaces
     type: list
@@ -74,6 +60,7 @@ properties:
     choice_type: null
     description: 'List of interfaces over which CAP should attempt to discover Manager'
     original_name: discovery-interfaces
+    elements: string
   enabled:
     name: enabled
     type: string
@@ -85,6 +72,7 @@ properties:
     choice_type: null
     description: 'Disable or enable CAP feature'
     original_name: enabled
+    elements: null
   interfaces:
     name: interfaces
     type: list
@@ -93,6 +81,19 @@ properties:
     choice_type: null
     description: 'List of wireless interfaces to be controlled by Manager'
     original_name: interfaces
+    elements: string
+  lock_to_caps_man:
+    name: lock_to_caps_man
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: null
+    original_name: lock-to-caps-man
+    elements: null
   static_virtual:
     name: static_virtual
     type: string
@@ -104,3 +105,4 @@ properties:
     choice_type: null
     description: 'CAP will create Static Virtual Interfaces instead of Dynamic and will try to reuse the same interface on reconnect to CAPsMAN if the MAC address will be the same. Note if two or more interfaces will have the same MAC address the assignment from the CAPsMAN could be random between those interfaces.'
     original_name: static-virtual
+    elements: null

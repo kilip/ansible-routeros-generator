@@ -54,6 +54,7 @@ properties_override:
       
   interface_list:
     type: list
+    elements: string
     description: 'interface list for this datapath'
   l2mtu:
     type: string

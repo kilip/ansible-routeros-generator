@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Provider\Ansible\Processor;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\ResourceManagerInterface;
@@ -26,7 +27,6 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class ModuleReindexProcessorTest extends KernelTestCase
 {
@@ -102,7 +102,9 @@ class ModuleReindexProcessorTest extends KernelTestCase
         $compiler = $this->compiler;
 
         $resource = new ResourceStructure();
-        $resource->setCommand('/interface');
+        $resource
+            ->setCommand('/interface')
+            ->setPackage('interface');
         $config = [
             'interface' => $this->getConfig('interface'),
         ];
@@ -118,7 +120,6 @@ class ModuleReindexProcessorTest extends KernelTestCase
             ->method('processYamlConfig')
             ->with(
                 $this->configuration,
-                'modules',
                 $this->moduleConfigDir
             )
             ->willReturn($config);
@@ -150,29 +151,25 @@ class ModuleReindexProcessorTest extends KernelTestCase
     private function configureDispatcherExpectations(MockObject $dispatcher)
     {
         $dispatcher
-            ->expects($this->at(0))
+            ->expects($this->exactly(4))
             ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_START
-            );
-        $dispatcher
-            ->expects($this->at(1))
-            ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_LOOP
-            );
-        $dispatcher->expects($this->at(2))
-            ->method('dispatch')
-            ->with($this->isInstanceOf(ModuleEvent::class), ModuleEvent::PRE_COMPILE);
-
-        $dispatcher
-            ->expects($this->at(3))
-            ->method('dispatch')
-            ->with(
-                $this->isInstanceOf(ProcessEvent::class),
-                ProcessEvent::EVENT_END
+            ->withConsecutive(
+                [
+                    $this->isInstanceOf(ProcessEvent::class),
+                    ProcessEvent::EVENT_START,
+                ],
+                [
+                    $this->isInstanceOf(ProcessEvent::class),
+                    ProcessEvent::EVENT_LOOP,
+                ],
+                [
+                    $this->isInstanceOf(ModuleEvent::class),
+                    ModuleEvent::PRE_COMPILE,
+                ],
+                [
+                    $this->isInstanceOf(ProcessEvent::class),
+                    ProcessEvent::EVENT_END,
+                ]
             );
     }
 }

@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Util;
 
+use RouterOS\Generator\Concerns\InteractsWithContainer;
+use RouterOS\Generator\Concerns\InteractsWithFilesystem;
 use RouterOS\Generator\Util\Compiler;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
-use Tests\RouterOS\Generator\Concerns\InteractsWithFilesystem;
 
 class CompilerTest extends KernelTestCase
 {
@@ -50,6 +50,6 @@ class CompilerTest extends KernelTestCase
 
         $contents = file_get_contents($target);
         $this->assertFileExists($target);
-        $this->assertRegExp('/foo=bar/', $contents);
+        $this->assertMatchesRegularExpression('/foo=bar/', $contents);
     }
 }

@@ -8,26 +8,31 @@ generator:
 properties_override:
   rx_chains:
     type: list
+    elements: integer
     choices:
       - 0
       - 1
       - 2
       - 3
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     options:
       - ignore-default
   tx_chains:
     type: list
+    elements: integer
     choices:
       - 0
       - 1
       - 2
       - 3
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     options:
       - ignore-default
   security_authentication_types:
     type: list
+    elements: string
     choices:
       - wpa-psk
       - wpa2-psk
@@ -37,6 +42,7 @@ properties_override:
       - ignore-default
   security_encryption:
     type: list
+    elements: string
   channel:
     type: string
   channel_width:

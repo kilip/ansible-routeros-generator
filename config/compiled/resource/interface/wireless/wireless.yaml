@@ -17,6 +17,7 @@ properties:
     choice_type: null
     description: 'This property is only effective for cards based on Atheros chipset.'
     original_name: adaptive-noise-immunity
+    elements: null
   allow_sharedkey:
     name: allow_sharedkey
     type: string
@@ -28,6 +29,7 @@ properties:
     choice_type: null
     description: 'Allow WEP Shared Key clients to connect. Note that no authentication is done for these clients (WEP Shared keys are not compared to anything) - they are just accepted at once (if access list allows that)'
     original_name: allow-sharedkey
+    elements: null
   ampdu_priorities:
     name: ampdu_priorities
     type: list
@@ -48,6 +50,7 @@ properties:
     options:
       - ignore-default
     original_name: ampdu-priorities
+    elements: integer
   amsdu_limit:
     name: amsdu_limit
     type: integer
@@ -56,6 +59,7 @@ properties:
     choice_type: null
     description: 'Max AMSDU that device is allowed to prepare when negotiated. AMSDU aggregation may significantly increase throughput especially for small frames, but may increase latency in case of packet loss due to retransmission of aggregated frame. Sending and receiving AMSDUs will also increase CPU usage.'
     original_name: amsdu-limit
+    elements: null
   amsdu_threshold:
     name: amsdu_threshold
     type: integer
@@ -64,6 +68,7 @@ properties:
     choice_type: null
     description: 'Max frame size to allow including in AMSDU.'
     original_name: amsdu-threshold
+    elements: null
   antenna_gain:
     name: antenna_gain
     type: integer
@@ -72,6 +77,7 @@ properties:
     choice_type: null
     description: 'Antenna gain in dBi, used to calculate maximum transmit power according to **country** regulations.'
     original_name: antenna-gain
+    elements: null
   antenna_mode:
     name: antenna_mode
     type: string
@@ -91,14 +97,16 @@ properties:
       - *txa-rxb* - use antenna 'a' for transmitting, antenna 'b' for receiving
       - *rxa-txb* - use antenna 'b' for transmitting, antenna 'a' for receiving
     original_name: antenna-mode
+    elements: null
   area:
     name: area
     type: string
     required: false
     default: null
     choice_type: null
-    description: 'Identifies group of wireless networks. This value is announced by AP, and can be matched in [ connect-list](#Connect_List) by **area-prefix**. This is a proprietary extension.'
+    description: 'Identifies group of wireless networks. This value is announced by AP, and can be matched in [connect-list](#Connect_List) by **area-prefix**. This is a proprietary extension.'
     original_name: area
+    elements: null
   arp:
     name: arp
     type: string
@@ -110,8 +118,9 @@ properties:
       - proxy-arp
       - reply-only
     choice_type: null
-    description: '[ `Read more >>`](https://wiki.mikrotik.com/wiki/Manual:IP/ARP#ARP_Modes "Manual:IP/ARP")'
+    description: '[Read More](https://wiki.mikrotik.com/wiki/Manual:IP/ARP#ARP_Modes "Manual:IP/ARP")'
     original_name: arp
+    elements: null
   arp_timeout:
     name: arp_timeout
     type: string
@@ -120,6 +129,7 @@ properties:
     choice_type: null
     description: 'ARP timeout is time how long ARP record is kept in ARP table after no packets are received from IP. Value **auto** equals to the value of **arp-timeout** in **/ip settings**, default is 30s'
     original_name: arp-timeout
+    elements: null
   band:
     name: band
     type: string
@@ -140,6 +150,7 @@ properties:
     choice_type: null
     description: 'Defines set of used data rates, channel frequencies and widths.'
     original_name: band
+    elements: null
   basic_rates_ag:
     name: basic_rates_ag
     type: string
@@ -157,6 +168,7 @@ properties:
     choice_type: null
     description: 'Similar to the **basic-rates-b** property, but used for 5ghz, 5ghz-10mhz, 5ghz-5mhz, 5ghz-turbo, 2.4ghz-b/g, 2.4ghz-onlyg, 2ghz-10mhz, 2ghz-5mhz and 2.4ghz-g-turbo bands.'
     original_name: basic-rates-a/g
+    elements: null
   basic_rates_b:
     name: basic_rates_b
     type: string
@@ -175,6 +187,7 @@ properties:
       
       This property has effect only in AP modes, and when value of **rate-set** is configured.
     original_name: basic-rates-b
+    elements: null
   bridge_mode:
     name: bridge_mode
     type: string
@@ -184,8 +197,9 @@ properties:
       - disabled
       - enabled
     choice_type: null
-    description: 'Allows to use station-bridge mode. [ `Read more >>`](https://wiki.mikrotik.com/wiki/Manual:Wireless_Station_Modes#Mode_station-bridge "Manual:Wireless Station Modes")'
+    description: 'Allows to use station-bridge mode. [Read More](https://wiki.mikrotik.com/wiki/Manual:Wireless_Station_Modes#Mode_station-bridge "Manual:Wireless Station Modes")'
     original_name: bridge-mode
+    elements: null
   burst_time:
     name: burst_time
     type: integer
@@ -194,6 +208,7 @@ properties:
     choice_type: null
     description: 'Time in microseconds which will be used to send data without stopping. Note that no other wireless cards in that network will be able to transmit data during burst-time microseconds. This setting is available only for AR5000, AR5001X, and AR5001X+ chipset based cards.'
     original_name: burst-time
+    elements: null
   channel_width:
     name: channel_width
     type: string
@@ -224,6 +239,7 @@ properties:
     choice_type: null
     description: 'Use of extension channels (e.g. Ce, eC etc) allows additional 20MHz extension channels and if it should be located below or above the control (main) channel. Extension channel allows 802.11n devices to use up to 40MHz (802.11ac up to 160MHz) of spectrum in total thus increasing max throughput. Channel widths with XX and XXXX extensions automatically scan for a less crowded control channel frequency based on the number of concurrent devices running in every frequency and chooses the “C” - Control channel frequency automatically.'
     original_name: channel-width
+    elements: null
   comment:
     name: comment
     type: string
@@ -232,6 +248,7 @@ properties:
     choice_type: null
     description: 'Short description of the interface'
     original_name: comment
+    elements: null
   compression:
     name: compression
     type: string
@@ -243,6 +260,7 @@ properties:
     choice_type: null
     description: 'Setting this property to *yes* will allow the use of the hardware compression. Wireless interface must have support for hardware compression. Connections with devices that do not use compression will still work.'
     original_name: compression
+    elements: null
   country:
     name: country
     type: string
@@ -251,27 +269,16 @@ properties:
     choice_type: null
     description: 'Limits available bands, frequencies and maximum transmit power for each frequency. Also specifies default value of **scan-list**. Value *no\_country\_set* is an FCC compliant set of channels.'
     original_name: country
-  default:
-    name: default
-    type: list
-    required: false
-    default: default
-    choice_type: null
-    description: |
-      The *default* value is all channels from selected band that are supported by card and allowed by the **country** and **frequency-mode** settings (this list can be seen in [ info](#Info)). For default scan list in *5ghz* band channels are taken with 20MHz step, in *5ghz-turbo* band - with 40MHz step, for all other bands - with 5MHz step. If **scan-list** is specified manually, then all matching channels are taken. (Example: **scan-list**=*default,5200-5245,2412-2427* - This will use the default value of scan list for current band, and add to it supported frequencies from 5200-5245 or 2412-2427 range.)
-      
-      Since RouterOS v6.0 with Winbox or Webfig, for inputting of multiple frequencies, add each frequency or range of frequencies into separate multiple scan-lists. Using a comma to separate frequencies is no longer supported in Winbox/Webfig since v6.0.
-      
-      Since RouterOS v6.35 (wireless-rep) scan-list support step feature where it is possible to manually specify the scan step. Example: **scan-list**=*5500-5600:20* will generate such scan-list values *5500,5520,5540,5560,5580,5600*
-    original_name: default
+    elements: null
   default_ap_tx_limit:
     name: default_ap_tx_limit
     type: integer
     required: false
     default: 0
     choice_type: null
-    description: 'This is the value of **ap-tx-limit** for clients that do not match any entry in the [ access-list](#Access_List). 0 means no limit.'
+    description: 'This is the value of **ap-tx-limit** for clients that do not match any entry in the [access-list](#Access_List). 0 means no limit.'
     original_name: default-ap-tx-limit
+    elements: null
   default_authentication:
     name: default_authentication
     type: string
@@ -281,16 +288,18 @@ properties:
       - 'no'
       - 'yes'
     choice_type: null
-    description: 'For AP mode, this is the value of **authentication** for clients that do not match any entry in the [ access-list](#Access_List). For station mode, this is the value of **connect** for APs that do not match any entry in the [ connect-list](#Connect_List)'
+    description: 'For AP mode, this is the value of **authentication** for clients that do not match any entry in the [access-list](#Access_List). For station mode, this is the value of **connect** for APs that do not match any entry in the [connect-list](#Connect_List)'
     original_name: default-authentication
+    elements: null
   default_client_tx_limit:
     name: default_client_tx_limit
     type: integer
     required: false
     default: 0
     choice_type: null
-    description: 'This is the value of **client-tx-limit** for clients that do not match any entry in the [ access-list](#Access_List). 0 means no limit'
+    description: 'This is the value of **client-tx-limit** for clients that do not match any entry in the [access-list](#Access_List). 0 means no limit'
     original_name: default-client-tx-limit
+    elements: null
   default_forwarding:
     name: default_forwarding
     type: string
@@ -300,8 +309,9 @@ properties:
       - 'no'
       - 'yes'
     choice_type: null
-    description: 'This is the value of **forwarding** for clients that do not match any entry in the [ access-list](#Access_List)'
+    description: 'This is the value of **forwarding** for clients that do not match any entry in the [access-list](#Access_List)'
     original_name: default-forwarding
+    elements: null
   disable_running_check:
     name: disable_running_check
     type: string
@@ -313,6 +323,7 @@ properties:
     choice_type: null
     description: 'When set to **yes** interface will always have running flag. If value is set to **no''**, the router determines whether the card is up and running - for AP one or more clients have to be registered to it, for station, it should be connected to an AP.'
     original_name: disable-running-check
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -324,6 +335,7 @@ properties:
     choice_type: null
     description: 'Whether interface is disabled'
     original_name: disabled
+    elements: null
   disconnect_timeout:
     name: disconnect_timeout
     type: string
@@ -332,6 +344,7 @@ properties:
     choice_type: null
     description: 'This interval is measured from third sending failure on the lowest data rate. At this point 3 \* (**hw-retries** + 1) frame transmits on the lowest data rate had failed. During **disconnect-timeout** packet transmission will be retried with **on-fail-retry-time** interval. If no frame can be transmitted successfully during **disconnect-timeout**, the connection is closed, and this event is logged as "extensive data loss". Successful frame transmission resets this timer.'
     original_name: disconnect-timeout
+    elements: null
   distance:
     name: distance
     type: integer
@@ -339,14 +352,16 @@ properties:
     default: 0
     choice_type: null
     description: |
-      How long to wait for confirmation of unicast frames (**ACKs**) before considering transmission unsuccessful, or in short **ACK-Timeout**. Distance value has these behaviors:
-      
+      How long to wait for confirmation of unicast frames (**ACKs**)
+      before considering transmission unsuccessful, or in short **ACK-Timeout**.
+      Distance value has these behaviors:
       - *Dynamic* - causes AP to detect and use the smallest timeout that works with all connected clients.
       - *Indoor* - uses the default ACK timeout value that the hardware chip manufacturer has set.
-      - *Number* - uses the input value in formula: ACK-timeout = ((**distance** \* 1000) + 299) / 300 us;
-      
+      - *Number* - uses the input value in formula: ACK-timeout = ((**distance** \* 1000) + 299) / 300 us
       Acknowledgments are not used in Nstreme/NV2 protocols.
+      
     original_name: distance
+    elements: null
   frame_lifetime:
     name: frame_lifetime
     type: integer
@@ -355,6 +370,7 @@ properties:
     choice_type: null
     description: 'Discard frames that have been queued for sending longer than **frame-lifetime**. By default, when value of this property is 0, frames are discarded only after connection is closed.'
     original_name: frame-lifetime
+    elements: null
   frequency:
     name: frequency
     type: integer
@@ -366,8 +382,9 @@ properties:
       
       Allowed values depend on the selected band, and are restricted by **country** setting and wireless card capabilities. This setting has **no effect** if interface is in any of **station** modes, or in *wds-slave* mode, or if DFS is active.
       
-      *Note*: If using mode "superchannel", any frequency supported by the card will be accepted, but on the RouterOS client, any non-standard frequency must be configured in the [ scan-list](#scan-list), otherwise it will not be scanning in non-standard range. In Winbox, scanlist frequencies are in *bold*, any other frequency means the clients will need scan-list configured.
+      *Note*: If using mode "superchannel", any frequency supported by the card will be accepted, but on the RouterOS client, any non-standard frequency must be configured in the [scan-list](#scan-list), otherwise it will not be scanning in non-standard range. In Winbox, scanlist frequencies are in *bold*, any other frequency means the clients will need scan-list configured.
     original_name: frequency
+    elements: null
   frequency_mode:
     name: frequency_mode
     type: string
@@ -387,6 +404,7 @@ properties:
       
       List of available channels for each band can be seen in **/interface wireless info allowed-channels**. This mode allows you to test wireless channels outside the default scan-list and/or regulatory domain. This mode should only be used in controlled environments, or if you have special permission to use it in your region. Before v4.3 this was called Custom Frequency Upgrade, or Superchannel. Since RouterOS v4.3 this mode is available without special key upgrades to all installations.
     original_name: frequency-mode
+    elements: null
   frequency_offset:
     name: frequency_offset
     type: integer
@@ -395,6 +413,7 @@ properties:
     choice_type: null
     description: 'Allows to specify offset if the used wireless card operates at a different frequency than is shown in RouterOS, in case a frequency converter is used in the card. So if your card works at 4000MHz but RouterOS shows 5000MHz, set offset to 1000MHz and it will be displayed correctly. The value is in MHz and can be positive or negative.'
     original_name: frequency-offset
+    elements: null
   guard_interval:
     name: guard_interval
     type: string
@@ -406,6 +425,7 @@ properties:
     choice_type: null
     description: 'Whether to allow use of short guard interval (refer to 802.11n MCS specification to see how this may affect throughput). "any" will use either short or long, depending on data rate, "long" will use long.'
     original_name: guard-interval
+    elements: null
   hide_ssid:
     name: hide_ssid
     type: string
@@ -421,6 +441,7 @@ properties:
       
       This property has an effect only in AP mode. Setting it to *yes* can remove this network from the list of wireless networks that are shown by some client software. Changing this setting does not improve the security of the wireless network, because SSID is included in other frames sent by the AP.
     original_name: hide-ssid
+    elements: null
   ht_basic_mcs:
     name: ht_basic_mcs
     type: list
@@ -460,8 +481,9 @@ properties:
       - mcs-8
       - mcs-9
     choice_type: null
-    description: '[Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11n-2009#Data_rates) that every connecting client must support. Refer to 802.11n for MCS specification.'
+    description: '[Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11n-2009#Data_rates) that every connecting client must support. Refer to 802.11n for MCS specification.'
     original_name: ht-basic-mcs
+    elements: string
   ht_supported_mcs:
     name: ht_supported_mcs
     type: list
@@ -517,8 +539,9 @@ properties:
       - mcs-8
       - mcs-9
     choice_type: null
-    description: '[Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11n-2009#Data_rates) that this device advertises as supported. Refer to 802.11n for MCS specification.'
+    description: '[Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11n-2009#Data_rates) that this device advertises as supported. Refer to 802.11n for MCS specification.'
     original_name: ht-supported-mcs
+    elements: string
   hw_fragmentation_threshold:
     name: hw_fragmentation_threshold
     type: integer
@@ -527,6 +550,7 @@ properties:
     choice_type: null
     description: 'Specifies maximum fragment size in bytes when transmitted over the wireless medium. 802.11 standard packet (MSDU in 802.11 terminologies) fragmentation allows packets to be fragmented before transmitting over a wireless medium to increase the probability of successful transmission (only fragments that did not transmit correctly are retransmitted). Note that transmission of a fragmented packet is less efficient than transmitting unfragmented packet because of protocol overhead and increased resource usage at both - transmitting and receiving party.'
     original_name: hw-fragmentation-threshold
+    elements: null
   hw_protection_mode:
     name: hw_protection_mode
     type: string
@@ -537,16 +561,18 @@ properties:
       - none
       - rts-cts
     choice_type: null
-    description: 'Frame protection support property [ `read more >>`](#Frame_protection_support_.28RTS.2FCTS.29)'
+    description: 'Frame protection support property [`read more >>`](#Frame_protection_support_.28RTS.2FCTS.29)'
     original_name: hw-protection-mode
+    elements: null
   hw_protection_threshold:
     name: hw_protection_threshold
     type: integer
     required: false
     default: 0
     choice_type: null
-    description: 'Frame protection support property[ `read more >>`](#Frame_protection_support_.28RTS.2FCTS.29)'
+    description: 'Frame protection support property[`read more >>`](#Frame_protection_support_.28RTS.2FCTS.29)'
     original_name: hw-protection-threshold
+    elements: null
   hw_retries:
     name: hw_retries
     type: integer
@@ -555,6 +581,7 @@ properties:
     choice_type: null
     description: 'Number of times sending frame is retried without considering it a transmission failure. Data-rate is decreased upon failure and the frame is sent again. Three sequential failures on the lowest supported rate suspend transmission to this destination for the duration of **on-fail-retry-time**. After that, the frame is sent again. The frame is being retransmitted until transmission success, or until the client is disconnected after **disconnect-timeout**. The frame can be discarded during this time if **frame-lifetime** is exceeded.'
     original_name: hw-retries
+    elements: null
   installation:
     name: installation
     type: string
@@ -567,6 +594,7 @@ properties:
     choice_type: null
     description: 'Adjusts scan-list to use indoor, outdoor or all frequencies for the country that is set.'
     original_name: installation
+    elements: null
   interworking_profile:
     name: interworking_profile
     type: string
@@ -578,6 +606,7 @@ properties:
     choice_type: null
     description: ''
     original_name: interworking-profile
+    elements: null
   keepalive_frames:
     name: keepalive_frames
     type: string
@@ -588,9 +617,10 @@ properties:
       - enabled
     choice_type: null
     description: |
-      Applies only if wireless interface is in mode=**ap-bridge**. If a client has not communicated for around 20 seconds, AP sends a "keepalive-frame".   
+      Applies only if wireless interface is in mode=**ap-bridge**. If a client has not communicated for around 20 seconds, AP sends a "keepalive-frame". 
       **Note**, disabling the feature can lead to "ghost" clients in registration-table.
     original_name: keepalive-frames
+    elements: null
   l2mtu:
     name: l2mtu
     type: integer
@@ -599,6 +629,7 @@ properties:
     choice_type: null
     description: ''
     original_name: l2mtu
+    elements: null
   mac_address:
     name: mac_address
     type: string
@@ -607,6 +638,7 @@ properties:
     choice_type: null
     description: ''
     original_name: mac-address
+    elements: null
   master_interface:
     name: master_interface
     type: string
@@ -615,6 +647,7 @@ properties:
     choice_type: null
     description: 'Name of wireless interface that has *virtual-ap* capability. [Virtual AP](/index.php?title=Virtual_AP&action=edit&redlink=1 "Virtual AP (page does not exist)") interface will only work if master interface is in *ap-bridge*, *bridge*, *station* or *wds-slave* mode. This property is only for virtual AP interfaces.'
     original_name: master-interface
+    elements: null
   max_station_count:
     name: max_station_count
     type: integer
@@ -623,6 +656,7 @@ properties:
     choice_type: null
     description: 'Maximum number of associated clients. WDS links also count toward this limit.'
     original_name: max-station-count
+    elements: null
   mode:
     name: mode
     type: string
@@ -661,8 +695,9 @@ properties:
       - *alignment-only* - Put the interface in a continuous transmit mode that is used for aiming the remote antenna.
       - *nstreme-dual-slave* - allow this interface to be used in nstreme-dual setup.
       
-      <dl><dd>MAC address translation in **pseudobridge** modes works by inspecting packets and building a table of corresponding IP and MAC addresses. All packets are sent to AP with the MAC address used by pseudobridge, and MAC addresses of received packets are restored from the address translation table. There is a single entry in the address translation table for all non-IP packets, hence more than one host in the bridged network cannot reliably use non-IP protocols. Note: Currently IPv6 doesn't work over Pseudobridge</dd></dl>
+      MAC address translation in **pseudobridge** modes works by inspecting packets and building a table of corresponding IP and MAC addresses. All packets are sent to AP with the MAC address used by pseudobridge, and MAC addresses of received packets are restored from the address translation table. There is a single entry in the address translation table for all non-IP packets, hence more than one host in the bridged network cannot reliably use non-IP protocols. Note: Currently IPv6 doesn't work over Pseudobridge
     original_name: mode
+    elements: null
   mtu:
     name: mtu
     type: integer
@@ -671,6 +706,7 @@ properties:
     choice_type: null
     description: ''
     original_name: mtu
+    elements: null
   multicast_buffering:
     name: multicast_buffering
     type: string
@@ -682,6 +718,7 @@ properties:
     choice_type: null
     description: 'For a client that has power saving, buffer multicast packets until next beacon time. A client should wake up to receive a beacon, by receiving beacon it sees that there are multicast packets pending, and it should wait for multicast packets to be sent.'
     original_name: multicast-buffering
+    elements: null
   multicast_helper:
     name: multicast_helper
     type: string
@@ -693,12 +730,13 @@ properties:
       - full
     choice_type: null
     description: |
-      When set to **full**, multicast packets will be sent with a unicast destination MAC address, resolving [ multicast problem](https://wiki.mikrotik.com/wiki/Manual:Multicast_detailed_example#Multicast_and_Wireless "Manual:Multicast detailed example") on the wireless link. This option should be enabled only on the access point, clients should be configured in **station-bridge** mode. Available starting from v5.15.
+      When set to **full**, multicast packets will be sent with a unicast destination MAC address, resolving [multicast problem](https://wiki.mikrotik.com/wiki/Manual:Multicast_detailed_example#Multicast_and_Wireless "Manual:Multicast detailed example") on the wireless link. This option should be enabled only on the access point, clients should be configured in **station-bridge** mode. Available starting from v5.15.
       
       - disabled - disables the helper and sends multicast packets with multicast destination MAC addresses
       - full - all multicast packet mac address are changed to unicast mac addresses prior sending them out
       - default - default choice that currently is set to *disabled*. Value can be changed in future releases.
     original_name: multicast-helper
+    elements: null
   name:
     name: name
     type: string
@@ -707,6 +745,7 @@ properties:
     choice_type: null
     description: 'name of the interface'
     original_name: name
+    elements: null
   noise_floor_threshold:
     name: noise_floor_threshold
     type: string
@@ -715,6 +754,7 @@ properties:
     choice_type: null
     description: 'For advanced use only, as it can badly affect the performance of the interface. It is possible to manually set noise floor threshold value. By default, it is dynamically calculated. This property also affects received signal strength. This property is only effective on non-AC chips.'
     original_name: noise-floor-threshold
+    elements: null
   nv2_cell_radius:
     name: nv2_cell_radius
     type: integer
@@ -727,6 +767,7 @@ properties:
       - on AP: distance to farthest client in km
       - on station: no effect
     original_name: nv2-cell-radius
+    elements: null
   nv2_noise_floor_offset:
     name: nv2_noise_floor_offset
     type: string
@@ -735,6 +776,7 @@ properties:
     choice_type: null
     description: ''
     original_name: nv2-noise-floor-offset
+    elements: null
   nv2_preshared_key:
     name: nv2_preshared_key
     type: string
@@ -743,6 +785,7 @@ properties:
     choice_type: null
     description: ''
     original_name: nv2-preshared-key
+    elements: null
   nv2_qos:
     name: nv2_qos
     type: string
@@ -758,6 +801,7 @@ properties:
       - **frame-priority** - manual setting that can be tuned with Mangle rules.
       - **default** - default setting where small packets receive priority for best latency
     original_name: nv2-qos
+    elements: null
   nv2_queue_count:
     name: nv2_queue_count
     type: integer
@@ -766,6 +810,7 @@ properties:
     choice_type: null
     description: ''
     original_name: nv2-queue-count
+    elements: null
   nv2_security:
     name: nv2_security
     type: string
@@ -777,6 +822,7 @@ properties:
     choice_type: null
     description: ''
     original_name: nv2-security
+    elements: null
   on_fail_retry_time:
     name: on_fail_retry_time
     type: string
@@ -785,6 +831,7 @@ properties:
     choice_type: null
     description: 'After third sending failure on the lowest data rate, wait for specified time interval before retrying.'
     original_name: on-fail-retry-time
+    elements: null
   periodic_calibration:
     name: periodic_calibration
     type: string
@@ -795,8 +842,9 @@ properties:
       - disabled
       - enabled
     choice_type: null
-    description: 'Setting *default* enables periodic calibration if [ info](#Info) **default-periodic-calibration** property is *enabled*. Value of that property depends on the type of wireless card. This property is only effective for cards based on Atheros chipset.'
+    description: 'Setting *default* enables periodic calibration if [info](#Info) **default-periodic-calibration** property is *enabled*. Value of that property depends on the type of wireless card. This property is only effective for cards based on Atheros chipset.'
     original_name: periodic-calibration
+    elements: null
   periodic_calibration_interval:
     name: periodic_calibration_interval
     type: integer
@@ -805,6 +853,7 @@ properties:
     choice_type: null
     description: 'This property is only effective for cards based on Atheros chipset.'
     original_name: periodic-calibration-interval
+    elements: null
   preamble_mode:
     name: preamble_mode
     type: string
@@ -827,6 +876,7 @@ properties:
         - *short* - do not connect to AP if it does not support short preamble.
         - *both* - Use short preamble if AP supports it.
     original_name: preamble-mode
+    elements: null
   prism_cardtype:
     name: prism_cardtype
     type: string
@@ -839,6 +889,7 @@ properties:
     choice_type: null
     description: 'Specify type of the installed Prism wireless card.'
     original_name: prism-cardtype
+    elements: null
   proprietary_extensions:
     name: proprietary_extensions
     type: string
@@ -854,6 +905,7 @@ properties:
       - *pre-2.9.25* - This is older method. It can interoperate with newer versions of RouterOS. This method is incompatible with some clients, for example, Centrino based ones.
       - *post-2.9.25* - This uses standardized way of including vendor specific information, that is compatible with newer wireless clients.
     original_name: proprietary-extensions
+    elements: null
   radio_name:
     name: radio_name
     type: string
@@ -864,6 +916,7 @@ properties:
     options:
       - ignore-default
     original_name: radio-name
+    elements: null
   rate_selection:
     name: rate_selection
     type: string
@@ -875,6 +928,7 @@ properties:
     choice_type: null
     description: 'Starting from v5.9 default value is advanced since legacy mode was inefficient.'
     original_name: rate-selection
+    elements: null
   rate_set:
     name: rate_set
     type: string
@@ -888,8 +942,9 @@ properties:
       Two options are available:
       
       - *default* - default basic and supported rate sets are used. Values from **basic-rates** and **supported-rates** parameters have no effect.
-      - *configured* - use values from **basic-rates**, **supported-rates**, **basic-mcs**, **mcs**. [ `Read more >>`](#Basic_and_MCS_Rate_table).
+      - *configured* - use values from **basic-rates**, **supported-rates**, **basic-mcs**, **mcs**. [Read More](#Basic_and_MCS_Rate_table).
     original_name: rate-set
+    elements: null
   rx_chains:
     name: rx_chains
     type: list
@@ -906,6 +961,7 @@ properties:
     options:
       - ignore-default
     original_name: rx-chains
+    elements: integer
   scan_list:
     name: scan_list
     type: list
@@ -913,10 +969,16 @@ properties:
     default:
       - default
     choice_type: null
-    description: null
+    description: |
+      The *default* value is all channels from selected band that are supported by card and allowed by the **country** and **frequency-mode** settings (this list can be seen in [info](#Info)). For default scan list in *5ghz* band channels are taken with 20MHz step, in *5ghz-turbo* band - with 40MHz step, for all other bands - with 5MHz step. If **scan-list** is specified manually, then all matching channels are taken. (Example: **scan-list**=*default,5200-5245,2412-2427* - This will use the default value of scan list for current band, and add to it supported frequencies from 5200-5245 or 2412-2427 range.)
+      
+      Since RouterOS v6.0 with Winbox or Webfig, for inputting of multiple frequencies, add each frequency or range of frequencies into separate multiple scan-lists. Using a comma to separate frequencies is no longer supported in Winbox/Webfig since v6.0.
+      
+      Since RouterOS v6.35 (wireless-rep) scan-list support step feature where it is possible to manually specify the scan step. Example: **scan-list**=*5500-5600:20* will generate such scan-list values *5500,5520,5540,5560,5580,5600*
     options:
       - ignore-default
     original_name: scan-list
+    elements: string
   secondary_channel:
     name: secondary_channel
     type: integer
@@ -925,14 +987,16 @@ properties:
     choice_type: null
     description: 'Specifies secondary channel, required to enable 80+80MHz transmission. To disable 80+80MHz functionality, set secondary-channel to "" or unset the value via CLI/GUI.'
     original_name: secondary-channel
+    elements: null
   security_profile:
     name: security_profile
     type: string
     required: false
     default: default
     choice_type: null
-    description: 'Name of profile from [ security-profiles](#Security_Profiles)'
+    description: 'Name of profile from [security-profiles](#Security_Profiles)'
     original_name: security-profile
+    elements: null
   skip_dfs_channels:
     name: skip_dfs_channels
     type: string
@@ -941,6 +1005,7 @@ properties:
     choice_type: null
     description: 'These values are used to skip all DFS channels or specifically skip DFS CAC channels in range 5600-5650MHz which detection could go up to 10min.'
     original_name: skip-dfs-channels
+    elements: null
   ssid:
     name: ssid
     type: string
@@ -951,6 +1016,7 @@ properties:
     options:
       - ignore-default
     original_name: ssid
+    elements: null
   station_bridge_clone_mac:
     name: station_bridge_clone_mac
     type: string
@@ -964,6 +1030,7 @@ properties:
       
       As soon as packet with MAC address of another device needs to be transmitted, station will reconnect to AP using that address.
     original_name: station-bridge-clone-mac
+    elements: null
   station_roaming:
     name: station_roaming
     type: string
@@ -973,8 +1040,9 @@ properties:
       - disabled
       - enabled
     choice_type: null
-    description: 'Station Roaming feature is available only for 802.11 wireless protocol and only for station modes. [ `Read more >>`](#Station-Roaming)'
+    description: 'Station Roaming feature is available only for 802.11 wireless protocol and only for station modes. [Read More](#Station-Roaming)'
     original_name: station-roaming
+    elements: null
   supported_rates_ag:
     name: supported_rates_ag
     type: list
@@ -1000,6 +1068,7 @@ properties:
     choice_type: null
     description: 'List of supported rates, used for all bands except *2ghz-b*.'
     original_name: supported-rates-a/g
+    elements: string
   supported_rates_b:
     name: supported_rates_b
     type: list
@@ -1017,6 +1086,7 @@ properties:
     choice_type: null
     description: 'List of supported rates, used for *2ghz-b*, *2ghz-b/g* and *2ghz-b/g/n* bands. Two devices will communicate only using rates that are supported by both devices. This property has effect only when value of **rate-set** is *configured*.'
     original_name: supported-rates-b
+    elements: string
   tdma_period_size:
     name: tdma_period_size
     type: integer
@@ -1025,6 +1095,7 @@ properties:
     choice_type: null
     description: 'Specifies TDMA period in milliseconds. It could help on the longer distance links, it could slightly increase bandwidth, while latency is increased too.'
     original_name: tdma-period-size
+    elements: null
   tx_chains:
     name: tx_chains
     type: list
@@ -1041,6 +1112,7 @@ properties:
     options:
       - ignore-default
     original_name: tx-chains
+    elements: integer
   tx_power:
     name: tx_power
     type: integer
@@ -1049,6 +1121,7 @@ properties:
     choice_type: null
     description: 'For 802.11ac wireless interface it''s total power but for 802.11a/b/g/n it''s power per chain.'
     original_name: tx-power
+    elements: null
   tx_power_mode:
     name: tx_power_mode
     type: string
@@ -1068,6 +1141,7 @@ properties:
       - manual-table - define transmit power for each rate separately. Can damage the card if transmit power is set above rated value of the card for used rate.
       - card-rates - use transmit power calculated for each rate based on value of **tx-power** parameter. Legacy mode only compatible with currently discontinued products.
     original_name: tx-power-mode
+    elements: null
   update_stats_interval:
     name: update_stats_interval
     type: string
@@ -1077,10 +1151,11 @@ properties:
     description: |
       How often to request update of signals strength and ccq values from clients.
       
-      Access to [ registration-table](#Registration_Table) also triggers update of these values.
+      Access to [registration-table](#Registration_Table) also triggers update of these values.
       
       This is proprietary extension.
     original_name: update-stats-interval
+    elements: null
   vht_basic_mcs:
     name: vht_basic_mcs
     type: string
@@ -1093,13 +1168,14 @@ properties:
       - none
     choice_type: null
     description: |
-      [Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11ac#Data_rates_and_speed) that every connecting client must support. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
+      [Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11ac#Data_rates_and_speed) that every connecting client must support. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
       
       - *none* - will not use selected Spatial Stream
       - *MCS 0-7* - client must support MCS-0 to MCS-7
       - *MCS 0-8* - client must support MCS-0 to MCS-8
       - *MCS 0-9* - client must support MCS-0 to MCS-9
     original_name: vht-basic-mcs
+    elements: null
   vht_supported_mcs:
     name: vht_supported_mcs
     type: string
@@ -1112,13 +1188,14 @@ properties:
       - none
     choice_type: null
     description: |
-      [Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11ac#Data_rates_and_speed) that this device advertises as supported. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
+      [Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11ac#Data_rates_and_speed) that this device advertises as supported. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
       
       - *none* - will not use selected Spatial Stream
       - *MCS 0-7* - devices will advertise as supported MCS-0 to MCS-7
       - *MCS 0-8* - devices will advertise as supported MCS-0 to MCS-8
       - *MCS 0-9* - devices will advertise as supported MCS-0 to MCS-9
     original_name: vht-supported-mcs
+    elements: null
   wds_cost_range:
     name: wds_cost_range
     type: integer
@@ -1132,14 +1209,16 @@ properties:
       
       Automatic adjustment does not work for WDS links that are manually configured as a bridge port.
     original_name: wds-cost-range
+    elements: null
   wds_default_bridge:
     name: wds_default_bridge
     type: string
     required: false
     default: none
     choice_type: null
-    description: 'When WDS link is established and status of the wds interface becomes *running*, it will be added as a bridge port to the bridge interface specified by this property. When WDS link is lost, wds interface is removed from the bridge. If wds interface is already included in a bridge setup when WDS link becomes active, it will not be added to bridge specified by , and will <span style="color: red; font-weight: bold">(needs editing)</span>'
+    description: 'When WDS link is established and status of the wds interface becomes *running*, it will be added as a bridge port to the bridge interface specified by this property. When WDS link is lost, wds interface is removed from the bridge. If wds interface is already included in a bridge setup when WDS link becomes active, it will not be added to bridge specified by , and will (needs editing)'
     original_name: wds-default-bridge
+    elements: null
   wds_default_cost:
     name: wds_default_cost
     type: integer
@@ -1148,6 +1227,7 @@ properties:
     choice_type: null
     description: 'Initial bridge port cost of the WDS links.'
     original_name: wds-default-cost
+    elements: null
   wds_ignore_ssid:
     name: wds_ignore_ssid
     type: string
@@ -1159,6 +1239,7 @@ properties:
     choice_type: null
     description: 'By default, WDS link between two APs can be created only when they work on the same frequency and have the same SSID value. If this property is set to *yes*, then SSID of the remote AP will not be checked. This property has no effect on connections from clients in *station-wds* mode. It also does not work if **wds-mode** is *static-mesh* or *dynamic-mesh*.'
     original_name: wds-ignore-ssid
+    elements: null
   wds_mode:
     name: wds_mode
     type: string
@@ -1178,8 +1259,9 @@ properties:
       - *static* only allows WDS links that are manually configured in [wds](/index.php?title=Wds&action=edit&redlink=1 "Wds (page does not exist)")
       - *dynamic* also allows WDS links with devices that are not configured in [wds](/index.php?title=Wds&action=edit&redlink=1 "Wds (page does not exist)"), by creating required entries dynamically. Such dynamic WDS entries are removed automatically after the connection with the other AP is lost.
       
-      <dl><dd>*-mesh* modes use different (better) method for establishing link between AP, that is not compatible with APs in non-mesh mode. This method avoids one-sided WDS links that are created only by one of the two APs. Such links cannot pass any data.</dd><dd>When AP or station is establishing WDS connection with another AP, it uses [ connect-list](#Connect_List) to check whether this connection is allowed. If station in *station-wds* mode is establishing connection with AP, AP uses [ access-list](#Access_List) to check whether this connection is allowed.</dd><dd>If **mode** is *station-wds*, then this property has no effect.</dd></dl>
+      *-mesh* modes use different (better) method for establishing link between AP, that is not compatible with APs in non-mesh mode. This method avoids one-sided WDS links that are created only by one of the two APs. Such links cannot pass any data.When AP or station is establishing WDS connection with another AP, it uses [connect-list](#Connect_List) to check whether this connection is allowed. If station in *station-wds* mode is establishing connection with AP, AP uses [access-list](#Access_List) to check whether this connection is allowed.If **mode** is *station-wds*, then this property has no effect.
     original_name: wds-mode
+    elements: null
   wireless_protocol:
     name: wireless_protocol
     type: string
@@ -1206,6 +1288,7 @@ properties:
       
       **Warning!** Nv2 doesn't have support for Virtual AP
     original_name: wireless-protocol
+    elements: null
   wmm_support:
     name: wmm_support
     type: string
@@ -1216,8 +1299,9 @@ properties:
       - enabled
       - required
     choice_type: null
-    description: 'Specifies whether to enable [ WMM](https://wiki.mikrotik.com/wiki/Manual:WMM "Manual:WMM").'
+    description: 'Specifies whether to enable [WMM](https://wiki.mikrotik.com/wiki/Manual:WMM "Manual:WMM").'
     original_name: wmm-support
+    elements: null
   wps_mode:
     name: wps_mode
     type: string
@@ -1228,5 +1312,6 @@ properties:
       - push-button
       - push-button-virtual-only
     choice_type: null
-    description: '[ `Read more >>`](#WPS_Server)'
+    description: '[Read More](#WPS_Server)'
     original_name: wps-mode
+    elements: null

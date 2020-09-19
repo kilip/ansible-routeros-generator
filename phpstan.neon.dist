@@ -9,11 +9,11 @@ parameters:
     PHPUnit\Framework\Constraint\Constraint:
       - fail
   ignoreErrors:
-    #- message: "#Call to an undefined method#"
-    #  path: src/Structure/ResourcePropertiesConfigurationTrait.php
     - message: "#Call to an undefined method#"
       path: src/Structure/MetaConfiguration.php
     - message: "#Call to an undefined method#"
       path: src/DependencyInjection/Configuration.php
     - message: "#Call to an undefined method#"
-      path: src/Provider/Ansible/ModuleConfiguration.php
+      path: src/Provider/Ansible/Structure/ModuleStructureConfiguration.php
+    - message: "#Call to an undefined method#"
+      path: src/Provider/Ansible/AnsibleProvider.php

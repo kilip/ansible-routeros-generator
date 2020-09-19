@@ -1,0 +1,2 @@
+Whether to add DHCP Option-82 information (Agent Remote ID and Agent Circuit ID) to DHCP packets. Can be used together with Option-82
+capable DHCP server to assign IP addresses and implement policies. This property only has effect when dhcp-snooping is set to C(yes).

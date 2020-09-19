@@ -1,0 +1,68 @@
+name: capsman_datapath
+package: capsman
+command: '/caps-man datapath'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index: 6
+properties_override:
+  name:
+    type: string
+    required: true
+    description: 'Name for datapath'
+  comment:
+    type: string
+    description: 'Short description of the datapath'
+  arp:
+    type: string
+    default: enabled
+    choices:
+      - disabled
+      - enabled
+      - proxy-arp
+      - reply-only
+    description: "Address Resolution Protocol setting\n- `disabled` - the interface will not use ARP\n- `enabled` - the interface will use ARP\n- `proxy-arp` - the interface will use the ARP proxy feature\n- `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the L(IP/ARP,https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. Therefore for communications to be successful, a valid static entry must already exist.\n"
+  bridge:
+    type: string
+    description: "Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.\n"
+  bridge_cost:
+    type: integer
+    description: "bridge port cost to use when adding as bridge port\n"
+  bridge_horizon:
+    type: integer
+    description: "bridge horizon to use when adding as bridge port\n"
+  client_to_client_forwarding:
+    type: string
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    description: "controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN\n"
+  interface_list:
+    type: list
+    elements: string
+    description: 'interface list for this datapath'
+  l2mtu:
+    type: string
+    description: 'set Layer2 MTU size'
+  local_forwarding:
+    type: string
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    description: "Controls forwarding mode. If disabled, all L2 and L3 data will be forwarded to CAPsMAN, and further forwarding decisions will be made only then.\nNote, if disabled, make sure that each CAP interface MAC Address that participates in the same broadcast domain is unique (including local MACs, like Bridge-MAC).\n"
+  mtu:
+    type: string
+    description: 'set MTU size'
+  openflow_switch:
+    type: string
+    description: "OpenFlow switch port (when enabled) to add interface to\n"
+  vlan_id:
+    type: integer
+    description: "VLAN ID to assign to interface if vlan-mode enables use of VLAN tagging\n"
+  vlan_mode:
+    type: string
+    choices:
+      - use-service-tag
+      - use-tag
+    description: "Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows the interface to only send out data tagged with given tag)\n"

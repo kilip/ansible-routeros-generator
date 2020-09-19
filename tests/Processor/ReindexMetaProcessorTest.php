@@ -15,18 +15,22 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Processor;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\EventSubscriberAssertions;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Contracts\CacheManagerInterface;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\MetaManagerInterface;
+use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Processor\ReindexMetaProcessor;
 use RouterOS\Generator\Structure\MetaConfiguration;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class ReindexMetaProcessorTest extends KernelTestCase
 {
     use InteractsWithContainer;
+    use EventSubscriberAssertions;
 
     /**
      * @var MockObject|EventDispatcherInterface
@@ -64,6 +68,7 @@ class ReindexMetaProcessorTest extends KernelTestCase
         $this->cacheManager = $this->createMock(CacheManagerInterface::class);
         $this->templateCompiler = $this->createMock(CompilerInterface::class);
         $this->metaConfigDir = __DIR__.'/../Fixtures/config/meta';
+        $this->subscriberEventClass = ReindexMetaProcessor::class;
 
         $this->processor = new ReindexMetaProcessor(
             $this->dispatcher,
@@ -75,16 +80,30 @@ class ReindexMetaProcessorTest extends KernelTestCase
         );
     }
 
+    public function testSubscribedEvents()
+    {
+        $this->assertSubscribedEvent(BuildEvent::PREPARE, 'onBuildEvent', 1000);
+    }
+
     public function testProcess()
     {
+        $event = $this->createMock(BuildEvent::class);
+        $output = $this->createMock(OutputInterface::class);
         $templateCompiler = $this->templateCompiler;
         $processor = $this->processor;
 
+        $event->expects($this->once())
+            ->method('getOutput')
+            ->willReturn($output);
+
+        $output->expects($this->once())
+            ->method('writeln')
+            ->with($this->isType('string'));
         $templateCompiler
             ->expects($this->atLeastOnce())
             ->method('compileYaml')
             ->with($this->isType('array'), $this->isType('string'));
 
-        $processor->process();
+        $processor->onBuildEvent($event);
     }
 }

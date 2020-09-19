@@ -100,48 +100,42 @@ class CacheManager implements CacheManagerInterface
 
     public function processYamlConfig(
         ConfigurationInterface $configuration,
-        $rootName,
         string $path,
-        bool $addFilePath = false
+        bool $force = false
     ): array {
         $cacheDir = $this->cacheDir;
-        $id = md5("{$rootName}-{$path}");
-        $cachePath = "{$cacheDir}/processed-yml/{$id}.php";
+        $id = md5("{$path}");
+        $cachePath = "{$cacheDir}/process-yaml-config/{$id}.dat";
         $cache = new ConfigCache($cachePath, $this->debug);
         $buildTree = $configuration->getConfigTreeBuilder()->buildTree();
         $root = $buildTree->getName();
 
-        if (!$cache->isFresh()) {
+        if (!$cache->isFresh() || $force) {
             $configs = [];
             $resources = [];
             $finder = Finder::create()->in($path);
             foreach ($finder->files() as $file) {
-                $data = $this->parseYaml($file->getRealPath());
-                if ($addFilePath) {
-                    $data['config_file'] = $file->getRealPath();
-                }
+                $data = $this->parseYaml($file->getRealPath(), $force);
                 //$configs[$exp[0]][$exp[1]][] = $data;
-                $configs[$root][$rootName][] = $data;
+                $configs[$root][] = $data;
                 $resources[] = new FileResource($file->getRealPath());
             }
             $r = new \ReflectionClass(\get_class($configuration));
             $resources[] = new FileResource($r->getFileName());
-
             $processor = new Processor();
             $processed = $processor->processConfiguration($configuration, $configs);
 
-            $contents = "<?php\n".
-                'return '.var_export($processed[$rootName], true)
-                .";\n";
+            $contents = serialize([$processed]);
             $cache->write($contents, $resources);
         }
 
-        $data = require $cachePath;
+        $contents = file_get_contents($cachePath);
+        $data = unserialize($contents);
 
-        return $data;
+        return $data[0];
     }
 
-    public function parseYaml(string $file): array
+    public function parseYaml(string $file, $force = false): array
     {
         $kernelProjectDir = $this->kernelProjectDir;
 
@@ -152,23 +146,23 @@ class CacheManager implements CacheManagerInterface
         $cacheDir = $this->cacheDir;
         $debug = $this->debug;
         $id = md5($file);
-        $cachePath = "{$cacheDir}/yml/{$id}.php";
+        $cachePath = "{$cacheDir}/parse-yaml/{$id}.dat";
 
         $cache = new ConfigCache($cachePath, $debug);
-        if (!$cache->isFresh()) {
+        if (!$cache->isFresh() || $force) {
             $data = Yaml::parseFile($file);
             $resources = [];
             $resources[] = new FileResource($file);
 
-            $contents = "<?php\nreturn "
-                .var_export($data, true).';';
+            $contents = serialize([$data]);
 
             $cache->write($contents, $resources);
         }
 
-        $data = require $cachePath;
+        $contents = file_get_contents($cachePath);
+        $data = unserialize($contents);
 
-        return $data;
+        return $data[0];
     }
 
     /**

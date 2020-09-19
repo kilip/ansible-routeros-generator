@@ -15,12 +15,20 @@ EXAMPLES = """
 
 from ansible.module_utils.basic import AnsibleModule
 from ..module_utils.resources.{{ package }}.{{ name }} import {{ resource_class_name }}
+{% if type == 'config' %}
 from ..module_utils.config.config import Config
+{% else %}
+from ..module_utils.config.setting import Setting
+{% endif %}
 
 
 def main():
-    module = AnsibleModule(argument_spec=BridgeResource.argument_spec)
-    result = Config(module, BridgeResource).execute_module()
+    module = AnsibleModule(argument_spec={{ resource_class_name }}.argument_spec)
+{% if type == 'config' %}
+    result = Config(module, {{ resource_class_name }}).execute_module()
+{% else %}
+    result = Setting(module, {{ resource_class_name }}).execute_module()
+{% endif %}
     return module.exit_json(**result)
 
 

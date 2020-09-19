@@ -48,6 +48,7 @@ class ModuleEvent
         $this->config = [
             'name' => $module->getName(),
             'package' => $module->getPackage(),
+            'type' => $resource->getType(),
             'template' => $module->getModuleTemplate(),
             'module_name' => $module->getModuleName(),
             'export_command' => $exportCommand,
@@ -56,9 +57,9 @@ class ModuleEvent
     }
 
     /**
-     * @return ModuleStructure
+     * @return ModuleStructure|null
      */
-    public function getModule(): ModuleStructure
+    public function getModule(): ?ModuleStructure
     {
         return $this->module;
     }

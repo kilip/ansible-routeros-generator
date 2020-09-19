@@ -11,7 +11,46 @@ class {{ name|classify }}Resource(ResourceBase):
     gather_network_resources = ["{{ name }}"]
     keys = {{ keys|json_encode|raw }}
     config_type = "{{ config_type }}"
+{% if custom_props is defined %}
+    custom_props = {{ custom_props|to_json(2)|raw}}
+{% endif %}
 {% if supports is defined %}
     supports = {{ supports|json_encode|raw }}
 {% endif %}
-    argument_spec = {{ argument_spec|to_json(2)|raw }}
+    argument_spec = {
+      "state": {{ argument_spec.state|to_json(3)|raw }},
+      "config": {
+          "type": "{{ argument_spec.config.type }}",
+{% if argument_spec.config.elements is defined %}
+          "elements": "{{ argument_spec.config.elements }}",
+{% endif %}
+          "options": {
+{% for key,option in argument_spec.config.options %}
+              "{{ key }}": {
+                  "type": "{{ option.type }}",
+{% if option.elements is defined %}
+                  "elements": "{{ option.elements }}",
+{% endif %}{% if option.required is defined %}
+                  "required": True,
+{% endif %}{% if option.default is defined %}{% if  option.default is iterable %}
+                  "default": [
+{% for def in option.default %}
+                      {{ def|convert(name, key, true)|raw }},
+{% endfor %}
+                  ],
+{% elseif option.type == "bool" %}
+                  "default": {{ option.default == "True" ? "True":"False"|raw }},
+{% else %}
+                  "default": {{ option.default|convert(name, key, true)|raw }},
+{% endif %}{% endif %}{% if option.choices is defined %}
+                  "choices": [
+{% for choice in option.choices %}
+                      {{ choice|convert(name, key, true)|raw }},
+{% endfor %}
+                  ],
+{% endif %}
+              },
+{% endfor %}
+          }
+      }
+    }

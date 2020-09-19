@@ -16,11 +16,11 @@ namespace Tests\RouterOS\Generator\Structure;
 
 use Doctrine\Inflector\InflectorFactory;
 use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Concerns\InteractsWithYaml;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
 use Symfony\Component\Yaml\Yaml;
-use Tests\RouterOS\Generator\Concerns\InteractsWithYaml;
 
 class ResourceStructureTest extends TestCase
 {
@@ -32,7 +32,7 @@ class ResourceStructureTest extends TestCase
         $this->assertFalse($resource->hasProperty('test'));
 
         $property = $resource->getProperty('test', true);
-        $this->assertIsObject($property);
+        $this->assertInstanceOf(ResourceProperty::class, $property);
         $this->assertTrue($resource->hasProperty('test'));
 
         $this->expectException(\InvalidArgumentException::class);

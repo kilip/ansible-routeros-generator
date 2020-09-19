@@ -11,7 +11,6 @@ env:
   COMPOSER_INSTALLER_COMMIT: fb22b78362d31c0d2bf516d1f8cdfd2745caa431
   COVERAGE: '0'
   EXT_PCOV_VERSION: '1.0.6'
-  SYMFONY_PHPUNIT_VERSION: '8.5'
 
 jobs:
   php-cs-fixer:
@@ -74,8 +73,6 @@ jobs:
           export PATH="$PATH:$HOME/.composer/vendor/bin"
           mkdir -p /var/cache/php-cs-fixer
           php-cs-fixer fix --dry-run --diff --cache-file=/var/cache/php-cs-fixer/.php_cs.cache --ansi
-
-
 
   phpstan:
     name: PHPStan (${{ matrix.php }})
@@ -144,8 +141,6 @@ jobs:
     strategy:
       matrix:
         php:
-          - '7.2'
-          - '7.3'
           - '7.4'
         include:
           - php: '7.4'
@@ -207,9 +202,9 @@ jobs:
         run: |
           mkdir -p build/logs/phpunit
           if [ "$COVERAGE" = '1' ]; then
-            ./vendor/bin/simple-phpunit --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml --colors=always
+            composer phpunit -- --coverage-clover build/logs/phpunit/clover.xml --log-junit build/logs/phpunit/junit.xml
           else
-            ./vendor/bin/simple-phpunit --log-junit build/logs/phpunit/junit.xml --colors=always
+            composer phpunit -- --log-junit build/logs/phpunit/junit.xml
           fi
       - name: Upload test artifacts
         if: always()

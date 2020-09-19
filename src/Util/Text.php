@@ -19,6 +19,90 @@ use RouterOS\Generator\Structure\ResourceStructure;
 
 class Text
 {
+    public static function normalizeText($text)
+    {
+        $patterns = [
+            // remove multi spaces
+            ['#(\s\s+)#', ' '],
+            ['#\((\s+)(.*)\)#', '(\\2)'],
+
+            // replace smart quotes
+            ['#(\“|\”)#', '"'],
+
+            // wrap text
+            ['#(.{1,140})(\s+|$\n?)|(.{1,140})#m', "\\1\\3\n"],
+
+            // fix blanks
+            ['#(\[|\()(\s+)#', '\\1'],
+
+            // fix [.*]
+            //['#\[(\n)?(.*)\]#m', "\n[\\2]"],
+
+            // fix breaking (.*)
+            //['#\((.*)(\n)(.*)\)#m', "(\\1\\3)"],
+
+            // remove trailling spaces
+            ['#[\s|\t]+$#m', ''],
+        ];
+
+        foreach ($patterns as $value) {
+            list($pattern, $replacement) = $value;
+            $text = preg_replace($pattern, $replacement, $text);
+        }
+
+        return $text;
+    }
+
+    public static function generateFindCommand(ResourceStructure $resource, $values)
+    {
+        $keys = $resource->getKeys();
+        $cmds = [];
+        foreach ($values as $name => $value) {
+            if (\in_array($name, $keys, true)) {
+                $value = self::quoteRouterOSValue($value);
+                $cmds[] = "{$name}={$value}";
+            }
+        }
+
+        return '[ find '.implode(' and ', $cmds).' ]';
+    }
+
+    public static function decorateMessage($message, array $contexts = [], $decorate = true)
+    {
+        $message = "<info>{$message}</info>";
+
+        foreach ($contexts as $index => $value) {
+            if ($decorate) {
+                $value = "<comment>{$value}</comment>";
+            }
+            $message = str_replace('{'.$index.'}', $value, $message);
+        }
+
+        return $message;
+    }
+
+    public static function namespaceToPath($namespace)
+    {
+        return str_replace('.', '/', $namespace);
+    }
+
+    public static function toRouterosExport(ResourceStructure $resource, array $values)
+    {
+        $type = $resource->getType();
+        $contents = self::arrayToRouteros($resource, $values);
+        if ('config' == $type) {
+            $contents = preg_replace("#(remove .*[\n]?)#", '', $contents);
+            $contents = preg_replace('#(set) (.*)#', 'add \\2', $contents);
+            $contents = preg_replace("#\/system script run .*\\n?#", '', $contents);
+        }
+
+        return <<<EOC
+# RouterOS Output
+#
+{$contents}
+EOC;
+    }
+
     public static function quoteRouterOSValue($value)
     {
         if (false !== strpos($value, ' ')) {
@@ -28,7 +112,40 @@ class Text
         return $value;
     }
 
-    public static function arrayToRouteros(ResourceStructure $resource, $values)
+    public static function toRouterosCommands(ResourceStructure $resource, $values)
+    {
+        $command = $resource->getCommand();
+        $commands = [];
+
+        foreach ($values as $value) {
+            $action = $value['action'];
+            $cmds = [];
+            if ('script' == $action) {
+                $cmds[] = $value['script'];
+            } else {
+                $type = $resource->getType();
+                $keys = $resource->getKeys();
+                $cmds = [$command, $action];
+                $vals = $value['values'];
+                if ('config' === $type && \in_array($action, ['set', 'remove'], true)) {
+                    $cmds[] = static::generateFindCommand($resource, $vals);
+                    foreach ($keys as $key) {
+                        unset($vals[$key]);
+                    }
+                }
+                foreach ($vals as $name => $val) {
+                    $originalName = static::getOriginalName($resource, $name);
+                    $val = static::quoteRouterOSValue($val);
+                    $cmds[] = "{$originalName}={$val}";
+                }
+            }
+            $commands[] = implode(' ', $cmds);
+        }
+
+        return $commands;
+    }
+
+    public static function arrayToRouteros(ResourceStructure $resource, $values, $asCommandList = false)
     {
         $command = $resource->getCommand();
         $configs = [];
@@ -56,6 +173,13 @@ class Text
             $configs[] = implode(' ', $cmds);
         }
 
+        if ($asCommandList) {
+            foreach ($configs as $index => $config) {
+                $configs[$index] = $command.' '.$config;
+            }
+
+            return $configs;
+        }
         $contents = "{$command}\n".implode("\n", $configs);
 
         return $contents;
@@ -111,6 +235,10 @@ class Text
 
     public static function extractParameters($command, $text)
     {
+        $text = strtr($text, [
+            "\n" => '',
+            '\\' => '',
+        ]);
         $exp = explode($command, $text);
         $info = $exp[1];
 
@@ -121,12 +249,13 @@ class Text
 
         $parameters = [];
         foreach ($exp as $item) {
-            $regex = '#(\S+)\=(\".*\"|\S+)#';
+            $regex = '#(\S+)\=(".*?"|\S+)#';
             preg_match_all($regex, $item, $matches);
             $param = [];
             for ($i = 0; $i < \count($matches[0]); ++$i) {
                 $name = self::normalizeName($matches[1][$i]);
                 $value = $matches[2][$i];
+                $value = str_replace('"', '', $value);
                 $param[$name] = $value;
             }
             $parameters[] = [

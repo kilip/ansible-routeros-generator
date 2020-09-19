@@ -1,0 +1,17 @@
+name: capsman_provisioning
+package: capsman
+command: '/caps-man provisioning'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:CAPsMAN'
+  table_index: 3
+properties_override:
+  ip_address_ranges:
+    type: string
+    options:
+      - ignore-choices
+      - ignore-default
+  slave_configurations:
+    type: list
+    elements: string
+keys:
+  - comment

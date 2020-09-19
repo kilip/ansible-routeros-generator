@@ -15,6 +15,7 @@ properties:
     options:
       - ignore-choices
     original_name: ca-certificate
+    elements: null
   certificate:
     name: certificate
     type: string
@@ -27,25 +28,7 @@ properties:
     choice_type: null
     description: 'Device certificate'
     original_name: certificate
-  comment:
-    name: comment
-    type: string
-    required: false
-    default: null
-    choice_type: null
-    description: 'Short note for capsman_manager resource'
-    original_name: comment
-  disabled:
-    name: disabled
-    type: string
-    required: false
-    default: 'no'
-    choices:
-      - 'yes'
-      - 'no'
-    choice_type: null
-    description: 'Set capsman_manager resource disability'
-    original_name: disabled
+    elements: null
   enabled:
     name: enabled
     type: string
@@ -57,6 +40,7 @@ properties:
     choice_type: null
     description: 'Disable or enable CAPsMAN functionality'
     original_name: enabled
+    elements: null
   package_path:
     name: package_path
     type: string
@@ -65,6 +49,7 @@ properties:
     choice_type: null
     description: 'Folder location for the RouterOS packages. For example, use "/upgrade" to specify the upgrade folder from the files section. If empty string is set, CAPsMAN can use built-in RouterOS packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.'
     original_name: package-path
+    elements: null
   require_peer_certificate:
     name: require_peer_certificate
     type: string
@@ -76,6 +61,7 @@ properties:
     choice_type: null
     description: 'Require all connecting CAPs to have a valid certificate'
     original_name: require-peer-certificate
+    elements: null
   upgrade_policy:
     name: upgrade_policy
     type: string
@@ -93,3 +79,4 @@ properties:
       - require-same-version - CAPsMAN suggest to upgrade the CAP RouterOS version and if it fails it will not provision the CAP. (Manual provision is still possible)
       - suggest-same-version - CAPsMAN suggests to upgrade the CAP RouterOS version and if it fails it will still be provisioned
     original_name: upgrade-policy
+    elements: null

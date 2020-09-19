@@ -15,11 +15,11 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Scraper;
 
 use PHPUnit\Framework\TestCase;
+use RouterOS\Generator\Concerns\InteractsWithCacheManager;
 use RouterOS\Generator\Scraper\PropertyParser;
 use RouterOS\Generator\Scraper\TableParser;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\ResourceStructure;
-use Tests\RouterOS\Generator\Concerns\InteractsWithCacheManager;
 
 class PropertyParserTest extends TestCase
 {

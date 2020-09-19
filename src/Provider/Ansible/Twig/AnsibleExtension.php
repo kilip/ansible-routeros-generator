@@ -19,28 +19,39 @@ use Twig\TwigFilter;
 
 class AnsibleExtension extends AbstractExtension
 {
+    /**
+     * @var string
+     */
+    private $modulePrefix;
+    /**
+     * @var string
+     */
+    private $moduleCompletePrefix;
+
+    public function __construct(
+        $modulePrefix = 'ros_',
+        $moduleCompletePrefix = 'kilip.routeros'
+    ) {
+        $this->modulePrefix = $modulePrefix;
+        $this->moduleCompletePrefix = $moduleCompletePrefix;
+    }
+
     public function getFilters()
     {
         return [
             new TwigFilter('ansible_normalize_output', [$this, 'normalizeOutput']),
             new TwigFilter('resource_base_import', [$this, 'resourceBaseImport']),
+            new TwigFilter('ansible_module_name', [$this, 'moduleName']),
         ];
     }
 
     public function normalizeOutput($output)
     {
-        // replace quoted links
-        $pattern = '#(\[\s+]?)([^\]]+)\]\((.+)(\s+?\".+\")([\s+]?\))#im';
-        $output = preg_replace($pattern, 'L(\\2, \\3)', $output);
+        // fix on/off value
+        $output = preg_replace('#([\-|\:]+)\s(on|off)#', '\\1 "\\2"', $output);
 
-        $pattern = '#(\[[\s+]?)([^\]]+)\]\(([^\s?\)]+)([\s+]?\))#im';
-        $output = preg_replace($pattern, 'L(\\2, \\3)', $output);
-
-        $pattern = '#L\((.+)(\s+\".+\")\)#im';
-        $output = preg_replace($pattern, 'L(\\1)', $output);
-
-        // decorize code output
-        $output = preg_replace('#\<var>([^<\/]+)<\/var>#im', 'C(\\1)', $output);
+        // fix hex value
+        $output = preg_replace('#(0x8100|0x88a8|0x9100)#', '"\\1"', $output);
 
         return preg_replace('#\`(.+)\`#im', 'C(\\1)', $output);
     }
@@ -51,5 +62,18 @@ class AnsibleExtension extends AbstractExtension
         $prefix = str_repeat('.', \count($exp));
 
         return "from {$prefix}.base import ResourceBase";
+    }
+
+    public function moduleName($name, $complete = false)
+    {
+        $modulePrefix = $this->modulePrefix;
+        $moduleCompletePrefix = $this->moduleCompletePrefix;
+
+        $moduleName = "{$modulePrefix}{$name}";
+        if ($complete) {
+            $moduleName = "{$moduleCompletePrefix}.{$moduleName}";
+        }
+
+        return $moduleName;
     }
 }

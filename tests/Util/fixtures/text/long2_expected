@@ -1,0 +1,3 @@
+When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies
+default update interval that can be overridden by the RADIUS server using the [Acct-Interim-Interval](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication "Manual:Interface/Wireless")
+attribute.

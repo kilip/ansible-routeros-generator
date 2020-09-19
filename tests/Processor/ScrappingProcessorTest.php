@@ -15,6 +15,8 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Processor;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
+use RouterOS\Generator\Concerns\InteractsWithYaml;
 use RouterOS\Generator\Contracts\CompilerInterface;
 use RouterOS\Generator\Contracts\MetaManagerInterface;
 use RouterOS\Generator\Contracts\ResourceManagerInterface;
@@ -25,8 +27,6 @@ use RouterOS\Generator\Structure\ResourceStructure;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
-use Tests\RouterOS\Generator\Concerns\InteractsWithYaml;
 
 class ScrappingProcessorTest extends KernelTestCase
 {
@@ -130,14 +130,12 @@ class ScrappingProcessorTest extends KernelTestCase
             ->willReturn($resource);
 
         $compiler
-            ->expects($this->at(0))
+            ->expects($this->exactly(2))
             ->method('compileYaml')
-            ->with($this->isType('array'), "{$resourceCompiledDir}/interface/interface.yaml");
-
-        $compiler
-            ->expects($this->at(1))
-            ->method('compileYaml')
-            ->with($this->isType('array'), "{$resourceCompiledDir}/index.yaml");
+            ->withConsecutive(
+                [$this->isType('array'), "{$resourceCompiledDir}/interface/interface.yaml"],
+                [$this->isType('array'), "{$resourceCompiledDir}/index.yaml"]
+            );
 
         $processor->process();
     }

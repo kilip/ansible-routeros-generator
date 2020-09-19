@@ -1,5 +1,6 @@
 name: vlan
 package: interface
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_vlan
 export_command: '/interface vlan export'
@@ -13,6 +14,7 @@ documentation:
     - 'This module manages the vlan configuration of Mikrotik RouterOS network devices.'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,26 +25,47 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of vlan options'
       suboptions:
         arp:
           type: str
-          choices: [disabled, enabled, proxy-arp, reply-only]
+          choices:
+            - disabled
+            - enabled
+            - proxy-arp
+            - reply-only
           default: enabled
+          description: 'Address Resolution Protocol mode'
+        comment:
+          type: str
+          description: 'Short note for vlan resource'
+        disabled:
+          type: bool
+          default: 'False'
+          description: 'Set vlan resource disability'
         interface:
           type: str
+          description: 'Name of physical interface on top of which VLAN will work'
         l2mtu:
           type: int
+          description: |
+            Layer2 MTU. For VLANS this value is not configurable. L(Read more&gt;&gt;,
+            https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards)
         mtu:
           type: int
           default: 1500
+          description: 'Layer3 Maximum transmission unit'
         name:
           type: str
           required: 'True'
+          description: 'Interface name'
         use_service_tag:
           type: bool
+          description: '802.1ad compatible Service Tag'
         vlan_id:
           type: int
           default: 1
+          description: 'Virtual LAN identifier or tag that is used to distinguish VLANs. Must be equal for all computers that belong to the same VLAN.'
 examples:
   - title: 'Using merged state'
     name: 'Merge configuration with device configuration'
@@ -61,6 +84,8 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
+      # RouterOS Output
+      #
       /interface vlan
       add arp=enabled comment="new comment" name=vlan-100
       add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200
@@ -80,6 +105,8 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
+      # RouterOS Output
+      #
       /interface vlan
       add arp=enabled comment="new comment" name=vlan-100
     commands:
@@ -97,10 +124,12 @@ examples:
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
     after: |
+      # RouterOS Output
+      #
       /interface vlan
       add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100
     commands:
-      - '/interface vlan remove name=vlan-100'
+      - '/interface vlan remove [ find name=vlan-100 ]'
       - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100'
       - '/system script run ansible-remove-invalid'
   - title: 'Using deleted state'
@@ -114,9 +143,12 @@ examples:
     before: |
       /interface vlan
       add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
-    after: '/interface vlan'
+    after: |
+      # RouterOS Output
+      #
+      /interface vlan
     commands:
-      - '/interface vlan remove name=vlan-100'
+      - '/interface vlan remove [ find name=vlan-100 ]'
       - '/system script run ansible-remove-invalid'
 resource:
   name: vlan
@@ -126,7 +158,7 @@ resource:
   keys:
     - name
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -140,22 +172,94 @@ resource:
       options:
         arp:
           type: str
-          choices: [disabled, enabled, proxy-arp, reply-only]
+          choices:
+            - disabled
+            - enabled
+            - proxy-arp
+            - reply-only
           default: enabled
+          description: '(need to be defined later)'
+        comment:
+          type: str
+          description: '(need to be defined later)'
+        disabled:
+          type: bool
+          default: 'False'
+          description: '(need to be defined later)'
         interface:
           type: str
+          description: '(need to be defined later)'
         l2mtu:
           type: int
+          description: '(need to be defined later)'
         mtu:
           type: int
           default: 1500
+          description: '(need to be defined later)'
         name:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         use_service_tag:
           type: bool
+          description: '(need to be defined later)'
         vlan_id:
           type: int
           default: 1
-        comment:
-          type: str
+          description: '(need to be defined later)'
+tests:
+  facts:
+    name: vlan
+    type: config
+    package: interface
+    fixture_contents: |
+      # RouterOS Output
+      #
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    fixtures:
+      - action: add
+        values:
+          arp: reply-only
+          interface: br-trunk
+          name: vlan-100
+          vlan_id: '100'
+  unit:
+    name: vlan
+    package: interface
+    module_name: ros_vlan
+    fixture_contents: |
+      # RouterOS Output
+      #
+      /interface vlan
+      add arp=reply-only interface=br-trunk name=vlan-100 vlan-id=100
+    tests:
+      - commands:
+          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+          - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-200 vlan-id=200'
+        argument_spec:
+          config:
+            - { comment: 'new comment', interface: br-trunk, name: vlan-100, vlan_id: 100 }
+            - { comment: 'new comment', interface: br-trunk, name: vlan-200, vlan_id: 200 }
+          state: merged
+      - commands:
+          - '/interface vlan set [ find name=vlan-100 ] arp=enabled comment="new comment"'
+        argument_spec:
+          config:
+            - { comment: 'new comment', interface: br-trunk, name: vlan-100, vlan_id: 100 }
+          state: replaced
+      - commands:
+          - '/interface vlan remove [ find name=vlan-100 ]'
+          - '/interface vlan add comment="new comment" interface=br-trunk name=vlan-new vlan-id=100'
+          - '/system script run ansible-remove-invalid'
+        argument_spec:
+          config:
+            - { comment: 'new comment', interface: br-trunk, name: vlan-new, vlan_id: 100 }
+          state: overridden
+      - commands:
+          - '/interface vlan remove [ find name=vlan-100 ]'
+          - '/system script run ansible-remove-invalid'
+        argument_spec:
+          config:
+            - { interface: br-trunk, name: vlan-100, vlan_id: 100 }
+          state: deleted

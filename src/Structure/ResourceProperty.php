@@ -42,6 +42,11 @@ class ResourceProperty
     private $type;
 
     /**
+     * @var string|null
+     */
+    private $elements;
+
+    /**
      * @var bool
      */
     private $required = false;
@@ -75,6 +80,24 @@ class ResourceProperty
      * @var string|null
      */
     private $originalName;
+
+    public static function getValidTypes()
+    {
+        return [
+            self::TYPE_STRING,
+            self::TYPE_LIST,
+            self::TYPE_INTEGER,
+            self::TYPE_BOOL,
+        ];
+    }
+
+    public static function getValidOptions()
+    {
+        return [
+            self::OPTION_IGNORE_CHOICES,
+            self::OPTION_IGNORE_DEFAULT,
+        ];
+    }
 
     public function hasOption($name)
     {
@@ -118,6 +141,10 @@ class ResourceProperty
     {
         $this->type = $type;
 
+        if (self::TYPE_LIST == $type) {
+            $this->elements = 'string';
+        }
+
         return $this;
     }
 
@@ -156,13 +183,6 @@ class ResourceProperty
      */
     public function setDefault($default)
     {
-        if (\is_string($default)) {
-            $data = @unserialize($default);
-            if (false !== $data) {
-                $default = $data;
-            }
-        }
-
         $this->default = $default;
 
         return $this;
@@ -277,5 +297,17 @@ class ResourceProperty
         $this->originalName = $originalName;
 
         return $this;
+    }
+
+    public function setElements(?string $elements)
+    {
+        $this->elements = $elements;
+
+        return $this;
+    }
+
+    public function getElements()
+    {
+        return $this->elements;
     }
 }

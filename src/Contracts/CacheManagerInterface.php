@@ -25,13 +25,12 @@ interface CacheManagerInterface
 
     /**
      * @param ConfigurationInterface $configuration
-     * @param string                 $rootName
      * @param string                 $path
-     * @param bool                   $addConfigFilePath
+     * @param bool                   $force
      *
      * @return array Processed Configuration
      */
-    public function processYamlConfig(ConfigurationInterface $configuration, string $rootName, string $path, bool $addConfigFilePath = false): array;
+    public function processYamlConfig(ConfigurationInterface $configuration, string $path, bool $force = false): array;
 
     /**
      * Parse YAML.

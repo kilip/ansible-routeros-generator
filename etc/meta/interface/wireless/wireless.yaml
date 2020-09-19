@@ -1,0 +1,68 @@
+name: wireless
+package: interface.wireless
+command: '/interface wireless'
+generator:
+  url: 'https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless'
+  table_index: 0
+properties_override:
+  distance:
+    description: "How long to wait for confirmation of unicast frames (**ACKs**)\nbefore considering transmission unsuccessful, or in short **ACK-Timeout**.\nDistance value has these behaviors:\n- *Dynamic* - causes AP to detect and use the smallest timeout that works with all connected clients.\n- *Indoor* - uses the default ACK timeout value that the hardware chip manufacturer has set.\n- *Number* - uses the input value in formula: ACK-timeout = ((**distance** \\* 1000) + 299) / 300 us\nAcknowledgments are not used in Nstreme/NV2 protocols.\n"
+  update_stats_interval:
+    type: string
+  wps_mode:
+    type: string
+  disconnect_timeout:
+    type: string
+  ssid:
+    options:
+      - ignore-default
+  radio_name:
+    options:
+      - ignore-default
+  ampdu_priorities:
+    type: list
+    elements: integer
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+    default:
+      - 0
+    options:
+      - ignore-default
+  rx_chains:
+    type: list
+    elements: integer
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+    default:
+      - 0
+    options:
+      - ignore-default
+  tx_chains:
+    type: list
+    elements: integer
+    choices:
+      - 0
+      - 1
+      - 2
+      - 3
+    default:
+      - 0
+    options:
+      - ignore-default
+  scan_list:
+    type: list
+    elements: string
+    default:
+      - default
+    options:
+      - ignore-default

@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace Tests\RouterOS\Generator\Util;
 
 use PHPUnit\Framework\MockObject\MockObject;
+use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Structure\Meta;
 use RouterOS\Generator\Structure\MetaConfiguration;
 use RouterOS\Generator\Util\CacheManager;
@@ -27,7 +28,6 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class CacheManagerTest extends KernelTestCase
 {
@@ -102,7 +102,6 @@ class CacheManagerTest extends KernelTestCase
 
         $result = $cache->processYamlConfig(
             $configuration,
-            'metas',
             $path
         );
 
@@ -149,17 +148,6 @@ class CacheManagerTest extends KernelTestCase
 
         $this->assertEquals('interface', $object->getName());
         $this->assertEquals('interface', $object->getPackage());
-    }
-
-    public function testMockHttpClient()
-    {
-        $container = $this->getContainer();
-        $cacheManager = $container->get('routeros.util.cache_manager');
-
-        $result = $cacheManager->getHtmlPage('https://wiki.mikrotik.com/wiki/Manual:Interface');
-        $expected = file_get_contents(__DIR__.'/../Fixtures/pages/interface.html');
-
-        $this->assertSame($expected, $result);
     }
 
     private function clearCache()

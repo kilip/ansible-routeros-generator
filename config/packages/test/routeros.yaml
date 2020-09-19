@@ -1,3 +1,7 @@
 routeros:
+  #@TODO: move to tests/Fixtures/etc dir when stable
+  config_dir: "%kernel.project_dir%/etc"
+  #@TODO: move to tests/Fixtures/config/compiled when stable
+  compiled_dir: "%kernel.project_dir%/config/compiled"
   ansible:
-    target_dir: "%kernel.cache_dir%/routeros/compiled-templates/ansible"
+    target_dir: "%kernel.cache_dir%/routeros/compiled-templates"

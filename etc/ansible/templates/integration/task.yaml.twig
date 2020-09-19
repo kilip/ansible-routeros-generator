@@ -1,0 +1,36 @@
+{% include "@ansible/header.txt.twig" %}
+---
+
+- include_tasks: pre_tasks.yml
+
+- name: set result commands facts
+  set_fact:
+    commands: [
+{{ ("'" ~ example.commands|join("\',\n\'")  ~ "'")|spacing(3)|raw }}
+    ]
+
+- name: {{ example.name }}
+  register: result
+  {{ name|ansible_module_name(true) }}:
+{{ example.argument_spec|routeros_yaml_dump(2) }}
+
+{% verbatim %}
+- name: set diff commands
+  set_fact:
+    diff_commands: "{{ result.commands | difference(commands) }}"
+
+- assert:
+    that:
+      - result.changed == True
+      - diff_commands == []
+    fail_msg: "changed={{ result.changed }} commands={{ result.commands }}"
+{% endverbatim %}
+- name: "idempotence: {{ example.name }}"
+  register: result
+  {{ name|ansible_module_name(true) }}:
+{{ example.argument_spec|routeros_yaml_dump(2) }}
+
+- assert:
+    that:
+      - result.changed == False
+      - result.commands == []

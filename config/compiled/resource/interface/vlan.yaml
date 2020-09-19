@@ -18,6 +18,28 @@ properties:
     choice_type: null
     description: 'Address Resolution Protocol mode'
     original_name: arp
+    elements: null
+  comment:
+    name: comment
+    type: string
+    required: false
+    default: null
+    choice_type: null
+    description: 'Short note for vlan resource'
+    original_name: comment
+    elements: null
+  disabled:
+    name: disabled
+    type: string
+    required: false
+    default: 'no'
+    choices:
+      - 'yes'
+      - 'no'
+    choice_type: null
+    description: 'Set vlan resource disability'
+    original_name: disabled
+    elements: null
   interface:
     name: interface
     type: string
@@ -26,14 +48,16 @@ properties:
     choice_type: null
     description: 'Name of physical interface on top of which VLAN will work'
     original_name: interface
+    elements: null
   l2mtu:
     name: l2mtu
     type: integer
     required: false
     default: null
     choice_type: null
-    description: 'Layer2 MTU. For VLANS this value is not configurable. [ Read more&gt;&gt;](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
+    description: 'Layer2 MTU. For VLANS this value is not configurable. [Read more&gt;&gt;](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
     original_name: l2mtu
+    elements: null
   mtu:
     name: mtu
     type: integer
@@ -42,6 +66,7 @@ properties:
     choice_type: null
     description: 'Layer3 Maximum transmission unit'
     original_name: mtu
+    elements: null
   name:
     name: name
     type: string
@@ -50,6 +75,7 @@ properties:
     choice_type: null
     description: 'Interface name'
     original_name: name
+    elements: null
   use_service_tag:
     name: use_service_tag
     type: string
@@ -61,6 +87,7 @@ properties:
     choice_type: null
     description: '802.1ad compatible Service Tag'
     original_name: use-service-tag
+    elements: null
   vlan_id:
     name: vlan_id
     type: integer
@@ -69,3 +96,4 @@ properties:
     choice_type: null
     description: 'Virtual LAN identifier or tag that is used to distinguish VLANs. Must be equal for all computers that belong to the same VLAN.'
     original_name: vlan-id
+    elements: null

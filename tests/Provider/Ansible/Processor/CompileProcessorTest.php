@@ -14,21 +14,27 @@ declare(strict_types=1);
 
 namespace Tests\RouterOS\Generator\Provider\Ansible\Processor;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use RouterOS\Generator\Contracts\CompilerInterface;
+use RouterOS\Generator\Provider\Ansible\Concerns\InteractsWithAnsibleStructure;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
 use RouterOS\Generator\Provider\Ansible\Processor\CompileProcessor;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Tests\RouterOS\Generator\Concerns\InteractsWithContainer;
 
 class CompileProcessorTest extends KernelTestCase
 {
-    use InteractsWithContainer;
+    use InteractsWithAnsibleStructure;
 
     private $moduleManager;
     private $compiler;
     private $cacheManager;
-    private $targetDir;
+
+    /**
+     * @var MockObject|Constant
+     */
+    private $constant;
     private $processor;
     private $dispatcher;
 
@@ -39,14 +45,14 @@ class CompileProcessorTest extends KernelTestCase
         $this->moduleManager = $this->createMock(ModuleManagerInterface::class);
         $this->compiler = $this->createMock(CompilerInterface::class);
         $this->cacheManager = $container->get('routeros.util.cache_manager');
-        $this->targetDir = $container->getParameter('ansible.target_dir');
+        $this->constant = $this->getService('ansible.constant');
 
         $this->processor = new CompileProcessor(
             $this->dispatcher,
             $this->moduleManager,
             $this->compiler,
             $this->cacheManager,
-            $this->targetDir
+            $this->constant
         );
     }
 
@@ -55,19 +61,13 @@ class CompileProcessorTest extends KernelTestCase
         $processor = $this->processor;
         $moduleManager = $this->moduleManager;
         $compiler = $this->compiler;
+        $constant = $this->constant;
         $lists = [
             'bridge' => [
                 'name' => 'bridge',
             ],
         ];
-        $config = [
-            'name' => 'bridge',
-            'package' => 'interface.bridge',
-            'documentation' => [],
-            'examples' => [],
-            'template' => '@ansible/module/module.py.twig',
-            'resource' => ['resource'],
-        ];
+        $config = $this->getModuleConfig('interface.bridge.bridge');
 
         $moduleManager->expects($this->once())
             ->method('getList')
@@ -79,25 +79,8 @@ class CompileProcessorTest extends KernelTestCase
             ->willReturn($config);
 
         $compiler
-            ->expects($this->exactly(3))
-            ->method('compile')
-            ->withConsecutive(
-                [
-                    $config['template'],
-                    $this->targetDir.'/plugins/modules/ros_bridge.py',
-                    $config,
-                ],
-                [
-                    '@ansible/resource.py.twig',
-                    $this->targetDir.'/plugins/module_utils/resources/interface/bridge/bridge.py',
-                    $config['resource'],
-                ],
-                [
-                    '@ansible/subset.py.twig',
-                    $this->targetDir.'/plugins/module_utils/resources/subset.py',
-                    ['bridge' => ['resource']],
-                ]
-            );
+            ->expects($this->exactly(16))
+            ->method('compile');
 
         $processor->process();
     }

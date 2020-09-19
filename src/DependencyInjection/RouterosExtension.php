@@ -14,11 +14,13 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\DependencyInjection;
 
+use RouterOS\Generator\Contracts\ProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\Finder\Finder;
 
 class RouterosExtension extends Extension implements PrependExtensionInterface
 {
@@ -29,21 +31,31 @@ class RouterosExtension extends Extension implements PrependExtensionInterface
 
     public function load(array $configs, ContainerBuilder $container)
     {
+        $environment = $container->getParameter('kernel.environment');
         $loader = new XmlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
         );
+
         $loader->load('services.xml');
-        $loader->load('ansible.xml');
+        if ('test' !== $environment) {
+            $loader->load('build.xml');
+        }
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('routeros.config_dir', $config['config_dir']);
         $this->configureParameters($container, 'routeros', $config);
-        $this->configureParameters($container, 'ansible', $config['ansible']);
 
         $this->configureMeta($container);
-        $this->configureAnsible($container);
+
+        $providers = static::loadProviders();
+        foreach ($providers as $provider) {
+            $configKey = $provider->getConfigKey();
+            $this->configureParameters($container, $configKey, $config[$configKey]);
+            $provider->load($container, $config[$configKey]);
+        }
     }
 
     private function configureParameters(ContainerBuilder $container, $root, $config)
@@ -76,18 +88,27 @@ class RouterosExtension extends Extension implements PrependExtensionInterface
         );
     }
 
-    private function configureAnsible(ContainerBuilder $container)
+    /**
+     * @return ProviderInterface[]
+     */
+    public static function loadProviders(): array
     {
-        $configDir = $container->getParameter('routeros.config_dir');
-        $compiledDir = $container->getParameter('routeros.compiled_dir');
+        $namespace = 'RouterOS\\Generator\\Provider';
+        $providersPaths = realpath(__DIR__.'/../Provider');
+        $providers = [];
 
-        $container->setParameter(
-            'ansible.compiled_dir',
-            "{$compiledDir}/ansible"
-        );
-        $container->setParameter(
-            'ansible.config_dir',
-            "{$configDir}/ansible/modules"
-        );
+        $finder = Finder::create()
+            ->in($providersPaths)
+            ->name('*Provider.php');
+
+        /** @var \Symfony\Component\Finder\SplFileInfo $file */
+        foreach ($finder->files() as $file) {
+            $relativePath = $file->getRelativePath();
+            $className = $file->getBasename('.php');
+            $className = "{$namespace}\\{$relativePath}\\{$className}";
+            $providers[] = new $className();
+        }
+
+        return $providers;
     }
 }

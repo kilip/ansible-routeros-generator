@@ -1,0 +1,13 @@
+asserts:
+{% for index,fixture in facts.fixtures %}
+{% for name,value in fixture.values %}
+{% if facts.type == "config" %}
+  - 'self.assertEqual(result[{{ index }}]["{{ name }}"], {{ value|convert(facts.name, name, true)|raw }})'
+{% else %}
+  - 'self.assertEqual(result["{{ name }}"], {{ value|convert(facts.name, name, true)|raw }})'
+{% endif %}
+{% endfor %}
+{% endfor %}
+resource: {{ facts.name }}
+fixtures: |
+{{ facts.fixture_contents|routeros_prefix("  ")|raw }}

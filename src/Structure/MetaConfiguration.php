@@ -14,62 +14,86 @@ declare(strict_types=1);
 
 namespace RouterOS\Generator\Structure;
 
-use Symfony\Component\Config\Definition\Builder\NodeBuilder;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 class MetaConfiguration implements ConfigurationInterface
 {
-    use ResourcePropertiesConfigurationTrait;
-
     public function getConfigTreeBuilder()
     {
-        $tree = new TreeBuilder('meta');
+        $tree = new TreeBuilder('metas');
 
-        $root = $tree->getRootNode()->children();
-
-        $root = $root
-            ->arrayNode('metas')
-                ->useAttributeAsKey('name')
-                ->arrayPrototype()
-                    ->children(); // start array proto typing
-
-        $root = $this->configureGeneral($root);
-        $root = $this->configurePropertiesNode($root, 'properties_override');
-
-        $root
-                    ->end() // end array prototyping
+        $tree->getRootNode()
+            ->useAttributeAsKey('name')
+            ->arrayPrototype()
+                ->children()
+                    ->scalarNode('name')->end()
+                    ->scalarNode('package')->end()
+                    ->scalarNode('command')->end()
+                    ->scalarNode('type')->end()
+                    ->arrayNode('keys')
+                        ->scalarPrototype()->end()
+                    ->end()
+                    ->arrayNode('generator')
+                        ->children()
+                            ->scalarNode('url')->end()
+                            ->arrayNode('table_index')
+                                ->beforeNormalization()
+                                    ->castToArray()
+                                ->end()
+                                ->scalarPrototype()->end()
+                            ->end()
+                            ->arrayNode('ignores')
+                                ->scalarPrototype()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->append($this->configurePropertiesNode('properties_override'))
                 ->end()
             ->end();
 
         return $tree;
     }
 
-    private function configureGeneral(NodeBuilder $node)
+    /**
+     * @param string $nodeName
+     *
+     * @return ArrayNodeDefinition
+     */
+    public function configurePropertiesNode(string $nodeName)
     {
-        $node
-            ->scalarNode('name')->end()
-            ->scalarNode('package')->end()
-            ->scalarNode('command')->end()
-            ->scalarNode('type')->end()
-            ->arrayNode('keys')
-                ->scalarPrototype()->end()
-            ->end()
-            ->arrayNode('generator')
+        $validTypes = ResourceProperty::getValidTypes();
+        $validOptions = ResourceProperty::getValidOptions();
+
+        $treeBuilder = new ArrayNodeDefinition($nodeName);
+        $treeBuilder
+            ->useAttributeAsKey('name')
+            ->arrayPrototype()
                 ->children()
-                    ->scalarNode('url')->end()
-                    ->arrayNode('table_index')
-                        ->beforeNormalization()
-                            ->castToArray()
-                        ->end()
+                    ->scalarNode('name')->end()
+                    ->scalarNode('original_name')->end()
+                    ->enumNode('type')
+                        ->values($validTypes)
+                    ->end()
+                    ->enumNode('elements')
+                        ->values($validTypes)
+                    ->end()
+                    ->booleanNode('required')->end()
+                    ->variableNode('default')->end()
+                    ->arrayNode('choices')
                         ->scalarPrototype()->end()
                     ->end()
-                    ->arrayNode('ignores')
-                        ->scalarPrototype()->end()
+                    ->scalarNode('choice_type')->end()
+                    ->scalarNode('description')->end()
+                    ->arrayNode('options')
+                        ->enumPrototype()
+                            ->values($validOptions)
+                        ->end()
                     ->end()
                 ->end()
             ->end();
 
-        return $node;
+        return $treeBuilder;
     }
 }

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services
+        https://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="ansible.configuration.module" class="RouterOS\Generator\Provider\Ansible\Structure\ModuleStructureConfiguration"/>
+
+        <service id="ansible.manager.module" class="RouterOS\Generator\Provider\Ansible\Structure\ModuleManager">
+            <argument type="service" id="routeros.util.cache_manager"/>
+            <argument>%ansible.compiled_dir%</argument>
+        </service>
+
+        <service id="ansible.twig.ansible" class="RouterOS\Generator\Provider\Ansible\Twig\AnsibleExtension">
+            <tag name="twig.extension"/>
+        </service>
+
+        <service
+                id="ansible.constant"
+                class="RouterOS\Generator\Provider\Ansible\Constant"
+                public="true"
+        >
+            <argument>%ansible.module_prefix%</argument>
+            <argument>%ansible.module_full_prefix%</argument>
+            <argument>%ansible.target_dir%</argument>
+            <argument>%ansible.compiled_dir%</argument>
+        </service>
+
+        <service
+                id="ansible.command.ansible_test"
+                class="RouterOS\Generator\Provider\Ansible\Command\AnsibleTestCommand"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.listener.process"/>
+            <tag name="console.command"/>
+        </service>
+    </services>
+</container>

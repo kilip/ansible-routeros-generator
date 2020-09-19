@@ -2,14 +2,14 @@
 # {{ example.title }}
 #
 # before state:
-# [admin@MikroTik] > {{ export_command }} 
+# [admin@MikroTik] > {{ export_command }}
 {{ example.before|routeros_prefix("# ")|raw }}
 - name: {{ example.name }}
   {{ module_name }}:
 {{ example.argument_spec|routeros_yaml_dump(2)|raw }}
 #
 # after state:
-# [admin@MikroTik] > {{ export_command }} 
+# [admin@MikroTik] > {{ export_command }}
 {{ example.after|routeros_prefix("# ")|raw }}
 #
 {% endfor %}

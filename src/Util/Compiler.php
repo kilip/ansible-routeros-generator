@@ -47,12 +47,19 @@ class Compiler implements CompilerInterface
         }
 
         $output = $twig->render($template, $context);
+        $output = strtr($output, [
+            '\\/' => '/',
+            "\_" => '/',
+            "\*" => '',
+        ]);
+        //$output = preg_replace("#[ \t]+$#", "", $output);
+
         file_put_contents($target, $output, LOCK_EX);
     }
 
-    public function compileYaml(array $config, string $target): void
+    public function compileYaml(array $config, string $target, $deep = 7): void
     {
-        $output = Yaml::dump($config, 6, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
+        $output = Yaml::dump($config, $deep, 2, Yaml::DUMP_MULTI_LINE_LITERAL_BLOCK);
 
         $output = Text::fixYamlDump($output);
         $output = str_replace($this->kernelProjectDir.\DIRECTORY_SEPARATOR, '', $output);

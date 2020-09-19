@@ -46,21 +46,29 @@ class PropertyParser
         $rosName = $this->parseName($info);
         $name = Text::normalizeName($rosName);
 
-        $property = $resource->getProperty($name, true);
+        if ('3gpp' == $name) {
+            $name = 'three_gpp';
+        }
 
+        $property = $resource->getProperty($name, true);
+        //$description = Text::normalizeText($description);
         $property->setName($name);
-        $property->setDescription($description);
         $property->setOriginalName($rosName);
 
         $this->parseChoices($property, $info);
         $this->parseType($property, $info);
         $this->parseDefault($property, $info);
 
+        if (null === $property->getDescription()) {
+            $property->setDescription($description);
+        }
+
         return $resource;
     }
 
     private function parseName($text)
     {
+        $text = strip_tags($text);
         preg_match("#\*\*(\S+)\*\*#im", $text, $matches);
         if (isset($matches[1])) {
             return trim($matches[1]);
