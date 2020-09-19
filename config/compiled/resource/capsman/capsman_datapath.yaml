@@ -24,6 +24,7 @@ properties:
       - `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the L(IP/ARP,https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. Therefore for communications to be successful, a valid static entry must already exist.
       
     original_name: arp
+    elements: null
   bridge:
     name: bridge
     type: string
@@ -34,6 +35,7 @@ properties:
       Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.
       
     original_name: bridge
+    elements: null
   bridge_cost:
     name: bridge_cost
     type: integer
@@ -44,6 +46,7 @@ properties:
       bridge port cost to use when adding as bridge port
       
     original_name: bridge-cost
+    elements: null
   bridge_horizon:
     name: bridge_horizon
     type: integer
@@ -54,6 +57,7 @@ properties:
       bridge horizon to use when adding as bridge port
       
     original_name: bridge-horizon
+    elements: null
   client_to_client_forwarding:
     name: client_to_client_forwarding
     type: string
@@ -67,6 +71,7 @@ properties:
       controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN
       
     original_name: client-to-client-forwarding
+    elements: null
   comment:
     name: comment
     type: string
@@ -75,6 +80,7 @@ properties:
     choice_type: null
     description: 'Short description of the datapath'
     original_name: comment
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -86,6 +92,7 @@ properties:
     choice_type: null
     description: 'Set capsman_datapath resource disability'
     original_name: disabled
+    elements: null
   interface_list:
     name: interface_list
     type: list
@@ -94,6 +101,7 @@ properties:
     choice_type: null
     description: 'interface list for this datapath'
     original_name: interface-list
+    elements: string
   l2mtu:
     name: l2mtu
     type: string
@@ -102,6 +110,7 @@ properties:
     choice_type: null
     description: 'set Layer2 MTU size'
     original_name: l2mtu
+    elements: null
   local_forwarding:
     name: local_forwarding
     type: string
@@ -116,6 +125,7 @@ properties:
       Note, if disabled, make sure that each CAP interface MAC Address that participates in the same broadcast domain is unique (including local MACs, like Bridge-MAC).
       
     original_name: local-forwarding
+    elements: null
   mtu:
     name: mtu
     type: string
@@ -124,6 +134,7 @@ properties:
     choice_type: null
     description: 'set MTU size'
     original_name: mtu
+    elements: null
   name:
     name: name
     type: string
@@ -132,6 +143,7 @@ properties:
     choice_type: null
     description: 'Name for datapath'
     original_name: name
+    elements: null
   openflow_switch:
     name: openflow_switch
     type: string
@@ -142,6 +154,7 @@ properties:
       OpenFlow switch port (when enabled) to add interface to
       
     original_name: openflow-switch
+    elements: null
   vlan_id:
     name: vlan_id
     type: integer
@@ -152,6 +165,7 @@ properties:
       VLAN ID to assign to interface if vlan-mode enables use of VLAN tagging
       
     original_name: vlan-id
+    elements: null
   vlan_mode:
     name: vlan_mode
     type: string
@@ -165,3 +179,4 @@ properties:
       Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows the interface to only send out data tagged with given tag)
       
     original_name: vlan-mode
+    elements: null

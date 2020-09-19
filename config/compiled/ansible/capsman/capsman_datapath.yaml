@@ -1,5 +1,6 @@
 name: capsman_datapath
 package: capsman
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_capsman_datapath
 export_command: '/caps-man datapath export'
@@ -13,6 +14,7 @@ documentation:
     - 'This modules manages CAPsMan DataPath Configuration on Mikrotik RouterOS network devices'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,6 +25,7 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of capsman_datapath options'
       suboptions:
         arp:
           type: str
@@ -37,29 +40,24 @@ documentation:
             - `disabled` - the interface will not use ARP
             - `enabled` - the interface will use ARP
             - `proxy-arp` - the interface will use the ARP proxy feature
-            - `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the L(IP/ARP,https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. Therefore for communications to be successful, a valid static entry must already exist.
-            
+            - `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as
+            static entries in the L(IP/ARP,https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. Therefore for communications to be successful, a valid
+            static entry must already exist.
         bridge:
           type: str
-          description: |
-            Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.
-            
+          description: 'Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.'
         bridge_cost:
           type: int
-          description: |
-            bridge port cost to use when adding as bridge port
-            
+          description: 'bridge port cost to use when adding as bridge port'
         bridge_horizon:
           type: int
-          description: |
-            bridge horizon to use when adding as bridge port
-            
+          description: 'bridge horizon to use when adding as bridge port'
         client_to_client_forwarding:
           type: bool
           default: 'False'
           description: |
-            controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN
-            
+            controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this
+            function is performed by CAP, otherwise it is performed by CAPsMAN
         comment:
           type: str
           description: 'Short description of the datapath'
@@ -69,6 +67,7 @@ documentation:
           description: 'Set capsman_datapath resource disability'
         interface_list:
           type: list
+          elements: str
           description: 'interface list for this datapath'
         l2mtu:
           type: str
@@ -77,9 +76,10 @@ documentation:
           type: bool
           default: 'False'
           description: |
-            Controls forwarding mode. If disabled, all L2 and L3 data will be forwarded to CAPsMAN, and further forwarding decisions will be made only then.
-            Note, if disabled, make sure that each CAP interface MAC Address that participates in the same broadcast domain is unique (including local MACs, like Bridge-MAC).
-            
+            Controls forwarding mode. If disabled, all L2 and L3 data will be forwarded to CAPsMAN, and further forwarding decisions will be made only
+            then.
+            Note, if disabled, make sure that each CAP interface MAC Address that participates in the same broadcast domain is unique (including local
+            MACs, like Bridge-MAC).
         mtu:
           type: str
           description: 'set MTU size'
@@ -89,22 +89,18 @@ documentation:
           description: 'Name for datapath'
         openflow_switch:
           type: str
-          description: |
-            OpenFlow switch port (when enabled) to add interface to
-            
+          description: 'OpenFlow switch port (when enabled) to add interface to'
         vlan_id:
           type: int
-          description: |
-            VLAN ID to assign to interface if vlan-mode enables use of VLAN tagging
-            
+          description: 'VLAN ID to assign to interface if vlan-mode enables use of VLAN tagging'
         vlan_mode:
           type: str
           choices:
             - use-service-tag
             - use-tag
           description: |
-            Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows the interface to only send out data tagged with given tag)
-            
+            Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows
+            the interface to only send out data tagged with given tag)
 examples:
   - title: 'Using Merged'
     name: 'Merge with device configuration'
@@ -137,7 +133,7 @@ resource:
   keys:
     - name
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -157,41 +153,57 @@ resource:
             - proxy-arp
             - reply-only
           default: enabled
+          description: '(need to be defined later)'
         bridge:
           type: str
+          description: '(need to be defined later)'
         bridge_cost:
           type: int
+          description: '(need to be defined later)'
         bridge_horizon:
           type: int
+          description: '(need to be defined later)'
         client_to_client_forwarding:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         comment:
           type: str
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         interface_list:
           type: list
+          elements: str
+          description: '(need to be defined later)'
         l2mtu:
           type: str
+          description: '(need to be defined later)'
         local_forwarding:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         mtu:
           type: str
+          description: '(need to be defined later)'
         name:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         openflow_switch:
           type: str
+          description: '(need to be defined later)'
         vlan_id:
           type: int
+          description: '(need to be defined later)'
         vlan_mode:
           type: str
           choices:
             - use-service-tag
             - use-tag
+          description: '(need to be defined later)'
 tests:
   facts:
     name: capsman_datapath
@@ -207,6 +219,8 @@ tests:
         values:
           name: test
   unit:
+    name: capsman_datapath
+    package: capsman
     module_name: ros_capsman_datapath
     fixture_contents: |
       # RouterOS Output

@@ -10,14 +10,19 @@ properties_override:
     type: string
   interfaces:
     type: list
+    elements: string
   discovery_interfaces:
     type: list
+    elements: string
   caps_man_addresses:
     type: list
+    elements: string
   caps_man_names:
     type: list
+    elements: string
   caps_man_certificate_common_names:
     type: list
+    elements: string
   static_virtual:
     type: string
     choices:

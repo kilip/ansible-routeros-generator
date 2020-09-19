@@ -63,6 +63,9 @@ class MetaConfiguration implements ConfigurationInterface
      */
     public function configurePropertiesNode(string $nodeName)
     {
+        $validTypes = ResourceProperty::getValidTypes();
+        $validOptions = ResourceProperty::getValidOptions();
+
         $treeBuilder = new ArrayNodeDefinition($nodeName);
         $treeBuilder
             ->useAttributeAsKey('name')
@@ -70,24 +73,23 @@ class MetaConfiguration implements ConfigurationInterface
                 ->children()
                     ->scalarNode('name')->end()
                     ->scalarNode('original_name')->end()
-                    ->scalarNode('type')->end()
-                    ->scalarNode('elements')->end()
-                    ->booleanNode('required')->end()
-                    ->scalarNode('default')
-                        ->beforeNormalization()
-                            ->ifArray()
-                            ->then(function ($v) {
-                                return serialize($v);
-                            })
-                        ->end()
+                    ->enumNode('type')
+                        ->values($validTypes)
                     ->end()
+                    ->enumNode('elements')
+                        ->values($validTypes)
+                    ->end()
+                    ->booleanNode('required')->end()
+                    ->variableNode('default')->end()
                     ->arrayNode('choices')
                         ->scalarPrototype()->end()
                     ->end()
                     ->scalarNode('choice_type')->end()
                     ->scalarNode('description')->end()
                     ->arrayNode('options')
-                        ->scalarPrototype()->end()
+                        ->enumPrototype()
+                            ->values($validOptions)
+                        ->end()
                     ->end()
                 ->end()
             ->end();

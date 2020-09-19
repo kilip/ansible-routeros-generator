@@ -1,5 +1,6 @@
 name: capsman_channel
 package: capsman
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_capsman_channel
 export_command: '/caps-man channel export'
@@ -13,6 +14,7 @@ documentation:
     - 'This modules manages CAPsMan Channels configuration on Mikrotik RouterOS network devices'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,6 +25,7 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of capsman_channel options'
       suboptions:
         band:
           type: str
@@ -64,10 +67,14 @@ documentation:
         save_selected:
           type: bool
           default: 'True'
-          description: 'Saves selected channel for the CAP Radio - will select this channel after the CAP reconnects to CAPsMAN and use it till the channel Re-optimize is done for this CAP.'
+          description: |
+            Saves selected channel for the CAP Radio - will select this channel after the CAP reconnects to CAPsMAN and use it till the channel
+            Re-optimize is done for this CAP.
         tx_power:
           type: int
-          description: 'TX Power for CAP interface (for the whole interface not for individual chains) in dBm. It is not possible to set higher than allowed by country regulations or interface. By default max allowed by country or interface is used.'
+          description: |
+            TX Power for CAP interface (for the whole interface not for individual chains) in dBm. It is not possible to set higher than allowed by
+            country regulations or interface. By default max allowed by country or interface is used.
         width:
           type: str
           description: 'Sets Channel Width in MHz. (E.g. 20, 40)'
@@ -101,7 +108,7 @@ resource:
   keys:
     - name
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -124,11 +131,14 @@ resource:
             - 5ghz-a
             - 5ghz-a/n
             - 5ghz-onlyn
+          description: '(need to be defined later)'
         comment:
           type: str
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         extension_channel:
           type: str
           choices:
@@ -139,18 +149,24 @@ resource:
             - eCee
             - eeCe
             - eeeC
+          description: '(need to be defined later)'
         frequency:
           type: int
+          description: '(need to be defined later)'
         name:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         save_selected:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         tx_power:
           type: int
+          description: '(need to be defined later)'
         width:
           type: str
+          description: '(need to be defined later)'
 tests:
   facts:
     name: capsman_channel
@@ -166,6 +182,8 @@ tests:
         values:
           name: test
   unit:
+    name: capsman_channel
+    package: capsman
     module_name: ros_capsman_channel
     fixture_contents: |
       # RouterOS Output

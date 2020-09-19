@@ -41,8 +41,8 @@ class Filesystem
         $this->ensureDirExists(\dirname($file));
         if (!is_file($file)) {
             touch($file);
-            chmod($file, 0775);
         }
+        chmod($file, 0666);
 
         return $this;
     }

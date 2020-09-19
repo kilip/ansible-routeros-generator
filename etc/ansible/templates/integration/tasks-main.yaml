@@ -1,0 +1,5 @@
+{% include "@ansible/header.txt.twig" %}
+---
+- include: cli.yaml
+  tags:
+    - network_cli

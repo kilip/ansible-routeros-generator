@@ -19,7 +19,7 @@
         <service id="routeros.scraper.page_cache" class="Symfony\Component\Cache\Adapter\FilesystemAdapter">
             <argument>%routeros.scraper.page_cache_namespace%</argument>
             <argument>%routeros.scraper.page_cache_lifetime%</argument>
-            <argument>%routeros.cache_dir%</argument>
+            <argument>%kernel.project_dir%/var/cache/routeros</argument>
         </service>
 
         <service id="routeros.util.cache_manager" class="RouterOS\Generator\Util\CacheManager" public="true">

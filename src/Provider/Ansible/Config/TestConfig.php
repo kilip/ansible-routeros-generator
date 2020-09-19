@@ -84,6 +84,8 @@ class TestConfig implements EventSubscriberInterface
 
         return [
             // @TODO: use ansible module prefix
+            'name' => $module->getName(),
+            'package' => $module->getPackage(),
             'module_name' => 'ros_'.$module->getName(),
             'fixture_contents' => $fixtureContents,
             'tests' => $tests,

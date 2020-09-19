@@ -16,6 +16,9 @@ namespace RouterOS\Generator\Provider\Ansible;
 
 class Constant
 {
+    public const TEST_UNITS = 'ansible-test.unit';
+    public const TEST_FACTS = 'ansible-test.facts';
+
     /**
      * @var string
      */
@@ -93,12 +96,36 @@ class Constant
         $this->modulesDir = "{$targetDir}/plugins/modules";
         $this->resourcesDir = "{$targetDir}/plugins/module_utils/resources";
         $this->moduleTestDir = "{$targetDir}/tests/unit/modules/generator/modules";
-        $this->moduleTestFixtureDir = "{$targetDir}/{$this->moduleTestDir}/fixtures";
+        $this->moduleTestFixtureDir = "{$this->moduleTestDir}/fixtures";
         $this->moduleTestFactsDir = "{$targetDir}/tests/unit/modules/generator/facts";
         $this->moduleTestFactsFixtureDir = "{$this->moduleTestFactsDir}/fixtures";
         $this->moduleIntegrationDir = "{$targetDir}/tests/integration/targets";
         $this->venvDir = "{$targetDir}/.venv";
         $this->lockDir = "{$this->venvDir}/routeros";
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompiledDir(): string
+    {
+        return $this->compiledDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVenvDir(): string
+    {
+        return $this->venvDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLockDir(): string
+    {
+        return $this->lockDir;
     }
 
     /**

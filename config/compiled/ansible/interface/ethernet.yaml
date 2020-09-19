@@ -1,5 +1,6 @@
 name: ethernet
 package: interface
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_ethernet
 export_command: '/interface ethernet export'
@@ -13,6 +14,7 @@ documentation:
     - 'This module manages the ethernet configuration of Mikrotik RouterOS network devices.'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,9 +25,11 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of ethernet options'
       suboptions:
         advertise:
           type: list
+          elements: str
           choices:
             - 10000M-full
             - 1000M-full
@@ -36,7 +40,9 @@ documentation:
             - 10M-half
             - 2500M-full
             - 5000M-full
-          description: 'Advertised speed and duplex modes for Ethernet interfaces over twisted pair, only applies when <var>auto-negotiation</var> is enabled. Advertising higher speeds than the actual interface supported speed will have no effect, multiple options are allowed.'
+          description: |
+            Advertised speed and duplex modes for Ethernet interfaces over twisted pair, only applies when auto-negotiation is enabled. Advertising
+            higher speeds than the actual interface supported speed will have no effect, multiple options are allowed.
         arp:
           type: str
           choices:
@@ -47,27 +53,26 @@ documentation:
             - reply-only
           default: enabled
           description: |
-            Address Resolution Protocol mode:
-            
-            - <var>disabled</var> - the interface will not use ARP
-            - <var>enabled</var> - the interface will use ARP
-            - <var>local-proxy-arp</var> - the router performs proxy ARP on the interface and sends replies to the same interface
-            - <var>proxy-arp</var> - the router performs proxy ARP on the interface and sends replies to other interfaces
-            - <var>reply-only</var> - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the [ ARP](https://wiki.mikrotik.com/wiki/Manual:IP/ARP "Manual:IP/ARP") table. No dynamic entries will be automatically stored in the ARP table. Therefore for communications to be successful, a valid static entry must already exist.
-            
+            Address Resolution Protocol mode: - disabled - the interface will not use ARP
+            - enabled - the interface will use ARP
+            - local-proxy-arp - the router performs proxy ARP on the interface and sends replies to the same interface
+            - proxy-arp - the router performs proxy ARP on the interface and sends replies to other interfaces
+            - reply-only - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as
+            static entries in the L(ARP, https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. No dynamic entries will be automatically stored in the ARP
+            table. Therefore for communications to be successful, a valid static entry must already exist.
         auto_negotiation:
           type: bool
           default: 'True'
           description: |
-            When enabled, the interface "advertises" its maximum capabilities to achieve the best connection possible.
-            
-            - **Note1:** Auto-negotiation should not be disabled on one end only, otherwise Ethernet Interfaces may not work properly.
+            When enabled, the interface "advertises" its maximum capabilities to achieve the best connection possible. - **Note1:** Auto-negotiation
+            should not be disabled on one end only, otherwise Ethernet Interfaces may not work properly.
             - **Note2:** Gigabit Ethernet and NBASE-T Ethernet links cannot work with auto-negotiation disabled.
-            
         bandwidth:
           type: int
           default: 0
-          description: 'Sets max rx/tx bandwidth in kbps that will be handled by an interface. TX limit is supported on all Atheros [ switch-chip](https://wiki.mikrotik.com/wiki/Manual:Switch_Chip_Features "Manual:Switch Chip Features") ports. RX limit is supported only on Atheros8327/QCA8337 switch-chip ports.'
+          description: |
+            Sets max rx/tx bandwidth in kbps that will be handled by an interface. TX limit is supported on all Atheros L(switch-chip,
+            https://wiki.mikrotik.com/wiki/Manual:Switch_Chip_Features) ports. RX limit is supported only on Atheros8327/QCA8337 switch-chip ports.
         cable_setting:
           type: str
           choices:
@@ -83,14 +88,20 @@ documentation:
             - copper
             - sfp
           default: auto
-          description: 'When <var>auto</var> mode is selected, the port that was first connected will establish the link. In case this link fails, the other port will try to establish a new link. If both ports are connected at the same time (e.g. after reboot), the priority will be the SFP/SFP+ port. When <var>sfp</var> mode is selected, the interface will only work through SFP/SFP+ cage. When <var>copper</var> mode is selected, the interface will only work through RJ45 Ethernet port.'
+          description: |
+            When auto mode is selected, the port that was first connected will establish the link. In case this link fails, the other port will try to
+            establish a new link. If both ports are connected at the same time (e.g. after reboot), the priority will be the SFP/SFP+ port. When sfp
+            mode is selected, the interface will only work through SFP/SFP+ cage. When copper mode is selected, the interface will only work through
+            RJ45 Ethernet port.
         comment:
           type: str
           description: 'Descriptive name of an item'
         disable_running_check:
           type: bool
           default: 'True'
-          description: 'Disable running check. If this value is set to ''no'', the router automatically detects whether the NIC is connected with a device in the network or not. Default value is ''yes'' because older NICs do not support it. (only applicable to x86)'
+          description: |
+            Disable running check. If this value is set to 'no', the router automatically detects whether the NIC is connected with a device in the
+            network or not. Default value is 'yes' because older NICs do not support it. (only applicable to x86)
         disabled:
           type: bool
           default: 'False'
@@ -98,20 +109,24 @@ documentation:
         full_duplex:
           type: bool
           default: 'True'
-          description: 'Defines whether the transmission of data appears in two directions simultaneously, only applies when <var>auto-negotiation</var> is disabled.'
+          description: 'Defines whether the transmission of data appears in two directions simultaneously, only applies when auto-negotiation is disabled.'
         l2mtu:
           type: int
-          description: 'Layer2 Maximum transmission unit. [ Read more&gt;&gt; ](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
+          description: 'Layer2 Maximum transmission unit. L(Read more&gt;&gt;, https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards)'
         mac_address:
           type: str
           description: 'Media Access Control number of an interface.'
         master_port:
           type: str
-          description: 'Outdated property, more details about this property can be found in the [ Master-port](https://wiki.mikrotik.com/wiki/Manual:Master-port "Manual:Master-port") page.'
+          description: |
+            Outdated property, more details about this property can be found in the L(Master-port, https://wiki.mikrotik.com/wiki/Manual:Master-port)
+            page.
         mdix_enable:
           type: bool
           default: 'True'
-          description: 'Whether the MDI/X auto cross over cable correction feature is enabled for the port (Hardware specific, e.g. ether1 on RB500 can be set to yes/no. Fixed to ''yes'' on other hardware.)'
+          description: |
+            Whether the MDI/X auto cross over cable correction feature is enabled for the port (Hardware specific, e.g. ether1 on RB500 can be set to
+            yes/no. Fixed to 'yes' on other hardware.)
         mtu:
           type: int
           default: 1500
@@ -127,10 +142,10 @@ documentation:
             - forced-on
             - 'off'
           default: 'off'
-          description: 'Poe Out settings. [ `Read more >>`](https://wiki.mikrotik.com/wiki/Manual:PoE-Out "Manual:PoE-Out")'
+          description: 'Poe Out settings. L(Read More, https://wiki.mikrotik.com/wiki/Manual:PoE-Out)'
         poe_priority:
           type: int
-          description: 'Poe Out settings. [ `Read more >>`](https://wiki.mikrotik.com/wiki/Manual:PoE-Out "Manual:PoE-Out")'
+          description: 'Poe Out settings. L(Read More, https://wiki.mikrotik.com/wiki/Manual:PoE-Out)'
         rx_flow_control:
           type: str
           choices:
@@ -138,7 +153,9 @@ documentation:
             - 'off'
             - 'on'
           default: 'off'
-          description: 'When set to on, the port will process received pause frames and suspend transmission if required. **auto** is the same as **on** except when auto-negotiation=yes flow control status is resolved by taking into account what other end advertises.'
+          description: |
+            When set to on, the port will process received pause frames and suspend transmission if required. **auto** is the same as **on** except when
+            auto-negotiation=yes flow control status is resolved by taking into account what other end advertises.
         speed:
           type: str
           choices:
@@ -146,7 +163,7 @@ documentation:
             - 10Gbps
             - 10Mbps
             - 1Gbps
-          description: 'Sets interface data transmission speed which takes effect only when <var>auto-negotiation</var> is disabled.'
+          description: 'Sets interface data transmission speed which takes effect only when auto-negotiation is disabled.'
         tx_flow_control:
           type: str
           choices:
@@ -154,7 +171,10 @@ documentation:
             - 'off'
             - 'on'
           default: 'off'
-          description: 'When set to on, the port will generate pause frames to the upstream device to temporarily stop the packet transmission. Pause frames are only generated when some routers output interface is congested and packets cannot be transmitted anymore. **auto** is the same as **on** except when auto-negotiation=yes flow control status is resolved by taking into account what other end advertises.'
+          description: |
+            When set to on, the port will generate pause frames to the upstream device to temporarily stop the packet transmission. Pause frames are
+            only generated when some routers output interface is congested and packets cannot be transmitted anymore. **auto** is the same as **on**
+            except when auto-negotiation=yes flow control status is resolved by taking into account what other end advertises.
 examples:
   - title: 'Using merged state'
     name: 'Merge configuration with device configuration'
@@ -169,14 +189,14 @@ examples:
       state: merged
     before: |
       /interface ethernet
-      set comment=ether1 name=ether1
+      set comment="ether1 comment" name=ether1
     after: |
       # RouterOS Output
       #
       /interface ethernet
-      add advertise=10M-full,100M-full,1000M-full comment=updated name=ether1
+      add advertise=10M-full,100M-full,1000M-full comment="updated comment" name=ether1
     commands:
-      - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment=updated'
+      - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"'
 resource:
   name: ethernet
   package: interface
@@ -185,7 +205,7 @@ resource:
   keys:
     - name
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -199,6 +219,7 @@ resource:
       options:
         advertise:
           type: list
+          elements: str
           choices:
             - 10000M-full
             - 1000M-full
@@ -209,6 +230,7 @@ resource:
             - 10M-half
             - 2500M-full
             - 5000M-full
+          description: '(need to be defined later)'
         arp:
           type: str
           choices:
@@ -218,12 +240,15 @@ resource:
             - proxy-arp
             - reply-only
           default: enabled
+          description: '(need to be defined later)'
         auto_negotiation:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         bandwidth:
           type: int
           default: 0
+          description: '(need to be defined later)'
         cable_setting:
           type: str
           choices:
@@ -231,6 +256,7 @@ resource:
             - short
             - standard
           default: default
+          description: '(need to be defined later)'
         combo_mode:
           type: str
           choices:
@@ -238,32 +264,43 @@ resource:
             - copper
             - sfp
           default: auto
+          description: '(need to be defined later)'
         comment:
           type: str
+          description: '(need to be defined later)'
         disable_running_check:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         full_duplex:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         l2mtu:
           type: int
+          description: '(need to be defined later)'
         mac_address:
           type: str
+          description: '(need to be defined later)'
         master_port:
           type: str
+          description: '(need to be defined later)'
         mdix_enable:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         mtu:
           type: int
           default: 1500
+          description: '(need to be defined later)'
         name:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         poe_out:
           type: str
           choices:
@@ -271,8 +308,10 @@ resource:
             - forced-on
             - 'off'
           default: 'off'
+          description: '(need to be defined later)'
         poe_priority:
           type: int
+          description: '(need to be defined later)'
         rx_flow_control:
           type: str
           choices:
@@ -280,6 +319,7 @@ resource:
             - 'off'
             - 'on'
           default: 'off'
+          description: '(need to be defined later)'
         speed:
           type: str
           choices:
@@ -287,6 +327,7 @@ resource:
             - 10Gbps
             - 10Mbps
             - 1Gbps
+          description: '(need to be defined later)'
         tx_flow_control:
           type: str
           choices:
@@ -294,6 +335,7 @@ resource:
             - 'off'
             - 'on'
           default: 'off'
+          description: '(need to be defined later)'
 tests:
   facts:
     name: ethernet
@@ -303,22 +345,24 @@ tests:
       # RouterOS Output
       #
       /interface ethernet
-      add comment=ether1 name=ether1
+      add comment="ether1 comment" name=ether1
     fixtures:
       - action: set
         values:
-          comment: ether1
+          comment: 'ether1 comment'
           name: ether1
   unit:
+    name: ethernet
+    package: interface
     module_name: ros_ethernet
     fixture_contents: |
       # RouterOS Output
       #
       /interface ethernet
-      add comment=ether1 name=ether1
+      add comment="ether1 comment" name=ether1
     tests:
       - commands:
-          - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment=updated'
+          - '/interface ethernet set [ find name=ether1 ] advertise=10M-full,100M-full,1000M-full comment="updated comment"'
         argument_spec:
           config:
             - { advertise: [10M-full, 100M-full, 1000M-full], comment: 'updated comment', name: ether1 }

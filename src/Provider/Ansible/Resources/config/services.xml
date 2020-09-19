@@ -26,5 +26,14 @@
             <argument>%ansible.target_dir%</argument>
             <argument>%ansible.compiled_dir%</argument>
         </service>
+
+        <service
+                id="ansible.command.ansible_test"
+                class="RouterOS\Generator\Provider\Ansible\Command\AnsibleTestCommand"
+        >
+            <argument type="service" id="event_dispatcher"/>
+            <argument type="service" id="routeros.listener.process"/>
+            <tag name="console.command"/>
+        </service>
     </services>
 </container>

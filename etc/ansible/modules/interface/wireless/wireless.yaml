@@ -14,7 +14,7 @@ fixtures:
   - action: set
     values:
       name: wlan1
-      comment: 'wlan1'
+      comment: 'wlan1 comment'
       security_profile: to-olympus
 examples:
   merged:
@@ -32,7 +32,7 @@ examples:
         values:
           name: wlan1
           ampdu_priorities: '0,1,2'
-          comment: 'updated'
+          comment: 'updated comment'
           security_profile: default
           supported_rates_ag: '6Mbps,24Mbps'
   replaced:
@@ -49,6 +49,6 @@ examples:
       - action: set
         values:
           name: wlan1
-          comment: 'new'
+          comment: 'new olympus'
           security_profile: new-olympus
           ssid: Olympus

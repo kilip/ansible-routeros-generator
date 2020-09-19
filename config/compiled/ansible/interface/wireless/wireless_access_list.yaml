@@ -1,5 +1,6 @@
 name: wireless_access_list
 package: interface.wireless
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_wireless_access_list
 export_command: '/interface wireless access-list export'
@@ -13,6 +14,7 @@ documentation:
     - 'This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,6 +25,7 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of wireless_access_list options'
       suboptions:
         ap_tx_limit:
           type: int
@@ -33,18 +36,13 @@ documentation:
           default: 'True'
           description: |2
              - *no* - Client association will always fail.
-            - *yes* - Use authentication procedure that is specified in the [ **security-profile**](#Security_Profiles) of the interface.
-            
+            - *yes* - Use authentication procedure that is specified in the L(**security-profile**, #Security_Profiles) of the interface.
         client_tx_limit:
           type: int
           default: 0
           description: |
-            Ask client to limit rate of data transmission. Value 0 means no limit.
-            
-            This is a proprietary extension that is supported by RouterOS clients.
-            
-            Value is in bits per second.
-            
+            Ask client to limit rate of data transmission. Value 0 means no limit. This is a proprietary extension that is supported by RouterOS
+            clients. Value is in bits per second.
         comment:
           type: str
           required: 'True'
@@ -52,25 +50,27 @@ documentation:
         disabled:
           type: bool
           default: 'False'
-          description: ''
+          description: '(need to be defined later)'
         forwarding:
           type: bool
           default: 'True'
           description: |2
              - *no* - Client cannot send frames to other station that are connected to same access point.
             - *yes* - Client can send frames to other stations on the same access point.
-            
         interface:
           type: str
           default: any
-          description: 'Rules with **interface**=*any* are used for any wireless interface and the **interface**=*all* defines [interface-list](https://wiki.mikrotik.com/wiki/Manual:Interface/List#Lists "Manual:Interface/List") “all” name. To make rule that applies only to one wireless interface, specify that interface as a value of this property.'
+          description: |
+            Rules with **interface**=*any* are used for any wireless interface and the **interface**=*all* defines L(interface-list,
+            https://wiki.mikrotik.com/wiki/Manual:Interface/List#Lists) "all" name. To make rule that applies only to one wireless interface, specify
+            that interface as a value of this property.
         mac_address:
           type: str
           default: '00:00:00:00:00:00'
           description: 'Rule matches client with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
         management_protection_key:
           type: str
-          description: ''
+          description: '(need to be defined later)'
         private_algo:
           type: str
           choices:
@@ -90,19 +90,13 @@ documentation:
           type: str
           default: '-120..120'
           description: |
-            Rule matches if signal strength of the station is within the range.
-            
-            <dl><dd>If signal strength of the station will go out of the range that is specified in the rule, access point will disconnect that station.</dd></dl>
-            
+            Rule matches if signal strength of the station is within the range. If signal strength of the station will go out of the range that is
+            specified in the rule, access point will disconnect that station.
         time:
           type: str
           description: |
-            Rule will match only during specified time.
-            
-            Station will be disconnected after specified time ends. Both start and end time is expressed as time since midnight, 00:00.
-            
-            Rule will match only during specified days of the week.
-            
+            Rule will match only during specified time. Station will be disconnected after specified time ends. Both start and end time is expressed as
+            time since midnight, 00:00. Rule will match only during specified days of the week.
 examples:
   - title: 'Using merge state'
     name: 'Merge with device configuration'
@@ -134,7 +128,7 @@ resource:
   keys:
     - comment
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -149,29 +143,38 @@ resource:
         ap_tx_limit:
           type: int
           default: 0
+          description: '(need to be defined later)'
         authentication:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         client_tx_limit:
           type: int
           default: 0
+          description: '(need to be defined later)'
         comment:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         forwarding:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         interface:
           type: str
           default: any
+          description: '(need to be defined later)'
         mac_address:
           type: str
           default: '00:00:00:00:00:00'
+          description: '(need to be defined later)'
         management_protection_key:
           type: str
+          description: '(need to be defined later)'
         private_algo:
           type: str
           choices:
@@ -180,15 +183,20 @@ resource:
             - aes-ccm
             - none
             - tkip
+          description: '(need to be defined later)'
         private_key:
           type: str
+          description: '(need to be defined later)'
         private_pre_shared_key:
           type: str
+          description: '(need to be defined later)'
         signal_range:
           type: str
           default: '-120..120'
+          description: '(need to be defined later)'
         time:
           type: str
+          description: '(need to be defined later)'
 tests:
   facts:
     name: wireless_access_list
@@ -205,6 +213,8 @@ tests:
           comment: existing
           signal_range: '-79..120'
   unit:
+    name: wireless_access_list
+    package: interface.wireless
     module_name: ros_wireless_access_list
     fixture_contents: |
       # RouterOS Output

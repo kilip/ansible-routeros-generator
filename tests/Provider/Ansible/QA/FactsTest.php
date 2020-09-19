@@ -17,12 +17,13 @@ namespace Tests\RouterOS\Generator\Provider\Ansible\QA;
 use PHPUnit\Framework\MockObject\MockObject;
 use RouterOS\Generator\Concerns\EventSubscriberAssertions;
 use RouterOS\Generator\Concerns\InteractsWithContainer;
-use RouterOS\Generator\Event\BuildEvent;
-use RouterOS\Generator\Event\ProcessEvent;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\Contracts\ModuleManagerInterface;
+use RouterOS\Generator\Provider\Ansible\Event\AnsibleTestEvent;
 use RouterOS\Generator\Provider\Ansible\QA\Facts;
 use RouterOS\Generator\Util\ProcessHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Process\Process;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class FactsTest extends KernelTestCase
@@ -41,9 +42,9 @@ class FactsTest extends KernelTestCase
     private $moduleManager;
 
     /**
-     * @var string
+     * @var Constant
      */
-    private $targetDir;
+    private $constant;
 
     /**
      * @var string
@@ -64,42 +65,56 @@ class FactsTest extends KernelTestCase
     {
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->moduleManager = $this->createMock(ModuleManagerInterface::class);
-        $this->targetDir = sys_get_temp_dir().'/routeros-generator/test';
+        $this->constant = $this->getService('ansible.constant');
         $this->processHelper = $this->createMock(ProcessHelper::class);
         $this->subscriberEventClass = Facts::class;
 
         $this->sut = new Facts(
             $this->dispatcher,
             $this->moduleManager,
-            $this->targetDir,
+            $this->constant,
             $this->processHelper
         );
     }
 
     public function testSubscribedEvents()
     {
-        $this->assertSubscribedEvent(BuildEvent::TEST, 'onTest');
+        $this->assertSubscribedEvent(AnsibleTestEvent::ALL, 'onAnsibleTest');
     }
 
     public function testOnTest()
     {
-        $event = $this->createMock(BuildEvent::class);
+        $event = $this->createMock(AnsibleTestEvent::class);
+        $moduleManager = $this->moduleManager;
         $processHelper = $this->processHelper;
         $dispatcher = $this->dispatcher;
         $sut = $this->sut;
+        $list = ['bridge' => [], 'interface' => []];
+
+        $moduleManager->expects($this->once())
+            ->method('getList')
+            ->willReturn($list);
 
         $processHelper
             ->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($processHelper);
 
-        /*
-        $dispatcher
+        $processHelper
             ->expects($this->atLeastOnce())
-            ->method('dispatch')
-            ->with($this->isInstanceOf(ProcessEvent::class));
-        */
+            ->method('run')
+            ->willReturnOnConsecutiveCalls(
+                0,
+                1
+            );
 
-        $sut->onTest($event);
+        $process = new Process([]);
+
+        $processHelper
+            ->expects($this->once())
+            ->method('getProcess')
+            ->willReturn($process);
+
+        $sut->onAnsibleTest($event);
     }
 }

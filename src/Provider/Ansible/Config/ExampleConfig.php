@@ -80,13 +80,13 @@ class ExampleConfig implements EventSubscriberInterface
                 $cmd = [$command, $action];
                 ksort($config['values']);
                 if (
-                    !\in_array($action, ['add', 'remove'], true)
+                    !\in_array($action, ['add'], true)
                     && 'config' == $resource->getType()
                 ) {
-                    $cmd[] = $this->generateFindCommand($resource, $config['values']);
+                    $cmd[] = Text::generateFindCommand($resource, $config['values']);
                 }
                 foreach ($config['values'] as $name => $value) {
-                    if (!\in_array($name, $keys, true) || \in_array($action, ['add', 'remove'], true)) {
+                    if (!\in_array($name, $keys, true) || \in_array($action, ['add'], true)) {
                         $rosName = Text::getOriginalName($resource, $name);
                         $cmd[] = "{$rosName}=".Text::quoteRouterOSValue($value);
                     }
@@ -101,15 +101,5 @@ class ExampleConfig implements EventSubscriberInterface
 
     private function generateFindCommand(ResourceStructure $resource, $values)
     {
-        $keys = $resource->getKeys();
-        $cmds = [];
-        foreach ($values as $name => $value) {
-            if (\in_array($name, $keys, true)) {
-                $value = Text::quoteRouterOSValue($value);
-                $cmds[] = "{$name}={$value}";
-            }
-        }
-
-        return '[ find '.implode(' ', $cmds).' ]';
     }
 }

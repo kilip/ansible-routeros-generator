@@ -7,6 +7,7 @@ Unit Tests For ros_{{ facts.name }} module
 
 from ..facts_base import TestFactsBase
 
+
 class Test{{ facts.name|classify }}Facts(TestFactsBase):
     def setUp(self):
         self.fixture_file = "{{ facts.package }}.{{ facts.name }}.yaml"

@@ -150,17 +150,6 @@ class CacheManagerTest extends KernelTestCase
         $this->assertEquals('interface', $object->getPackage());
     }
 
-    public function testMockHttpClient()
-    {
-        $container = $this->getContainer();
-        $cacheManager = $container->get('routeros.util.cache_manager');
-
-        $result = $cacheManager->getHtmlPage('https://wiki.mikrotik.com/wiki/Manual:Interface');
-        $expected = file_get_contents(__DIR__.'/../Fixtures/pages/interface.html');
-
-        $this->assertSame($expected, $result);
-    }
-
     private function clearCache()
     {
         $finder = Finder::create()

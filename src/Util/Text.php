@@ -19,6 +19,68 @@ use RouterOS\Generator\Structure\ResourceStructure;
 
 class Text
 {
+    public static function normalizeText($text)
+    {
+        $patterns = [
+            // remove multi spaces
+            ['#(\s\s+)#', ' '],
+            ['#\((\s+)(.*)\)#', '(\\2)'],
+
+            // replace smart quotes
+            ['#(\“|\”)#', '"'],
+
+            // wrap text
+            ['#(.{1,140})(\s+|$\n?)|(.{1,140})#m', "\\1\\3\n"],
+
+            // fix blanks
+            ['#(\[|\()(\s+)#', '\\1'],
+
+            // fix [.*]
+            //['#\[(\n)?(.*)\]#m', "\n[\\2]"],
+
+            // fix breaking (.*)
+            //['#\((.*)(\n)(.*)\)#m', "(\\1\\3)"],
+
+            // remove trailling spaces
+            ['#[\s|\t]+$#m', ''],
+        ];
+
+        foreach ($patterns as $value) {
+            list($pattern, $replacement) = $value;
+            $text = preg_replace($pattern, $replacement, $text);
+        }
+
+        return $text;
+    }
+
+    public static function generateFindCommand(ResourceStructure $resource, $values)
+    {
+        $keys = $resource->getKeys();
+        $cmds = [];
+        foreach ($values as $name => $value) {
+            if (\in_array($name, $keys, true)) {
+                $value = self::quoteRouterOSValue($value);
+                $cmds[] = "{$name}={$value}";
+            }
+        }
+
+        return '[ find '.implode(' and ', $cmds).' ]';
+    }
+
+    public static function decorateMessage($message, array $contexts = [], $decorate = true)
+    {
+        $message = "<info>{$message}</info>";
+
+        foreach ($contexts as $index => $value) {
+            if ($decorate) {
+                $value = "<comment>{$value}</comment>";
+            }
+            $message = str_replace('{'.$index.'}', $value, $message);
+        }
+
+        return $message;
+    }
+
     public static function namespaceToPath($namespace)
     {
         return str_replace('.', '/', $namespace);
@@ -66,16 +128,10 @@ EOC;
                 $cmds = [$command, $action];
                 $vals = $value['values'];
                 if ('config' === $type && \in_array($action, ['set', 'remove'], true)) {
-                    $finds = [];
-                    foreach ($vals as $name => $val) {
-                        if (\in_array($name, $keys, true)) {
-                            $val = static::quoteRouterOSValue($val);
-                            $originalName = static::getOriginalName($resource, $name);
-                            $finds[] = "{$originalName}=$val";
-                            unset($vals[$name]);
-                        }
+                    $cmds[] = static::generateFindCommand($resource, $vals);
+                    foreach ($keys as $key) {
+                        unset($vals[$key]);
                     }
-                    $cmds[] = '[ find '.implode(' ', $finds).' ]';
                 }
                 foreach ($vals as $name => $val) {
                     $originalName = static::getOriginalName($resource, $name);
@@ -193,21 +249,19 @@ EOC;
 
         $parameters = [];
         foreach ($exp as $item) {
-            $regex = '#(\S+)\=(\S+|\"\"|\".+\")#';
+            $regex = '#(\S+)\=(".*?"|\S+)#';
             preg_match_all($regex, $item, $matches);
             $param = [];
             for ($i = 0; $i < \count($matches[0]); ++$i) {
                 $name = self::normalizeName($matches[1][$i]);
                 $value = $matches[2][$i];
+                $value = str_replace('"', '', $value);
                 $param[$name] = $value;
             }
             $parameters[] = [
                 'action' => $action,
                 'values' => $param,
             ];
-        }
-        if (false !== strpos($text, '/interface wireless cap')) {
-            //print_r($parameters);die();
         }
 
         return $parameters;

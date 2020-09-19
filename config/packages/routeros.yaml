@@ -5,7 +5,7 @@ twig:
 routeros:
   config_dir: "%kernel.project_dir%/etc"
   compiled_dir: "%kernel.project_dir%/config/compiled"
-  cache_dir: "%kernel.project_dir%/var/cache/routeros"
+  cache_dir: "%kernel.cache_dir%/routeros"
   ansible:
     default_author: "%env(resolve:AUTHOR)%"
     module_prefix: "ros_"

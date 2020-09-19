@@ -11,3 +11,11 @@ generator:
 properties_override:
   authentication_types:
     type: list
+    elements: string
+  interim_update:
+    type: string
+    options:
+      - ignore-default
+  supplicant_identity:
+    options:
+      - ignore-default

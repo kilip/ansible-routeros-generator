@@ -186,16 +186,15 @@ class CompileProcessor implements EventSubscriberInterface
         $compiler = $this->compiler;
         $constant = $this->constant;
         $moduleName = 'ros_'.$name;
-        $targetCli = "{$constant->getModuleIntegrationDir()}/{$moduleName}/tests/cli";
+        $targetDir = "{$constant->getModuleIntegrationDir()}/{$moduleName}";
+        $targetCli = "{$targetDir}/tests/cli";
 
-        if (isset($config['integration'])) {
+        if (isset($config['integration']) && isset($config['examples'])) {
             $integration = $config['integration'];
             $template = '@ansible/integration/pre_task.yaml.twig';
             $target = "{$targetCli}/pre_tasks.yml";
             $compiler->compile($template, $target, ['integration' => $integration]);
-        }
 
-        if (isset($config['examples'])) {
             $examples = $config['examples'];
             $template = '@ansible/integration/task.yaml.twig';
             foreach ($examples as $example) {
@@ -205,6 +204,20 @@ class CompileProcessor implements EventSubscriberInterface
                     'name' => $name,
                     'example' => $example,
                 ]);
+            }
+
+            $files = [
+                'defaults-main.yaml',
+                'meta-main.yaml',
+                'tasks-cli.yaml',
+                'tasks-main.yaml',
+            ];
+            foreach ($files as $file) {
+                $template = "@ansible/integration/{$file}";
+                $filePath = str_replace('-', '/', $file);
+                $target = "{$targetDir}/{$filePath}";
+
+                $compiler->compile($template, $target, []);
             }
         }
     }

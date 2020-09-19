@@ -17,6 +17,7 @@ namespace RouterOS\Generator\Provider\Ansible\QA;
 use RouterOS\Generator\Event\BuildEvent;
 use RouterOS\Generator\Event\ProcessEvent;
 use RouterOS\Generator\Exception\ProcessException;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Util\ProcessHelper;
 use RouterOS\Generator\Util\ProcessItem;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -24,11 +25,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class Prepare implements EventSubscriberInterface
 {
-    /**
-     * @var string
-     */
-    private $targetDir;
-
     /**
      * @var ProcessHelper
      */
@@ -42,24 +38,28 @@ class Prepare implements EventSubscriberInterface
      * @var EventDispatcherInterface
      */
     private $dispatcher;
+    /**
+     * @var Constant
+     */
+    private $constant;
 
     public function __construct(
         EventDispatcherInterface $dispatcher,
-        string $targetDir,
+        Constant $constant,
         ProcessHelper $processHelper = null
     ) {
         if (null === $processHelper) {
             $processHelper = new ProcessHelper();
         }
-        $this->targetDir = $targetDir;
         $this->processHelper = $processHelper;
         $this->dispatcher = $dispatcher;
+        $this->constant = $constant;
     }
 
     public static function getSubscribedEvents()
     {
         return [
-            BuildEvent::TEST_PREPARE => 'onPrepare',
+            BuildEvent::BUILD_POST => 'onPrepare',
         ];
     }
 
@@ -68,7 +68,7 @@ class Prepare implements EventSubscriberInterface
         $dispatcher = $this->dispatcher;
         $exceptions = [];
 
-        $event->log('Ansible Tests Preparation');
+        $event->log('Running Tox');
 
         $this->checkVirtualEnv();
         $this->checkRequirements();
@@ -98,7 +98,7 @@ class Prepare implements EventSubscriberInterface
     public function checkVirtualEnv()
     {
         $processHelper = $this->processHelper;
-        $targetDir = $this->targetDir;
+        $targetDir = $this->constant->getTargetDir();
         $venvDir = '.venv';
 
         if (!is_dir("{$targetDir}/{$venvDir}")) {
@@ -117,10 +117,12 @@ class Prepare implements EventSubscriberInterface
 
     public function checkRequirements()
     {
-        $targetDir = $this->targetDir;
-        $wheelLockFile = "{$targetDir}/.venv/.wheel.lck";
-        $requirementsLock = "{$targetDir}/.venv/.requirements.lck";
-        $testRequirementsLock = "{$targetDir}/.venv/.test-requirements.lck";
+        $lockDir = $this->constant->getLockDir();
+        $wheelLockFile = "{$lockDir}/.wheel.lck";
+        $requirementsLock = "{$lockDir}/.requirements.lck";
+        $testRequirementsLock = "{$lockDir}/.test-requirements.lck";
+
+        filesystem()->ensureDirExists($lockDir);
 
         if (!is_file($wheelLockFile)) {
             $this->addProcessItem(
@@ -180,13 +182,13 @@ class Prepare implements EventSubscriberInterface
 
     private function addProcessItem($cmds, $message, callable $afterProcess = null)
     {
-        $this->processItems[] = new ProcessItem($cmds, $this->targetDir, $message, $afterProcess);
+        $this->processItems[] = new ProcessItem($cmds, $this->constant->getTargetDir(), $message, $afterProcess);
     }
 
     private function runProcess(BuildEvent $event, ProcessItem $item)
     {
         $processHelper = $this->processHelper;
-        $processHelper->setDirectOutput(true);
+        $processHelper->setDirectOutput($item->isDirectOutput());
         $processHelper->create($item->getCommands(), $item->getWorkingDir());
         $exitCode = $processHelper->run();
         if (\is_callable($item->getAfterProcess())) {

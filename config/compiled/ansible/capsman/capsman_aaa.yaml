@@ -1,5 +1,6 @@
 name: capsman_aaa
 package: capsman
+type: setting
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_capsman_aaa
 export_command: '/caps-man aaa export'
@@ -11,10 +12,9 @@ documentation:
   short_description: 'CAPsMan AAA Configuration Module'
   description:
     - 'This modules manages CAPsMan AAA configuration on Mikrotik RouterOS network devices'
-  supports:
-    - export-verbose-mode
   options:
     state:
+      type: str
       choices:
         - present
         - reset
@@ -22,6 +22,7 @@ documentation:
       description: 'Set state for this module'
     config:
       type: dict
+      description: 'A dictionary of capsman_aaa options'
       suboptions:
         called_format:
           type: str
@@ -30,25 +31,37 @@ documentation:
             - 'mac:ssid'
             - ssid
           default: 'mac:ssid'
-          description: 'Format of how the "called-id" identifier will be passed to RADIUS. When configuring radius server clients, you can specify "called-id" in order to separate multiple entires.'
+          description: |
+            Format of how the "called-id" identifier will be passed to RADIUS. When configuring radius server clients, you can specify "called-id" in
+            order to separate multiple entires.
         interim_update:
           type: str
           default: disabled
-          description: 'When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies default update interval that can be overridden by the RADIUS server using the [ Acct-Interim-Interval](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication "Manual:Interface/Wireless") attribute.'
+          description: |
+            When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies
+            default update interval that can be overridden by the RADIUS server using the L(Acct-Interim-Interval,
+            https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication) attribute.
         mac_caching:
           type: str
           default: disabled
-          description: 'If this value is set to time interval, the Access Point will cache RADIUS MAC authentication responses for specified time, and will not contact RADIUS server if matching cache entry already exists. Value disabled will disable cache, Access Point will always contact RADIUS server.'
+          description: |
+            If this value is set to time interval, the Access Point will cache RADIUS MAC authentication responses for specified time, and will not
+            contact RADIUS server if matching cache entry already exists. Value disabled will disable cache, Access Point will always contact RADIUS
+            server.
         mac_format:
           type: str
           default: 'XX:XX:XX:XX:XX:XX'
-          description: 'Controls how MAC address of the client is encoded by Access Point in the User-Name attribute of the MAC authentication and MAC accounting RADIUS requests.'
+          description: |
+            Controls how MAC address of the client is encoded by Access Point in the User-Name attribute of the MAC authentication and MAC accounting
+            RADIUS requests.
         mac_mode:
           type: str
           choices:
             - as-username
             - as-username-and-password
-          description: 'By default Access Point uses an empty password, when sending Access-Request during MAC authentication. When this property is set to as-username-and-password, Access Point will use the same value for User-Password attribute as for the User-Name attribute.'
+          description: |
+            By default Access Point uses an empty password, when sending Access-Request during MAC authentication. When this property is set to
+            as-username-and-password, Access Point will use the same value for User-Password attribute as for the User-Name attribute.
 examples:
   - title: 'Using present state'
     name: 'Change configuration'
@@ -94,7 +107,7 @@ resource:
   supports:
     - export-verbose-mode
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - present
@@ -110,20 +123,25 @@ resource:
             - 'mac:ssid'
             - ssid
           default: 'mac:ssid'
+          description: '(need to be defined later)'
         interim_update:
           type: str
           default: disabled
+          description: '(need to be defined later)'
         mac_caching:
           type: str
           default: disabled
+          description: '(need to be defined later)'
         mac_format:
           type: str
           default: 'XX:XX:XX:XX:XX:XX'
+          description: '(need to be defined later)'
         mac_mode:
           type: str
           choices:
             - as-username
             - as-username-and-password
+          description: '(need to be defined later)'
 tests:
   facts:
     name: capsman_aaa
@@ -143,6 +161,8 @@ tests:
           mac_format: XX.XX.XX.XX.XX.XX
           mac_mode: as-username
   unit:
+    name: capsman_aaa
+    package: capsman
     module_name: ros_capsman_aaa
     fixture_contents: |
       # RouterOS Output

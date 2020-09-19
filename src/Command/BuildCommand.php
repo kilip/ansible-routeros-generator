@@ -51,6 +51,12 @@ class BuildCommand extends Command
             InputOption::VALUE_NONE,
             'Running Test Only'
         );
+        $this->addOption(
+            'build-only',
+            null,
+            InputOption::VALUE_NONE,
+            'Running Build Only'
+        );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -58,6 +64,7 @@ class BuildCommand extends Command
         $dispatcher = $this->dispatcher;
         $processListener = $this->processListener;
         $testOnly = $input->getOption('test-only');
+        $buildOnly = $input->getOption('build-only');
         $event = new BuildEvent($output);
 
         $processListener->setOutput($output);
@@ -70,11 +77,8 @@ class BuildCommand extends Command
 
             $dispatcher->dispatch($event, BuildEvent::PREPARE);
             $dispatcher->dispatch($event, BuildEvent::BUILD);
+            $dispatcher->dispatch($event, BuildEvent::BUILD_POST);
         }
-
-        // test
-        $dispatcher->dispatch($event, BuildEvent::TEST_PREPARE);
-        $dispatcher->dispatch($event, BuildEvent::TEST);
 
         return Command::SUCCESS;
     }

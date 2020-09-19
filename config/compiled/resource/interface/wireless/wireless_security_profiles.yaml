@@ -18,6 +18,7 @@ properties:
     choice_type: null
     description: 'Set of supported authentication types, multiple values can be selected. Access Point will advertise supported authentication types, and client will connect to Access Point only if it supports any of the advertised authentication types.'
     original_name: authentication-types
+    elements: string
   comment:
     name: comment
     type: string
@@ -26,6 +27,7 @@ properties:
     choice_type: null
     description: 'Short note for wireless_security_profiles resource'
     original_name: comment
+    elements: null
   disable_pmkid:
     name: disable_pmkid
     type: string
@@ -38,11 +40,12 @@ properties:
     description: |
       Whether to include PMKID into the EAPOL frame sent out by the Access Point. Disabling PMKID can cause compatibility issues with devices that use the PMKID to connect to an Access Point.
       
-      - <var>yes</var> - removes PMKID from EAPOL frames (improves security, reduces compatibility).
-      - <var>no</var> - includes PMKID into EAPOL frames (reduces security, improves compatibility).
+      - yes - removes PMKID from EAPOL frames (improves security, reduces compatibility).
+      - no - includes PMKID into EAPOL frames (reduces security, improves compatibility).
       
       This property only has effect on Access Points.
     original_name: disable-pmkid
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -54,6 +57,7 @@ properties:
     choice_type: null
     description: 'Set wireless_security_profiles resource disability'
     original_name: disabled
+    elements: null
   eap_methods:
     name: eap_methods
     type: string
@@ -68,11 +72,12 @@ properties:
     description: |
       Allowed types of authentication methods, multiple values can be selected. This property only has effect on Access Points.
       
-      - <var>eap-tls</var> - Use built-in EAP TLS authentication. Both client and server certificates are supported. See description of **tls-mode** and **tls-certificate** properties.
-      - <var>eap-ttls-mschapv2</var> - Use EAP-TTLS with MS-CHAPv2 authentication.
-      - <var>passthrough</var> - Access Point will relay authentication process to the RADIUS server.
-      - <var>peap</var> - Use Protected EAP authentication.
+      - eap-tls - Use built-in EAP TLS authentication. Both client and server certificates are supported. See description of **tls-mode** and **tls-certificate** properties.
+      - eap-ttls-mschapv2 - Use EAP-TTLS with MS-CHAPv2 authentication.
+      - passthrough - Access Point will relay authentication process to the RADIUS server.
+      - peap - Use Protected EAP authentication.
     original_name: eap-methods
+    elements: null
   group_ciphers:
     name: group_ciphers
     type: string
@@ -85,9 +90,10 @@ properties:
     description: |
       Access Point advertises one of these ciphers, multiple values can be selected. Access Point uses it to encrypt all broadcast and multicast frames. Client attempts connection only to Access Points that use one of the specified group ciphers.
       
-      - <var>tkip</var> - Temporal Key Integrity Protocol - encryption protocol, compatible with legacy WEP equipment, but enhanced to correct some of the WEP flaws.
-      - <var>aes-ccm</var> - more secure WPA encryption protocol, based on the reliable AES (Advanced Encryption Standard). Networks free of WEP legacy should use only this cipher.
+      - tkip - Temporal Key Integrity Protocol - encryption protocol, compatible with legacy WEP equipment, but enhanced to correct some of the WEP flaws.
+      - aes-ccm - more secure WPA encryption protocol, based on the reliable AES (Advanced Encryption Standard). Networks free of WEP legacy should use only this cipher.
     original_name: group-ciphers
+    elements: null
   group_key_update:
     name: group_key_update
     type: string
@@ -96,14 +102,18 @@ properties:
     choice_type: null
     description: 'Controls how often Access Point updates the group key. This key is used to encrypt all broadcast and multicast frames. property only has effect for Access Points.'
     original_name: group-key-update
+    elements: null
   interim_update:
     name: interim_update
     type: string
     required: false
-    default: '0'
+    default: null
     choice_type: null
-    description: 'When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies default update interval that can be overridden by the RADIUS server using [ Acct-Interim-Interval](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication "Manual:Interface/Wireless") attribute.'
+    description: 'When RADIUS accounting is used, Access Point periodically sends accounting information updates to the RADIUS server. This property specifies default update interval that can be overridden by the RADIUS server using [Acct-Interim-Interval](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#RADIUS_MAC_authentication "Manual:Interface/Wireless") attribute.'
+    options:
+      - ignore-default
     original_name: interim-update
+    elements: null
   mode:
     name: mode
     type: string
@@ -118,11 +128,12 @@ properties:
     description: |
       Encryption mode for the security profile.
       
-      - <var>none</var> - Encryption is not used. Encrypted frames are not accepted.
-      - <var>static-keys-required</var> - WEP mode. Do not accept and do not send unencrypted frames. Station in *static-keys-required* mode will not connect to an Access Point in *static-keys-optional* mode.
-      - <var>static-keys-optional</var> - WEP mode. Support encryption and decryption, but allow also to receive and send unencrypted frames. Device will send unencrypted frames if encryption algorithm is specified as *none*. Station in *static-keys-optional* mode will not connect to an Access Point in *static-keys-required* mode. See also: [ static-sta-private-algo](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#WEP_properties "Manual:Interface/Wireless"), [ static-transmit-key](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#WEP_properties "Manual:Interface/Wireless").
-      - <var>dynamic-keys</var> - WPA mode.
+      - none - Encryption is not used. Encrypted frames are not accepted.
+      - static-keys-required - WEP mode. Do not accept and do not send unencrypted frames. Station in *static-keys-required* mode will not connect to an Access Point in *static-keys-optional* mode.
+      - static-keys-optional - WEP mode. Support encryption and decryption, but allow also to receive and send unencrypted frames. Device will send unencrypted frames if encryption algorithm is specified as *none*. Station in *static-keys-optional* mode will not connect to an Access Point in *static-keys-required* mode. See also: [static-sta-private-algo](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#WEP_properties "Manual:Interface/Wireless"), [static-transmit-key](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#WEP_properties "Manual:Interface/Wireless").
+      - dynamic-keys - WPA mode.
     original_name: mode
+    elements: null
   mschapv2_password:
     name: mschapv2_password
     type: string
@@ -131,6 +142,7 @@ properties:
     choice_type: null
     description: 'Password to use for authentication when *eap-ttls-mschapv2* authentication method is being used. This property only has effect on Stations.'
     original_name: mschapv2-password
+    elements: null
   mschapv2_username:
     name: mschapv2_username
     type: string
@@ -139,6 +151,7 @@ properties:
     choice_type: null
     description: 'Username to use for authentication when *eap-ttls-mschapv2* authentication method is being used. This property only has effect on Stations.'
     original_name: mschapv2-username
+    elements: null
   name:
     name: name
     type: string
@@ -147,6 +160,7 @@ properties:
     choice_type: null
     description: 'Name of the security profile'
     original_name: name
+    elements: null
   radius_called_format:
     name: radius_called_format
     type: string
@@ -159,6 +173,7 @@ properties:
     choice_type: null
     description: 'Format of how the "called-id" identifier will be passed to RADIUS. When configuring radius server clients, you can specify "called-id" in order to separate multiple entires.'
     original_name: radius-called-format
+    elements: null
   radius_eap_accounting:
     name: radius_eap_accounting
     type: string
@@ -170,6 +185,7 @@ properties:
     choice_type: null
     description: 'Explicitly enable accouting packets for radius-eap authentication'
     original_name: radius-eap-accounting
+    elements: null
   radius_mac_accounting:
     name: radius_mac_accounting
     type: string
@@ -181,6 +197,7 @@ properties:
     choice_type: null
     description: 'Explicitly enable accouting packets for radius-mac authentication'
     original_name: radius-mac-accounting
+    elements: null
   radius_mac_authentication:
     name: radius_mac_authentication
     type: string
@@ -191,11 +208,12 @@ properties:
       - 'yes'
     choice_type: null
     description: |
-      This property affects the way how Access Point processes clients that are not found in the [ Access List](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#Access_List "Manual:Interface/Wireless").
+      This property affects the way how Access Point processes clients that are not found in the [Access List](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#Access_List "Manual:Interface/Wireless").
       
-      - <var>no</var> - allow or reject client authentication based on the value of [ default-authentication](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#General_interface_properties "Manual:Interface/Wireless") property of the Wireless interface.
-      - <var>yes</var> - Query RADIUS server using MAC address of client as user name. With this setting the value of [ default-authentication](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#General_interface_properties "Manual:Interface/Wireless") has no effect.
+      - no - allow or reject client authentication based on the value of [default-authentication](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#General_interface_properties "Manual:Interface/Wireless") property of the Wireless interface.
+      - yes - Query RADIUS server using MAC address of client as user name. With this setting the value of [default-authentication](https://wiki.mikrotik.com/wiki/Manual:Interface/Wireless#General_interface_properties "Manual:Interface/Wireless") has no effect.
     original_name: radius-mac-authentication
+    elements: null
   radius_mac_caching:
     name: radius_mac_caching
     type: string
@@ -207,6 +225,7 @@ properties:
     choice_type: null
     description: 'If this value is set to time interval, the Access Point will cache RADIUS MAC authentication responses for specified time, and will not contact RADIUS server if matching cache entry already exists. Value *disabled* will disable cache, Access Point will always contact RADIUS server.'
     original_name: radius-mac-caching
+    elements: null
   radius_mac_format:
     name: radius_mac_format
     type: string
@@ -223,6 +242,7 @@ properties:
     choice_type: null
     description: 'Controls how MAC address of the client is encoded by Access Point in the User-Name attribute of the MAC authentication and MAC accounting RADIUS requests.'
     original_name: radius-mac-format
+    elements: null
   radius_mac_mode:
     name: radius_mac_mode
     type: string
@@ -234,14 +254,18 @@ properties:
     choice_type: null
     description: 'By default Access Point uses an empty password, when sending Access-Request during MAC authentication. When this property is set to *as-username-and-password*, Access Point will use the same value for User-Password attribute as for the User-Name attribute.'
     original_name: radius-mac-mode
+    elements: null
   supplicant_identity:
     name: supplicant_identity
     type: string
     required: false
-    default: '[ Identity](https://wiki.mikrotik.com/wiki/Manual:System/identity "Manual:System/identity")'
+    default: null
     choice_type: null
     description: 'EAP identity that is sent by client at the beginning of EAP authentication. This value is used as a value for User-Name attribute in RADIUS messages sent by RADIUS EAP accounting and RADIUS EAP pass-through authentication.'
+    options:
+      - ignore-default
     original_name: supplicant-identity
+    elements: null
   tls_certificate:
     name: tls_certificate
     type: string
@@ -253,6 +277,7 @@ properties:
     choice_type: null
     description: 'Access Point always needs a certificate when configured when **tls-mode** is set to *verify-certificate*, or is set to *dont-verify-certificate*. Client needs a certificate only if Access Point is configured with **tls-mode** set to *verify-certificate*. In this case client needs a valid certificate that is signed by a CA known to the Access Point. This property only has effect when **tls-mode** is not set to *no-certificates* and **eap-methods** contains *eap-tls*.'
     original_name: tls-certificate
+    elements: null
   tls_mode:
     name: tls_mode
     type: string
@@ -267,11 +292,12 @@ properties:
     description: |
       This property has effect only when **eap-methods** contains *eap-tls*.
       
-      - <var>verify-certificate</var> - Require remote device to have valid certificate. Check that it is signed by known certificate authority. No additional identity verification is done. Certificate may include information about time period during which it is valid. If router has incorrect time and date, it may reject valid certificate because router's clock is outside that period. See also the [ Certificates](https://wiki.mikrotik.com/wiki/Manual:System/Certificates "Manual:System/Certificates") configuration.
-      - <var>dont-verify-certificate</var> - Do not check certificate of the remote device. Access Point will not require client to provide certificate.
-      - <var>no-certificates</var> - Do not use certificates. TLS session is established using 2048 bit anonymous Diffie-Hellman key exchange.
-      - <var>verify-certificate-with-crl</var> - Same as *verify-certificate* but also checks if the certificate is valid by checking the Certificate Revocation List.
+      - verify-certificate - Require remote device to have valid certificate. Check that it is signed by known certificate authority. No additional identity verification is done. Certificate may include information about time period during which it is valid. If router has incorrect time and date, it may reject valid certificate because router's clock is outside that period. See also the [Certificates](https://wiki.mikrotik.com/wiki/Manual:System/Certificates "Manual:System/Certificates") configuration.
+      - dont-verify-certificate - Do not check certificate of the remote device. Access Point will not require client to provide certificate.
+      - no-certificates - Do not use certificates. TLS session is established using 2048 bit anonymous Diffie-Hellman key exchange.
+      - verify-certificate-with-crl - Same as *verify-certificate* but also checks if the certificate is valid by checking the Certificate Revocation List.
     original_name: tls-mode
+    elements: null
   unicast_ciphers:
     name: unicast_ciphers
     type: string
@@ -283,6 +309,7 @@ properties:
     choice_type: null
     description: 'Access Point advertises that it supports specified ciphers, multiple values can be selected. Client attempts connection only to Access Points that supports at least one of the specified ciphers. One of the ciphers will be used to encrypt unicast frames that are sent between Access Point and Station.'
     original_name: unicast-ciphers
+    elements: null
   wpa2_pre_shared_key:
     name: wpa2_pre_shared_key
     type: string
@@ -291,6 +318,7 @@ properties:
     choice_type: null
     description: 'WPA2 pre-shared key mode requires all devices in a BSS to have common secret key. Value of this key can be an arbitrary text. Commonly referred to as the network password for WPA2 mode. property only has effect when *wpa2-psk* is added to **authentication-types**.'
     original_name: wpa2-pre-shared-key
+    elements: null
   wpa_pre_shared_key:
     name: wpa_pre_shared_key
     type: string
@@ -299,3 +327,4 @@ properties:
     choice_type: null
     description: 'WPA pre-shared key mode requires all devices in a BSS to have common secret key. Value of this key can be an arbitrary text. Commonly referred to as the network password for WPA mode. property only has effect when *wpa-psk* is added to **authentication-types**.'
     original_name: wpa-pre-shared-key
+    elements: null

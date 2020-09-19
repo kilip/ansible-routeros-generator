@@ -18,13 +18,13 @@
 - name: set diff commands
   set_fact:
     diff_commands: "{{ result.commands | difference(commands) }}"
-{% endverbatim %}
 
 - assert:
     that:
       - result.changed == True
       - diff_commands == []
-
+    fail_msg: "changed={{ result.changed }} commands={{ result.commands }}"
+{% endverbatim %}
 - name: "idempotence: {{ example.name }}"
   register: result
   {{ name|ansible_module_name(true) }}:

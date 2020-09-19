@@ -68,7 +68,7 @@ class ResourceConfig implements EventSubscriberInterface
         ];
 
         return [
-            'states' => $states,
+            'state' => $states,
             'config' => $config,
         ];
     }

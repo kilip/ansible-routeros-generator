@@ -71,7 +71,6 @@ class ProcessEventSubscriber implements EventSubscriberInterface
     public function setOutput(OutputInterface $output): void
     {
         $this->output = $output;
-        $this->createProgressBar($output);
     }
 
     public function onLogEvent(ProcessEvent $event)
@@ -85,6 +84,8 @@ class ProcessEventSubscriber implements EventSubscriberInterface
 
     public function onStartProcessEvent(ProcessEvent $event)
     {
+        $this->createProgressBar($this->output);
+
         if (null !== $this->progressBar) {
             $this->showMessage($event);
             $this->progressBar->start();
@@ -115,6 +116,7 @@ class ProcessEventSubscriber implements EventSubscriberInterface
     public function onExceptionEvent(ProcessEvent $event)
     {
         $this->exceptions = $event->getExceptions();
+        $this->renderException();
     }
 
     /**
@@ -146,17 +148,11 @@ class ProcessEventSubscriber implements EventSubscriberInterface
 
     private function showMessage(ProcessEvent $event)
     {
+        $progressBar = $this->progressBar;
         $context = $event->getContext();
         $message = $event->getMessage();
-        $progressBar = $this->progressBar;
-        $rendered = "<info>{$message}</info>";
 
-        $replacements = [];
-        foreach ($context as $key => $value) {
-            $replacements['{'.$key.'}'] = "<comment>$value</comment>";
-        }
-
-        $rendered = strtr($rendered, $replacements);
+        $rendered = $this->renderMessage($message, $context);
         $progressBar->setMessage($rendered);
     }
 
@@ -165,7 +161,29 @@ class ProcessEventSubscriber implements EventSubscriberInterface
         $output = $this->output;
 
         foreach ($this->exceptions as $exception) {
-            $output->writeln($exception->getMessage());
+            $callback = [$exception, 'getContext'];
+            $message = $exception->getMessage();
+
+            if (\is_callable($callback)) {
+                $context = \call_user_func($callback);
+                $message = $this->renderMessage($message, $context, false);
+            }
+            $output->writeln("<error>error</error> {$message}");
+            $output->writeln('');
         }
+    }
+
+    private function renderMessage($message, array $context = [], $decorate = true)
+    {
+        $rendered = "<info>{$message}</info>";
+        $replacements = [];
+        foreach ($context as $key => $value) {
+            if ($decorate) {
+                $value = "<comment>{$value}</comment>";
+            }
+            $replacements['{'.$key.'}'] = $value;
+        }
+
+        return strtr($rendered, $replacements);
     }
 }

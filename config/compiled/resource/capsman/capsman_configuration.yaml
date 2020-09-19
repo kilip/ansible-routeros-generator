@@ -13,6 +13,7 @@ properties:
     choice_type: null
     description: 'User defined list taken from Channel names (**/caps-man channels**)'
     original_name: channel
+    elements: null
   channel_band:
     name: channel_band
     type: string
@@ -32,6 +33,7 @@ properties:
     choice_type: null
     description: 'Defines set of used channels.'
     original_name: channel.band
+    elements: null
   channel_control_channel_width:
     name: channel_control_channel_width
     type: string
@@ -45,6 +47,7 @@ properties:
     choice_type: null
     description: 'Defines set of used channel widths.'
     original_name: channel.control-channel-width
+    elements: null
   channel_extension_channel:
     name: channel_extension_channel
     type: string
@@ -63,6 +66,7 @@ properties:
     choice_type: null
     description: 'Extension channel configuration. (E.g. Ce = extension channel is above Control channel, eC = extension channel is below Control channel)'
     original_name: channel.extension-channel
+    elements: null
   channel_frequency:
     name: channel_frequency
     type: integer
@@ -71,6 +75,7 @@ properties:
     choice_type: null
     description: 'Channel frequency value in MHz on which AP will operate. If left blank, CAPsMAN will automatically determine the best frequency that is least occupied.'
     original_name: channel.frequency
+    elements: null
   channel_reselect_interval:
     name: channel_reselect_interval
     type: string
@@ -79,6 +84,7 @@ properties:
     choice_type: null
     description: 'Interval after which least occupied frequency is chosen. Works only if **channel.frequency** is left blank.'
     original_name: channel.reselect-interval
+    elements: null
   channel_save_selected:
     name: channel_save_selected
     type: string
@@ -90,6 +96,7 @@ properties:
     choice_type: null
     description: 'If channel frequency is chosen automatically and **channel.reselect-interval** is used, then saves the last picked frequency.'
     original_name: channel.save-selected
+    elements: null
   channel_secondary_frequency:
     name: channel_secondary_frequency
     type: integer
@@ -98,6 +105,7 @@ properties:
     choice_type: null
     description: 'Specifies the second frequency that will be used for 80+80MHz configuration. Set it to **Disabled** in order to disable 80+80MHz capability.'
     original_name: channel.secondary-frequency
+    elements: null
   channel_skip_dfs_channels:
     name: channel_skip_dfs_channels
     type: string
@@ -109,6 +117,7 @@ properties:
     choice_type: null
     description: 'If **channel.frequency** is left blank, the selection will skip DFS channels'
     original_name: channel.skip-dfs-channels
+    elements: null
   channel_tx_power:
     name: channel_tx_power
     type: integer
@@ -117,6 +126,7 @@ properties:
     choice_type: null
     description: 'TX Power for CAP interface (for the whole interface not for individual chains) in dBm. It is not possible to set higher than allowed by country regulations or interface. By default max allowed by country or interface is used.'
     original_name: channel.tx-power
+    elements: null
   channel_width:
     name: channel_width
     type: string
@@ -125,6 +135,7 @@ properties:
     choice_type: null
     description: 'Sets Channel Width in MHz.'
     original_name: channel.width
+    elements: null
   comment:
     name: comment
     type: string
@@ -133,6 +144,7 @@ properties:
     choice_type: null
     description: 'Short description of the Configuration profile'
     original_name: comment
+    elements: null
   country:
     name: country
     type: string
@@ -141,6 +153,7 @@ properties:
     choice_type: null
     description: 'Limits available bands, frequencies and maximum transmit power for each frequency. Also specifies default value of **scan-list**. Value *no\_country\_set* is an FCC compliant set of channels.'
     original_name: country
+    elements: null
   datapath:
     name: datapath
     type: string
@@ -149,6 +162,7 @@ properties:
     choice_type: null
     description: 'User defined list taken from Datapath names (**/caps-man datapath**)'
     original_name: datapath
+    elements: null
   datapath_bridge:
     name: datapath_bridge
     type: string
@@ -157,6 +171,7 @@ properties:
     choice_type: null
     description: 'Bridge to which particular interface should be automatically added as port. Required only when local-forwarding is not used.'
     original_name: datapath.bridge
+    elements: null
   datapath_bridge_cost:
     name: datapath_bridge_cost
     type: integer
@@ -165,6 +180,7 @@ properties:
     choice_type: null
     description: 'bridge port cost to use when adding as bridge port'
     original_name: datapath.bridge-cost
+    elements: null
   datapath_bridge_horizon:
     name: datapath_bridge_horizon
     type: integer
@@ -173,6 +189,7 @@ properties:
     choice_type: null
     description: 'bridge horizon to use when adding as bridge port'
     original_name: datapath.bridge-horizon
+    elements: null
   datapath_client_to_client_forwarding:
     name: datapath_client_to_client_forwarding
     type: string
@@ -184,6 +201,7 @@ properties:
     choice_type: null
     description: 'controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN'
     original_name: datapath.client-to-client-forwarding
+    elements: null
   datapath_interface_list:
     name: datapath_interface_list
     type: string
@@ -192,6 +210,7 @@ properties:
     choice_type: null
     description: ''
     original_name: datapath.interface-list
+    elements: null
   datapath_l2mtu:
     name: datapath_l2mtu
     type: string
@@ -200,6 +219,7 @@ properties:
     choice_type: null
     description: 'set Layer2 MTU size'
     original_name: datapath.l2mtu
+    elements: null
   datapath_local_forwarding:
     name: datapath_local_forwarding
     type: string
@@ -210,9 +230,10 @@ properties:
       - 'yes'
     choice_type: null
     description: |
-      Controls forwarding mode. If disabled, all L2 and L3 data will be forwarded to CAPsMAN, and further forwarding decisions will be made only then.   
+      Controls forwarding mode. If disabled, all L2 and L3 data will be forwarded to CAPsMAN, and further forwarding decisions will be made only then. 
       **Note**, if disabled, make sure that each CAP interface MAC Address that participates in the same broadcast domain is unique (including local MAC's, like Bridge-MAC).
     original_name: datapath.local-forwarding
+    elements: null
   datapath_mtu:
     name: datapath_mtu
     type: string
@@ -221,6 +242,7 @@ properties:
     choice_type: null
     description: 'set MTU size'
     original_name: datapath.mtu
+    elements: null
   datapath_openflow_switch:
     name: datapath_openflow_switch
     type: string
@@ -229,6 +251,7 @@ properties:
     choice_type: null
     description: 'OpenFlow switch port (when enabled) to add interface to'
     original_name: datapath.openflow-switch
+    elements: null
   datapath_vlan_id:
     name: datapath_vlan_id
     type: integer
@@ -237,6 +260,7 @@ properties:
     choice_type: null
     description: 'VLAN ID to assign to interface if vlan-mode enables use of VLAN tagging'
     original_name: datapath.vlan-id
+    elements: null
   datapath_vlan_mode:
     name: datapath_vlan_mode
     type: string
@@ -248,6 +272,7 @@ properties:
     choice_type: null
     description: 'Enables and specifies the type of VLAN tag to be assigned to the interface (causes all received data to get tagged with VLAN tag and allows the interface to only send out data tagged with given tag)'
     original_name: datapath.vlan-mode
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -259,6 +284,7 @@ properties:
     choice_type: null
     description: 'Set capsman_configuration resource disability'
     original_name: disabled
+    elements: null
   disconnect_timeout:
     name: disconnect_timeout
     type: string
@@ -267,6 +293,7 @@ properties:
     choice_type: null
     description: ''
     original_name: disconnect-timeout
+    elements: null
   distance:
     name: distance
     type: string
@@ -275,6 +302,7 @@ properties:
     choice_type: null
     description: ''
     original_name: distance
+    elements: null
   frame_lifetime:
     name: frame_lifetime
     type: string
@@ -283,6 +311,7 @@ properties:
     choice_type: null
     description: ''
     original_name: frame-lifetime
+    elements: null
   guard_interval:
     name: guard_interval
     type: string
@@ -294,6 +323,7 @@ properties:
     choice_type: null
     description: 'Whether to allow the use of short guard interval (refer to 802.11n MCS specification to see how this may affect throughput). "any" will use either short or long, depending on data rate, "long" will use long only.'
     original_name: guard-interval
+    elements: null
   hide_ssid:
     name: hide_ssid
     type: string
@@ -309,6 +339,7 @@ properties:
       
       This property has effect only in AP mode. Setting it to *yes* can remove this network from the list of wireless networks that are shown by some client software. Changing this setting does not improve the security of the wireless network, because SSID is included in other frames sent by the AP.
     original_name: hide-ssid
+    elements: null
   hw_protection_mode:
     name: hw_protection_mode
     type: string
@@ -317,6 +348,7 @@ properties:
     choice_type: null
     description: ''
     original_name: hw-protection-mode
+    elements: null
   hw_retries:
     name: hw_retries
     type: string
@@ -325,6 +357,7 @@ properties:
     choice_type: null
     description: ''
     original_name: hw-retries
+    elements: null
   installation:
     name: installation
     type: string
@@ -337,6 +370,7 @@ properties:
     choice_type: null
     description: ''
     original_name: installation
+    elements: null
   keepalive_frames:
     name: keepalive_frames
     type: string
@@ -348,6 +382,7 @@ properties:
     choice_type: null
     description: ''
     original_name: keepalive-frames
+    elements: null
   load_balancing_group:
     name: load_balancing_group
     type: string
@@ -356,6 +391,7 @@ properties:
     choice_type: null
     description: 'Tags the interface to the load balancing group. For a client to connect to interface in this group, the interface should have the same number of already connected clients as all other interfaces in the group or smaller. Useful in setups where ranges of CAPs mostly overlap.'
     original_name: load-balancing-group
+    elements: null
   max_sta_count:
     name: max_sta_count
     type: integer
@@ -364,6 +400,7 @@ properties:
     choice_type: null
     description: 'Maximum number of associated clients.'
     original_name: max-sta-count
+    elements: null
   mode:
     name: mode
     type: string
@@ -372,6 +409,7 @@ properties:
     choice_type: null
     description: 'Set operational mode. Only ap currently supported.'
     original_name: mode
+    elements: null
   multicast_helper:
     name: multicast_helper
     type: string
@@ -383,12 +421,13 @@ properties:
       - full
     choice_type: null
     description: |
-      When set to full multicast packets will be sent with unicast destination MAC address, resolving [ multicast problem](https://wiki.mikrotik.com/wiki/Manual:Multicast_detailed_example#Multicast_and_Wireless "Manual:Multicast detailed example") on a wireless link. This option should be enabled only on the access point, clients should be configured in **station-bridge** mode. Available starting from v5.15.
+      When set to full multicast packets will be sent with unicast destination MAC address, resolving [multicast problem](https://wiki.mikrotik.com/wiki/Manual:Multicast_detailed_example#Multicast_and_Wireless "Manual:Multicast detailed example") on a wireless link. This option should be enabled only on the access point, clients should be configured in **station-bridge** mode. Available starting from v5.15.
       
       - disabled - disables the helper and sends multicast packets with multicast destination MAC addresses
       - full - all multicast packet mac address are changed to unicast mac addresses prior sending them out
       - default - default choice that currently is set to *disabled*. Value can be changed in future releases.
     original_name: multicast-helper
+    elements: null
   name:
     name: name
     type: string
@@ -397,6 +436,7 @@ properties:
     choice_type: null
     description: 'Descriptive name for the Configuration Profile'
     original_name: name
+    elements: null
   rates:
     name: rates
     type: string
@@ -405,6 +445,7 @@ properties:
     choice_type: null
     description: 'User defined list taken from Rates names (**/caps-man rates**)'
     original_name: rates
+    elements: null
   rates_basic:
     name: rates_basic
     type: string
@@ -426,6 +467,7 @@ properties:
     choice_type: null
     description: ''
     original_name: rates.basic
+    elements: null
   rates_ht_basic_mcs:
     name: rates_ht_basic_mcs
     type: list
@@ -465,8 +507,9 @@ properties:
       - mcs-8
       - mcs-9
     choice_type: null
-    description: '[Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11n-2009#Data_rates) that every connecting client must support. Refer to 802.11n for MCS specification.'
+    description: '[Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11n-2009#Data_rates) that every connecting client must support. Refer to 802.11n for MCS specification.'
     original_name: rates.ht-basic-mcs
+    elements: string
   rates_ht_supported_mcs:
     name: rates_ht_supported_mcs
     type: list
@@ -522,8 +565,9 @@ properties:
       - mcs-8
       - mcs-9
     choice_type: null
-    description: '[Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11n-2009#Data_rates) that this device advertises as supported. Refer to 802.11n for MCS specification.'
+    description: '[Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11n-2009#Data_rates) that this device advertises as supported. Refer to 802.11n for MCS specification.'
     original_name: rates.ht-supported-mcs
+    elements: string
   rates_supported:
     name: rates_supported
     type: string
@@ -545,6 +589,7 @@ properties:
     choice_type: null
     description: ''
     original_name: rates.supported
+    elements: null
   rates_vht_basic_mcs:
     name: rates_vht_basic_mcs
     type: string
@@ -557,13 +602,14 @@ properties:
       - none
     choice_type: null
     description: |
-      [Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11ac#Data_rates_and_speed) that every connecting client must support. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
+      [Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11ac#Data_rates_and_speed) that every connecting client must support. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
       
       - *none* - will not use selected Spatial Stream
       - *MCS 0-7* - client must support MCS-0 to MCS-7
       - *MCS 0-8* - client must support MCS-0 to MCS-8
       - *MCS 0-9* - client must support MCS-0 to MCS-9
     original_name: rates.vht-basic-mcs
+    elements: null
   rates_vht_supported_mcs:
     name: rates_vht_supported_mcs
     type: string
@@ -576,18 +622,20 @@ properties:
       - none
     choice_type: null
     description: |
-      [Modulation and Coding Schemes](http://en.wikipedia.orghttps://wiki.mikrotik.com/wiki/IEEE_802.11ac#Data_rates_and_speed) that this device advertises as supported. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
+      [Modulation and Coding Schemes](http://en.wikipedia.org/wiki/IEEE_802.11ac#Data_rates_and_speed) that this device advertises as supported. Refer to 802.11ac for MCS specification. You can set MCS interval for each of Spatial Stream
       
       - *none* - will not use selected Spatial Stream
       - *MCS 0-7* - devices will advertise as supported MCS-0 to MCS-7
       - *MCS 0-8* - devices will advertise as supported MCS-0 to MCS-8
       - *MCS 0-9* - devices will advertise as supported MCS-0 to MCS-9
     original_name: rates.vht-supported-mcs
+    elements: null
   rx_chains:
     name: rx_chains
     type: list
     required: false
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     choices:
       - 0
       - 1
@@ -598,6 +646,7 @@ properties:
     options:
       - ignore-default
     original_name: rx-chains
+    elements: integer
   security:
     name: security
     type: string
@@ -606,6 +655,7 @@ properties:
     choice_type: null
     description: 'Name of security configuration from **/caps-man security**'
     original_name: security
+    elements: null
   security_authentication_types:
     name: security_authentication_types
     type: list
@@ -621,6 +671,7 @@ properties:
     options:
       - ignore-default
     original_name: security.authentication-types
+    elements: string
   security_disable_pmkid:
     name: security_disable_pmkid
     type: string
@@ -629,6 +680,7 @@ properties:
     choice_type: null
     description: ''
     original_name: security.disable-pmkid
+    elements: null
   security_eap_methods:
     name: security_eap_methods
     type: string
@@ -642,6 +694,7 @@ properties:
        - eap-tls - Use built-in EAP TLS authentication.
       - passthrough - Access point will relay authentication process to the RADIUS server.
     original_name: security.eap-methods
+    elements: null
   security_eap_radius_accounting:
     name: security_eap_radius_accounting
     type: string
@@ -650,6 +703,7 @@ properties:
     choice_type: null
     description: 'specifies if RADIUS traffic accounting should be used if RADIUS authentication gets done for this client'
     original_name: security.eap-radius-accounting
+    elements: null
   security_encryption:
     name: security_encryption
     type: list
@@ -661,6 +715,7 @@ properties:
     choice_type: null
     description: 'Set type of unicast encryption algorithm used'
     original_name: security.encryption
+    elements: string
   security_group_encryption:
     name: security_group_encryption
     type: string
@@ -673,9 +728,10 @@ properties:
     description: |
       Access Point advertises one of these ciphers, multiple values can be selected. Access Point uses it to encrypt all broadcast and multicast frames. Client attempts connection only to Access Points that use one of the specified group ciphers.
       
-      - <var>tkip</var> - Temporal Key Integrity Protocol - encryption protocol, compatible with legacy WEP equipment, but enhanced to correct some of the WEP flaws.
-      - <var>aes-ccm</var> - more secure WPA encryption protocol, based on the reliable AES (Advanced Encryption Standard). Networks free of WEP legacy should use only this cipher.
+      - tkip - Temporal Key Integrity Protocol - encryption protocol, compatible with legacy WEP equipment, but enhanced to correct some of the WEP flaws.
+      - aes-ccm - more secure WPA encryption protocol, based on the reliable AES (Advanced Encryption Standard). Networks free of WEP legacy should use only this cipher.
     original_name: security.group-encryption
+    elements: null
   security_group_key_update:
     name: security_group_key_update
     type: string
@@ -684,6 +740,7 @@ properties:
     choice_type: null
     description: 'Controls how often Access Point updates the group key. This key is used to encrypt all broadcast and multicast frames. property only has effect for Access Points.'
     original_name: security.group-key-update
+    elements: null
   security_passphrase:
     name: security_passphrase
     type: string
@@ -692,6 +749,7 @@ properties:
     choice_type: null
     description: 'WPA or WPA2 pre-shared key'
     original_name: security.passphrase
+    elements: null
   security_tls_certificate:
     name: security_tls_certificate
     type: string
@@ -703,6 +761,7 @@ properties:
     choice_type: null
     description: 'Access Point always needs a certificate when **security.tls-mode** is set to value other than **no-certificates**.'
     original_name: security.tls-certificate
+    elements: null
   security_tls_mode:
     name: security_tls_mode
     type: string
@@ -717,11 +776,12 @@ properties:
     description: |
       This property has effect only when **security.eap-methods** contains *eap-tls*.
       
-      - <var>verify-certificate</var> - Require remote device to have valid certificate. Check that it is signed by known certificate authority. No additional identity verification is done. Certificate may include information about time period during which it is valid. If router has incorrect time and date, it may reject valid certificate because router's clock is outside that period. See also the [ Certificates](https://wiki.mikrotik.com/wiki/Manual:System/Certificates "Manual:System/Certificates") configuration.
-      - <var>dont-verify-certificate</var> - Do not check certificate of the remote device. Access Point will not require client to provide certificate.
-      - <var>no-certificates</var> - Do not use certificates. TLS session is established using 2048 bit anonymous Diffie-Hellman key exchange.
-      - <var>verify-certificate-with-crl</var> - Same as verify-certificate but also checks if the certificate is valid by checking the Certificate Revocation List.
+      - verify-certificate - Require remote device to have valid certificate. Check that it is signed by known certificate authority. No additional identity verification is done. Certificate may include information about time period during which it is valid. If router has incorrect time and date, it may reject valid certificate because router's clock is outside that period. See also the [Certificates](https://wiki.mikrotik.com/wiki/Manual:System/Certificates "Manual:System/Certificates") configuration.
+      - dont-verify-certificate - Do not check certificate of the remote device. Access Point will not require client to provide certificate.
+      - no-certificates - Do not use certificates. TLS session is established using 2048 bit anonymous Diffie-Hellman key exchange.
+      - verify-certificate-with-crl - Same as verify-certificate but also checks if the certificate is valid by checking the Certificate Revocation List.
     original_name: security.tls-mode
+    elements: null
   ssid:
     name: ssid
     type: string
@@ -730,11 +790,13 @@ properties:
     choice_type: null
     description: 'SSID (service set identifier) is a name broadcast in the beacons that identifies wireless network.'
     original_name: ssid
+    elements: null
   tx_chains:
     name: tx_chains
     type: list
     required: false
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     choices:
       - 0
       - 1
@@ -745,3 +807,4 @@ properties:
     options:
       - ignore-default
     original_name: tx-chains
+    elements: integer

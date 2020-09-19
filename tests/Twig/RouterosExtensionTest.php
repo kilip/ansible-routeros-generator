@@ -100,7 +100,6 @@ class RouterosExtensionTest extends KernelTestCase
     public function getTestConvertData()
     {
         return [
-            ['interface', 'mtu', 1500, '1500'],
             ['interface', 'mtu', 1500, '"1500"', true],
         ];
     }

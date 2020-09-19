@@ -90,9 +90,10 @@ class ProcessEvent extends Event
      *
      * @return static
      */
-    public function setMessage(string $message)
+    public function setMessage(string $message, array $context = [])
     {
         $this->message = $message;
+        $this->context = $context;
 
         return $this;
     }

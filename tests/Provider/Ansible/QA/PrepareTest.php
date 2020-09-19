@@ -17,6 +17,7 @@ namespace Tests\RouterOS\Generator\Provider\Ansible\QA;
 use PHPUnit\Framework\MockObject\MockObject;
 use RouterOS\Generator\Concerns\InteractsWithContainer;
 use RouterOS\Generator\Event\BuildEvent;
+use RouterOS\Generator\Provider\Ansible\Constant;
 use RouterOS\Generator\Provider\Ansible\QA\Prepare;
 use RouterOS\Generator\Util\ProcessHelper;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -31,7 +32,10 @@ class PrepareTest extends KernelTestCase
      */
     private $processHelper;
 
-    private $targetDir;
+    /**
+     * @var Constant
+     */
+    private $constant;
 
     /**
      * @var Prepare
@@ -47,7 +51,7 @@ class PrepareTest extends KernelTestCase
     {
         $this->dispatcher = $this->createMock(EventDispatcherInterface::class);
         $this->processHelper = $this->createMock(ProcessHelper::class);
-        $this->targetDir = $this->getParameter('ansible.target_dir');
+        $this->constant = $this->getService('ansible.constant');
 
         $this->processHelper
             ->expects($this->any())
@@ -60,7 +64,7 @@ class PrepareTest extends KernelTestCase
 
         $this->listener = new Prepare(
             $this->dispatcher,
-            $this->targetDir,
+            $this->constant,
             $this->processHelper
         );
     }
@@ -75,6 +79,11 @@ class PrepareTest extends KernelTestCase
             ->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($processHelper);
+
+        $processHelper
+            ->expects($this->atLeastOnce())
+            ->method('run')
+            ->willReturn(0);
         $listener->onPrepare($event);
     }
 }

@@ -14,8 +14,9 @@ properties:
       - 'no'
       - 'yes'
     choice_type: null
-    description: 'Whether to enable a bridge [ FastPath](https://wiki.mikrotik.com/wiki/Manual:Fast_Path "Manual:Fast Path") globally.'
+    description: 'Whether to enable a bridge [FastPath](https://wiki.mikrotik.com/wiki/Manual:Fast_Path "Manual:Fast Path") globally.'
     original_name: allow-fast-path
+    elements: null
   bridge_fast_forward_bytes:
     name: bridge_fast_forward_bytes
     type: integer
@@ -24,6 +25,7 @@ properties:
     choice_type: null
     description: 'Shows byte count forwarded by Bridge Fast Forward.'
     original_name: bridge-fast-forward-bytes
+    elements: null
   bridge_fast_forward_packets:
     name: bridge_fast_forward_packets
     type: integer
@@ -32,6 +34,7 @@ properties:
     choice_type: null
     description: 'Shows packet count forwarded by Bridge Fast Forward.'
     original_name: bridge-fast-forward-packets
+    elements: null
   bridge_fast_path_active:
     name: bridge_fast_path_active
     type: string
@@ -43,6 +46,7 @@ properties:
     choice_type: null
     description: 'Shows whether a bridge FastPath is active globally, FastPatch status per bridge interface is not displayed.'
     original_name: bridge-fast-path-active
+    elements: null
   bridge_fast_path_bytes:
     name: bridge_fast_path_bytes
     type: integer
@@ -51,6 +55,7 @@ properties:
     choice_type: null
     description: 'Shows byte count forwarded by Bridge Fast Path.'
     original_name: bridge-fast-path-bytes
+    elements: null
   bridge_fast_path_packets:
     name: bridge_fast_path_packets
     type: integer
@@ -59,6 +64,7 @@ properties:
     choice_type: null
     description: 'Shows packet count forwarded by Bridge FastPath.'
     original_name: bridge-fast-path-packets
+    elements: null
   use_ip_firewall:
     name: use_ip_firewall
     type: string
@@ -68,8 +74,9 @@ properties:
       - 'no'
       - 'yes'
     choice_type: null
-    description: 'Force bridged traffic to also be processed by prerouting, forward and postrouting sections of IP routing ([ Packet Flow](https://wiki.mikrotik.com/wiki/Manual:Packet_Flow_v6 "Manual:Packet Flow v6")). This does not apply to routed traffic. This property is required in case you want to assign [ Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to traffic in a bridge. Property <var>use-ip-firewall-for-vlan</var> is required in case bridge <var>vlan-filtering</var> is used.'
+    description: 'Force bridged traffic to also be processed by prerouting, forward and postrouting sections of IP routing ([Packet Flow](https://wiki.mikrotik.com/wiki/Manual:Packet_Flow_v6 "Manual:Packet Flow v6")). This does not apply to routed traffic. This property is required in case you want to assign [Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to traffic in a bridge. Property use-ip-firewall-for-vlan is required in case bridge vlan-filtering is used.'
     original_name: use-ip-firewall
+    elements: null
   use_ip_firewall_for_pppoe:
     name: use_ip_firewall_for_pppoe
     type: string
@@ -79,8 +86,9 @@ properties:
       - 'no'
       - 'yes'
     choice_type: null
-    description: 'Send bridged un-encrypted PPPoE traffic to also be processed by [ IP/Firewall](https://wiki.mikrotik.com/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when <var>use-ip-firewall</var> is set to `yes`. This property is required in case you want to assign [ Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to PPPoE traffic in a bridge.'
+    description: 'Send bridged un-encrypted PPPoE traffic to also be processed by [IP/Firewall](https://wiki.mikrotik.com/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when use-ip-firewall is set to `yes`. This property is required in case you want to assign [Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to PPPoE traffic in a bridge.'
     original_name: use-ip-firewall-for-pppoe
+    elements: null
   use_ip_firewall_for_vlan:
     name: use_ip_firewall_for_vlan
     type: string
@@ -90,5 +98,6 @@ properties:
       - 'no'
       - 'yes'
     choice_type: null
-    description: 'Send bridged VLAN traffic to also be processed by [ IP/Firewall](https://wiki.mikrotik.com/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when <var>use-ip-firewall</var> is set to `yes`. This property is required in case you want to assign [ Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [ Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to VLAN traffic in a bridge.'
+    description: 'Send bridged VLAN traffic to also be processed by [IP/Firewall](https://wiki.mikrotik.com/wiki/Manual:IP/Firewall "Manual:IP/Firewall"). This property only has effect when use-ip-firewall is set to `yes`. This property is required in case you want to assign [Simple Queues](https://wiki.mikrotik.com/wiki/Manual:Queue#Simple_Queues "Manual:Queue") or global [Queue Tree](https://wiki.mikrotik.com/wiki/Manual:Queue#Queue_Tree "Manual:Queue") to VLAN traffic in a bridge.'
     original_name: use-ip-firewall-for-vlan
+    elements: null

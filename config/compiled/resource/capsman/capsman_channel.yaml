@@ -22,6 +22,7 @@ properties:
     choice_type: null
     description: 'Define operational radio frequency band and mode taken from hardware capability of wireless card'
     original_name: band
+    elements: null
   comment:
     name: comment
     type: string
@@ -30,6 +31,7 @@ properties:
     choice_type: null
     description: 'Short description of the Channel Group profile'
     original_name: comment
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -41,6 +43,7 @@ properties:
     choice_type: null
     description: 'Set capsman_channel resource disability'
     original_name: disabled
+    elements: null
   extension_channel:
     name: extension_channel
     type: string
@@ -57,6 +60,7 @@ properties:
     choice_type: null
     description: 'Extension channel configuration. (E.g. Ce = extension channel is above Control channel, eC = extension channel is below Control channel)'
     original_name: extension-channel
+    elements: null
   frequency:
     name: frequency
     type: integer
@@ -65,6 +69,7 @@ properties:
     choice_type: null
     description: 'Channel frequency value in MHz on which AP will operate.'
     original_name: frequency
+    elements: null
   name:
     name: name
     type: string
@@ -73,6 +78,7 @@ properties:
     choice_type: null
     description: 'Descriptive name for the Channel Group Profile'
     original_name: name
+    elements: null
   save_selected:
     name: save_selected
     type: string
@@ -84,6 +90,7 @@ properties:
     choice_type: null
     description: 'Saves selected channel for the CAP Radio - will select this channel after the CAP reconnects to CAPsMAN and use it till the channel Re-optimize is done for this CAP.'
     original_name: save-selected
+    elements: null
   tx_power:
     name: tx_power
     type: integer
@@ -92,6 +99,7 @@ properties:
     choice_type: null
     description: 'TX Power for CAP interface (for the whole interface not for individual chains) in dBm. It is not possible to set higher than allowed by country regulations or interface. By default max allowed by country or interface is used.'
     original_name: tx-power
+    elements: null
   width:
     name: width
     type: string
@@ -100,3 +108,4 @@ properties:
     choice_type: null
     description: 'Sets Channel Width in MHz. (E.g. 20, 40)'
     original_name: width
+    elements: null

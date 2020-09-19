@@ -1,5 +1,6 @@
 name: capsman_provisioning
 package: capsman
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_capsman_provisioning
 export_command: '/caps-man provisioning export'
@@ -13,6 +14,7 @@ documentation:
     - 'This modules manages CAPsMan Provisioning on Mikrotik RouterOS network devices'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,6 +25,7 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of capsman_provisioning options'
       suboptions:
         action:
           type: str
@@ -32,20 +35,21 @@ documentation:
             - create-enabled
             - none
           description: |
-            Action to take if rule matches are specified by the following settings:
-            
-            - **create-disabled** - create disabled static interfaces for radio. I.e., the interfaces will be bound to the radio, but the radio will not be operational until the interface is manually enabled;
+            Action to take if rule matches are specified by the following settings: - **create-disabled** - create disabled static interfaces for radio.
+            I.e., the interfaces will be bound to the radio, but the radio will not be operational until the interface is manually enabled;
             - **create-enabled** - create enabled static interfaces. I.e., the interfaces will be bound to the radio and the radio will be operational;
-            - **create-dynamic-enabled** - create enabled dynamic interfaces. I.e., the interfaces will be bound to the radio, and the radio will be operational;
+            - **create-dynamic-enabled** - create enabled dynamic interfaces. I.e., the interfaces will be bound to the radio, and the radio will be
+            operational;
             - **none** - do nothing, leaves radio in non-provisioned state;
-            
         comment:
           type: str
           required: 'True'
           description: 'Short description of the Provisioning rule'
         common_name_regexp:
           type: str
-          description: 'Regular expression to match radios by common name. Each CAP''s common name identifier can be found under "/caps-man radio" as value "REMOTE-CAP-NAME"'
+          description: |
+            Regular expression to match radios by common name. Each CAP's common name identifier can be found under "/caps-man radio" as value
+            "REMOTE-CAP-NAME"
         disabled:
           type: bool
           default: 'False'
@@ -70,7 +74,9 @@ documentation:
           description: 'Match CAPs with IPs within configured address range.'
         master_configuration:
           type: str
-          description: 'If **action** specifies to create interfaces, then a new master interface with its configuration set to this configuration profile will be created'
+          description: |
+            If **action** specifies to create interfaces, then a new master interface with its configuration set to this configuration profile will be
+            created
         name_format:
           type: str
           choices:
@@ -80,13 +86,10 @@ documentation:
             - prefix-identity
           default: cap
           description: |
-            specify the syntax of the CAP interface name creation
-            
-            - cap - default name
+            specify the syntax of the CAP interface name creation - cap - default name
             - identity - CAP boards system identity name
             - prefix - name from the name-prefix value
             - prefix-identity - name from the name-prefix value and the CAP boards system identity name
-            
         name_prefix:
           type: str
           description: 'name prefix which can be used in the name-format for creating the CAP interface names'
@@ -96,6 +99,7 @@ documentation:
           description: 'MAC address of radio to be matched, empty MAC (00:00:00:00:00:00) means match all MAC addresses'
         slave_configurations:
           type: list
+          elements: str
           description: 'If **action** specifies to create interfaces, then a new slave interface for each configuration profile in this list is created.'
 examples:
   - title: 'Using merged state'
@@ -107,7 +111,7 @@ examples:
           action: create-disabled
         - comment: 'Olympus Wireless Network'
           identity_regexp: olympus
-          master_configuration: olympus
+          master_configuration: olympus-network
           name_format: identity
           slave_configurations:
             - troy-network
@@ -121,10 +125,10 @@ examples:
       #
       /caps-man provisioning
       add action=create-disabled comment=test
-      add action=create-enabled comment=Olympus identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network
+      add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network
     commands:
       - '/caps-man provisioning set [ find comment=test ] action=create-disabled'
-      - '/caps-man provisioning add action=create-enabled comment=Olympus identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
+      - '/caps-man provisioning add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
   - title: 'Using deleted state'
     name: 'Delete provisioning config'
     argument_spec:
@@ -139,7 +143,7 @@ examples:
       #
       /caps-man provisioning
     commands:
-      - '/caps-man provisioning remove comment=test'
+      - '/caps-man provisioning remove [ find comment=test ]'
       - '/system script run ansible-remove-invalid'
 resource:
   name: capsman_provisioning
@@ -149,7 +153,7 @@ resource:
   keys:
     - comment
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -168,14 +172,18 @@ resource:
             - create-dynamic-enabled
             - create-enabled
             - none
+          description: '(need to be defined later)'
         comment:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         common_name_regexp:
           type: str
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         hw_supported_modes:
           type: str
           choices:
@@ -187,12 +195,16 @@ resource:
             - g
             - g-turbo
             - gn
+          description: '(need to be defined later)'
         identity_regexp:
           type: str
+          description: '(need to be defined later)'
         ip_address_ranges:
           type: str
+          description: '(need to be defined later)'
         master_configuration:
           type: str
+          description: '(need to be defined later)'
         name_format:
           type: str
           choices:
@@ -201,13 +213,18 @@ resource:
             - prefix
             - prefix-identity
           default: cap
+          description: '(need to be defined later)'
         name_prefix:
           type: str
+          description: '(need to be defined later)'
         radio_mac:
           type: str
           default: '00:00:00:00:00:00'
+          description: '(need to be defined later)'
         slave_configurations:
           type: list
+          elements: str
+          description: '(need to be defined later)'
 tests:
   facts:
     name: capsman_provisioning
@@ -223,6 +240,8 @@ tests:
         values:
           comment: test
   unit:
+    name: capsman_provisioning
+    package: capsman
     module_name: ros_capsman_provisioning
     fixture_contents: |
       # RouterOS Output
@@ -232,12 +251,12 @@ tests:
     tests:
       - commands:
           - '/caps-man provisioning set [ find comment=test ] action=create-disabled'
-          - '/caps-man provisioning add action=create-enabled comment=Olympus identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
+          - '/caps-man provisioning add action=create-enabled comment="Olympus Wireless Network" identity-regexp=olympus master-configuration=olympus-network name-format=identity slave-configurations=troy-network,gaia-network'
         argument_spec:
           state: merged
           config:
             - { action: create-disabled, comment: test }
-            - { action: create-enabled, comment: 'Olympus Wireless Network', identity_regexp: olympus, master_configuration: olympus, name_format: identity, slave_configurations: [troy-network, gaia-network] }
+            - { action: create-enabled, comment: 'Olympus Wireless Network', identity_regexp: olympus, master_configuration: olympus-network, name_format: identity, slave_configurations: [troy-network, gaia-network] }
       - commands:
           - '/caps-man provisioning remove [ find comment=test ]'
           - '/system script run ansible-remove-invalid'

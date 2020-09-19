@@ -12,5 +12,6 @@ properties_override:
       - ignore-default
   slave_configurations:
     type: list
+    elements: string
 keys:
   - comment

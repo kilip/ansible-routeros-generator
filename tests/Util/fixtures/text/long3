@@ -1,0 +1,7 @@
+How long to wait for confirmation of unicast frames (**ACKs**)
+before considering transmission unsuccessful, or in short **ACK-Timeout**.
+Distance value has these behaviors:
+- *Dynamic* - causes AP to detect and use the smallest timeout that works with all connected clients.
+- *Indoor* - uses the default ACK timeout value that the hardware chip manufacturer has set.
+- *Number* - uses the input value in formula: ACK-timeout = ((**distance** \* 1000) + 299) / 300 us
+Acknowledgments are not used in Nstreme/NV2 protocols.

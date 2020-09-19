@@ -13,6 +13,7 @@ properties:
     choice_type: null
     description: 'Short note for interface resource'
     original_name: comment
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -24,14 +25,16 @@ properties:
     choice_type: null
     description: 'Set interface disability.'
     original_name: disabled
+    elements: null
   l2mtu:
     name: l2mtu
     type: string
     required: false
     default: null
     choice_type: null
-    description: 'Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. [ Read more&gt;&gt; ](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
+    description: 'Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. [Read more&gt;&gt;](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
     original_name: l2mtu
+    elements: null
   mtu:
     name: mtu
     type: string
@@ -40,6 +43,7 @@ properties:
     choice_type: null
     description: 'Layer3 Maximum transmission unit'
     original_name: mtu
+    elements: null
   name:
     name: name
     type: string
@@ -48,3 +52,4 @@ properties:
     choice_type: null
     description: 'Name of an interface'
     original_name: name
+    elements: null

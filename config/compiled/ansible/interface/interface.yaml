@@ -1,5 +1,6 @@
 name: interface
 package: interface
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_interface
 export_command: '/interface export'
@@ -11,18 +12,9 @@ documentation:
   short_description: 'Interface Resource Module'
   description:
     - 'This module manages the interface configuration of Mikrotik RouterOS network devices.'
-  supports:
-    - export-verbose-mode
-  integration:
-    pre_tasks:
-      - name: 'reset interface configuration'
-        kilip.routeros.ros_interface:
-          state: merged
-          config:
-            - { name: ether2, comment: 'ether2 comment', mtu: '1500' }
-            - { name: ether3, comment: 'ether3 comment', mtu: '1500', disabled: 'yes' }
   options:
     state:
+      type: str
       choices:
         - merged
       default: merged
@@ -30,6 +22,7 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of interface options'
       suboptions:
         comment:
           type: str
@@ -40,7 +33,9 @@ documentation:
           description: 'Set interface disability.'
         l2mtu:
           type: str
-          description: 'Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. [ Read more&gt;&gt; ](https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards "Maximum Transmission Unit on RouterBoards")'
+          description: |
+            Layer2 Maximum transmission unit. Note that this property can not be configured on all interfaces. L(Read more&gt;&gt;,
+            https://wiki.mikrotik.com/wiki/Maximum_Transmission_Unit_on_RouterBoards)
         mtu:
           type: str
           description: 'Layer3 Maximum transmission unit'
@@ -63,17 +58,17 @@ examples:
       state: merged
     before: |
       /interface
-      set comment=ether2 mtu=1500 name=ether2
-      set comment=ether3 disabled=yes mtu=1500 name=ether3
+      set comment="ether2 comment" mtu=1500 name=ether2
+      set comment="ether3 comment" disabled=yes mtu=1500 name=ether3
     after: |
       # RouterOS Output
       #
       /interface
-      add comment=ether2 mtu=2000 name=ether2
-      add comment=ether3 disabled=no mtu=3000 name=ether3
+      add comment="ether2 updated" mtu=2000 name=ether2
+      add comment="ether3 updated" disabled=no mtu=3000 name=ether3
     commands:
-      - '/interface set [ find name=ether2 ] comment=ether2 mtu=2000'
-      - '/interface set [ find name=ether3 ] comment=ether3 disabled=no mtu=3000'
+      - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
+      - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
 resource:
   name: interface
   package: interface
@@ -81,10 +76,8 @@ resource:
   config_type: config
   keys:
     - name
-  supports:
-    - export-verbose-mode
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -95,16 +88,21 @@ resource:
       options:
         comment:
           type: str
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         l2mtu:
           type: str
+          description: '(need to be defined later)'
         mtu:
           type: str
+          description: '(need to be defined later)'
         name:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
 tests:
   facts:
     name: interface
@@ -114,32 +112,34 @@ tests:
       # RouterOS Output
       #
       /interface
-      add comment=ether2 mtu=1500 name=ether2
-      add comment=ether3 disabled=yes mtu=1500 name=ether3
+      add comment="ether2 comment" mtu=1500 name=ether2
+      add comment="ether3 comment" disabled=yes mtu=1500 name=ether3
     fixtures:
       - action: set
         values:
-          comment: ether2
+          comment: 'ether2 comment'
           mtu: '1500'
           name: ether2
       - action: set
         values:
-          comment: ether3
+          comment: 'ether3 comment'
           disabled: 'yes'
           mtu: '1500'
           name: ether3
   unit:
+    name: interface
+    package: interface
     module_name: ros_interface
     fixture_contents: |
       # RouterOS Output
       #
       /interface
-      add comment=ether2 mtu=1500 name=ether2
-      add comment=ether3 disabled=yes mtu=1500 name=ether3
+      add comment="ether2 comment" mtu=1500 name=ether2
+      add comment="ether3 comment" disabled=yes mtu=1500 name=ether3
     tests:
       - commands:
-          - '/interface set [ find name=ether2 ] comment=ether2 mtu=2000'
-          - '/interface set [ find name=ether3 ] comment=ether3 disabled=no mtu=3000'
+          - '/interface set [ find name=ether2 ] comment="ether2 updated" mtu=2000'
+          - '/interface set [ find name=ether3 ] comment="ether3 updated" disabled=no mtu=3000'
         argument_spec:
           config:
             - { comment: 'ether2 updated', mtu: '2000', name: ether2 }

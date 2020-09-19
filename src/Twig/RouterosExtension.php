@@ -47,22 +47,51 @@ class RouterosExtension extends AbstractExtension
             new TwigFilter('to_routeros_export', [$this, 'toRouterOSExport']),
             new TwigFilter('quote_value', [$this, 'quoteValue']),
             new TwigFilter('convert', [$this, 'convert']),
+            new TwigFilter('to_bool', [$this, 'toBool']),
         ];
     }
 
-    public function convert($value, $name, $property, $andQuote = false)
+    public function toBool($value)
+    {
+        if ('yes' == $value) {
+            return 'True';
+        }
+        if ('no' == $value) {
+            return 'False';
+        }
+
+        return $value;
+    }
+
+    public function convert($value, $name, $propertyName, $andQuote = false)
     {
         $resourceManager = $this->resourceManager;
         $resource = $resourceManager->getResource($name);
-        $property = $resource->getProperty($property);
+        $property = $resource->getProperty($propertyName);
 
         $type = $property->getType();
+        $elements = $property->getElements();
 
-        if (ResourceProperty::TYPE_INTEGER == $type) {
+        if (0 === $value) {
+            return 0;
+        }
+
+        if (\in_array($value, ['on', 'off'], true)) {
+            return '"'.$value.'"';
+        }
+        if (\in_array($value, ['yes', 'no'], true)) {
+            return 'yes' === $value ? 'True' : 'False';
+        }
+
+        if (
+            ResourceProperty::TYPE_INTEGER == $type
+            || ResourceProperty:: TYPE_INTEGER == $elements
+        ) {
             $value = (int) $value;
-        } elseif (ResourceProperty::TYPE_STRING == $type) {
-            $value = (string) $value;
-
+        } elseif (
+            ResourceProperty::TYPE_STRING == $type
+            || ResourceProperty::TYPE_STRING == $elements
+        ) {
             if ($andQuote) {
                 $value = '"'.$value.'"';
             }

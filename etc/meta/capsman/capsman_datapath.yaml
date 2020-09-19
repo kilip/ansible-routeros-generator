@@ -39,6 +39,7 @@ properties_override:
     description: "controls if client-to-client forwarding between wireless clients connected to interface should be allowed, in local forwarding mode this function is performed by CAP, otherwise it is performed by CAPsMAN\n"
   interface_list:
     type: list
+    elements: string
     description: 'interface list for this datapath'
   l2mtu:
     type: string

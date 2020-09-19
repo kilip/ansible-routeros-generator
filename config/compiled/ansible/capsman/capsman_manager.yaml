@@ -1,5 +1,6 @@
 name: capsman_manager
 package: capsman
+type: setting
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_capsman_manager
 export_command: '/caps-man manager export'
@@ -11,10 +12,9 @@ documentation:
   short_description: 'CAPsMan Manager Setting Module'
   description:
     - 'This modules manages CAPsMan Maanager Setting on Mikrotik RouterOS network devices'
-  supports:
-    - export-verbose-mode
   options:
     state:
+      type: str
       choices:
         - present
         - reset
@@ -22,6 +22,7 @@ documentation:
       description: 'Set state for this module'
     config:
       type: dict
+      description: 'A dictionary of capsman_manager options'
       suboptions:
         ca_certificate:
           type: str
@@ -39,7 +40,9 @@ documentation:
           description: 'Disable or enable CAPsMAN functionality'
         package_path:
           type: str
-          description: 'Folder location for the RouterOS packages. For example, use "/upgrade" to specify the upgrade folder from the files section. If empty string is set, CAPsMAN can use built-in RouterOS packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.'
+          description: |
+            Folder location for the RouterOS packages. For example, use "/upgrade" to specify the upgrade folder from the files section. If empty string
+            is set, CAPsMAN can use built-in RouterOS packages, note that in this case only CAPs with the same architecture as CAPsMAN will be upgraded.
         require_peer_certificate:
           type: bool
           default: 'False'
@@ -51,12 +54,10 @@ documentation:
             - require-same-version
             - suggest-same-upgrade
           description: |
-            Upgrade policy options
-            
-            - none - do not perform upgrade
-            - require-same-version - CAPsMAN suggest to upgrade the CAP RouterOS version and if it fails it will not provision the CAP. (Manual provision is still possible)
+            Upgrade policy options - none - do not perform upgrade
+            - require-same-version - CAPsMAN suggest to upgrade the CAP RouterOS version and if it fails it will not provision the CAP. (Manual
+            provision is still possible)
             - suggest-same-version - CAPsMAN suggests to upgrade the CAP RouterOS version and if it fails it will still be provisioned
-            
 examples:
   - title: 'Using Present State'
     name: 'Update Settings'
@@ -85,7 +86,7 @@ resource:
   supports:
     - export-verbose-mode
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - present
@@ -96,26 +97,32 @@ resource:
       options:
         ca_certificate:
           type: str
+          description: '(need to be defined later)'
         certificate:
           type: str
           choices:
             - auto
             - 'certificate name'
             - none
+          description: '(need to be defined later)'
         enabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         package_path:
           type: str
+          description: '(need to be defined later)'
         require_peer_certificate:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         upgrade_policy:
           type: str
           choices:
             - none
             - require-same-version
             - suggest-same-upgrade
+          description: '(need to be defined later)'
 tests:
   facts:
     name: capsman_manager
@@ -135,6 +142,8 @@ tests:
           require_peer_certificate: 'no'
           upgrade_policy: none
   unit:
+    name: capsman_manager
+    package: capsman
     module_name: ros_capsman_manager
     fixture_contents: |
       # RouterOS Output

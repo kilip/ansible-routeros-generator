@@ -84,9 +84,20 @@ class TableParser
 
         $crawler->filter('td')->each(function ($crawler, $index) use (&$columns) {
             $html = $crawler->html();
-            $converter = new HtmlConverter(['use_autolinks' => false]);
+            $converter = new HtmlConverter([
+                'use_autolinks' => true,
+                'strip_tags' => true,
+                'hard_break' => true,
+            ]);
             $markdown = $converter->convert($html);
-            $markdown = str_replace('/wiki/', 'https://wiki.mikrotik.com/wiki/', $markdown);
+            $markdown = str_replace('`Read more >>`', 'Read More', $markdown);
+            $markdown = strtr($markdown, [
+                '[ ' => '[',
+                ' ]' => ']',
+                '( ' => ')',
+                ' )' => ')',
+            ]);
+            $markdown = str_replace('(/wiki', '(https://wiki.mikrotik.com/wiki', $markdown);
             $columns[$index] = $markdown;
         });
 

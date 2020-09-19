@@ -47,18 +47,11 @@ class AnsibleExtension extends AbstractExtension
 
     public function normalizeOutput($output)
     {
-        // replace quoted links
-        $pattern = '#(\[\s+]?)([^\]]+)\]\((.+)(\s+?\".+\")([\s+]?\))#im';
-        $output = preg_replace($pattern, 'L(\\2, \\3)', $output);
+        // fix on/off value
+        $output = preg_replace('#([\-|\:]+)\s(on|off)#', '\\1 "\\2"', $output);
 
-        $pattern = '#(\[[\s+]?)([^\]]+)\]\(([^\s?\)]+)([\s+]?\))#im';
-        $output = preg_replace($pattern, 'L(\\2, \\3)', $output);
-
-        $pattern = '#L\((.+)(\s+\".+\")\)#im';
-        $output = preg_replace($pattern, 'L(\\1)', $output);
-
-        // decorize code output
-        $output = preg_replace('#\<var>([^<\/]+)<\/var>#im', 'C(\\1)', $output);
+        // fix hex value
+        $output = preg_replace('#(0x8100|0x88a8|0x9100)#', '"\\1"', $output);
 
         return preg_replace('#\`(.+)\`#im', 'C(\\1)', $output);
     }
@@ -76,7 +69,7 @@ class AnsibleExtension extends AbstractExtension
         $modulePrefix = $this->modulePrefix;
         $moduleCompletePrefix = $this->moduleCompletePrefix;
 
-        $moduleName = "{$modulePrefix}_{$name}";
+        $moduleName = "{$modulePrefix}{$name}";
         if ($complete) {
             $moduleName = "{$moduleCompletePrefix}.{$moduleName}";
         }

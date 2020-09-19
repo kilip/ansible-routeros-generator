@@ -6,6 +6,16 @@ generator:
   table_index:
     - 0
 properties_override:
+  distance:
+    description: |
+      How long to wait for confirmation of unicast frames (**ACKs**)
+      before considering transmission unsuccessful, or in short **ACK-Timeout**.
+      Distance value has these behaviors:
+      - *Dynamic* - causes AP to detect and use the smallest timeout that works with all connected clients.
+      - *Indoor* - uses the default ACK timeout value that the hardware chip manufacturer has set.
+      - *Number* - uses the input value in formula: ACK-timeout = ((**distance** \* 1000) + 299) / 300 us
+      Acknowledgments are not used in Nstreme/NV2 protocols.
+      
   update_stats_interval:
     type: string
   wps_mode:
@@ -20,6 +30,7 @@ properties_override:
       - ignore-default
   ampdu_priorities:
     type: list
+    elements: integer
     choices:
       - 0
       - 1
@@ -29,31 +40,38 @@ properties_override:
       - 5
       - 6
       - 7
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     options:
       - ignore-default
   rx_chains:
     type: list
+    elements: integer
     choices:
       - 0
       - 1
       - 2
       - 3
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     options:
       - ignore-default
   tx_chains:
     type: list
+    elements: integer
     choices:
       - 0
       - 1
       - 2
       - 3
-    default: 'a:1:{i:0;i:0;}'
+    default:
+      - 0
     options:
       - ignore-default
   scan_list:
     type: list
-    default: 'a:1:{i:0;s:7:"default";}'
+    elements: string
+    default:
+      - default
     options:
       - ignore-default

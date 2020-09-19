@@ -18,6 +18,7 @@ use RouterOS\Generator\Provider\Ansible\Event\ModuleEvent;
 use RouterOS\Generator\Provider\Ansible\Structure\ModuleStructure;
 use RouterOS\Generator\Structure\ResourceProperty;
 use RouterOS\Generator\Structure\ResourceStructure;
+use RouterOS\Generator\Util\Text;
 
 trait ConfigTrait
 {
@@ -38,6 +39,11 @@ trait ConfigTrait
             $prop = [
                 'type' => $type,
             ];
+
+            $elements = $property->getElements();
+            if (null !== $elements) {
+                $prop['elements'] = $this->translateType($elements);
+            }
 
             $choices = $property->getChoices();
             if (!empty($choices)) {
@@ -70,11 +76,22 @@ trait ConfigTrait
                 $prop['required'] = 'True';
             }
 
+            $description = $property->getDescription();
             if (
                 !(ModuleEvent::PROPERTY_NO_DESCRIPTION & $options)
-                && null !== $property->getDescription()
+                && null !== $description
+                && \strlen($description) > 5
             ) {
-                $prop['description'] = $property->getDescription();
+                // replace quoted links
+                $pattern = '#\[([^\]]+)\]\(([^\)|^\"]+)( \".*\")?\)#im';
+                $output = preg_replace($pattern, 'L(\\1, \\2)', $description);
+
+                // decorize code output
+                $output = preg_replace('#\<var>([^<\/]+)<\/var>#im', 'C(\\1)', $output);
+                $output = Text::normalizeText($output);
+                $prop['description'] = $output;
+            } else {
+                $prop['description'] = '(need to be defined later)';
             }
 
             $props[$name] = $prop;

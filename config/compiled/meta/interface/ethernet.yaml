@@ -15,3 +15,4 @@ properties_override:
     description: 'Set interface disability.'
   advertise:
     type: list
+    elements: string

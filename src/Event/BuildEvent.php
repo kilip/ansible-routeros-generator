@@ -21,9 +21,7 @@ class BuildEvent extends Event
 {
     public const PREPARE = 'build.prepare';
     public const BUILD = 'build';
-
-    public const TEST_PREPARE = 'test.prepare';
-    public const TEST = 'test';
+    public const BUILD_POST = 'build.post';
 
     /**
      * @var OutputInterface

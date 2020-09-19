@@ -1,5 +1,6 @@
 name: bridge
 package: interface.bridge
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_bridge
 export_command: '/interface bridge export'
@@ -11,21 +12,9 @@ documentation:
   short_description: 'Bridge Resource Module'
   description:
     - 'This modules manages configuration in submenu `/interface bridge`.'
-  integration:
-    pre_tasks:
-      - name: 'remove created bridge'
-        kilip.routeros.ros_bridge:
-          state: deleted
-          config:
-            - { name: br-new }
-      - name: 'reset bridge configuration'
-        kilip.routeros.ros_bridge:
-          state: merged
-          config:
-            - { name: br-trunk, comment: 'trunk bridge', arp: reply-only }
-            - { name: br-wan, comment: 'wan bridge', arp: reply-only, vlan_filtering: 'no' }
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -36,14 +25,17 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of bridge options'
       suboptions:
         add_dhcp_option82:
           type: bool
           default: 'False'
-          description: 'Whether to add DHCP Option-82 information (Agent Remote ID and Agent Circuit ID) to DHCP packets. Can be used together with Option-82 capable DHCP server to assign IP addresses and implement policies. This property only has effect when <var>dhcp-snooping</var> is set to `yes`.'
+          description: |
+            Whether to add DHCP Option-82 information (Agent Remote ID and Agent Circuit ID) to DHCP packets. Can be used together with Option-82
+            capable DHCP server to assign IP addresses and implement policies. This property only has effect when dhcp-snooping is set to `yes`.
         admin_mac:
           type: str
-          description: 'Static MAC address of the bridge. This property only has effect when <var>auto-mac</var> is set to `no`.'
+          description: 'Static MAC address of the bridge. This property only has effect when auto-mac is set to `no`.'
         ageing_time:
           type: str
           default: '00:05:00'
@@ -57,21 +49,24 @@ documentation:
             - reply-only
           default: enabled
           description: |
-            Address Resolution Protocol setting
-            
-            - `disabled` - the interface will not use ARP
+            Address Resolution Protocol setting - `disabled` - the interface will not use ARP
             - `enabled` - the interface will use ARP
             - `proxy-arp` - the interface will use the ARP proxy feature
-            - `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as static entries in the [ IP/ARP](https://wiki.mikrotik.com/wiki/Manual:IP/ARP "Manual:IP/ARP") table. No dynamic entries will be automatically stored in the [ IP/ARP](https://wiki.mikrotik.com/wiki/Manual:IP/ARP "Manual:IP/ARP") table. Therefore for communications to be successful, a valid static entry must already exist.
-            
+            - `reply-only` - the interface will only reply to requests originated from matching IP address/MAC address combinations which are entered as
+            static entries in the L(IP/ARP, https://wiki.mikrotik.com/wiki/Manual:IP/ARP) table. Therefore for communications to be successful, a valid
+            static entry must already exist.
         arp_timeout:
           type: str
           default: auto
-          description: 'ARP timeout is time how long ARP record is kept in ARP table after no packets are received from IP. Value `auto` equals to the value of <var>arp-timeout</var> in [ IP/Settings](https://wiki.mikrotik.com/wiki/Manual:IP/Settings "Manual:IP/Settings"), default is 30s.'
+          description: |
+            ARP timeout is time how long ARP record is kept in ARP table after no packets are received from IP. Value `auto` equals to the value of
+            arp-timeout in L(IP/Settings, https://wiki.mikrotik.com/wiki/Manual:IP/Settings), default is 30s.
         auto_mac:
           type: bool
           default: 'True'
-          description: 'Automatically select one MAC address of bridge ports as a bridge MAC address, bridge MAC will be chosen from the first added bridge port. After a device reboot, the bridge MAC can change depending on the port-number.'
+          description: |
+            Automatically select one MAC address of bridge ports as a bridge MAC address, bridge MAC will be chosen from the first added bridge port.
+            After a device reboot, the bridge MAC can change depending on the port-number.
         comment:
           type: str
           description: 'Short description of the interface.'
@@ -90,15 +85,19 @@ documentation:
             - '0x88a8'
             - '0x9100'
           default: '0x8100'
-          description: 'Changes the EtherType, which will be used to determine if a packet has a VLAN tag. Packets that have a matching EtherType are considered as tagged packets. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+          description: |
+            Changes the EtherType, which will be used to determine if a packet has a VLAN tag. Packets that have a matching EtherType are considered as
+            tagged packets. This property only has effect when vlan-filtering is set to `yes`.
         fast_forward:
           type: bool
           default: 'True'
-          description: 'Special and faster case of [ FastPath](https://wiki.mikrotik.com/wiki/Manual:Fast_Path "Manual:Fast Path") which works only on bridges with 2 interfaces (enabled by default only for new bridges). More details can be found in the [ Fast Forward](https://wiki.mikrotik.com/wiki/Manual:Interface/Bridge#Fast_Forward "Manual:Interface/Bridge") section.'
+          description: 'Special and faster case of L(FastPath, https://wiki.mikrotik.com/wiki/Manual:Fast_Path) section.'
         forward_delay:
           type: str
           default: '00:00:15'
-          description: 'Time which is spent during the initialization phase of the bridge interface (i.e., after router startup or enabling the interface) in listening/learning state before the bridge will start functioning normally.'
+          description: |
+            Time which is spent during the initialization phase of the bridge interface (i.e., after router startup or enabling the interface) in
+            listening/learning state before the bridge will start functioning normally.
         frame_types:
           type: str
           choices:
@@ -106,7 +105,7 @@ documentation:
             - admit-only-untagged-and-priority-tagged
             - admit-only-vlan-tagged
           default: admit-all
-          description: 'Specifies allowed frame types on a bridge port. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+          description: 'Specifies allowed frame types on a bridge port. This property only has effect when vlan-filtering is set to `yes`.'
         igmp_snooping:
           type: bool
           default: 'False'
@@ -117,46 +116,77 @@ documentation:
             - 2
             - 3
           default: 2
-          description: 'Selects the IGMP version in which IGMP general membership queries will be generated. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+          description: |
+            Selects the IGMP version in which IGMP general membership queries will be generated. This property only has effect when igmp-snooping is set
+            to `yes`.
         ingress_filtering:
           type: bool
           default: 'False'
-          description: 'Enables or disables VLAN ingress filtering, which checks if the ingress port is a member of the received VLAN ID in the bridge VLAN table. By default, VLANs that don''t exist in the bridge VLAN table are dropped before they are sent out (egress), but this property allows you to drop the packets when they are received (ingress). Should be used with <var>frame-types</var> to specify if the ingress traffic should be tagged or untagged. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+          description: |
+            Enables or disables VLAN ingress filtering, which checks if the ingress port is a member of the received VLAN ID in the bridge VLAN table.
+            By default, VLANs that don't exist in the bridge VLAN table are dropped before they are sent out (egress), but this property allows you to
+            drop the packets when they are received (ingress). Should be used with frame-types to specify if the ingress traffic should be tagged or
+            untagged. This property only has effect when vlan-filtering is set to `yes`.
         last_member_interval:
           type: str
           default: 1s
-          description: 'If a port has <var>fast-leave</var> set to `no` and a bridge port receives a IGMP Leave message, then a IGMP Snooping enabled bridge will send a IGMP query to make sure that no devices has subscribed to a certain multicast stream on a bridge port. If a IGMP Snooping enabled bridge does not receive a IGMP membership report after amount of <var>last-member-interval</var>, then the bridge considers that no one has subscribed to a certain multicast stream and can stop forwarding it. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+          description: |
+            If a port has fast-leave set to `no` and a bridge port receives a IGMP Leave message, then a IGMP Snooping enabled bridge will send a IGMP
+            query to make sure that no devices has subscribed to a certain multicast stream on a bridge port. If a IGMP Snooping enabled bridge does not
+            receive a IGMP membership report after amount of last-member-interval, then the bridge considers that no one has subscribed to a certain
+            multicast stream and can stop forwarding it. This property only has effect when igmp-snooping is set to `yes`.
         last_member_query_count:
           type: int
           default: 2
-          description: 'How many times should <var>last-member-interval</var> pass until a IGMP Snooping bridge will stop forwarding a certain multicast stream. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+          description: |
+            How many times should last-member-interval pass until a IGMP Snooping bridge will stop forwarding a certain multicast stream. This property
+            only has effect when igmp-snooping is set to `yes`.
         max_hops:
           type: int
           default: 20
-          description: 'Bridge count which BPDU can pass in a MSTP enabled network in the same region before BPDU is being ignored. This property only has effect when <var>protocol-mode</var> is set to `mstp`.'
+          description: |
+            Bridge count which BPDU can pass in a MSTP enabled network in the same region before BPDU is being ignored. This property only has effect
+            when protocol-mode is set to `mstp`.
         max_message_age:
           type: str
           default: '00:00:20'
-          description: 'How long to remember Hello messages received from other STP/RSTP enabled bridges. This property only has effect when <var>protocol-mode</var> is set to `stp` or `rstp`.'
+          description: |
+            How long to remember Hello messages received from other STP/RSTP enabled bridges. This property only has effect when protocol-mode is set to
+            `stp` or `rstp`.
         membership_interval:
           type: str
           default: 4m20s
-          description: 'Amount of time after an entry in the Multicast Database (MDB) is removed if a IGMP membership report is not received on a certain port. This property only has effect when <var>igmp-snooping</var> is set to `yes`.'
+          description: |
+            Amount of time after an entry in the Multicast Database (MDB) is removed if a IGMP membership report is not received on a certain port. This
+            property only has effect when igmp-snooping is set to `yes`.
         mld_version:
           type: int
           choices:
             - 1
             - 2
           default: 1
-          description: 'Selects the MLD version. Version 2 adds support for source-specific multicast. This property only has effect when RouterOS IPv6 package is enabled and <var>igmp-snooping</var> is set to `yes`.'
+          description: |
+            Selects the MLD version. Version 2 adds support for source-specific multicast. This property only has effect when RouterOS IPv6 package is
+            enabled and igmp-snooping is set to `yes`.
         mtu:
           type: str
           default: auto
-          description: 'Maximum transmission unit, by default, the bridge will set MTU automatically and it will use the lowest MTU value of any associated bridge port. The default bridge MTU value without any bridge ports added is 1500. The MTU value can be set manually, but it cannot exceed the bridge L2MTU or the lowest bridge port L2MTU. If a new bridge port is added with L2MTU which is smaller than the actual-mtu of the bridge (set by the <var>mtu</var> property), then manually set value will be ignored and the bridge will act as if `mtu=auto` is set.'
+          description: |
+            Maximum transmission unit, by default, the bridge will set MTU automatically and it will use the lowest MTU value of any associated bridge
+            port. The default bridge MTU value without any bridge ports added is 1500. The MTU value can be set manually, but it cannot exceed the
+            bridge L2MTU or the lowest bridge port L2MTU. If a new bridge port is added with L2MTU which is smaller than the actual-mtu of the bridge
+            (set by the mtu property), then manually set value will be ignored and the bridge will act as if `mtu=auto` is set.
         multicast_querier:
           type: bool
           default: 'False'
-          description: 'Multicast querier generates IGMP general membership queries to which all IGMP capable devices respond with a IGMP membership report, usually a PIM (multicast) router generates these queries. By using this property you can make a IGMP Snooping enabled bridge to generate IGMP general membership queries. This property should be used whenever there is no PIM (multicast) router in a Layer2 network or IGMP packets must be sent through multiple IGMP Snooping enabled bridges to reach a PIM (multicast) router. Without a multicast querier in a Layer2 network the Multicast Database (MDB) is not being updated and IGMP Snooping will not function properly. Only untagged IGMP general membership queries are generated. This property only has effect when <var>igmp-snooping</var> is set to `yes`. Additionally, the <var>igmp-snooping</var> should be disabled/enabled after changing <var>multicast-querier</var> property.'
+          description: |
+            Multicast querier generates IGMP general membership queries to which all IGMP capable devices respond with a IGMP membership report, usually
+            a PIM (multicast) router generates these queries. By using this property you can make a IGMP Snooping enabled bridge to generate IGMP
+            general membership queries. This property should be used whenever there is no PIM (multicast) router in a Layer2 network or IGMP packets
+            must be sent through multiple IGMP Snooping enabled bridges to reach a PIM (multicast) router. Without a multicast querier in a Layer2
+            network the Multicast Database (MDB) is not being updated and IGMP Snooping will not function properly. Only untagged IGMP general
+            membership queries are generated. This property only has effect when igmp-snooping is set to `yes`. Additionally, the igmp-snooping should
+            be disabled/enabled after changing multicast-querier property.
         multicast_router:
           type: str
           choices:
@@ -165,12 +195,12 @@ documentation:
             - temporary-query
           default: temporary-query
           description: |
-            Changes the state of a bridge itself if IGMP membership reports are going to be forwarded to it. This property can be used to forward IGMP membership reports to the bridge for statistics or to analyse them.
-            
-            - `disabled` - IGMP membership reports are not forwarded to the bridge itself regardless what is connected to it.
+            Changes the state of a bridge itself if IGMP membership reports are going to be forwarded to it. This property can be used to forward IGMP
+            membership reports to the bridge for statistics or to analyse them. - `disabled` - IGMP membership reports are not forwarded to the bridge
+            itself regardless what is connected to it.
             - `permanent` - IGMP membership reports are forwarded through this the bridge itself regardless what is connected to it.
-            - `temporary-query` - automatically detect multicast routers and IGMP Snooping enabled bridges. This property only has effect when <var>igmp-snooping</var> is set to `yes`.
-            
+            - `temporary-query` - automatically detect multicast routers and IGMP Snooping enabled bridges. This property only has effect when
+            igmp-snooping is set to `yes`.
         name:
           type: str
           required: 'True'
@@ -178,7 +208,9 @@ documentation:
         priority:
           type: int
           default: 32768
-          description: 'Bridge priority, used by STP to determine root bridge, used by MSTP to determine CIST and IST regional root bridge. This property has no effect when <var>protocol-mode</var> is set to `none`.'
+          description: |
+            Bridge priority, used by STP to determine root bridge, used by MSTP to determine CIST and IST regional root bridge. This property has no
+            effect when protocol-mode is set to `none`.
         protocol_mode:
           type: str
           choices:
@@ -187,38 +219,54 @@ documentation:
             - rstp
             - stp
           default: rstp
-          description: 'Select Spanning tree protocol (STP) or Rapid spanning tree protocol (RSTP) to ensure a loop-free topology for any bridged LAN. RSTP provides for faster spanning tree convergence after a topology change. Select MSTP to ensure loop-free topology across multiple VLANs. Since RouterOS v6.43 it is possible to forward Reserved MAC addresses that are in **01:80:C2:00:00:0X** range, this can be done by setting the <var>protocol-mode</var> to `none`.'
+          description: |
+            Select Spanning tree protocol (STP) or Rapid spanning tree protocol (RSTP) to ensure a loop-free topology for any bridged LAN. RSTP provides
+            for faster spanning tree convergence after a topology change. Select MSTP to ensure loop-free topology across multiple VLANs. Since RouterOS
+            v6.43 it is possible to forward Reserved MAC addresses that are in **01:80:C2:00:00:0X** range, this can be done by setting the
+            protocol-mode to `none`.
         pvid:
           type: int
           default: 1
-          description: 'Port VLAN ID (pvid) specifies which VLAN the untagged ingress traffic is assigned to. It applies e.g. to frames sent from bridge IP and destined to a bridge port. This property only has effect when <var>vlan-filtering</var> is set to `yes`.'
+          description: |
+            Port VLAN ID (pvid) specifies which VLAN the untagged ingress traffic is assigned to. It applies e.g. to frames sent from bridge IP and
+            destined to a bridge port. This property only has effect when vlan-filtering is set to `yes`.
         querier_interval:
           type: str
           default: 4m15s
-          description: 'Used to change the interval how often a bridge checks if it is the active multicast querier. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+          description: |
+            Used to change the interval how often a bridge checks if it is the active multicast querier. This property only has effect when
+            igmp-snooping and multicast-querier is set to `yes`.
         query_interval:
           type: str
           default: 2m5s
-          description: 'Used to change the interval how often IGMP general membership queries are sent out. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+          description: |
+            Used to change the interval how often IGMP general membership queries are sent out. This property only has effect when igmp-snooping and
+            multicast-querier is set to `yes`.
         query_response_interval:
           type: str
           default: 10s
-          description: 'Interval in which a IGMP capable device must reply to a IGMP query with a IGMP membership report. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+          description: |
+            Interval in which a IGMP capable device must reply to a IGMP query with a IGMP membership report. This property only has effect when
+            igmp-snooping and multicast-querier is set to `yes`.
         region_name:
           type: str
-          description: 'MSTP region name. This property only has effect when <var>protocol-mode</var> is set to `mstp`.'
+          description: 'MSTP region name. This property only has effect when protocol-mode is set to `mstp`.'
         region_revision:
           type: int
           default: 0
-          description: 'MSTP configuration revision number. This property only has effect when <var>protocol-mode</var> is set to `mstp`.'
+          description: 'MSTP configuration revision number. This property only has effect when protocol-mode is set to `mstp`.'
         startup_query_count:
           type: int
           default: 2
-          description: 'Specifies how many times must <var>startup-query-interval</var> pass until the bridge starts sending out IGMP general membership queries periodically. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+          description: |
+            Specifies how many times must startup-query-interval pass until the bridge starts sending out IGMP general membership queries periodically.
+            This property only has effect when igmp-snooping and multicast-querier is set to `yes`.
         startup_query_interval:
           type: str
           default: 31s250ms
-          description: 'Used to change the amount of time after a bridge starts sending out IGMP general membership queries after the bridge is enabled. This property only has effect when <var>igmp-snooping</var> and <var>multicast-querier</var> is set to `yes`.'
+          description: |
+            Used to change the amount of time after a bridge starts sending out IGMP general membership queries after the bridge is enabled. This
+            property only has effect when igmp-snooping and multicast-querier is set to `yes`.
         transmit_hold_count:
           type: int
           default: 6
@@ -242,17 +290,17 @@ examples:
       state: merged
     before: |
       /interface bridge
-      add arp=reply-only comment=trunk name=br-trunk
-      add arp=reply-only comment=wan name=br-wan
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
-      add arp=enabled comment=updated name=br-wan
-      add arp=enabled comment=updated name=br-trunk vlan-filtering=yes
+      add arp=enabled comment="updated comment" name=br-wan
+      add arp=enabled comment="updated comment" name=br-trunk vlan-filtering=yes
     commands:
-      - '/interface bridge set [ find name=br-wan ] arp=enabled comment=updated'
-      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=updated vlan-filtering=yes'
+      - '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"'
+      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="updated comment" vlan-filtering=yes'
   - title: 'Using Replaced'
     name: 'Replace device configuration'
     argument_spec:
@@ -264,17 +312,17 @@ examples:
       state: replaced
     before: |
       /interface bridge
-      add arp=reply-only comment=trunk name=br-trunk
-      add arp=reply-only comment=wan name=br-wan
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
-      add arp=enabled comment=replaced name=br-wan
-      add arp=enabled comment=replaced name=br-trunk
+      add arp=enabled comment="replaced comment" name=br-wan
+      add arp=enabled comment="replaced comment" name=br-trunk
     commands:
-      - '/interface bridge set [ find name=br-wan ] arp=enabled comment=replaced'
-      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=replaced'
+      - '/interface bridge set [ find name=br-wan ] arp=enabled comment="replaced comment"'
+      - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="replaced comment"'
   - title: 'Using Overridden'
     name: 'Override bridge configuration'
     argument_spec:
@@ -284,17 +332,17 @@ examples:
       state: overridden
     before: |
       /interface bridge
-      add arp=reply-only comment=trunk name=br-trunk
-      add arp=reply-only comment=wan name=br-wan
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
-      add comment=new name=br-new
+      add comment="new bridge" name=br-new
     commands:
-      - '/interface bridge remove name=br-trunk'
-      - '/interface bridge remove name=br-wan'
-      - '/interface bridge add comment=new name=br-new'
+      - '/interface bridge remove [ find name=br-trunk ]'
+      - '/interface bridge remove [ find name=br-wan ]'
+      - '/interface bridge add comment="new bridge" name=br-new'
       - '/system script run ansible-remove-invalid'
   - title: 'Using deleted state'
     name: 'Delete bridge'
@@ -305,15 +353,15 @@ examples:
       state: deleted
     before: |
       /interface bridge
-      add arp=reply-only comment=trunk name=br-trunk
-      add arp=reply-only comment=wan name=br-wan
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
     after: |
       # RouterOS Output
       #
       /interface bridge
     commands:
-      - '/interface bridge remove name=br-trunk'
-      - '/interface bridge remove name=br-wan'
+      - '/interface bridge remove [ find name=br-trunk ]'
+      - '/interface bridge remove [ find name=br-wan ]'
       - '/system script run ansible-remove-invalid'
 resource:
   name: bridge
@@ -323,7 +371,7 @@ resource:
   keys:
     - name
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -338,11 +386,14 @@ resource:
         add_dhcp_option82:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         admin_mac:
           type: str
+          description: '(need to be defined later)'
         ageing_time:
           type: str
           default: '00:05:00'
+          description: '(need to be defined later)'
         arp:
           type: str
           choices:
@@ -351,20 +402,26 @@ resource:
             - proxy-arp
             - reply-only
           default: enabled
+          description: '(need to be defined later)'
         arp_timeout:
           type: str
           default: auto
+          description: '(need to be defined later)'
         auto_mac:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         comment:
           type: str
+          description: '(need to be defined later)'
         dhcp_snooping:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         ether_type:
           type: str
           choices:
@@ -372,12 +429,15 @@ resource:
             - '0x88a8'
             - '0x9100'
           default: '0x8100'
+          description: '(need to be defined later)'
         fast_forward:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         forward_delay:
           type: str
           default: '00:00:15'
+          description: '(need to be defined later)'
         frame_types:
           type: str
           choices:
@@ -385,45 +445,57 @@ resource:
             - admit-only-untagged-and-priority-tagged
             - admit-only-vlan-tagged
           default: admit-all
+          description: '(need to be defined later)'
         igmp_snooping:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         igmp_version:
           type: int
           choices:
             - 2
             - 3
           default: 2
+          description: '(need to be defined later)'
         ingress_filtering:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         last_member_interval:
           type: str
           default: 1s
+          description: '(need to be defined later)'
         last_member_query_count:
           type: int
           default: 2
+          description: '(need to be defined later)'
         max_hops:
           type: int
           default: 20
+          description: '(need to be defined later)'
         max_message_age:
           type: str
           default: '00:00:20'
+          description: '(need to be defined later)'
         membership_interval:
           type: str
           default: 4m20s
+          description: '(need to be defined later)'
         mld_version:
           type: int
           choices:
             - 1
             - 2
           default: 1
+          description: '(need to be defined later)'
         mtu:
           type: str
           default: auto
+          description: '(need to be defined later)'
         multicast_querier:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         multicast_router:
           type: str
           choices:
@@ -431,12 +503,15 @@ resource:
             - permanent
             - temporary-query
           default: temporary-query
+          description: '(need to be defined later)'
         name:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         priority:
           type: int
           default: 32768
+          description: '(need to be defined later)'
         protocol_mode:
           type: str
           choices:
@@ -445,35 +520,46 @@ resource:
             - rstp
             - stp
           default: rstp
+          description: '(need to be defined later)'
         pvid:
           type: int
           default: 1
+          description: '(need to be defined later)'
         querier_interval:
           type: str
           default: 4m15s
+          description: '(need to be defined later)'
         query_interval:
           type: str
           default: 2m5s
+          description: '(need to be defined later)'
         query_response_interval:
           type: str
           default: 10s
+          description: '(need to be defined later)'
         region_name:
           type: str
+          description: '(need to be defined later)'
         region_revision:
           type: int
           default: 0
+          description: '(need to be defined later)'
         startup_query_count:
           type: int
           default: 2
+          description: '(need to be defined later)'
         startup_query_interval:
           type: str
           default: 31s250ms
+          description: '(need to be defined later)'
         transmit_hold_count:
           type: int
           default: 6
+          description: '(need to be defined later)'
         vlan_filtering:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
 tests:
   facts:
     name: bridge
@@ -483,39 +569,41 @@ tests:
       # RouterOS Output
       #
       /interface bridge
-      add arp=reply-only comment=trunk name=br-trunk
-      add arp=reply-only comment=wan name=br-wan
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
     fixtures:
       - action: add
         values:
           arp: reply-only
-          comment: trunk
+          comment: 'trunk bridge'
           name: br-trunk
       - action: add
         values:
           arp: reply-only
-          comment: wan
+          comment: 'wan bridge'
           name: br-wan
   unit:
+    name: bridge
+    package: interface.bridge
     module_name: ros_bridge
     fixture_contents: |
       # RouterOS Output
       #
       /interface bridge
-      add arp=reply-only comment=trunk name=br-trunk
-      add arp=reply-only comment=wan name=br-wan
+      add arp=reply-only comment="trunk bridge" name=br-trunk
+      add arp=reply-only comment="wan bridge" name=br-wan
     tests:
       - commands:
-          - '/interface bridge set [ find name=br-wan ] arp=enabled comment=updated'
-          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=updated vlan-filtering=yes'
+          - '/interface bridge set [ find name=br-wan ] arp=enabled comment="updated comment"'
+          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="updated comment" vlan-filtering=yes'
         argument_spec:
           config:
             - { arp: enabled, comment: 'updated comment', name: br-wan }
             - { arp: enabled, comment: 'updated comment', name: br-trunk, vlan_filtering: 'yes' }
           state: merged
       - commands:
-          - '/interface bridge set [ find name=br-wan ] arp=enabled comment=replaced'
-          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment=replaced'
+          - '/interface bridge set [ find name=br-wan ] arp=enabled comment="replaced comment"'
+          - '/interface bridge set [ find name=br-trunk ] arp=enabled comment="replaced comment"'
         argument_spec:
           config:
             - { comment: 'replaced comment', name: br-wan }
@@ -524,7 +612,7 @@ tests:
       - commands:
           - '/interface bridge remove [ find name=br-trunk ]'
           - '/interface bridge remove [ find name=br-wan ]'
-          - '/interface bridge add comment=new name=br-new'
+          - '/interface bridge add comment="new bridge" name=br-new'
           - '/system script run ansible-remove-invalid'
         argument_spec:
           config:

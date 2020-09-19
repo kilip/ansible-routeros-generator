@@ -13,6 +13,7 @@ properties:
     choice_type: null
     description: 'Limit rate of data transmission to this client. Value 0 means no limit. Value is in bits per second.'
     original_name: ap-tx-limit
+    elements: null
   authentication:
     name: authentication
     type: string
@@ -24,8 +25,9 @@ properties:
     choice_type: null
     description: |2
        - *no* - Client association will always fail.
-      - *yes* - Use authentication procedure that is specified in the [ **security-profile**](#Security_Profiles) of the interface.
+      - *yes* - Use authentication procedure that is specified in the [**security-profile**](#Security_Profiles) of the interface.
     original_name: authentication
+    elements: null
   client_tx_limit:
     name: client_tx_limit
     type: integer
@@ -39,6 +41,7 @@ properties:
       
       Value is in bits per second.
     original_name: client-tx-limit
+    elements: null
   comment:
     name: comment
     type: string
@@ -47,6 +50,7 @@ properties:
     choice_type: null
     description: 'Short description of an entry'
     original_name: comment
+    elements: null
   disabled:
     name: disabled
     type: string
@@ -58,6 +62,7 @@ properties:
     choice_type: null
     description: ''
     original_name: disabled
+    elements: null
   forwarding:
     name: forwarding
     type: string
@@ -71,6 +76,7 @@ properties:
        - *no* - Client cannot send frames to other station that are connected to same access point.
       - *yes* - Client can send frames to other stations on the same access point.
     original_name: forwarding
+    elements: null
   interface:
     name: interface
     type: string
@@ -79,6 +85,7 @@ properties:
     choice_type: null
     description: 'Rules with **interface**=*any* are used for any wireless interface and the **interface**=*all* defines [interface-list](https://wiki.mikrotik.com/wiki/Manual:Interface/List#Lists "Manual:Interface/List") “all” name. To make rule that applies only to one wireless interface, specify that interface as a value of this property.'
     original_name: interface
+    elements: null
   mac_address:
     name: mac_address
     type: string
@@ -87,6 +94,7 @@ properties:
     choice_type: null
     description: 'Rule matches client with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
     original_name: mac-address
+    elements: null
   management_protection_key:
     name: management_protection_key
     type: string
@@ -97,6 +105,7 @@ properties:
     options:
       - ignore-default
     original_name: management-protection-key
+    elements: null
   private_algo:
     name: private_algo
     type: string
@@ -111,6 +120,7 @@ properties:
     choice_type: null
     description: 'Only for WEP modes.'
     original_name: private-algo
+    elements: null
   private_key:
     name: private_key
     type: string
@@ -121,6 +131,7 @@ properties:
     options:
       - ignore-default
     original_name: private-key
+    elements: null
   private_pre_shared_key:
     name: private_pre_shared_key
     type: string
@@ -131,6 +142,7 @@ properties:
     options:
       - ignore-default
     original_name: private-pre-shared-key
+    elements: null
   signal_range:
     name: signal_range
     type: string
@@ -140,8 +152,9 @@ properties:
     description: |
       Rule matches if signal strength of the station is within the range.
       
-      <dl><dd>If signal strength of the station will go out of the range that is specified in the rule, access point will disconnect that station.</dd></dl>
+      If signal strength of the station will go out of the range that is specified in the rule, access point will disconnect that station.
     original_name: signal-range
+    elements: null
   time:
     name: time
     type: string
@@ -157,3 +170,4 @@ properties:
     options:
       - ignore-choices
     original_name: time
+    elements: null

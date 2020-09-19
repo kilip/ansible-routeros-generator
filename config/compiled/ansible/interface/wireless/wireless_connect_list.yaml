@@ -1,5 +1,6 @@
 name: wireless_connect_list
 package: interface.wireless
+type: config
 template: '@ansible/module/module.py.twig'
 module_name: kilip.routeros.ros_wireless_connect_list
 export_command: '/interface wireless connect-list export'
@@ -13,6 +14,7 @@ documentation:
     - 'This module manages the Wireless Access List configuration of Mikrotik RouterOS network devices.'
   options:
     state:
+      type: str
       choices:
         - merged
         - replaced
@@ -23,10 +25,8 @@ documentation:
     config:
       type: list
       elements: dict
+      description: 'A dictionary of wireless_connect_list options'
       suboptions:
-        3gpp:
-          type: str
-          description: ''
         area_prefix:
           type: str
           description: 'Rule matches if area value of AP (a proprietary extension) begins with specified value.**area** value is a proprietary extension.'
@@ -38,15 +38,12 @@ documentation:
           type: bool
           default: 'True'
           description: |
-            Available options:
-            
-            - *yes* - Connect to access point that matches this rule.
+            Available options: - *yes* - Connect to access point that matches this rule.
             - *no* - Do not connect to any access point that matches this rule.
-            
         disabled:
           type: bool
           default: 'False'
-          description: ''
+          description: '(need to be defined later)'
         interface:
           type: str
           description: 'Each rule in connect list applies only to one wireless interface that is specified by this setting.'
@@ -56,14 +53,25 @@ documentation:
           description: 'Rule matches only AP with the specified MAC address. Value *00:00:00:00:00:00* matches always.'
         security_profile:
           type: str
-          description: 'Name of [ security profile](#Security_Profiles) that is used when connecting to matching access points, If value of this property is *none*, then security profile specified in the interface configuration will be used. In station mode, rule will match only access points that can support specified security profile. Value *none* will match access point that supports security profile that is specified in the interface configuration. In access point mode value of this property will not be used to match remote devices.'
+          description: |
+            Name of L(security profile, #Security_Profiles) that is used when connecting to matching access points, If value of this property is *none*,
+            then security profile specified in the interface configuration will be used. In station mode, rule will match only access points that can
+            support specified security profile. Value *none* will match access point that supports security profile that is specified in the interface
+            configuration. In access point mode value of this property will not be used to match remote devices.
         signal_range:
           type: str
           default: '-120..120'
-          description: 'Rule matches if signal strength of the access point is within the range. If station establishes connection to access point that is matched by this rule, it will disconnect from that access point when signal strength goes out of the specified range.'
+          description: |
+            Rule matches if signal strength of the access point is within the range. If station establishes connection to access point that is matched
+            by this rule, it will disconnect from that access point when signal strength goes out of the specified range.
         ssid:
           type: str
-          description: 'Rule matches access points that have this SSID. Empty value matches any SSID. This property has effect only when station mode interface **ssid** is empty, or when access point mode interface has **wds-ignore-ssid**=*yes*'
+          description: |
+            Rule matches access points that have this SSID. Empty value matches any SSID. This property has effect only when station mode interface
+            **ssid** is empty, or when access point mode interface has **wds-ignore-ssid**=*yes*
+        three_gpp:
+          type: str
+          description: '(need to be defined later)'
         wireless_protocol:
           type: str
           choices:
@@ -72,7 +80,7 @@ documentation:
             - nstreme
             - tdma
           default: any
-          description: ''
+          description: '(need to be defined later)'
 examples:
   - title: 'Using merged state'
     name: 'Merge device configuration'
@@ -81,7 +89,7 @@ examples:
         - comment: existing
           interface: wlan1
           signal_range: '-50..120'
-          wireless_protocol: 802.11
+          wireless_protocol: '802.11'
       state: merged
     before: |
       /interface wireless connect-list
@@ -90,9 +98,9 @@ examples:
       # RouterOS Output
       #
       /interface wireless connect-list
-      add comment=existing interface=wlan1 signal-range=-50..120 wireless-protocol=802.11
+      add comment=existing signal-range=-50..120 wireless-protocol=802.11
     commands:
-      - '/interface wireless connect-list set [ find comment=existing ] interface=wlan1 signal-range=-50..120 wireless-protocol=802.11'
+      - '/interface wireless connect-list set [ find comment=existing ] signal-range=-50..120 wireless-protocol=802.11'
 resource:
   name: wireless_connect_list
   package: interface.wireless
@@ -101,7 +109,7 @@ resource:
   keys:
     - comment
   argument_spec:
-    states:
+    state:
       type: str
       choices:
         - merged
@@ -113,31 +121,41 @@ resource:
       type: list
       elements: dict
       options:
-        3gpp:
-          type: str
         area_prefix:
           type: str
+          description: '(need to be defined later)'
         comment:
           type: str
           required: 'True'
+          description: '(need to be defined later)'
         connect:
           type: bool
           default: 'True'
+          description: '(need to be defined later)'
         disabled:
           type: bool
           default: 'False'
+          description: '(need to be defined later)'
         interface:
           type: str
+          description: '(need to be defined later)'
         mac_address:
           type: str
           default: '00:00:00:00:00:00'
+          description: '(need to be defined later)'
         security_profile:
           type: str
+          description: '(need to be defined later)'
         signal_range:
           type: str
           default: '-120..120'
+          description: '(need to be defined later)'
         ssid:
           type: str
+          description: '(need to be defined later)'
+        three_gpp:
+          type: str
+          description: '(need to be defined later)'
         wireless_protocol:
           type: str
           choices:
@@ -146,6 +164,10 @@ resource:
             - nstreme
             - tdma
           default: any
+          description: '(need to be defined later)'
+  custom_props:
+    three_gpp:
+      original_name: 3gpp
 tests:
   facts:
     name: wireless_connect_list
@@ -163,6 +185,8 @@ tests:
           interface: wlan1
           signal_range: '-79..120'
   unit:
+    name: wireless_connect_list
+    package: interface.wireless
     module_name: ros_wireless_connect_list
     fixture_contents: |
       # RouterOS Output
@@ -171,8 +195,8 @@ tests:
       add comment=existing interface=wlan1 signal-range=-79..120
     tests:
       - commands:
-          - '/interface wireless connect-list set [ find comment=existing ] interface=wlan1 signal-range=-50..120 wireless-protocol=802.11'
+          - '/interface wireless connect-list set [ find comment=existing ] signal-range=-50..120 wireless-protocol=802.11'
         argument_spec:
           config:
-            - { comment: existing, interface: wlan1, signal_range: '-50..120', wireless_protocol: 802.11 }
+            - { comment: existing, interface: wlan1, signal_range: '-50..120', wireless_protocol: '802.11' }
           state: merged

@@ -36,16 +36,23 @@ class ProcessItem
      */
     private $afterProcess;
 
+    /**
+     * @var bool
+     */
+    private $directOutput = false;
+
     public function __construct(
         array $commands,
         string $workingDir,
         string $message = null,
-        callable $afterProcess = null
+        callable $afterProcess = null,
+        bool $directOutput = false
     ) {
         $this->commands = $commands;
         $this->workingDir = $workingDir;
         $this->message = $message;
         $this->afterProcess = $afterProcess;
+        $this->directOutput = $directOutput;
     }
 
     /**
@@ -78,5 +85,13 @@ class ProcessItem
     public function getAfterProcess(): ?callable
     {
         return $this->afterProcess;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDirectOutput(): bool
+    {
+        return $this->directOutput;
     }
 }

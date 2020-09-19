@@ -37,12 +37,12 @@ examples:
         values:
           bridge: br-wan
           interface: ether1
-          comment: 'new'
+          comment: 'new comment'
       - action: set
         values:
           bridge: br-trunk
           interface: ether2
-          comment: 'new'
+          comment: 'new comment'
           disabled: 'no'
   replaced:
     name: 'Replace device configuration'
@@ -61,12 +61,12 @@ examples:
         values:
           bridge: br-wan
           interface: ether1
-          comment: 'new'
+          comment: 'new comment'
       - action: set
         values:
           bridge: br-trunk
           interface: ether2
-          comment: 'new'
+          comment: 'new comment'
           disabled: 'no'
   overridden:
     name: 'Override device configuration'
@@ -89,7 +89,7 @@ examples:
       - action: add
         values:
           bridge: br-new
-          comment: 'new'
+          comment: 'new comment'
           interface: ether2
       - action: script
         script: '/system script run ansible-remove-invalid'

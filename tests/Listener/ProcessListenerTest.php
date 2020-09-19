@@ -33,17 +33,17 @@ class ProcessListenerTest extends TestCase
         $listener = new ProcessEventSubscriber($logger);
         $listener->setOutput($output);
 
+        $event = new ProcessEvent('Start Processing bar', [], 10);
+        $listener->onStartProcessEvent($event);
+
         $listener->getProgressBar()->setRedrawFrequency(1);
         $listener->getProgressBar()->minSecondsBetweenRedraws(0);
         $listener->getProgressBar()->maxSecondsBetweenRedraws(0);
 
-        $event = new ProcessEvent('Start Processing bar', [], 10);
-        $listener->onStartProcessEvent($event);
         $this->assertMatchesRegularExpression('#Start Processing#', $this->getDisplay());
+
         for ($i = 1; $i <= 10; ++$i) {
-            $event
-                ->setContext([$i])
-                ->setMessage('Process {0}');
+            $event->setMessage('Process {0}', [$i]);
             $listener->onLoopEvent($event);
 
             $display = $this->getDisplay(true);

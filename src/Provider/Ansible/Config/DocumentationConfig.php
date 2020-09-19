@@ -43,6 +43,9 @@ class DocumentationConfig implements EventSubscriberInterface
             'module_name',
             'module_template',
             'name',
+            'supports',
+            'integration',
+            'ignores',
         ]);
 
         $orders = [
@@ -71,6 +74,7 @@ class DocumentationConfig implements EventSubscriberInterface
         $states = $module->getStates();
 
         $options['state'] = [
+            'type' => 'str',
             'choices' => $states,
             'default' => $module->getDefaultState(),
             'description' => 'Set state for this module',
@@ -89,7 +93,7 @@ class DocumentationConfig implements EventSubscriberInterface
         if ('config' == $resource->getType()) {
             $config['elements'] = 'dict';
         }
-
+        $config['description'] = "A dictionary of {$module->getName()} options";
         $config['suboptions'] = $this->normalizeProperties($module, $resource);
 
         return $config;
